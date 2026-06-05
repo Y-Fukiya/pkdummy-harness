@@ -14,12 +14,16 @@ It does not run mrgsolve and does not modify pk.yml, targets.yml, or specs.
 from __future__ import annotations
 
 import argparse
+import sys
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 import yaml
+
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from tools.make_analysis_inputs import make_analysis_inputs
 from tools.make_sdtm_like_domains import make_sdtm_like_domains

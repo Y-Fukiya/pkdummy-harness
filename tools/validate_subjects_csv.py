@@ -9,6 +9,9 @@ import sys
 from pathlib import Path
 from typing import Iterable
 
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 from tools.template_gen import SUBJECT_CSV_REQUIRED_COLUMNS
 
 
