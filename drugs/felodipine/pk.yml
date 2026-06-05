@@ -1,0 +1,36 @@
+id: osp::felodipine
+name: Felodipine
+route_inferred: po
+sources:
+- url: https://pubmed.ncbi.nlm.nih.gov/1782737/
+- url: https://pubmed.ncbi.nlm.nih.gov/3327676/
+pk_raw:
+  half_life: 24-25 hours
+  clearance: 1-1.5 L/min
+  volume_of_distribution: 10 L/kg
+  bioavailability: 15%
+  elimination_route: 肝代謝
+pk_parsed:
+  half_life_h: 24.5
+  half_life_h_range:
+  - 24.0
+  - 25.0
+  clearance:
+    value: 90.0
+    unit: L/h
+  volume:
+    value: 10.0
+    unit: L/kg
+  bioavailability_frac: 0.15
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.02829172165550797
+  CL_abs_L_per_h_at_70kg: 90.0
+  V_abs_L_at_70kg: 700.0
+  CL_systemic_L_per_h_at_70kg: 13.5
+  V_systemic_L_at_70kg: 105.0
+  notes:
+  - 'Oral entries: CL/V from label are often apparent (CL/F, V/F). If so, use CL_abs/V_abs
+    as apparent and set F1=1 in the simulation model.'
+  - If you are confident the source reports systemic CL and V, you can use CL_systemic/V_systemic
+    with F1=bioavailability.

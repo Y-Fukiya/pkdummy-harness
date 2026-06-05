@@ -1,0 +1,32 @@
+scenario:
+  id: cda1_dose100mg_iv_single
+  route: iv
+  regimen: single
+  dose:
+    value: 100.0
+    unit: mg
+  population:
+    species: human
+    group: adult_healthy
+targets:
+  auc:
+    type: AUC0-inf
+    value: 17006802.721088436
+    unit: ng*h/mL
+    summary: geometric_mean
+    variability:
+      type: gcv_percent
+      value: 35
+  t_half:
+    phase: terminal
+    value: 656.4000000000001
+    unit: h
+    summary: arithmetic_mean
+    variability:
+      type: sd
+      value: 164.10000000000002
+notes:
+- AUC is computed as Dose/CL (assuming CL is apparent CL/F for oral, and systemic
+  CL for IV).
+- Variability fields are placeholders unless you replace them with drug-specific PopPK
+  values.

@@ -1,0 +1,31 @@
+id: osp::amikacin
+name: Amikacin
+route_inferred: iv
+sources:
+- url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0b56f6df-a05d-4520-8bf0-d7cefe20f6ad
+pk_raw:
+  half_life: slightly over 2 hours
+  clearance: about 100 mL/min
+  volume_of_distribution: 24 liters (28% of the body weight)
+  bioavailability: N/A (IV only)
+  elimination_route: 腎排泄
+pk_parsed:
+  half_life_h: 2.0
+  half_life_h_range:
+  - 2.0
+  - 2.0
+  clearance:
+    value: 6.0
+    unit: L/h
+  volume:
+    value: 24.0
+    unit: L
+  bioavailability_frac: 1.0
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.34657359027997264
+  CL_abs_L_per_h_at_70kg: 6.0
+  V_abs_L_at_70kg: 24.0
+  CL_systemic_L_per_h_at_70kg: 6.0
+  V_systemic_L_at_70kg: 24.0
+  notes: []

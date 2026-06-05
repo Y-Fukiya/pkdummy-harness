@@ -1,0 +1,19 @@
+---
+title: {{TITLE_YAML}}
+format:
+  docx:
+    toc: true
+    number-sections: false
+{{REFERENCE_DOC_OPTION}}
+---
+
+{{REPORT_BODY}}
+
+## Reproducibility
+
+This DOCX is rendered from the generated Quarto source `pk_fixture_report.qmd`.
+The source ADPC-like input, descriptive CSV summaries, plot PNG files, and render
+manifest are stored in the same report directory.
+
+This report is for PK-like synthetic fixture review only. It is not a clinical
+pharmacology validation report, VPC/GOF package, or submission-ready ADaM output.

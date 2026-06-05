@@ -1,0 +1,35 @@
+id: osp::itraconazole
+name: Itraconazole
+route_inferred: po
+sources:
+- url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b1274d78-1096-4ae3-8299-a2e94eaa0ea5
+pk_raw:
+  half_life: 16-28 hours (single dose), 34-42 hours (repeated dosing)
+  clearance: 278 mL/min
+  volume_of_distribution: '>700 L'
+  bioavailability: 55%
+  elimination_route: 肝代謝, 腎排泄, 糞便排泄
+pk_parsed:
+  half_life_h: 22.0
+  half_life_h_range:
+  - 16.0
+  - 28.0
+  clearance:
+    value: 16.68
+    unit: L/h
+  volume:
+    value: 700.0
+    unit: L
+  bioavailability_frac: 0.55
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.03150669002545206
+  CL_abs_L_per_h_at_70kg: 16.68
+  V_abs_L_at_70kg: 700.0
+  CL_systemic_L_per_h_at_70kg: 9.174000000000001
+  V_systemic_L_at_70kg: 385.00000000000006
+  notes:
+  - 'Oral entries: CL/V from label are often apparent (CL/F, V/F). If so, use CL_abs/V_abs
+    as apparent and set F1=1 in the simulation model.'
+  - If you are confident the source reports systemic CL and V, you can use CL_systemic/V_systemic
+    with F1=bioavailability.

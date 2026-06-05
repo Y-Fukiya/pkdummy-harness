@@ -1,0 +1,34 @@
+id: osp::motavizumab_medi_524
+name: Motavizumab (MEDI-524)
+route_inferred: iv
+sources:
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3837853/
+pk_raw:
+  half_life: 19-34 days
+  clearance: 165-326 mL/day
+  volume_of_distribution: 5.2-9.5 liters
+  bioavailability: N/A (IV only)
+  elimination_route: Proteolytic degradation
+pk_parsed:
+  half_life_h: 636.0
+  half_life_h_range:
+  - 456.0
+  - 816.0
+  clearance:
+    value: 0.010229166666666666
+    unit: L/h
+  volume:
+    value: 7.35
+    unit: L
+  bioavailability_frac: 1.0
+  bioavailability_frac_range:
+  - 1.0
+  - 1.0
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.0010898540574841907
+  CL_abs_L_per_h_at_70kg: 0.010229166666666666
+  V_abs_L_at_70kg: 7.35
+  CL_systemic_L_per_h_at_70kg: 0.010229166666666666
+  V_systemic_L_at_70kg: 7.35
+  notes: []

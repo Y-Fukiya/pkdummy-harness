@@ -1,0 +1,34 @@
+id: osp::abciximab
+name: Abciximab
+route_inferred: iv
+sources:
+- url: https://go.drugbank.com/drugs/DB00054
+- url: https://pubmed.ncbi.nlm.nih.gov/11907493/
+- url: https://www.researchgate.net/publication/232754238_Pharmacokinetics_PK_pharmacodynamics_PD_and_GPIIBIIIA_receptor_blockade_of_ABCIXIMAB_in_stable_angina_pectoris_patients
+- url: https://www.sciencedirect.com/topics/biochemistry-genetics-and-molecular-biology/abciximab
+pk_raw:
+  half_life: 10-30 minutes
+  clearance: 183 +/- 72 mL/min
+  volume_of_distribution: 1.44 L/kg
+  bioavailability: N/A (IV only)
+  elimination_route: 細網内皮系による代謝
+pk_parsed:
+  half_life_h: 0.3333333333333333
+  half_life_h_range:
+  - 0.16666666666666666
+  - 0.5
+  clearance:
+    value: 4.32
+    unit: L/h
+  volume:
+    value: 1.44
+    unit: L/kg
+  bioavailability_frac: 1.0
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 2.079441541679836
+  CL_abs_L_per_h_at_70kg: 4.32
+  V_abs_L_at_70kg: 100.8
+  CL_systemic_L_per_h_at_70kg: 4.32
+  V_systemic_L_at_70kg: 100.8
+  notes: []

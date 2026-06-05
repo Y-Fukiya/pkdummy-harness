@@ -1,0 +1,33 @@
+id: OSP_erythromycin
+name: Erythromycin
+route_inferred: iv
+sources:
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3581054/
+pk_raw:
+  text: 'IV study: CL 0.53 L/h/kg; t1/2 2.30 h. One-comp V derived.'
+pk_parsed:
+  half_life_h: 2.3
+  clearance:
+    value: 0.53
+    unit: L/h/kg
+  volume:
+    value: 1.7586452548436462
+    unit: L/kg
+  bioavailability_frac: 1.0
+  clearance_basis: systemic
+  volume_basis: systemic
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.3013683393738893
+  CL_abs_L_per_h_at_70kg: 37.1
+  V_abs_L_at_70kg: 123.10516783905524
+  CL_apparent_L_per_h_at_70kg: 37.1
+  V_apparent_L_at_70kg: 123.10516783905524
+  CL_systemic_L_per_h_at_70kg: 37.1
+  V_systemic_L_at_70kg: 123.10516783905524
+  notes:
+  - Apparent CL/V were derived as (systemic CL/V) / F.
+  - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability
+    with systemic CL/V.'
+  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
+    typically report systemic parameters.'

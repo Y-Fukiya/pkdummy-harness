@@ -1,0 +1,43 @@
+id: osp::triazolam
+name: Triazolam
+route_inferred: po
+sources:
+- url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ce6ddb53-89ca-4edf-a519-553d34ce7938
+- url: https://go.drugbank.com/drugs/DB00897
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC1401197/
+pk_raw:
+  half_life: 1.5-5.5 hours
+  clearance: 526 mL/min
+  volume_of_distribution: null
+  bioavailability: 44%
+  elimination_route: 腎排泄
+pk_parsed:
+  half_life_h: 3.5
+  half_life_h_range:
+  - 1.5
+  - 5.5
+  clearance:
+    value: 31.560000000000002
+    unit: L/h
+  volume:
+    value: 159.36009421659492
+    unit: L
+    derived_from: clearance and half_life_h assuming ke=ln(2)/t1/2
+  bioavailability_frac: 0.44
+  bioavailability_frac_range:
+  - 0.44
+  - 0.44
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.19804205158855578
+  CL_abs_L_per_h_at_70kg: 31.560000000000002
+  V_abs_L_at_70kg: 159.36009421659492
+  CL_systemic_L_per_h_at_70kg: 13.886400000000002
+  V_systemic_L_at_70kg: 70.11844145530176
+  notes:
+  - Derived V from CL and t1/2 assuming ke=ln(2)/t1/2 (one-compartment
+    rescue; not a direct literature V).
+  - 'Oral entries: CL/V from label are often apparent (CL/F, V/F). If so, use CL_abs/V_abs
+    as apparent and set F1=1 in the simulation model.'
+  - If you are confident the source reports systemic CL and V, you can use CL_systemic/V_systemic
+    with F1=bioavailability.

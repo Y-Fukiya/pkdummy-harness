@@ -1,0 +1,37 @@
+id: osp::aciclovir
+name: Aciclovir
+route_inferred: po
+sources:
+- url: https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=e8a0f9f8-294f-4dd6-bd55-10a6253f1aa8
+- url: https://pubmed.ncbi.nlm.nih.gov/6355048/
+- url: https://www.sciencedirect.com/science/article/pii/S2590170220300339
+pk_raw:
+  half_life: 2.5 to 3.3 hours
+  clearance: 327 mL/min/1.73 m2
+  volume_of_distribution: 0.6 L/kg
+  bioavailability: 10% to 20%
+  elimination_route: 腎排泄
+pk_parsed:
+  half_life_h: 2.5
+  half_life_h_range:
+  - 2.5
+  - 2.5
+  clearance:
+    value: 19.62
+    unit: L/h
+  volume:
+    value: 0.6
+    unit: L/kg
+  bioavailability_frac: 0.1
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.2772588722239781
+  CL_abs_L_per_h_at_70kg: 19.62
+  V_abs_L_at_70kg: 42.0
+  CL_systemic_L_per_h_at_70kg: 1.9620000000000002
+  V_systemic_L_at_70kg: 4.2
+  notes:
+  - 'Oral entries: CL/V from label are often apparent (CL/F, V/F). If so, use CL_abs/V_abs
+    as apparent and set F1=1 in the simulation model.'
+  - If you are confident the source reports systemic CL and V, you can use CL_systemic/V_systemic
+    with F1=bioavailability.

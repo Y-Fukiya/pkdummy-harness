@@ -1,0 +1,48 @@
+id: osp::fluvoxamine
+name: Fluvoxamine
+route_inferred: po
+sources:
+- url: https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=35b377d9-5b7a-4d8e-b6c1-4291d02f5dae
+- url: https://link.springer.com/article/10.2165/00003088-199500291-00003
+- url: https://www.clinpgx.org/pmid/7988100
+- url: https://psychopharmacologyinstitute.com/section/fluvoxamine-essentials-mechanism-of-action-indications-pharmacokinetics-and-dosing-2051-4052/
+- url: https://en.wikipedia.org/wiki/Fluvoxamine
+- url: https://www.accessdata.fda.gov/drugsatfda_docs/label/2007/021519lbl.pdf
+- url: https://pubmed.ncbi.nlm.nih.gov/9184622/
+- url: https://go.drugbank.com/drugs/DB00176
+pk_raw:
+  half_life: 9-28 hours
+  clearance: null
+  volume_of_distribution: 25 L/kg
+  bioavailability: 53%
+  elimination_route: 肝代謝 (CYP450), 腎排泄 (98%; 94%が代謝物, 4%が未変化体)
+pk_parsed:
+  half_life_h: 18.5
+  half_life_h_range:
+  - 9.0
+  - 28.0
+  clearance:
+    value: 65.56797653945428
+    unit: L/h
+    derived_from: volume and half_life_h assuming ke=ln(2)/t1/2
+  volume:
+    value: 25.0
+    unit: L/kg
+  bioavailability_frac: 0.53
+  bioavailability_frac_range:
+  - 0.53
+  - 0.53
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.037467415165402446
+  CL_abs_L_per_h_at_70kg: 65.56797653945428
+  V_abs_L_at_70kg: 1750.0
+  CL_systemic_L_per_h_at_70kg: 34.75102756591077
+  V_systemic_L_at_70kg: 927.5
+  notes:
+  - Derived CL from V and t1/2 assuming ke=ln(2)/t1/2 (one-compartment
+    rescue; not a direct literature CL).
+  - 'Oral entries: CL/V from label are often apparent (CL/F, V/F). If so, use CL_abs/V_abs
+    as apparent and set F1=1 in the simulation model.'
+  - If you are confident the source reports systemic CL and V, you can use CL_systemic/V_systemic
+    with F1=bioavailability.

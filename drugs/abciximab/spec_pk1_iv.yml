@@ -1,0 +1,61 @@
+version: 0.1
+study:
+  id: OSP_abciximab
+  title: Abciximab (IV template from label/PopPK summary)
+population:
+  n: 100
+  covariates:
+    wt_kg:
+      dist: lognormal
+      median: 70.0
+      cv: 0.25
+      min: 40
+      max: 120
+regimen:
+  route: iv_bolus
+  units:
+    dose: mg
+  arms:
+    A:
+      n: 100
+      dose_mg: 100
+sampling:
+  t_end_h: 72.0
+  dt_h: 0.5
+  include_t0: true
+model:
+  template: pk1_iv_ode
+  units:
+    conc: ng/mL
+    mult: 1000
+  theta:
+    CL: 4.32
+    V: 100.8
+iiv:
+  eta:
+    CL: 0.09
+    V: 0.04
+  corr: false
+residual:
+  type: prop+add
+  prop: 0.25
+  add: 0.0
+output:
+  out_dir: outputs
+  seed: 20260217
+  write:
+    raw_csv: true
+    nonmem_csv: true
+    summary_md: true
+meta:
+  sources:
+  - https://go.drugbank.com/drugs/DB00054
+  - https://pubmed.ncbi.nlm.nih.gov/11907493/
+  - https://www.researchgate.net/publication/232754238_Pharmacokinetics_PK_pharmacodynamics_PD_and_GPIIBIIIA_receptor_blockade_of_ABCIXIMAB_in_stable_angina_pectoris_patients
+  - https://www.sciencedirect.com/topics/biochemistry-genetics-and-molecular-biology/abciximab
+  pk_summary_raw:
+    half_life: 10-30 minutes
+    clearance: 183 +/- 72 mL/min
+    volume: 1.44 L/kg
+    bioavailability: N/A (IV only)
+    elimination: 細網内皮系による代謝

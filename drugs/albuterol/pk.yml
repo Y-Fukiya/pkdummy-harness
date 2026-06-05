@@ -1,0 +1,34 @@
+id: OSP_albuterol
+name: Albuterol
+route_inferred: iv
+sources:
+- url: https://pubmed.ncbi.nlm.nih.gov/2878124/
+pk_raw:
+  text: 'IV study: clearance 480 mL/min, t1/2 3.86 h. One-comp V derived from CL and
+    t1/2.'
+pk_parsed:
+  half_life_h: 3.86
+  clearance:
+    value: 28.8
+    unit: L/h
+  volume:
+    value: 160.38152230554428
+    unit: L
+  bioavailability_frac: 1.0
+  clearance_basis: systemic
+  volume_basis: systemic
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.179571808435219
+  CL_abs_L_per_h_at_70kg: 28.8
+  V_abs_L_at_70kg: 160.38152230554428
+  CL_apparent_L_per_h_at_70kg: 28.8
+  V_apparent_L_at_70kg: 160.38152230554428
+  CL_systemic_L_per_h_at_70kg: 28.8
+  V_systemic_L_at_70kg: 160.38152230554428
+  notes:
+  - Apparent CL/V were derived as (systemic CL/V) / F.
+  - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability
+    with systemic CL/V.'
+  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
+    typically report systemic parameters.'

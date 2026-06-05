@@ -1,0 +1,31 @@
+id: osp::alfentanil
+name: Alfentanil
+route_inferred: iv
+sources:
+- url: https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=c965d63f-933b-4a83-88f6-c8c74159530b
+pk_raw:
+  half_life: 2.5-4 hours
+  clearance: 5 mL/kg/min
+  volume_of_distribution: 0.4-1 L/kg
+  bioavailability: N/A (IV only)
+  elimination_route: 肝代謝, 腎排泄
+pk_parsed:
+  half_life_h: 3.25
+  half_life_h_range:
+  - 2.5
+  - 4.0
+  clearance:
+    value: 0.3
+    unit: L/h/kg
+  volume:
+    value: 1.0
+    unit: L/kg
+  bioavailability_frac: 1.0
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.21327605555690624
+  CL_abs_L_per_h_at_70kg: 21.0
+  V_abs_L_at_70kg: 70.0
+  CL_systemic_L_per_h_at_70kg: 21.0
+  V_systemic_L_at_70kg: 70.0
+  notes: []

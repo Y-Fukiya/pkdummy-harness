@@ -1,0 +1,35 @@
+id: osp::montelukast
+name: Montelukast
+route_inferred: po
+sources:
+- url: https://pubmed.ncbi.nlm.nih.gov/9429741/
+pk_raw:
+  half_life: 6.7 hours
+  clearance: 30.8 mL/min
+  volume_of_distribution: 9.7 L
+  bioavailability: 61-62%
+  elimination_route: 胆汁排泄
+pk_parsed:
+  half_life_h: 6.7
+  half_life_h_range:
+  - 6.7
+  - 6.7
+  clearance:
+    value: 1.8479999999999999
+    unit: L/h
+  volume:
+    value: 9.7
+    unit: L
+  bioavailability_frac: 0.615
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.10345480306864854
+  CL_abs_L_per_h_at_70kg: 1.8479999999999999
+  V_abs_L_at_70kg: 9.7
+  CL_systemic_L_per_h_at_70kg: 1.13652
+  V_systemic_L_at_70kg: 5.9655
+  notes:
+  - 'Oral entries: CL/V from label are often apparent (CL/F, V/F). If so, use CL_abs/V_abs
+    as apparent and set F1=1 in the simulation model.'
+  - If you are confident the source reports systemic CL and V, you can use CL_systemic/V_systemic
+    with F1=bioavailability.

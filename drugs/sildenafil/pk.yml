@@ -1,0 +1,46 @@
+id: osp::sildenafil
+name: Sildenafil
+route_inferred: po
+sources:
+- url: https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=7086e222-0f2b-4c02-84c0-4f8635c90993
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC1874251/
+- url: https://www.accessdata.fda.gov/drugsatfda_docs/label/2007/020895s027lbl.pdf
+- url: https://en.wikipedia.org/wiki/Sildenafil
+- url: https://go.drugbank.com/drugs/DB00203
+- url: https://labeling.pfizer.com/ShowLabeling.aspx?id=14610
+pk_raw:
+  half_life: 3-5 hours
+  clearance: null
+  volume_of_distribution: 105 L
+  bioavailability: 41% (25-63%)
+  elimination_route: 糞便 (~80%), 尿 (~13%)
+pk_parsed:
+  half_life_h: 4.0
+  half_life_h_range:
+  - 3.0
+  - 5.0
+  clearance:
+    value: 18.195113489698564
+    unit: L/h
+    derived_from: volume and half_life_h assuming ke=ln(2)/t1/2
+  volume:
+    value: 105.0
+    unit: L
+  bioavailability_frac: 0.44
+  bioavailability_frac_range:
+  - 0.25
+  - 0.63
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.17328679513998632
+  CL_abs_L_per_h_at_70kg: 18.195113489698564
+  V_abs_L_at_70kg: 105.0
+  CL_systemic_L_per_h_at_70kg: 8.005849935467369
+  V_systemic_L_at_70kg: 46.2
+  notes:
+  - Derived CL from V and t1/2 assuming ke=ln(2)/t1/2 (one-compartment
+    rescue; not a direct literature CL).
+  - 'Oral entries: CL/V from label are often apparent (CL/F, V/F). If so, use CL_abs/V_abs
+    as apparent and set F1=1 in the simulation model.'
+  - If you are confident the source reports systemic CL and V, you can use CL_systemic/V_systemic
+    with F1=bioavailability.

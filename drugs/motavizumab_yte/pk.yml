@@ -1,0 +1,34 @@
+id: OSP_motavizumab_yte
+name: Motavizumab-YTE
+route_inferred: iv
+sources:
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3662602/
+pk_raw:
+  text: 'Phase 1: clearance ~43-68 mL/day (use 55 mL/day); t1/2 ~70-100 days (use
+    85). One-comp V derived.'
+pk_parsed:
+  half_life_h: 2040
+  clearance:
+    value: 0.0022916666666666667
+    unit: L/h
+  volume:
+    value: 6.744599316155904
+    unit: L
+  bioavailability_frac: 1.0
+  clearance_basis: systemic
+  volume_basis: systemic
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.0003397780296862477
+  CL_abs_L_per_h_at_70kg: 0.0022916666666666667
+  V_abs_L_at_70kg: 6.744599316155904
+  CL_apparent_L_per_h_at_70kg: 0.0022916666666666667
+  V_apparent_L_at_70kg: 6.744599316155904
+  CL_systemic_L_per_h_at_70kg: 0.0022916666666666667
+  V_systemic_L_at_70kg: 6.744599316155904
+  notes:
+  - Apparent CL/V were derived as (systemic CL/V) / F.
+  - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability
+    with systemic CL/V.'
+  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
+    typically report systemic parameters.'

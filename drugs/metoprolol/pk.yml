@@ -1,0 +1,42 @@
+id: osp::metoprolol
+name: Metoprolol
+route_inferred: po
+sources:
+- url: https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=cbc32a80-717b-4cf2-b76a-6d03a3720419
+- url: https://pubmed.ncbi.nlm.nih.gov/35764772/
+pk_raw:
+  half_life: 3-7 hours
+  clearance: 48 L/h
+  volume_of_distribution: null
+  bioavailability: 約50%
+  elimination_route: 肝代謝
+pk_parsed:
+  half_life_h: 5.0
+  half_life_h_range:
+  - 3.0
+  - 7.0
+  clearance:
+    value: 48.0
+    unit: L/h
+  volume:
+    value: 346.2468098133512
+    unit: L
+    derived_from: clearance and half_life_h assuming ke=ln(2)/t1/2
+  bioavailability_frac: 0.5
+  bioavailability_frac_range:
+  - 0.5
+  - 0.5
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.13862943611198905
+  CL_abs_L_per_h_at_70kg: 48.0
+  V_abs_L_at_70kg: 346.2468098133512
+  CL_systemic_L_per_h_at_70kg: 24.0
+  V_systemic_L_at_70kg: 173.1234049066756
+  notes:
+  - Derived V from CL and t1/2 assuming ke=ln(2)/t1/2 (one-compartment
+    rescue; not a direct literature V).
+  - 'Oral entries: CL/V from label are often apparent (CL/F, V/F). If so, use CL_abs/V_abs
+    as apparent and set F1=1 in the simulation model.'
+  - If you are confident the source reports systemic CL and V, you can use CL_systemic/V_systemic
+    with F1=bioavailability.

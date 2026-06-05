@@ -1,0 +1,140 @@
+from __future__ import annotations
+
+import csv
+import math
+import subprocess
+import sys
+from pathlib import Path
+
+import yaml
+
+from tools.run_demo_set import run_demo_set
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def write_yaml(path: Path, obj: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(yaml.safe_dump(obj, sort_keys=False), encoding="utf-8")
+
+
+def read_csv(path: Path) -> list[dict[str, str]]:
+    with path.open("r", encoding="utf-8", newline="") as f:
+        return list(csv.DictReader(f))
+
+
+def write_demo_drug(
+    drugs_dir: Path,
+    slug: str,
+    *,
+    route: str,
+    template: str,
+) -> None:
+    drug_dir = drugs_dir / slug
+    dose_mg = 100.0
+    cl = 10.0
+    v = 20.0
+    half_life_h = math.log(2.0) / (cl / v)
+    write_yaml(
+        drug_dir / "pk.yml",
+        {
+            "id": slug,
+            "name": slug,
+            "route_inferred": "po" if route == "oral" else "iv",
+            "sources": ["fixture"],
+            "pk_parsed": {"half_life_h": half_life_h},
+            "derived": {
+                "CL_abs_L_per_h_at_70kg": cl,
+                "V_abs_L_at_70kg": v,
+                "ke_1_per_h": cl / v,
+            },
+        },
+    )
+    write_yaml(
+        drug_dir / "targets.yml",
+        {
+            "scenario": {"dose": {"value": dose_mg, "unit": "mg"}},
+            "targets": {
+                "auc": {"value": dose_mg * 1000.0 / cl, "unit": "ng*h/mL"},
+                "t_half": {"value": half_life_h, "unit": "h"},
+            },
+        },
+    )
+    theta = {"CL": cl, "V": v}
+    if route == "oral":
+        theta.update({"KA": 1.2, "F1": 1.0, "ALAG1": 0.0})
+    write_yaml(
+        drug_dir / f"spec_pk1_{'oral' if route == 'oral' else 'iv'}.yml",
+        {
+            "study": {"id": f"OSP_{slug}", "title": f"{slug} demo"},
+            "population": {"n": 2},
+            "regimen": {"route": route, "arms": {"A": {"n": 2, "dose_mg": dose_mg}}},
+            "sampling": {"t_end_h": 24.0, "dt_h": 1.0, "include_t0": True},
+            "model": {
+                "template": template,
+                "units": {"conc": "ng/mL", "mult": 1000},
+                "theta": theta,
+            },
+        },
+    )
+
+
+def test_run_demo_set_creates_multi_drug_workflow_outputs(tmp_path: Path) -> None:
+    drugs_dir = tmp_path / "drugs"
+    write_demo_drug(drugs_dir, "oral_demo", route="oral", template="pk1_oral_ode")
+    write_demo_drug(drugs_dir, "iv_demo", route="iv_bolus", template="pk1_iv_ode")
+    out_dir = tmp_path / "demo_set"
+
+    result = run_demo_set(
+        drugs=["oral_demo", "iv_demo"],
+        drugs_dir=drugs_dir,
+        out_dir=out_dir,
+        sample_times_h=[0, 1, 2, 4, 8, 12, 24],
+    )
+
+    assert result.status in {"OK", "WARN"}
+    assert result.counts["drugs"] == 2
+    assert result.files["summary_csv"].exists()
+    assert result.files["summary_md"].exists()
+    rows = read_csv(result.files["summary_csv"])
+    assert [row["drug"] for row in rows] == ["oral_demo", "iv_demo"]
+    assert all(row["analysis_adpc_rows"] == "14" for row in rows)
+    assert all(row["analysis_nca_rows"] == "14" for row in rows)
+    assert all(row["analysis_poppk_rows"] == "16" for row in rows)
+    for slug in ("oral_demo", "iv_demo"):
+        assert (out_dir / slug / "raw" / "sim_full.csv").exists()
+        assert (out_dir / slug / "workflow" / "analysis_inputs" / "ADPC.csv").exists()
+        assert (out_dir / slug / "workflow" / "analysis_inputs" / "NCA_INPUT.csv").exists()
+        assert (out_dir / slug / "workflow" / "analysis_inputs" / "POPPK_INPUT.csv").exists()
+
+
+def test_run_demo_set_cli(tmp_path: Path) -> None:
+    drugs_dir = tmp_path / "drugs"
+    write_demo_drug(drugs_dir, "oral_demo", route="oral", template="pk1_oral_ode")
+    out_dir = tmp_path / "demo_set"
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "tools/run_demo_set.py",
+            "--drugs",
+            "oral_demo",
+            "--drugs-dir",
+            str(drugs_dir),
+            "--out-dir",
+            str(out_dir),
+            "--times",
+            "0,1,2,4,8,12,24",
+        ],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+
+    assert completed.returncode == 0, completed.stdout
+    assert "Demo set: " in completed.stdout
+    assert (out_dir / "summary.csv").exists()
+    assert (out_dir / "oral_demo" / "workflow" / "analysis_inputs" / "POPPK_INPUT.csv").exists()

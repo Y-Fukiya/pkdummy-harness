@@ -1,0 +1,38 @@
+id: osp::omeprazole
+name: Omeprazole
+route_inferred: po
+sources:
+- url: https://en.wikipedia.org/wiki/Omeprazole
+- url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d8b466e0-a35e-4fba-9d43-4e6c0122e7ad
+- url: https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=a17e415e-a559-4a8d-a455-699184a01523
+- url: https://pubmed.ncbi.nlm.nih.gov/2315973/
+pk_raw:
+  half_life: 0.5-1.2 hours
+  clearance: 624 mL/min (range 59-828 mL/min)
+  volume_of_distribution: 0.4 L/kg
+  bioavailability: '35-76% (repeated doses: ~60%)'
+  elimination_route: 肝代謝 (CYP2C19, CYP3A4), 腎排泄 (77%), 糞便排泄 (胆汁分泌由来)
+pk_parsed:
+  half_life_h: 0.85
+  half_life_h_range:
+  - 0.5
+  - 1.2
+  clearance:
+    value: 43.56
+    unit: L/h
+  volume:
+    value: 0.4
+    unit: L/kg
+  bioavailability_frac: 0.555
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.8154672712469945
+  CL_abs_L_per_h_at_70kg: 43.56
+  V_abs_L_at_70kg: 28.0
+  CL_systemic_L_per_h_at_70kg: 24.175800000000002
+  V_systemic_L_at_70kg: 15.540000000000001
+  notes:
+  - 'Oral entries: CL/V from label are often apparent (CL/F, V/F). If so, use CL_abs/V_abs
+    as apparent and set F1=1 in the simulation model.'
+  - If you are confident the source reports systemic CL and V, you can use CL_systemic/V_systemic
+    with F1=bioavailability.

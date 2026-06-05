@@ -1,0 +1,126 @@
+version: '0.8'
+generated_at: '2026-02-23T01:56:18'
+weight_ref_kg: 70.0
+selection_criteria:
+  po: half-life and (clearance or Vd) parsable; missing one of CL/Vd may be derived
+    using t1/2 (1-comp). bioavailability is optional.
+  iv: IV-only (or inferred IV) and half-life and (clearance or Vd) parsable; missing
+    one of CL/Vd may be derived using t1/2 (1-comp).
+counts:
+  total_in_csv: 37
+  selected: 37
+  excluded: 0
+selected:
+- drug: Abciximab
+  route: iv
+  path: drugs/abciximab
+- drug: Aciclovir
+  route: po
+  path: drugs/aciclovir
+- drug: Albuterol
+  route: iv
+  path: drugs/albuterol
+- drug: Alfentanil
+  route: iv
+  path: drugs/alfentanil
+- drug: Alprazolam
+  route: po
+  path: drugs/alprazolam
+- drug: Amikacin
+  route: iv
+  path: drugs/amikacin
+- drug: Apixaban
+  route: po
+  path: drugs/apixaban
+- drug: Atazanavir
+  route: po
+  path: drugs/atazanavir
+- drug: Buprenorphine
+  route: iv
+  path: drugs/buprenorphine
+- drug: Carbamazepine
+  route: po
+  path: drugs/carbamazepine
+- drug: CDA1
+  route: iv
+  path: drugs/cda1
+- drug: Cimetidine
+  route: po
+  path: drugs/cimetidine
+- drug: Clarithromycin
+  route: po
+  path: drugs/clarithromycin
+- drug: Dapagliflozin
+  route: po
+  path: drugs/dapagliflozin
+- drug: Efavirenz
+  route: po
+  path: drugs/efavirenz
+- drug: Erythromycin
+  route: iv
+  path: drugs/erythromycin
+- drug: Ethinylestradiol
+  route: po
+  path: drugs/ethinylestradiol
+- drug: Felodipine
+  route: po
+  path: drugs/felodipine
+- drug: Fluconazole
+  route: iv
+  path: drugs/fluconazole
+- drug: Fluvoxamine
+  route: po
+  path: drugs/fluvoxamine
+- drug: Inulin
+  route: iv
+  path: drugs/inulin
+- drug: Itraconazole
+  route: po
+  path: drugs/itraconazole
+- drug: Mefenamic acid
+  route: po
+  path: drugs/mefenamic_acid
+- drug: Metoprolol
+  route: po
+  path: drugs/metoprolol
+- drug: Mexiletine
+  route: po
+  path: drugs/mexiletine
+- drug: Moclobemide
+  route: po
+  path: drugs/moclobemide
+- drug: Montelukast
+  route: po
+  path: drugs/montelukast
+- drug: Motavizumab (MEDI-524)
+  route: iv
+  path: drugs/motavizumab_medi_524
+- drug: Motavizumab-YTE
+  route: iv
+  path: drugs/motavizumab_yte
+- drug: Omeprazole
+  route: po
+  path: drugs/omeprazole
+- drug: Raltegravir
+  route: po
+  path: drugs/raltegravir
+- drug: Sildenafil
+  route: po
+  path: drugs/sildenafil
+- drug: Sufentanil
+  route: po
+  path: drugs/sufentanil
+- drug: Tefibazumab
+  route: iv
+  path: drugs/tefibazumab
+- drug: Tizanidine
+  route: po
+  path: drugs/tizanidine
+- drug: Triazolam
+  route: po
+  path: drugs/triazolam
+- drug: Verapamil
+  route: po
+  path: drugs/verapamil
+jobs_presets:
+  excluded22_v01: jobs/jobs_excluded22_v01.yml

@@ -1,0 +1,19 @@
+[project]
+name = "osp-pk-templates-v0-10-codex-harness"
+version = "0.10.1"
+description = "Codex-friendly validation harness for OSP PK templates v0.10"
+requires-python = ">=3.10"
+dependencies = [
+  "PyYAML>=6.0",
+  "pandas>=2.0",
+  "requests>=2.31",
+  "lxml>=4.9",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+pythonpath = ["."]

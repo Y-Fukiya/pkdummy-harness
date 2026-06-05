@@ -1,0 +1,34 @@
+id: OSP_dapagliflozin
+name: Dapagliflozin
+route_inferred: po
+sources:
+- url: https://www.accessdata.fda.gov/drugsatfda_docs/nda/2014/202293Orig1s000ClinPharmR.pdf
+pk_raw:
+  text: 'FDA ClinPharm review: plasma clearance 207 mL/min; t1/2 12.9 h; oral bioavailability
+    78%. Treat CL/V as apparent for 1-comp template.'
+pk_parsed:
+  half_life_h: 12.9
+  clearance:
+    value: 12.42
+    unit: L/h
+  volume:
+    value: 231.14571406114794
+    unit: L
+  bioavailability_frac: 0.78
+  clearance_basis: apparent
+  volume_basis: apparent
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.053732339578290336
+  CL_abs_L_per_h_at_70kg: 12.42
+  V_abs_L_at_70kg: 231.14571406114794
+  CL_apparent_L_per_h_at_70kg: 12.42
+  V_apparent_L_at_70kg: 231.14571406114794
+  CL_systemic_L_per_h_at_70kg: 9.6876
+  V_systemic_L_at_70kg: 180.2936569676954
+  notes:
+  - Systemic CL/V were derived as (apparent CL/V) * F (assumes values are CL/F, V/F).
+  - 'Basis detected/selected: apparent (CL/F, V/F). Model default can use CL_abs/V_abs
+    as apparent and set F1=1.'
+  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
+    typically report systemic parameters.'

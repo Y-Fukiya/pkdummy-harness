@@ -1,0 +1,34 @@
+id: OSP_sufentanil
+name: Sufentanil
+route_inferred: po
+sources:
+- url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8b580f3d-e3b5-4086-b093-87a980631147
+pk_raw:
+  text: 'DSUVIA label: terminal t1/2 13.4 h; apparent clearance 108 L/h; bioavailability
+    53%. One-comp V derived.'
+pk_parsed:
+  half_life_h: 13.4
+  clearance:
+    value: 108.0
+    unit: L/h
+  volume:
+    value: 2087.868263174508
+    unit: L
+  bioavailability_frac: 0.53
+  clearance_basis: apparent
+  volume_basis: apparent
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.05172740153432428
+  CL_abs_L_per_h_at_70kg: 108.0
+  V_abs_L_at_70kg: 2087.868263174508
+  CL_apparent_L_per_h_at_70kg: 108.0
+  V_apparent_L_at_70kg: 2087.868263174508
+  CL_systemic_L_per_h_at_70kg: 57.24
+  V_systemic_L_at_70kg: 1106.5701794824893
+  notes:
+  - Systemic CL/V were derived as (apparent CL/V) * F (assumes values are CL/F, V/F).
+  - 'Basis detected/selected: apparent (CL/F, V/F). Model default can use CL_abs/V_abs
+    as apparent and set F1=1.'
+  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
+    typically report systemic parameters.'

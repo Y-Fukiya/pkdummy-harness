@@ -1,0 +1,67 @@
+version: 0.1
+study:
+  id: OSP_efavirenz
+  title: Efavirenz (template from label/PopPK summary)
+population:
+  n: 100
+  covariates:
+    wt_kg:
+      dist: lognormal
+      median: 70.0
+      cv: 0.25
+      min: 40
+      max: 120
+regimen:
+  route: oral
+  units:
+    dose: mg
+  arms:
+    A:
+      n: 100
+      dose_mg: 100
+sampling:
+  t_end_h: 72.0
+  dt_h: 0.5
+  include_t0: true
+model:
+  template: pk1_oral_ode
+  units:
+    conc: ng/mL
+    mult: 1000
+  theta:
+    CL: 13.9
+    V: 1163.1007419646824
+    KA: 1.2
+    F1: 1.0
+    ALAG1: 0.5
+  notes:
+  - Default assumes CL and V from sources are apparent (CL/F, V/F). Set theta.F1 to
+    your chosen bioavailability AND adjust CL/V accordingly if your sources report
+    systemic CL/V.
+iiv:
+  eta:
+    CL: 0.09
+    V: 0.04
+    KA: 0.16
+  corr: false
+residual:
+  type: prop+add
+  prop: 0.25
+  add: 0.0
+output:
+  out_dir: outputs
+  seed: 20260217
+  write:
+    raw_csv: true
+    nonmem_csv: true
+    summary_md: true
+meta:
+  sources:
+  - https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=13ca3456-e5bf-4bb1-af95-b1378658a358
+  - https://pubmed.ncbi.nlm.nih.gov/40851704/
+  pk_summary_raw:
+    half_life: 52-76 hours (単回投与), 40-55 hours (複数回投与)
+    clearance: 13.9 L/h
+    volume: null
+    bioavailability: 良好、高脂肪食によりCmaxが28%増加
+    elimination: 肝代謝、尿中排泄 (14-34%)、糞便排泄 (16-61%)

@@ -1,0 +1,58 @@
+version: 0.1
+study:
+  id: OSP_amikacin
+  title: Amikacin (IV template from label/PopPK summary)
+population:
+  n: 100
+  covariates:
+    wt_kg:
+      dist: lognormal
+      median: 70.0
+      cv: 0.25
+      min: 40
+      max: 120
+regimen:
+  route: iv_bolus
+  units:
+    dose: mg
+  arms:
+    A:
+      n: 100
+      dose_mg: 100
+sampling:
+  t_end_h: 72.0
+  dt_h: 0.5
+  include_t0: true
+model:
+  template: pk1_iv_ode
+  units:
+    conc: ng/mL
+    mult: 1000
+  theta:
+    CL: 6.0
+    V: 24.0
+iiv:
+  eta:
+    CL: 0.09
+    V: 0.04
+  corr: false
+residual:
+  type: prop+add
+  prop: 0.25
+  add: 0.0
+output:
+  out_dir: outputs
+  seed: 20260217
+  write:
+    raw_csv: true
+    nonmem_csv: true
+    summary_md: true
+meta:
+  sources:
+  - https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0b56f6df-a05d-4520-8bf0-d7cefe20f6ad
+  pk_summary_raw:
+    half_life: slightly over 2 hours
+    clearance: about 100 mL/min
+    volume: 24 liters (28% of the body weight)
+    bioavailability: N/A (IV only)
+    elimination: 腎排泄

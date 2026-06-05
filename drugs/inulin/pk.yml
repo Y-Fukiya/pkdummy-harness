@@ -1,0 +1,32 @@
+id: osp::inulin
+name: Inulin
+route_inferred: iv
+sources:
+- url: https://go.drugbank.com/drugs/DB00638
+- url: https://www.sciencedirect.com/topics/immunology-and-microbiology/elimination-half-life
+pk_raw:
+  half_life: 2-4 hours
+  clearance: 7.2 L/hr
+  volume_of_distribution: 16 L
+  bioavailability: N/A (IV only)
+  elimination_route: 腎排泄
+pk_parsed:
+  half_life_h: 3.0
+  half_life_h_range:
+  - 2.0
+  - 4.0
+  clearance:
+    value: 7.2
+    unit: L/h
+  volume:
+    value: 16.0
+    unit: L
+  bioavailability_frac: 1.0
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.23104906018664842
+  CL_abs_L_per_h_at_70kg: 7.2
+  V_abs_L_at_70kg: 16.0
+  CL_systemic_L_per_h_at_70kg: 7.2
+  V_systemic_L_at_70kg: 16.0
+  notes: []

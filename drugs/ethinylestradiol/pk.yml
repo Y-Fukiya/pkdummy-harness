@@ -1,0 +1,42 @@
+id: osp::ethinylestradiol
+name: Ethinylestradiol
+route_inferred: po
+sources:
+- url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=142c4b90-c9ab-45ce-9172-f1ea7d366686
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC4285808/
+pk_raw:
+  half_life: 16.5-17.6 hours
+  clearance: 25.7 L/h
+  volume_of_distribution: null
+  bioavailability: 38-48%
+  elimination_route: 肝代謝
+pk_parsed:
+  half_life_h: 17.05
+  half_life_h_range:
+  - 16.5
+  - 17.6
+  clearance:
+    value: 25.7
+    unit: L/h
+  volume:
+    value: 632.1673264919305
+    unit: L
+    derived_from: clearance and half_life_h assuming ke=ln(2)/t1/2
+  bioavailability_frac: 0.43
+  bioavailability_frac_range:
+  - 0.38
+  - 0.48
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.04065379358122846
+  CL_abs_L_per_h_at_70kg: 25.7
+  V_abs_L_at_70kg: 632.1673264919305
+  CL_systemic_L_per_h_at_70kg: 11.051
+  V_systemic_L_at_70kg: 271.8319503915301
+  notes:
+  - Derived V from CL and t1/2 assuming ke=ln(2)/t1/2 (one-compartment
+    rescue; not a direct literature V).
+  - 'Oral entries: CL/V from label are often apparent (CL/F, V/F). If so, use CL_abs/V_abs
+    as apparent and set F1=1 in the simulation model.'
+  - If you are confident the source reports systemic CL and V, you can use CL_systemic/V_systemic
+    with F1=bioavailability.

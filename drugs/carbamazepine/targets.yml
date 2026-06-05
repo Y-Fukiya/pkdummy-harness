@@ -1,0 +1,32 @@
+scenario:
+  id: carbamazepine_dose200mg_po_single
+  route: po
+  regimen: single
+  dose:
+    value: 200.0
+    unit: mg
+  population:
+    species: human
+    group: adult_healthy
+targets:
+  auc:
+    type: AUC0-inf
+    value: 41666.66666666667
+    unit: ng*h/mL
+    summary: geometric_mean
+    variability:
+      type: gcv_percent
+      value: 35
+  t_half:
+    phase: terminal
+    value: 14.5
+    unit: h
+    summary: arithmetic_mean
+    variability:
+      type: sd
+      value: 1.0
+notes:
+- AUC is computed as Dose/CL using the extracted CL. For oral, this is often apparent
+  CL/F unless you explicitly choose systemic parameters.
+- Variability fields are placeholders unless you replace them with drug-specific PopPK
+  values.

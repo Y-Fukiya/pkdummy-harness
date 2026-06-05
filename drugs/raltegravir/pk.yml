@@ -1,0 +1,33 @@
+id: OSP_raltegravir
+name: Raltegravir
+route_inferred: po
+sources:
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3486539/
+pk_raw:
+  text: 'PopPK: CL/F 60.2 L/h; terminal t1/2 10.9 h. One-comp V derived.'
+pk_parsed:
+  half_life_h: 10.9
+  clearance:
+    value: 60.2
+    unit: L/h
+  volume:
+    value: 946.6676319305201
+    unit: L
+  bioavailability_frac: 1.0
+  clearance_basis: apparent
+  volume_basis: apparent
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.06359148445504086
+  CL_abs_L_per_h_at_70kg: 60.2
+  V_abs_L_at_70kg: 946.6676319305201
+  CL_apparent_L_per_h_at_70kg: 60.2
+  V_apparent_L_at_70kg: 946.6676319305201
+  CL_systemic_L_per_h_at_70kg: 60.2
+  V_systemic_L_at_70kg: 946.6676319305201
+  notes:
+  - Systemic CL/V were derived as (apparent CL/V) * F (assumes values are CL/F, V/F).
+  - 'Basis detected/selected: apparent (CL/F, V/F). Model default can use CL_abs/V_abs
+    as apparent and set F1=1.'
+  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
+    typically report systemic parameters.'

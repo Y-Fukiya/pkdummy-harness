@@ -1,0 +1,37 @@
+id: osp::moclobemide
+name: Moclobemide
+route_inferred: po
+sources:
+- url: https://go.drugbank.com/drugs/DB01171
+- url: https://pubmed.ncbi.nlm.nih.gov/2248087/
+- url: https://pubmed.ncbi.nlm.nih.gov/8582117/
+pk_raw:
+  half_life: 1-2 hours
+  clearance: 30-78 L/h
+  volume_of_distribution: 1-1.5 L/kg
+  bioavailability: 56-90%
+  elimination_route: 肝代謝+腎排泄
+pk_parsed:
+  half_life_h: 1.5
+  half_life_h_range:
+  - 1.0
+  - 2.0
+  clearance:
+    value: 78.0
+    unit: L/h
+  volume:
+    value: 1.5
+    unit: L/kg
+  bioavailability_frac: 0.73
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.46209812037329684
+  CL_abs_L_per_h_at_70kg: 78.0
+  V_abs_L_at_70kg: 105.0
+  CL_systemic_L_per_h_at_70kg: 56.94
+  V_systemic_L_at_70kg: 76.64999999999999
+  notes:
+  - 'Oral entries: CL/V from label are often apparent (CL/F, V/F). If so, use CL_abs/V_abs
+    as apparent and set F1=1 in the simulation model.'
+  - If you are confident the source reports systemic CL and V, you can use CL_systemic/V_systemic
+    with F1=bioavailability.

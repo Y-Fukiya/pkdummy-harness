@@ -1,0 +1,32 @@
+scenario:
+  id: erythromycin_dose125mg_iv_single
+  route: iv
+  regimen: single
+  dose:
+    value: 125.0
+    unit: mg
+  population:
+    species: human
+    group: adult_healthy
+targets:
+  auc:
+    type: AUC0-inf
+    value: 3369.272237196765
+    unit: ng*h/mL
+    summary: geometric_mean
+    variability:
+      type: gcv_percent
+      value: 35
+  t_half:
+    phase: terminal
+    value: 2.3
+    unit: h
+    summary: arithmetic_mean
+    variability:
+      type: sd
+      value: 1.0
+notes:
+- AUC is computed as Dose/CL using the extracted CL. For oral, this is often apparent
+  CL/F unless you explicitly choose systemic parameters.
+- Variability fields are placeholders unless you replace them with drug-specific PopPK
+  values.

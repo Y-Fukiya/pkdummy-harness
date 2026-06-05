@@ -1,0 +1,33 @@
+id: OSP_fluconazole
+name: Fluconazole
+route_inferred: iv
+sources:
+- url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f6e44764-c652-4926-b081-9111c82c7957
+pk_raw:
+  text: 'Label: mean body clearance 0.23 mL/min/kg; t1/2 ~30 h. One-comp V derived.'
+pk_parsed:
+  half_life_h: 30.0
+  clearance:
+    value: 0.0138
+    unit: L/h/kg
+  volume:
+    value: 0.5972757469280309
+    unit: L/kg
+  bioavailability_frac: 1.0
+  clearance_basis: systemic
+  volume_basis: systemic
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.023104906018664845
+  CL_abs_L_per_h_at_70kg: 0.966
+  V_abs_L_at_70kg: 41.80930228496216
+  CL_apparent_L_per_h_at_70kg: 0.966
+  V_apparent_L_at_70kg: 41.80930228496216
+  CL_systemic_L_per_h_at_70kg: 0.966
+  V_systemic_L_at_70kg: 41.80930228496216
+  notes:
+  - Apparent CL/V were derived as (systemic CL/V) / F.
+  - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability
+    with systemic CL/V.'
+  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
+    typically report systemic parameters.'

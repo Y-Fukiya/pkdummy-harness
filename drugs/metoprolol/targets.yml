@@ -1,0 +1,32 @@
+scenario:
+  id: metoprolol_dose100mg_po_single
+  route: po
+  regimen: single
+  dose:
+    value: 100.0
+    unit: mg
+  population:
+    species: human
+    group: adult_healthy
+targets:
+  auc:
+    type: AUC0-inf
+    value: 2083.3333333333335
+    unit: ng*h/mL
+    summary: geometric_mean
+    variability:
+      type: gcv_percent
+      value: 35
+  t_half:
+    phase: terminal
+    value: 5.0
+    unit: h
+    summary: arithmetic_mean
+    variability:
+      type: sd
+      value: 1.0
+notes:
+- AUC is computed as Dose/CL (assuming CL is apparent CL/F for oral, and systemic
+  CL for IV).
+- Variability fields are placeholders unless you replace them with drug-specific PopPK
+  values.

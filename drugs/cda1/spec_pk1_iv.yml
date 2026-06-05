@@ -1,0 +1,59 @@
+version: 0.1
+study:
+  id: OSP_cda1
+  title: CDA1 (IV template from label/PopPK summary)
+population:
+  n: 100
+  covariates:
+    wt_kg:
+      dist: lognormal
+      median: 70.0
+      cv: 0.25
+      min: 40
+      max: 120
+regimen:
+  route: iv_bolus
+  units:
+    dose: mg
+  arms:
+    A:
+      n: 100
+      dose_mg: 100
+sampling:
+  t_end_h: 3938.4000000000005
+  dt_h: 0.5
+  include_t0: true
+model:
+  template: pk1_iv_ode
+  units:
+    conc: ng/mL
+    mult: 1000
+  theta:
+    CL: 0.00588
+    V: 4.9
+iiv:
+  eta:
+    CL: 0.09
+    V: 0.04
+  corr: false
+residual:
+  type: prop+add
+  prop: 0.25
+  add: 0.0
+output:
+  out_dir: outputs
+  seed: 20260217
+  write:
+    raw_csv: true
+    nonmem_csv: true
+    summary_md: true
+meta:
+  sources:
+  - https://pubmed.ncbi.nlm.nih.gov/18502001/
+  - https://pmc.ncbi.nlm.nih.gov/articles/PMC2628753/
+  pk_summary_raw:
+    half_life: 22.9-31.8 days
+    clearance: 0.0014 mL/min/kg
+    volume: 0.07 L/kg
+    bioavailability: N/A (IV only)
+    elimination: ''

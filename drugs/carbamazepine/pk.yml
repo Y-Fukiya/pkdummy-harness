@@ -1,0 +1,34 @@
+id: OSP_carbamazepine
+name: Carbamazepine
+route_inferred: po
+sources:
+- url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=52f0f753-a70c-4572-a85c-97ea7a2601a9
+pk_raw:
+  text: 'Label: oral clearance ~80 mL/min at steady state; half-life 12-17 h. Use
+    t1/2 14.5 h; one-comp V derived.'
+pk_parsed:
+  half_life_h: 14.5
+  clearance:
+    value: 4.8
+    unit: L/h
+  volume:
+    value: 100.41157484587185
+    unit: L
+  bioavailability_frac: 1.0
+  clearance_basis: apparent
+  volume_basis: apparent
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.04780325383172036
+  CL_abs_L_per_h_at_70kg: 4.8
+  V_abs_L_at_70kg: 100.41157484587185
+  CL_apparent_L_per_h_at_70kg: 4.8
+  V_apparent_L_at_70kg: 100.41157484587185
+  CL_systemic_L_per_h_at_70kg: 4.8
+  V_systemic_L_at_70kg: 100.41157484587185
+  notes:
+  - Systemic CL/V were derived as (apparent CL/V) * F (assumes values are CL/F, V/F).
+  - 'Basis detected/selected: apparent (CL/F, V/F). Model default can use CL_abs/V_abs
+    as apparent and set F1=1.'
+  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
+    typically report systemic parameters.'

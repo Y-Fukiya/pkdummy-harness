@@ -1,0 +1,16 @@
+version: "0.1"
+mode: demo_set
+drugs_dir: drugs
+out_dir: outputs/demo_set_config
+drugs:
+  - albuterol
+  - alprazolam
+  - aciclovir
+  - abciximab
+  - felodipine
+simulation:
+  engine: analytical_demo
+sampling:
+  times_h: [0, 0.5, 1, 2, 4, 8, 12, 24]
+validation:
+  allow_failed: true

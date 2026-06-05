@@ -1,0 +1,68 @@
+version: 0.1
+study:
+  id: OSP_moclobemide
+  title: Moclobemide (template from label/PopPK summary)
+population:
+  n: 100
+  covariates:
+    wt_kg:
+      dist: lognormal
+      median: 70.0
+      cv: 0.25
+      min: 40
+      max: 120
+regimen:
+  route: oral
+  units:
+    dose: mg
+  arms:
+    A:
+      n: 100
+      dose_mg: 100
+sampling:
+  t_end_h: 72.0
+  dt_h: 0.5
+  include_t0: true
+model:
+  template: pk1_oral_ode
+  units:
+    conc: ng/mL
+    mult: 1000
+  theta:
+    CL: 78.0
+    V: 105.0
+    KA: 1.2
+    F1: 1.0
+    ALAG1: 0.5
+  notes:
+  - Default assumes CL and V from sources are apparent (CL/F, V/F). Set theta.F1 to
+    your chosen bioavailability AND adjust CL/V accordingly if your sources report
+    systemic CL/V.
+iiv:
+  eta:
+    CL: 0.09
+    V: 0.04
+    KA: 0.16
+  corr: false
+residual:
+  type: prop+add
+  prop: 0.25
+  add: 0.0
+output:
+  out_dir: outputs
+  seed: 20260217
+  write:
+    raw_csv: true
+    nonmem_csv: true
+    summary_md: true
+meta:
+  sources:
+  - https://go.drugbank.com/drugs/DB01171
+  - https://pubmed.ncbi.nlm.nih.gov/2248087/
+  - https://pubmed.ncbi.nlm.nih.gov/8582117/
+  pk_summary_raw:
+    half_life: 1-2 hours
+    clearance: 30-78 L/h
+    volume: 1-1.5 L/kg
+    bioavailability: 56-90%
+    elimination: 肝代謝+腎排泄

@@ -1,0 +1,178 @@
+jobs:
+- name: Aciclovir
+  route: oral
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed:
+    setid: e8a0f9f8-294f-4dd6-bd55-10a6253f1aa8
+  pubmed:
+    pmid: '6355048'
+- name: Atazanavir
+  route: oral
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed:
+    setid: 7fbea274-d6b5-4faa-bbf0-05fefab42114
+  pubmed: false
+- name: Carbamazepine
+  route: oral
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed:
+    setid: 25cca2b1-9020-4d8a-bc22-b8063e57f9e1
+  pubmed:
+    pmid: '346287'
+- name: Dapagliflozin
+  route: oral
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed:
+    setid: 72ad22ae-efe6-4cd6-a302-98aaee423d69
+  pubmed: false
+- name: Efavirenz
+  route: oral
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed:
+    setid: 13ca3456-e5bf-4bb1-af95-b1378658a358
+  pubmed:
+    pmid: '40851704'
+- name: Erythromycin
+  route: oral
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed: true
+  pubmed: false
+- name: Ethinylestradiol
+  route: oral
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed:
+    setid: 142c4b90-c9ab-45ce-9172-f1ea7d366686
+  pubmed: false
+- name: Metoprolol
+  route: oral
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed:
+    setid: cbc32a80-717b-4cf2-b76a-6d03a3720419
+  pubmed:
+    pmid: '35764772'
+- name: Raltegravir
+  route: oral
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed: true
+  pubmed: false
+- name: Sufentanil
+  route: iv
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed:
+    setid: 95e639db-1ca3-4328-b347-7ea348f6cc72
+  pubmed:
+    pmid: '8050423'
+- name: Fluconazole
+  route: oral
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed:
+    setid: 69f199fa-bb92-4837-8b12-427a1c71f622
+  pubmed: false
+- name: Fluvoxamine
+  route: oral
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed:
+    setid: 35b377d9-5b7a-4d8e-b6c1-4291d02f5dae
+  pubmed:
+    pmid: '9184622'
+- name: Mexiletine
+  route: oral
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed:
+    setid: ab73778b-6794-441c-b127-610a6d0733ea
+  pubmed:
+    pmid: '10589372'
+- name: S-Mephenytoin
+  route: oral
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed: true
+  pubmed:
+    pmid: '1505151'
+- name: Sildenafil
+  route: oral
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed:
+    setid: 7086e222-0f2b-4c02-84c0-4f8635c90993
+  pubmed: false
+- name: Tizanidine
+  route: oral
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed:
+    setid: 043d9e51-bfa2-4add-9058-5ece332f7e99
+  pubmed: false
+- name: Triazolam
+  route: oral
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed:
+    setid: ce6ddb53-89ca-4edf-a519-553d34ce7938
+  pubmed: false
+- name: Mefenamic acid
+  route: oral
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed:
+    setid: d0291319-ab3e-20c8-e053-2a95a90afabb
+  pubmed: false
+- name: Motavizumab (MEDI-524)
+  route: iv
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed: true
+  pubmed: false
+- name: MEDI524YTE
+  route: iv
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed: true
+  pubmed: false
+- name: dAb2
+  route: iv
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed: true
+  pubmed: false
+- name: BAY794620
+  route: oral
+  dose_mg: 100.0
+  weight_ref_kg_for_abs: 70.0
+  param_basis: auto
+  dailymed: true
+  pubmed: false

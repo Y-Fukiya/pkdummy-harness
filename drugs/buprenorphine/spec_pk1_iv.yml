@@ -1,0 +1,52 @@
+version: 0.1
+study:
+  id: OSP_buprenorphine
+  title: Buprenorphine (template from label/PopPK source)
+population:
+  n: 100
+  covariates:
+    wt_kg:
+      dist: lognormal
+      median: 70.0
+      cv: 0.25
+      min: 40
+      max: 120
+regimen:
+  route: iv
+  units:
+    dose: mg
+  arms:
+    A:
+      n: 100
+      dose_mg: 0.3
+      infusion_h: 1.0
+sampling:
+  t_end_h: 72.0
+  dt_h: 0.5
+  include_t0: true
+model:
+  template: pk1_iv_ode
+  units:
+    conc: ng/mL
+    mult: 1000
+  theta:
+    CL: 54.0
+    V: 806.0
+iiv:
+  eta:
+    CL: 0.09
+    V: 0.04
+  corr: false
+residual:
+  type: prop+add
+  prop: 0.25
+  add: 0.0
+output:
+  include:
+  - IPRED
+  - DV
+  - CP
+  - AUC
+  format: csv
+meta:
+  generated_by: tools/template_gen.py

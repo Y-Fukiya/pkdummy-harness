@@ -1,0 +1,34 @@
+id: osp::tefibazumab
+name: Tefibazumab
+route_inferred: iv
+sources:
+- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC1610062/
+pk_raw:
+  half_life: 17-18 days
+  clearance: 12 ml/h
+  volume_of_distribution: 7.3 liters
+  bioavailability: N/A (IV only)
+  elimination_route: null
+pk_parsed:
+  half_life_h: 420.0
+  half_life_h_range:
+  - 408.0
+  - 432.0
+  clearance:
+    value: 0.012
+    unit: L/h
+  volume:
+    value: 7.3
+    unit: L
+  bioavailability_frac: 1.0
+  bioavailability_frac_range:
+  - 1.0
+  - 1.0
+  weight_ref_kg_for_abs: 70.0
+derived:
+  ke_1_per_h: 0.0016503504299046317
+  CL_abs_L_per_h_at_70kg: 0.012
+  V_abs_L_at_70kg: 7.3
+  CL_systemic_L_per_h_at_70kg: 0.012
+  V_systemic_L_at_70kg: 7.3
+  notes: []

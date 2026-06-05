@@ -1,0 +1,14 @@
+jobs:
+  - name: simvastatin
+    route: oral
+    dose_mg: 40
+    weight_ref_kg_for_abs: 70
+    dailymed: true
+    pubmed: false
+
+  - name: abciximab
+    route: iv
+    dose_mg: 5
+    weight_ref_kg_for_abs: 70
+    dailymed: true
+    pubmed: false
