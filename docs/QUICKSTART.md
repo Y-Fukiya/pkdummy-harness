@@ -24,6 +24,8 @@ flowchart LR
 
 UI/launcherから呼ぶ場合の契約は [LAUNCHER_CONTRACT.md](LAUNCHER_CONTRACT.md) を参照してください。
 
+説明資料用のdraw.io図は [assets/pk-harness-process.drawio](assets/pk-harness-process.drawio) にあります。図の読み方は [PROCESS_FLOW.md](PROCESS_FLOW.md) を参照してください。
+
 ## 2. Install And Check
 
 リポジトリ直下で実行します。

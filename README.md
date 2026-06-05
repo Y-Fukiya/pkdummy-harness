@@ -6,6 +6,8 @@
 
 ![PK-like Synthetic Data Harness workflow](docs/assets/pk-harness-workflow.png)
 
+処理プロセスを説明するdraw.io形式の図は [docs/assets/pk-harness-process.drawio](docs/assets/pk-harness-process.drawio) にあります。図の読み方は [docs/PROCESS_FLOW.md](docs/PROCESS_FLOW.md) を参照してください。
+
 ## Positioning
 
 このハーネスは、薬剤ごとの文献スケールの `CL`, `V`, `t1/2`, `AUC` を使い、解析パイプライン検証に使いやすい synthetic fixture を作るためのものです。
