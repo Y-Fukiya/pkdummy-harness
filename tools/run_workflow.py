@@ -158,6 +158,9 @@ def run_workflow(
     seed: int = 20260217,
     study_start: str = "2026-01-01T08:00:00",
     pc_conc_col: str = "DV",
+    pc_conc_unit: str | None = None,
+    dose_cmt: str = "1",
+    observation_cmt: str = "2",
     strict_subject_match: bool = False,
     overwrite_existing_pc_conc: bool = False,
     max_validation_loops: int = 3,
@@ -284,6 +287,7 @@ def run_workflow(
         study_start=study_start,
         seed=seed,
         pc_conc_col=pc_conc_col,
+        pc_conc_unit=pc_conc_unit,
         strict_subject_match=strict_subject_match,
         overwrite_existing_pc_conc=overwrite_existing_pc_conc,
     )
@@ -294,6 +298,8 @@ def run_workflow(
     analysis_result = make_analysis_inputs(
         sdtm_like_dir=sdtm_dir,
         out_dir=analysis_dir,
+        dose_cmt=dose_cmt,
+        observation_cmt=observation_cmt,
     )
     trace_lines.append(
         f"{datetime.now().isoformat(timespec='seconds')} ANALYSIS_INPUTS status={analysis_result.status} counts={analysis_result.counts}"
@@ -360,6 +366,9 @@ def run_workflow(
                 "seed": seed,
                 "study_start": study_start,
                 "pc_conc_col": pc_conc_col,
+                "pc_conc_unit": pc_conc_unit,
+                "dose_cmt": dose_cmt,
+                "observation_cmt": observation_cmt,
                 "strict_subject_match": strict_subject_match,
                 "overwrite_existing_pc_conc": overwrite_existing_pc_conc,
                 "max_validation_loops": max_validation_loops,
@@ -397,6 +406,9 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--seed", type=int, default=20260217)
     parser.add_argument("--study-start", default="2026-01-01T08:00:00")
     parser.add_argument("--pc-conc-col", default="DV")
+    parser.add_argument("--pc-conc-unit", default=None, help="Optional concentration unit override for generated PC units")
+    parser.add_argument("--dose-cmt", default="1", help="CMT value for PopPK dosing rows")
+    parser.add_argument("--observation-cmt", default="2", help="CMT value for PopPK observation rows")
     parser.add_argument("--strict-subject-match", action="store_true")
     parser.add_argument("--overwrite-existing-pc-conc", action="store_true")
     parser.add_argument("--max-validation-loops", type=int, default=3)
@@ -432,6 +444,9 @@ def main(argv: list[str] | None = None) -> int:
             seed=args.seed,
             study_start=args.study_start,
             pc_conc_col=args.pc_conc_col,
+            pc_conc_unit=args.pc_conc_unit,
+            dose_cmt=args.dose_cmt,
+            observation_cmt=args.observation_cmt,
             strict_subject_match=args.strict_subject_match,
             overwrite_existing_pc_conc=args.overwrite_existing_pc_conc,
             max_validation_loops=args.max_validation_loops,

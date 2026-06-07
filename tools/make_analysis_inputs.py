@@ -319,6 +319,8 @@ def _make_poppk(
     adpc_rows: list[dict[str, Any]],
     *,
     ex_by_subject: dict[str, dict[str, str]],
+    dose_cmt: str = "1",
+    observation_cmt: str = "2",
 ) -> list[dict[str, Any]]:
     subject_order = {
         usubjid: idx
@@ -338,7 +340,7 @@ def _make_poppk(
                 "MDV": "1",
                 "AMT": _norm(ex.get("EXDOSE") or first["DOSE_MG"]),
                 "DV": "",
-                "CMT": "1",
+                "CMT": dose_cmt,
                 "RATE": "0",
                 "DOSE_MG": _norm(ex.get("EXDOSE") or first["DOSE_MG"]),
                 "ROUTE": _norm(ex.get("EXROUTE") or first["ROUTE"]),
@@ -364,7 +366,7 @@ def _make_poppk(
                     "MDV": "0" if has_dv else "1",
                     "AMT": "0",
                     "DV": obs["AVAL"],
-                    "CMT": "2",
+                    "CMT": observation_cmt,
                     "RATE": "0",
                     "DOSE_MG": obs["DOSE_MG"],
                     "ROUTE": obs["ROUTE"],
@@ -415,6 +417,8 @@ def make_analysis_inputs(
     *,
     sdtm_like_dir: Path | str,
     out_dir: Path | str,
+    dose_cmt: str = "1",
+    observation_cmt: str = "2",
 ) -> AnalysisInputResult:
     sdtm_path = Path(sdtm_like_dir)
     out_path = Path(out_dir)
@@ -459,7 +463,12 @@ def make_analysis_inputs(
         ex_by_subject=ex_by_subject,
     )
     nca_rows = _make_nca(adpc_rows)
-    poppk_rows = _make_poppk(adpc_rows, ex_by_subject=ex_by_subject)
+    poppk_rows = _make_poppk(
+        adpc_rows,
+        ex_by_subject=ex_by_subject,
+        dose_cmt=str(dose_cmt),
+        observation_cmt=str(observation_cmt),
+    )
 
     files = {
         "ADPC": out_path / "ADPC.csv",
@@ -489,6 +498,10 @@ def make_analysis_inputs(
             "inputs": {name: str(path) for name, path in required.items()},
             "outputs": {name: str(path) for name, path in files.items()},
             "counts": counts,
+            "settings": {
+                "dose_cmt": str(dose_cmt),
+                "observation_cmt": str(observation_cmt),
+            },
             "warnings": warnings,
             "notes": [
                 "ADPC.csv is ADPC-like and intended for workflow smoke tests, not submission-ready ADaM.",
@@ -510,6 +523,8 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sdtm-like-dir", required=True, type=Path, help="Directory containing DM/VS/LB/EX/PC CSVs")
     parser.add_argument("--out-dir", required=True, type=Path, help="Output directory for ADPC/NCA/PopPK fixture CSVs")
+    parser.add_argument("--dose-cmt", default="1", help="CMT value for PopPK dosing rows")
+    parser.add_argument("--observation-cmt", default="2", help="CMT value for PopPK observation rows")
     return parser
 
 
@@ -520,6 +535,8 @@ def main(argv: list[str] | None = None) -> int:
         result = make_analysis_inputs(
             sdtm_like_dir=args.sdtm_like_dir,
             out_dir=args.out_dir,
+            dose_cmt=args.dose_cmt,
+            observation_cmt=args.observation_cmt,
         )
     except Exception as exc:
         print(f"ERROR: {exc}")

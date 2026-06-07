@@ -122,6 +122,7 @@ python3 tools/validate_simulation.py \
 ```
 
 この検証は `sim_full.csv` から `AUC0-inf`, `Cmax`, `Tmax`, terminal `t1/2` を再計算します。現時点で主に判定に使うのは AUC と t1/2 です。
+入力CSVに `CP_UNIT`, `DV_UNIT`, `CONC_UNIT`, `PCSTRESU` などの単位列がある場合は、レポート表示とCL由来AUC比較の単位換算に使います。単位列がない場合は、従来どおり `ng/mL` 前提のfixtureとして扱います。
 
 ### Step 3: 臨床試験の採血ポイントに合わせる
 
@@ -255,6 +256,20 @@ python3 tools/make_sdtm_like_domains.py \
 
 PC濃度は既定で `DV` を読み、必要に応じて `CP`, `IPRED` をフォールバックします。全行で濃度が読めない場合はエラー、部分的に読めない場合は警告になります。
 
+濃度単位は、`DV_UNIT`, `DVU`, `CONC_UNIT`, `PCSTRESU`, `PCORRESU` などの入力列があれば引き継ぎます。単位を明示したい場合は `--pc-conc-unit` を指定します。
+
+```bash
+python3 tools/run_workflow.py \
+  --sim-full outputs/<run>/raw/sim_full.csv \
+  --drug <slug> \
+  --times 0,0.5,1,2,4,8,12,24 \
+  --pc-conc-unit ng/mL \
+  --out-dir outputs/<run>/workflow
+```
+
+単位列も `--pc-conc-unit` もない場合だけ、workflow fixtureの既定として `ng/mL` を使います。
+この単位は後続の `ADPC.csv` / `NCA_INPUT.csv` にも引き継がれます。
+
 ### 既存DM/LB/VS/PC skeletonがある場合
 
 既存の `DM`, `VS`, `LB` を保持し、濃度なし `PC` skeletonだけにシミュレーション濃度を注入できます。
@@ -313,6 +328,18 @@ python3 tools/make_analysis_inputs.py \
 ```
 
 このステップの役割は、臨床薬理的な正しさの証明ではなく、**SDTM-likeからADaM/NCA/PopPK側へ最低限つながるか** の確認です。PC濃度が全て欠損している場合は停止し、部分欠損は `MANIFEST.yml` の警告とPopPK側の `MDV=1` として残します。
+
+PopPK fixtureの `CMT` は既定で投与行 `1`、観測行 `2` ですが、実NONMEM/nlmixr2モデルのcompartment定義とは限りません。施設やcontrol streamに合わせる場合は明示します。
+
+```bash
+python3 tools/make_analysis_inputs.py \
+  --sdtm-like-dir outputs/<run>/workflow/sdtm_like \
+  --out-dir outputs/<run>/workflow/analysis_inputs \
+  --dose-cmt 1 \
+  --observation-cmt 2
+```
+
+`run_workflow.py` から一括実行する場合も、同じ `--dose-cmt` と `--observation-cmt` を指定できます。
 
 ### 記述統計レポートを作る場合
 
@@ -585,12 +612,14 @@ make harness-check
 | manifest構造確認 | `python3 tools/validate_manifest.py outputs/<run>/workflow/MANIFEST.yml` |
 | config一括ハーネス | `python3 tools/run_harness.py harness_examples/demo_set.yml` |
 | 一括workflow | `python3 tools/run_workflow.py --sim-full outputs/<run>/raw/sim_full.csv --drug <slug> --times 0,0.5,1,2,4,8,12,24 --out-dir outputs/<run>/workflow` |
+| 濃度単位を明示 | `python3 tools/run_workflow.py --sim-full outputs/<run>/raw/sim_full.csv --drug <slug> --times 0,0.5,1,2,4,8,12,24 --pc-conc-unit ng/mL --out-dir outputs/<run>/workflow` |
 | 複数薬剤デモ | `python3 tools/run_harness.py harness_examples/demo_set.yml` |
 | 既存SDTM skeleton利用 | `python3 tools/run_workflow.py --sim-full outputs/<run>/raw/sim_full.csv --drug <slug> --times 0,0.5,1,2,4,8,12,24 --dm-csv existing/DM.csv --vs-csv existing/VS.csv --lb-csv existing/LB.csv --pc-csv existing/PC_skeleton.csv --out-dir outputs/<run>/workflow` |
 | シミュレーション検証 | `python3 tools/validate_simulation.py outputs/<run>/raw/sim_full.csv --pk drugs/<slug>/pk.yml --targets drugs/<slug>/targets.yml --out-md outputs/<run>/reports/simulation_validation.md` |
 | 採血時点抽出 | `python3 tools/sample_clinical_timepoints.py outputs/<run>/raw/sim_full.csv --times 0,0.5,1,2,4,8,12,24 --out outputs/<run>/raw/clinical_samples.csv` |
 | SDTM-like CSV生成 | `python3 tools/make_sdtm_like_domains.py --clinical-samples outputs/<run>/raw/clinical_samples.csv --spec drugs/<slug>/spec_pk1_oral.yml --out-dir outputs/<run>/sdtm_like` |
 | ADPC/NCA/PopPK入力生成 | `python3 tools/make_analysis_inputs.py --sdtm-like-dir outputs/<run>/workflow/sdtm_like --out-dir outputs/<run>/workflow/analysis_inputs` |
+| PopPK CMT convention指定 | `python3 tools/make_analysis_inputs.py --sdtm-like-dir outputs/<run>/workflow/sdtm_like --out-dir outputs/<run>/workflow/analysis_inputs --dose-cmt 1 --observation-cmt 2` |
 | NCA/PopPK adapter生成 | `python3 tools/make_downstream_adapters.py --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/adapters` |
 | 下流E2E smoke check | `python3 tools/run_downstream_smoke.py --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/downstream_smoke` |
 | 外部tool validation probe | `python3 tools/run_external_tool_validation.py --downstream-dir outputs/<run>/workflow/downstream_smoke --out-dir outputs/<run>/workflow/external_tool_validation` |
@@ -610,8 +639,10 @@ make harness-check
 | `sample_clinical_timepoints.py` が範囲外エラー | 指定した採血時刻が `sim_full.csv` の時間範囲外 | `sampling.t_end_h` を延ばして再実行、または採血時刻を短くする |
 | `--method exact` でエラー | 指定時刻がCSVに存在しない | `linear` か `nearest` を使う |
 | `make_sdtm_like_domains.py` が濃度列を読めない | `clinical_samples.csv` に `DV` がない | `--pc-conc-col CP` など実列名を指定する |
+| 濃度単位が期待と違う | 入力CSVに単位列がない、または施設単位と異なる | `--pc-conc-unit` を指定する。入力列では `DV_UNIT`, `DVU`, `CONC_UNIT`, `PCSTRESU` などを利用できる |
 | 既存PC skeletonに濃度が入らない | `USUBJID` と `PCTPTNUM/PCTPT/PCELTM` が合わない | skeleton側の時点キーを確認する |
 | `make_analysis_inputs.py` が停止する | PC濃度が全て欠損している | `PCSTRESN`, `PCORRES`, `DV`, `CP`, `IPRED` のいずれかが入っているか確認する |
+| PopPKのCMTがcontrol streamと合わない | 既定CMTはparser smoke用の convention | `--dose-cmt`, `--observation-cmt` で施設側モデル定義に合わせる |
 | `report_pk_fixture.R` が `ggplot2` 不足で停止する | R package未導入 | `install.packages("ggplot2")` を実行する。ハーネス本体はこのレポートなしでも実行可能 |
 | `render_pk_fixture_quarto.R` がQuarto不足で停止する | Quarto CLI未導入または実行制約 | Quartoを導入する。docx不要なら `report_pk_fixture.R` のMarkdown/PNG/CSVで運用する |
 | 既存skeletonで列不足エラー | fixture生成に必要な最小列がない | `DM/VS/LB/EX/PC` のrequired columnsを確認する |
@@ -653,6 +684,7 @@ make harness-check
 [ ] spec_pk1_*.yml をrunnerで実行する
 [ ] raw/sim_full.csv が出ている
 [ ] run_workflow.py で validation report / clinical_samples.csv / SDTM-like CSV / analysis_inputs / MANIFEST / trace.log を作る
+[ ] 濃度単位とPopPK CMT conventionが施設側仕様と合うか確認する
 [ ] OK/WARN/FAILED の扱いを記録する
 [ ] ADPC.csv / NCA_INPUT.csv / POPPK_INPUT.csv を下流workflowに投入する
 [ ] 必要なら make_downstream_adapters.py でツール別adapterを作る

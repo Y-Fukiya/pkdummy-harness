@@ -177,6 +177,46 @@ def test_make_sdtm_like_domains_writes_limited_domains(tmp_path: Path) -> None:
     assert manifest["warnings"] == []
 
 
+def test_make_sdtm_like_domains_preserves_input_concentration_unit(tmp_path: Path) -> None:
+    samples = tmp_path / "clinical_samples.csv"
+    spec = tmp_path / "spec.yml"
+    out_dir = tmp_path / "sdtm"
+    write_clinical_samples(samples)
+    write_spec(spec)
+    rows = read_csv(samples)
+    for row in rows:
+        row["DV_UNIT"] = "ug/mL"
+    write_csv(samples, rows, list(rows[0]))
+
+    make_sdtm_like_domains(
+        clinical_samples_csv=samples,
+        spec_yml=spec,
+        out_dir=out_dir,
+    )
+
+    pc = read_csv(out_dir / "PC.csv")
+    assert {row["PCSTRESU"] for row in pc} == {"ug/mL"}
+    assert {row["PCORRESU"] for row in pc} == {"ug/mL"}
+
+
+def test_make_sdtm_like_domains_allows_explicit_concentration_unit_override(tmp_path: Path) -> None:
+    samples = tmp_path / "clinical_samples.csv"
+    spec = tmp_path / "spec.yml"
+    out_dir = tmp_path / "sdtm"
+    write_clinical_samples(samples)
+    write_spec(spec)
+
+    make_sdtm_like_domains(
+        clinical_samples_csv=samples,
+        spec_yml=spec,
+        out_dir=out_dir,
+        pc_conc_unit="pmol/mL",
+    )
+
+    pc = read_csv(out_dir / "PC.csv")
+    assert {row["PCSTRESU"] for row in pc} == {"pmol/mL"}
+
+
 def test_make_sdtm_like_domains_uses_subject_height_when_available(tmp_path: Path) -> None:
     samples = tmp_path / "clinical_samples.csv"
     subjects = tmp_path / "subjects.csv"

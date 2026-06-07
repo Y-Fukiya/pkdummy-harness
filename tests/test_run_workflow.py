@@ -107,6 +107,29 @@ def test_run_workflow_creates_trace_manifest_samples_and_sdtm_like_domains(tmp_p
     assert manifest["validation"]["status"] == "OK"
 
 
+def test_run_workflow_propagates_concentration_unit_and_poppk_cmt_convention(tmp_path: Path) -> None:
+    sim_csv, pk_yml, targets_yml, spec_yml = write_inputs(tmp_path)
+    out_dir = tmp_path / "workflow"
+
+    run_workflow(
+        sim_full_csv=sim_csv,
+        out_dir=out_dir,
+        pk_yml=pk_yml,
+        targets_yml=targets_yml,
+        spec_yml=spec_yml,
+        times_h=[0, 1, 2, 3],
+        pc_conc_unit="ug/mL",
+        dose_cmt="10",
+        observation_cmt="20",
+    )
+
+    pc = list(csv.DictReader((out_dir / "sdtm_like" / "PC.csv").open(encoding="utf-8", newline="")))
+    poppk = list(csv.DictReader((out_dir / "analysis_inputs" / "POPPK_INPUT.csv").open(encoding="utf-8", newline="")))
+    assert {row["PCSTRESU"] for row in pc} == {"ug/mL"}
+    assert poppk[0]["CMT"] == "10"
+    assert {row["CMT"] for row in poppk[1:]} == {"20"}
+
+
 def test_run_workflow_accepts_existing_domain_csvs_and_fills_pc_skeleton(tmp_path: Path) -> None:
     sim_csv, pk_yml, targets_yml, spec_yml = write_inputs(tmp_path)
     dm_csv = tmp_path / "DM_existing.csv"

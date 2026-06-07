@@ -77,6 +77,22 @@ python3 tools/run_workflow.py \
   --out-dir outputs/<run>/workflow
 ```
 
+濃度単位やPopPKのcompartment conventionを明示したい場合:
+
+```bash
+python3 tools/run_workflow.py \
+  --sim-full outputs/<run>/raw/sim_full.csv \
+  --drug <slug> \
+  --times 0,0.5,1,2,4,8,12,24 \
+  --pc-conc-unit ng/mL \
+  --dose-cmt 1 \
+  --observation-cmt 2 \
+  --out-dir outputs/<run>/workflow
+```
+
+`--pc-conc-unit` を省略した場合、`clinical_samples.csv` の `DV_UNIT`, `CONC_UNIT`, `PCSTRESU` などから単位を引き継ぎ、見つからなければ `ng/mL` を使います。`--dose-cmt` と `--observation-cmt` はparser smoke test用のCMT値で、正式モデルのcompartment定義は施設側control streamやsite adapterで合わせてください。
+`validate_simulation.py` も入力CSVの単位列を読み、CL由来AUC比較の単位換算に使います。
+
 設定ファイルの書き方だけ確認する場合:
 
 ```bash
@@ -354,6 +370,8 @@ outputs/demo_set_milestone7/
 | PC濃度欠損を検出 | 全欠損はエラー、部分欠損は警告 |
 | 被験者ID不一致を検出 | `--strict-subject-match` で厳密停止可能 |
 | 既存PC濃度を保護 | `--overwrite-existing-pc-conc` なしでは非空欄濃度を上書きしない |
+| 濃度単位を明示可能 | `--pc-conc-unit` または入力CSVの単位列を `PCSTRESU/AVALU/CONC_UNIT` へ引き継ぐ |
+| PopPK CMTを明示可能 | `--dose-cmt`, `--observation-cmt` でparser smoke fixtureのCMT conventionを設定する |
 
 ## PK Value Governance
 

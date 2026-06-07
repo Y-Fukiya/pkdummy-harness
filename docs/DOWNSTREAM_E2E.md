@@ -66,6 +66,8 @@ This check improves workflow confidence, but it does not replace:
 
 For formal tool use, treat the generated files as **starting fixtures** and add tool/project-specific control files, metadata, and validation outside this harness.
 
+`POPPK_INPUT.csv` の `CMT` は parser smoke fixture 用の convention です。既定は投与行 `1`、観測行 `2` ですが、実NONMEM/nlmixr2モデルに合わせる場合は `make_analysis_inputs.py` または `run_workflow.py` で `--dose-cmt` と `--observation-cmt` を指定してください。
+
 ## Site-specific Adapter Layer
 
 施設ごとの列名、固定値、必須列を合わせたい場合は、標準adapterの後ではなく `analysis_inputs/` から直接 site-specific CSV を作ります。

@@ -144,6 +144,22 @@ def test_make_analysis_inputs_creates_adpc_nca_and_poppk_smoke_inputs(tmp_path: 
     assert manifest["counts"] == result.counts
 
 
+def test_make_analysis_inputs_allows_poppk_cmt_convention_override(tmp_path: Path) -> None:
+    sdtm = write_sdtm_like(tmp_path)
+    out_dir = tmp_path / "analysis_inputs"
+
+    make_analysis_inputs(
+        sdtm_like_dir=sdtm,
+        out_dir=out_dir,
+        dose_cmt="10",
+        observation_cmt="20",
+    )
+
+    poppk = read_csv(out_dir / "POPPK_INPUT.csv")
+    assert poppk[0]["CMT"] == "10"
+    assert {row["CMT"] for row in poppk[1:]} == {"20"}
+
+
 def test_make_analysis_inputs_cli(tmp_path: Path) -> None:
     sdtm = write_sdtm_like(tmp_path)
     out_dir = tmp_path / "analysis_inputs"

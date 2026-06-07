@@ -20,6 +20,19 @@ import yaml
 
 
 CONC_COLUMNS = ["CP", "IPRED", "DV", "CONC"]
+UNIT_COLUMNS = [
+    "CONC_UNIT",
+    "CONCU",
+    "CP_UNIT",
+    "CPU",
+    "IPRED_UNIT",
+    "IPREDU",
+    "DV_UNIT",
+    "DVU",
+    "PCSTRESU",
+    "PCORRESU",
+    "UNIT",
+]
 
 
 @dataclass(frozen=True)
@@ -113,6 +126,45 @@ def _concentration(row: dict[str, Any]) -> float | None:
             if value is not None:
                 return value
     return None
+
+
+def _row_value_case_insensitive(row: dict[str, Any], keys: list[str]) -> str:
+    lower_map = {str(key).lower(): value for key, value in row.items()}
+    for key in keys:
+        value = row.get(key)
+        if value is not None and str(value).strip():
+            return str(value).strip()
+        value = lower_map.get(key.lower())
+        if value is not None and str(value).strip():
+            return str(value).strip()
+    return ""
+
+
+def infer_concentration_unit(rows: list[dict[str, Any]], default: str = "ng/mL") -> str:
+    for row in rows:
+        unit = _row_value_case_insensitive(row, UNIT_COLUMNS)
+        if unit:
+            return unit
+    return default
+
+
+def _auc_unit(conc_unit: str) -> str:
+    if "/" in conc_unit:
+        amount, volume = conc_unit.split("/", 1)
+        return f"{amount}*h/{volume}"
+    return f"{conc_unit}*h"
+
+
+def _auc_multiplier_from_mg_per_l(conc_unit: str) -> float | None:
+    normalized = conc_unit.strip().lower().replace(" ", "").replace("µ", "u")
+    multipliers = {
+        "ng/ml": 1000.0,
+        "ug/ml": 1.0,
+        "mcg/ml": 1.0,
+        "mg/l": 1.0,
+        "mg/ml": 0.001,
+    }
+    return multipliers.get(normalized)
 
 
 def _time(row: dict[str, Any]) -> float | None:
@@ -222,7 +274,7 @@ def _median(values: list[float]) -> float | None:
     return 0.5 * (ordered[mid - 1] + ordered[mid])
 
 
-def summarize_metrics(metrics: dict[str, SubjectMetrics]) -> dict[str, Any]:
+def summarize_metrics(metrics: dict[str, SubjectMetrics], *, concentration_unit: str = "ng/mL") -> dict[str, Any]:
     aucs = [m.auc0_inf for m in metrics.values()]
     cmax = [m.cmax for m in metrics.values()]
     tmax = [m.tmax_h for m in metrics.values()]
@@ -239,6 +291,8 @@ def summarize_metrics(metrics: dict[str, SubjectMetrics]) -> dict[str, Any]:
         "tmax_h_median": _median(tmax),
         "half_life_h_mean": _mean(half_lives),
         "half_life_h_median": _median(half_lives),
+        "concentration_unit": concentration_unit,
+        "auc_unit": _auc_unit(concentration_unit),
     }
 
 
@@ -332,8 +386,10 @@ def validate_simulation(
     rows = read_csv_rows(sim_csv)
     pk = load_yaml(pk_yml)
     targets = load_yaml(targets_yml)
+    concentration_unit = infer_concentration_unit(rows)
+    auc_unit = _auc_unit(concentration_unit)
     subject_metrics = compute_subject_metrics(rows, tolerances=tolerances)
-    summary = summarize_metrics(subject_metrics)
+    summary = summarize_metrics(subject_metrics, concentration_unit=concentration_unit)
     comparisons: list[Comparison] = []
     warnings: list[str] = []
     failures: list[str] = []
@@ -343,8 +399,8 @@ def validate_simulation(
 
     target_map = targets.get("targets") or {}
     target_specs = [
-        ("targets.auc", "auc", "ng*h/mL"),
-        ("targets.cmax", "cmax", "ng/mL"),
+        ("targets.auc", "auc", auc_unit),
+        ("targets.cmax", "cmax", concentration_unit),
         ("targets.tmax", "tmax", "h"),
         ("targets.t_half", "t_half", "h"),
     ]
@@ -389,16 +445,20 @@ def validate_simulation(
     dose = _dose_mg(targets, rows)
     cl_abs = _to_float(derived.get("CL_abs_L_per_h_at_70kg"))
     if dose and cl_abs and cl_abs > 0:
-        _add_comparison(
-            comparisons,
-            warnings,
-            failures,
-            label="derived.CL_abs implied AUC",
-            observed=summary.get("auc0_inf_geomean"),
-            expected=dose * 1000.0 / cl_abs,
-            unit="ng*h/mL",
-            tolerances=tolerances,
-        )
+        multiplier = _auc_multiplier_from_mg_per_l(concentration_unit)
+        if multiplier is None:
+            warnings.append(f"derived.CL_abs implied AUC skipped: unsupported concentration unit {concentration_unit!r}")
+        else:
+            _add_comparison(
+                comparisons,
+                warnings,
+                failures,
+                label="derived.CL_abs implied AUC",
+                observed=summary.get("auc0_inf_geomean"),
+                expected=dose * multiplier / cl_abs,
+                unit=auc_unit,
+                tolerances=tolerances,
+            )
 
     status = "FAILED" if failures else "WARN" if warnings else "OK"
     return ValidationResult(status, summary, comparisons, warnings, failures, subject_metrics)
@@ -440,6 +500,8 @@ def render_markdown(
     *,
     loop: ValidationLoopResult | None = None,
 ) -> str:
+    auc_unit = str(result.summary.get("auc_unit") or "ng*h/mL")
+    concentration_unit = str(result.summary.get("concentration_unit") or "ng/mL")
     lines = [
         "# Simulation validation",
         "",
@@ -448,15 +510,16 @@ def render_markdown(
         f"- pk.yml: `{pk_yml}`",
         f"- targets.yml: `{targets_yml}`",
         f"- Validation attempts: `{len(loop.attempts) if loop else 1}` / `{loop.max_loops if loop else 1}`",
+        "- Validation rechecks repeat the same calculation only. No optimization or calibration is performed.",
         "",
         "## Summary",
         "",
         "| Metric | Value |",
         "| --- | ---: |",
         f"| Subjects | {_fmt(result.summary.get('n_subjects'))} |",
-        f"| AUC0-inf geometric mean | {_fmt(result.summary.get('auc0_inf_geomean'))} ng*h/mL |",
-        f"| AUC0-inf arithmetic mean | {_fmt(result.summary.get('auc0_inf_mean'))} ng*h/mL |",
-        f"| Cmax geometric mean | {_fmt(result.summary.get('cmax_geomean'))} ng/mL |",
+        f"| AUC0-inf geometric mean | {_fmt(result.summary.get('auc0_inf_geomean'))} {auc_unit} |",
+        f"| AUC0-inf arithmetic mean | {_fmt(result.summary.get('auc0_inf_mean'))} {auc_unit} |",
+        f"| Cmax geometric mean | {_fmt(result.summary.get('cmax_geomean'))} {concentration_unit} |",
         f"| Tmax mean | {_fmt(result.summary.get('tmax_h_mean'))} h |",
         f"| Terminal half-life mean | {_fmt(result.summary.get('half_life_h_mean'))} h |",
         "",

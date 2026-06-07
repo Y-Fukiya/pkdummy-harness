@@ -421,12 +421,49 @@ def _make_ex(
     return rows
 
 
+def _row_value_case_insensitive(row: dict[str, str], keys: list[str]) -> str:
+    lower_map = {key.lower(): value for key, value in row.items()}
+    for key in keys:
+        value = row.get(key)
+        if not _is_blank(value):
+            return str(value).strip()
+        value = lower_map.get(key.lower())
+        if not _is_blank(value):
+            return str(value).strip()
+    return ""
+
+
+def _pc_conc_unit_from_row(row: dict[str, str], *, conc_col: str, conc_unit: str | None) -> str:
+    if not _is_blank(conc_unit):
+        return str(conc_unit).strip()
+    unit = _row_value_case_insensitive(
+        row,
+        [
+            f"{conc_col}_UNIT",
+            f"{conc_col}U",
+            "CONC_UNIT",
+            "CONCU",
+            "DV_UNIT",
+            "DVU",
+            "CP_UNIT",
+            "CPU",
+            "IPRED_UNIT",
+            "IPREDU",
+            "PCSTRESU",
+            "PCORRESU",
+            "UNIT",
+        ],
+    )
+    return unit or "ng/mL"
+
+
 def _make_pc(
     clinical_rows: list[dict[str, str]],
     *,
     study_id: str,
     study_start: datetime,
     conc_col: str,
+    conc_unit: str | None,
 ) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for seq, row in enumerate(clinical_rows, start=1):
@@ -435,6 +472,7 @@ def _make_pc(
         conc = _to_float(row.get(conc_col))
         if conc is None:
             conc = _to_float(row.get("DV") or row.get("CP") or row.get("IPRED"))
+        unit = _pc_conc_unit_from_row(row, conc_col=conc_col, conc_unit=conc_unit)
         rows.append(
             {
                 "STUDYID": str(row.get("STUDYID") or study_id),
@@ -444,9 +482,9 @@ def _make_pc(
                 "PCTESTCD": "DRUGCONC",
                 "PCTEST": "Drug Concentration",
                 "PCORRES": conc if conc is not None else "",
-                "PCORRESU": "ng/mL",
+                "PCORRESU": unit,
                 "PCSTRESN": conc if conc is not None else "",
-                "PCSTRESU": "ng/mL",
+                "PCSTRESU": unit,
                 "PCDTC": _iso_from_hours(study_start, time_h),
                 "PCTPT": row.get("TPT") or "",
                 "PCTPTNUM": row.get("TPTNUM") or "",
@@ -468,22 +506,24 @@ def _clinical_pc_match_map(
     *,
     study_id: str,
     conc_col: str,
-) -> dict[tuple[str, str, str], float]:
-    match_map: dict[tuple[str, str, str], float] = {}
+    conc_unit: str | None,
+) -> dict[tuple[str, str, str], tuple[float, str]]:
+    match_map: dict[tuple[str, str, str], tuple[float, str]] = {}
     for seq, row in enumerate(clinical_rows, start=1):
         conc = _pc_conc_from_row(row, conc_col=conc_col)
         if conc is None:
             continue
+        unit = _pc_conc_unit_from_row(row, conc_col=conc_col, conc_unit=conc_unit)
         usubjid = str(row.get("USUBJID") or _subject_key(study_id, row.get("ID"), fallback=seq))
         tptnum = _norm_num(row.get("TPTNUM"))
         if tptnum:
-            match_map[("tptnum", usubjid, tptnum)] = conc
+            match_map[("tptnum", usubjid, tptnum)] = (conc, unit)
         tpt = _norm_text(row.get("TPT"))
         if tpt:
-            match_map[("tpt", usubjid, tpt)] = conc
+            match_map[("tpt", usubjid, tpt)] = (conc, unit)
         time_h = _norm_num(row.get("TIME_H") or row.get("time") or row.get("TIME") or row.get("NOMTIME_H"))
         if time_h:
-            match_map[("time", usubjid, time_h)] = conc
+            match_map[("time", usubjid, time_h)] = (conc, unit)
     return match_map
 
 
@@ -511,19 +551,21 @@ def _fill_existing_pc_skeleton(
     clinical_rows: list[dict[str, str]],
     study_id: str,
     conc_col: str,
+    conc_unit: str | None,
     overwrite_existing_pc_conc: bool,
 ) -> tuple[list[str], list[dict[str, str]], list[str]]:
     fieldnames, pc_rows = _read_csv(pc_csv)
     _validate_existing_domain_csv(domain="PC", fieldnames=fieldnames)
     out_fields = _ensure_fields(fieldnames, ["PCORRES", "PCORRESU", "PCSTRESN", "PCSTRESU"])
-    match_map = _clinical_pc_match_map(clinical_rows, study_id=study_id, conc_col=conc_col)
+    match_map = _clinical_pc_match_map(clinical_rows, study_id=study_id, conc_col=conc_col, conc_unit=conc_unit)
     matched = 0
     unmatched_blank = 0
     for row in pc_rows:
         conc = None
+        unit = ""
         for key in _existing_pc_keys(row):
             if key in match_map:
-                conc = match_map[key]
+                conc, unit = match_map[key]
                 break
         has_existing = not _is_blank(row.get("PCSTRESN")) or not _is_blank(row.get("PCORRES"))
         if conc is None:
@@ -536,9 +578,9 @@ def _fill_existing_pc_skeleton(
             row["PCORRES"] = value
             row["PCSTRESN"] = value
         if _is_blank(row.get("PCORRESU")):
-            row["PCORRESU"] = "ng/mL"
+            row["PCORRESU"] = unit or "ng/mL"
         if _is_blank(row.get("PCSTRESU")):
-            row["PCSTRESU"] = "ng/mL"
+            row["PCSTRESU"] = unit or "ng/mL"
 
     if matched == 0 and unmatched_blank:
         raise ValueError(
@@ -590,6 +632,7 @@ def make_sdtm_like_domains(
     study_start: str = "2026-01-01T08:00:00",
     seed: int = 20260217,
     pc_conc_col: str = "DV",
+    pc_conc_unit: str | None = None,
     strict_subject_match: bool = False,
     overwrite_existing_pc_conc: bool = False,
 ) -> SdtmLikeResult:
@@ -688,11 +731,18 @@ def make_sdtm_like_domains(
             clinical_rows=clinical_rows,
             study_id=study_id,
             conc_col=pc_conc_col,
+            conc_unit=pc_conc_unit,
             overwrite_existing_pc_conc=overwrite_existing_pc_conc,
         )
         warnings.extend(pc_warnings)
     else:
-        pc_rows = _make_pc(clinical_rows, study_id=study_id, study_start=start, conc_col=pc_conc_col)
+        pc_rows = _make_pc(
+            clinical_rows,
+            study_id=study_id,
+            study_start=start,
+            conc_col=pc_conc_col,
+            conc_unit=pc_conc_unit,
+        )
         pc_fields = [
             "STUDYID",
             "DOMAIN",
@@ -762,6 +812,7 @@ def make_sdtm_like_domains(
                 "study_start": study_start,
                 "seed": seed,
                 "pc_conc_col": pc_conc_col,
+                "pc_conc_unit": pc_conc_unit,
                 "strict_subject_match": strict_subject_match,
                 "overwrite_existing_pc_conc": overwrite_existing_pc_conc,
             },
@@ -797,6 +848,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--study-start", default="2026-01-01T08:00:00", help="ISO datetime for dosing and baseline records")
     parser.add_argument("--seed", type=int, default=20260217, help="Seed for synthetic HEIGHT/SCR generation")
     parser.add_argument("--pc-conc-col", default="DV", help="Clinical sample concentration column to map to PC")
+    parser.add_argument("--pc-conc-unit", default=None, help="Optional concentration unit override for PCORRESU/PCSTRESU")
     parser.add_argument("--strict-subject-match", action="store_true", help="Fail if subjects.csv IDs and clinical_samples.csv IDs differ")
     parser.add_argument("--overwrite-existing-pc-conc", action="store_true", help="Overwrite nonblank PCORRES/PCSTRESN in --pc-csv")
     return parser
@@ -819,6 +871,7 @@ def main(argv: list[str] | None = None) -> int:
             study_start=args.study_start,
             seed=args.seed,
             pc_conc_col=args.pc_conc_col,
+            pc_conc_unit=args.pc_conc_unit,
             strict_subject_match=args.strict_subject_match,
             overwrite_existing_pc_conc=args.overwrite_existing_pc_conc,
         )
