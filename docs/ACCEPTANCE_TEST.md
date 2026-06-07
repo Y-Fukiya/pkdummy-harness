@@ -23,6 +23,12 @@ make validate
 make acceptance-check
 ```
 
+Windows PowerShellでは `make` の代わりに [WINDOWS_POWERSHELL.md](WINDOWS_POWERSHELL.md) の手順を使います。
+
+```powershell
+.\scripts\acceptance-check.ps1 -SkipExternalProbe
+```
+
 このtargetは次を実行します。
 
 | Step | Purpose |
@@ -123,3 +129,4 @@ outputs/site_adapter_check/minimal_aciclovir/
 - READMEだけで第三者が実行したときの観察メモ
 
 これらはこのrepo内で設定・記録できますが、外部ソフトウェア本体や施設SOPの代替にはしません。
+運用チェックリストは [VALIDATION_AND_RELEASE_CHECKLIST.md](VALIDATION_AND_RELEASE_CHECKLIST.md) にまとめています。
