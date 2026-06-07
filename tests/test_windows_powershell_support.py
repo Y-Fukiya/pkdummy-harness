@@ -63,7 +63,8 @@ def test_readme_and_acceptance_docs_link_windows_powershell_guide() -> None:
 def test_ci_has_windows_powershell_smoke_job() -> None:
     workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
 
-    assert "windows-latest" in workflow
+    assert "windows-2025-vs2026" in workflow
+    assert "windows-latest" not in workflow
     assert "scripts/harness-check.ps1" in workflow
     assert "-SkipExternalProbe" in workflow
 
