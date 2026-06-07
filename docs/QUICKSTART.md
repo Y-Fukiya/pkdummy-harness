@@ -187,6 +187,16 @@ python3 tools/make_downstream_adapters.py \
 
 これは列名adapterであり、各ツールの正式な解析仕様を保証するものではありません。
 
+adapter生成、簡易NCA、PopPK parser template作成まで一括で確認する場合:
+
+```bash
+python3 tools/run_downstream_smoke.py \
+  --analysis-dir outputs/demo_set_config/albuterol/workflow/analysis_inputs \
+  --out-dir outputs/demo_set_config/albuterol/workflow/downstream_smoke
+```
+
+この結果は `DOWNSTREAM_SMOKE_MANIFEST.yml` に残ります。正式なPhoenix/NONMEM/nlmixr2検証ではなく、下流接続用のE2E smoke checkです。
+
 ## 8. Two Input Patterns
 
 このハーネスは2パターンで使えます。
@@ -258,6 +268,7 @@ outputs/<run>/workflow/analysis_inputs/MANIFEST.yml
 [ ] 必要なら report_pk_fixture.R で記述統計レポートを作成
 [ ] Word共有が必要なら render_pk_fixture_quarto.R でdocxを作成
 [ ] 必要なら make_downstream_adapters.py でtool別adapter CSVを作成
+[ ] 必要なら run_downstream_smoke.py で下流E2E smoke checkを実行
 [ ] 必要なら validate_manifest.py でMANIFEST.yml構造を確認
 [ ] MANIFEST.yml と trace.log が残っている
 [ ] pk.yml は自動更新していない

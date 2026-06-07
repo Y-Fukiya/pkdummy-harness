@@ -109,6 +109,15 @@ UIはまず `HARNESS_STATUS.json` を読んでください。
 }
 ```
 
+ローカルでmanifestだけを見やすくする場合、UIを作らずに静的HTML viewerを生成できます。
+
+```bash
+python3 tools/render_manifest_viewer.py outputs/<run>/workflow/MANIFEST.yml \
+  --out-html outputs/<run>/workflow/manifest_viewer.html
+```
+
+これは薄いviewerであり、ハーネスの実行、PK値編集、calibration反映は行いません。
+
 ADPC-like出力から記述統計レポートを追加したい場合、UIはR/ggplot処理を再実装せず、次のスクリプトを明示実行するか、生成済みartifactを表示してください。
 
 ```bash

@@ -48,6 +48,14 @@ def test_excluded_csv_is_header_only_when_library_has_no_exclusions():
     assert lines[0].startswith("drug,slug,route_inferred,status,missing")
 
 
+def test_github_actions_use_node24_ready_action_versions():
+    workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    assert "actions/checkout@v6" in workflow
+    assert "actions/setup-python@v6" in workflow
+    assert "actions/checkout@v4" not in workflow
+    assert "actions/setup-python@v5" not in workflow
+
+
 def test_minimal_examples_are_versioned_for_new_users():
     examples = {
         "minimal_aciclovir": {"subjects": {"EXAMPLE-001", "EXAMPLE-002"}, "route": "ORAL"},

@@ -126,6 +126,16 @@ python3 tools/make_downstream_adapters.py \
 
 これは `nca_r.csv`, `nca_phoenix.csv`, `poppk_nonmem.csv`, `poppk_nlmixr2.csv` を作ります。各ツールの正式仕様を保証するものではなく、parser/control-stream smoke test用の列名adapterです。
 
+adapter生成、簡易NCA、PopPK parser template作成まで一括で確認する場合:
+
+```bash
+python3 tools/run_downstream_smoke.py \
+  --analysis-dir outputs/<run>/workflow/analysis_inputs \
+  --out-dir outputs/<run>/workflow/downstream_smoke
+```
+
+詳細は [docs/DOWNSTREAM_E2E.md](docs/DOWNSTREAM_E2E.md) を参照してください。
+
 既存の `DM/LB/VS/PC` skeletonがない場合は、ハーネス側がSDTM-like CSVを生成します。既存の `DM/LB/VS` と濃度なし `PC` skeletonがある場合は、それらを渡して `PC` に濃度だけを注入できます。
 
 複数薬剤デモをまとめて作る場合:
@@ -434,6 +444,7 @@ docs/
 - [User Guide](docs/USER_GUIDE.md): 通常の使い方、図解、成果物の見方
 - [App Decision](docs/APP_DECISION.md): Shinyなどのアプリ化を今すぐ行わない判断と将来UIの境界
 - [Launcher Contract](docs/LAUNCHER_CONTRACT.md): Shiny Cloud/Tauri/CLIから `run_harness.py` を呼ぶ契約
+- [Downstream E2E Smoke](docs/DOWNSTREAM_E2E.md): NCA/PopPK下流接続のfixture-level smoke check
 - [Harvest Guide](docs/HARVEST.md): 文献・DailyMed・PubMedからパラメータを更新する手順
 - [Schema](docs/SCHEMA.md): `pk.yml`, `targets.yml`, `spec_pk1_*.yml` の構造
 - [Codex Harness Notes](docs/CODEX_HARNESS.md): Codexに作業させる時の内部運用
@@ -465,6 +476,13 @@ make examples-check
 
 ```bash
 python3 tools/validate_manifest.py outputs/<run>/workflow/MANIFEST.yml
+```
+
+manifestを薄いローカルHTML viewerで確認する場合:
+
+```bash
+python3 tools/render_manifest_viewer.py outputs/<run>/workflow/MANIFEST.yml \
+  --out-html outputs/<run>/workflow/manifest_viewer.html
 ```
 
 ## Expert-facing Summary

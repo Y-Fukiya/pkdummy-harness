@@ -49,6 +49,9 @@ make harness-check
 | `tools/make_sdtm_like_domains.py` | `clinical_samples.csv` から限定版 DM/VS/LB/EX/PC CSV とMANIFESTを生成 | submission-ready SDTMではない |
 | `tools/make_analysis_inputs.py` | SDTM-likeからADPC-like/NCA/PopPK smoke-test CSVとMANIFESTを生成 | submission-ready ADaMやモデル固有NONMEM datasetではない |
 | `tools/make_downstream_adapters.py` | ADPC/POPPK_INPUTからR NCA/Phoenix/NONMEM/nlmixr2風adapter CSVを生成 | parser/control-stream smoke test用。正式tool datasetではない |
+| `tools/validate_downstream_adapters.py` | adapter CSVのrepository-owned contractを検証する | 外部ツール公式仕様の認証ではない |
+| `tools/run_downstream_smoke.py` | adapter生成、簡易NCA、PopPK parser template作成を一括確認する | fixture-level E2E。Phoenix/NONMEM/nlmixr2本体は実行しない |
+| `tools/render_manifest_viewer.py` | `MANIFEST.yml` を静的HTML viewerに変換する | thin UIの最小形。ハーネス実行やPK編集はしない |
 | `tools/check_examples.py` | versioned minimal examplesを一時再生成して出力driftを検出する | 例示用artifactの列・件数が知らないうちに変わるのを防ぐ |
 | `tools/doctor.py` | Python/R/Quarto/simPopのpreflight確認を行う | 任意依存不足はWARNとして扱い、CLI本体を過剰に重くしない |
 | `tools/validate_manifest.py` | `MANIFEST.yml` の必須fieldと基本型を確認する | artifactの監査性を保つ。臨床的正しさのvalidationではない |

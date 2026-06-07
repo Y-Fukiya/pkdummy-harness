@@ -25,9 +25,11 @@ from tools.validate_manifest import validate_manifest_file
 JUNK_FILE_NAMES = {".DS_Store"}
 JUNK_DIR_NAMES = {"__MACOSX", "__pycache__", ".pytest_cache"}
 REQUIRED_FILES = [
+    ".github/workflows/ci.yml",
     "AGENTS.md",
     "docs/APP_DECISION.md",
     "docs/LAUNCHER_CONTRACT.md",
+    "docs/DOWNSTREAM_E2E.md",
     "docs/PROCESS_FLOW.md",
     "docs/QUICKSTART.md",
     "docs/USER_GUIDE.md",
@@ -76,6 +78,9 @@ REQUIRED_FILES = [
     "tools/make_sdtm_like_domains.py",
     "tools/make_analysis_inputs.py",
     "tools/make_downstream_adapters.py",
+    "tools/validate_downstream_adapters.py",
+    "tools/run_downstream_smoke.py",
+    "tools/render_manifest_viewer.py",
     "tools/check_examples.py",
     "tools/doctor.py",
     "tools/validate_manifest.py",
@@ -95,6 +100,9 @@ REQUIRED_FILES = [
     "tests/test_make_sdtm_like_domains.py",
     "tests/test_make_analysis_inputs.py",
     "tests/test_make_downstream_adapters.py",
+    "tests/test_validate_downstream_adapters.py",
+    "tests/test_run_downstream_smoke.py",
+    "tests/test_render_manifest_viewer.py",
     "tests/test_validate_harness_config.py",
     "tests/test_check_examples.py",
     "tests/test_doctor.py",

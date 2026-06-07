@@ -79,10 +79,13 @@ population:
 - 既存ドメインを使う場合は `--dm-csv`, `--vs-csv`, `--lb-csv`, `--ex-csv`, `--pc-csv` を指定できる。`--pc-csv` は濃度なしPC skeletonとして扱い、`USUBJID + PCTPTNUM/PCTPT/PCELTM` で `clinical_samples.csv` と照合して `PCORRES/PCSTRESN` を埋める
 - `python tools/make_analysis_inputs.py --sdtm-like-dir outputs/<run>/workflow/sdtm_like --out-dir outputs/<run>/workflow/analysis_inputs`: 限定版SDTM-like `DM/VS/LB/EX/PC` から `ADPC.csv`, `NCA_INPUT.csv`, `POPPK_INPUT.csv`, `MANIFEST.yml` を生成する。これらは下流workflow smoke test用で、submission-ready ADaMやモデル固有NONMEM datasetではない
 - `python tools/make_downstream_adapters.py --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/adapters`: `ADPC.csv` と `POPPK_INPUT.csv` から `nca_r.csv`, `nca_phoenix.csv`, `poppk_nonmem.csv`, `poppk_nlmixr2.csv` を生成する。これはparser/control-stream smoke test用adapterで、各ツールの正式dataset仕様を保証しない
+- `python tools/validate_downstream_adapters.py outputs/<run>/workflow/adapters`: adapter CSVのrepository-owned contractを検証する。外部ツール公式仕様の認証ではない
+- `python tools/run_downstream_smoke.py --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/downstream_smoke`: adapter生成、簡易NCA、PopPK parser template作成をまとめて行うfixture-level E2E smoke check
 - `python tools/validate_harness_config.py harness_examples/demo_set.yml`: `run_harness.py` 用configの必須項目、mode、sampling、validation、demo variability設定を検証する
 - `python tools/check_examples.py examples`: Git管理された `examples/minimal_*` を一時ディレクトリで再生成し、CSVとmanifestの安定項目が期待出力からずれていないか確認する
 - `python tools/doctor.py`: Python/R/Quarto/simPopなどのローカル環境をpreflight確認する。必須依存不足はFAILED、任意依存不足はWARN
 - `python tools/validate_manifest.py outputs/<run>/workflow/MANIFEST.yml`: run-levelまたはtool-level `MANIFEST.yml` の必須field、status、mapping/list型を確認する
+- `python tools/render_manifest_viewer.py outputs/<run>/workflow/MANIFEST.yml --out-html outputs/<run>/workflow/manifest_viewer.html`: `MANIFEST.yml` を薄い静的HTML viewerに変換する。UI/cloud runnerの代替ではなく、manifest閲覧用
 - `Rscript tools/report_pk_fixture.R --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/reports/pk_fixture_report --title "<slug> PK fixture report"`: `ADPC.csv` から被験者背景の要約統計、時点別濃度統計、ggplot2のlinear/log濃度プロット、Markdownレポートを生成する。これはfixture確認用の記述統計で、臨床薬理モデル妥当化ではない
 - `Rscript tools/render_pk_fixture_quarto.R --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/reports/pk_fixture_quarto --title "<slug> PK fixture report"`: `templates/pk_fixture_report.qmd` を使って、軽量レポートの内容をQuarto docxへ変換する任意ステップ。Word style referenceを使う場合は `--reference-doc reference.docx` を指定する
 - `Rscript tools/make_simpop_subjects.R --out subjects.csv --n 100 --dose-mg 100`: 任意の `simPop` ベース被験者CSV生成

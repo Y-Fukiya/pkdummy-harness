@@ -379,6 +379,28 @@ python3 tools/make_downstream_adapters.py \
 
 これは列名や最小列セットを合わせるadapterです。各ツール固有の正式な解析datasetやcontrol streamを保証するものではありません。
 
+### 下流E2E smoke checkを行う場合
+
+adapter生成、簡易NCA、PopPK parser template作成までまとめて確認できます。
+
+```bash
+python3 tools/run_downstream_smoke.py \
+  --analysis-dir outputs/<run>/workflow/analysis_inputs \
+  --out-dir outputs/<run>/workflow/downstream_smoke
+```
+
+出力:
+
+| File | Content |
+| --- | --- |
+| `DOWNSTREAM_SMOKE_MANIFEST.yml` | status, counts, warnings, limitations |
+| `nca_smoke/NCA_SUMMARY.csv` | simple linear-trapezoidal `CMAX`, `TMAX_H`, `AUCLAST` |
+| `poppk_smoke/POPPK_PARSE_SUMMARY.yml` | dose/observation row counts |
+| `poppk_smoke/nonmem_parser_template.ctl` | NONMEM parser smoke template |
+| `poppk_smoke/nlmixr2_parser_template.R` | nlmixr2 parser smoke template |
+
+これは正式なPhoenix/NONMEM/nlmixr2実行ではありません。下流parserやcontrol templateへつながるかのfixture-level E2E確認です。
+
 ## 10. 複数薬剤デモを作る場合
 
 Milestone 7では、3-5薬剤程度をまとめて流し、成功例、WARN例、限界例を確認します。
@@ -518,6 +540,9 @@ make harness-check
 | SDTM-like CSV生成 | `python3 tools/make_sdtm_like_domains.py --clinical-samples outputs/<run>/raw/clinical_samples.csv --spec drugs/<slug>/spec_pk1_oral.yml --out-dir outputs/<run>/sdtm_like` |
 | ADPC/NCA/PopPK入力生成 | `python3 tools/make_analysis_inputs.py --sdtm-like-dir outputs/<run>/workflow/sdtm_like --out-dir outputs/<run>/workflow/analysis_inputs` |
 | NCA/PopPK adapter生成 | `python3 tools/make_downstream_adapters.py --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/adapters` |
+| 下流E2E smoke check | `python3 tools/run_downstream_smoke.py --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/downstream_smoke` |
+| adapter contract確認 | `python3 tools/validate_downstream_adapters.py outputs/<run>/workflow/downstream_smoke/adapters` |
+| manifest viewer生成 | `python3 tools/render_manifest_viewer.py outputs/<run>/workflow/MANIFEST.yml --out-html outputs/<run>/workflow/manifest_viewer.html` |
 | 記述統計レポート生成 | `Rscript tools/report_pk_fixture.R --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/reports/pk_fixture_report --title "<slug> PK fixture report"` |
 | Quarto docxレポート生成 | `Rscript tools/render_pk_fixture_quarto.R --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/reports/pk_fixture_quarto --title "<slug> PK fixture report"` |
 | 被験者CSV検証 | `python3 tools/validate_subjects_csv.py subjects/subjects.csv --expected-n 100 --allowed-arm A` |

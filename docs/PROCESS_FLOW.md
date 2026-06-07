@@ -31,10 +31,14 @@ flowchart LR
     N --> O["ADPC / NCA_INPUT / POPPK_INPUT"]
     O --> A1["make_downstream_adapters.py"]
     A1 --> A2["NCA / PopPK adapter CSVs"]
+    O --> T["run_downstream_smoke.py"]
+    T --> U["NCA_SUMMARY / PopPK parser templates"]
     O --> P["report_pk_fixture.R"]
     P --> Q["Markdown / summary CSV / ggplot PNG"]
     Q --> R["render_pk_fixture_quarto.R"]
     R --> S["Quarto DOCX"]
+    I --> V["render_manifest_viewer.py"]
+    V --> W["static HTML manifest viewer"]
 ```
 
 ## 重要な境界
@@ -43,8 +47,10 @@ flowchart LR
 | --- | --- |
 | `run_harness.py` | YAML config からデモまたはpost-simulation workflowを起動する共通入口 |
 | `run_workflow.py` | `sim_full.csv` 後の validate、採血点抽出、SDTM-like生成、analysis input生成 |
+| `run_downstream_smoke.py` | ADPC/NCA/PopPK入力からadapter生成、簡易NCA、PopPK parser template作成まで確認 |
 | `report_pk_fixture.R` | ADPC-likeから被験者背景、濃度統計、ggplotを含む記述統計レポートを作成 |
 | `render_pk_fixture_quarto.R` | Word共有用の任意DOCXをQuartoで作成 |
+| `render_manifest_viewer.py` | manifest/status確認用の静的HTML viewerを作成 |
 | `MANIFEST.yml` / `trace.log` | 入力、出力、警告、処理順序の監査用artifact |
 
 ## Guardrails

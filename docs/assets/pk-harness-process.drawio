@@ -1,149 +1,173 @@
-<mxfile host="app.diagrams.net" modified="2026-06-05T00:00:00.000Z" agent="Codex" version="24.7.8" type="device">
+<mxfile host="Electron" agent="Codex">
   <diagram id="pk-harness-process" name="PK Harness Process">
-    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+    <mxGraphModel dx="1639" dy="1074" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="title" value="CLI / Python / R PK Fixture Harness Process" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=26;fontStyle=1;fontColor=#111827;" vertex="1" parent="1">
-          <mxGeometry x="40" y="24" width="760" height="40" as="geometry" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=26;fontStyle=1;fontColor=#111827;" value="CLI / Python / R PK Fixture Harness Process" vertex="1">
+          <mxGeometry height="40" width="760" x="40" y="24" as="geometry" />
         </mxCell>
-        <mxCell id="subtitle" value="Purpose: generate PK-like synthetic fixtures for SDTM-like / ADPC / NCA / PopPK workflow testing. Not clinical validation." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontColor=#4B5563;" vertex="1" parent="1">
-          <mxGeometry x="42" y="63" width="950" height="28" as="geometry" />
+        <mxCell id="subtitle" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontColor=#4B5563;" value="Purpose: generate PK-like synthetic fixtures for SDTM-like / ADPC / NCA / PopPK workflow testing. Not clinical validation." vertex="1">
+          <mxGeometry height="28" width="950" x="42" y="63" as="geometry" />
         </mxCell>
-        <mxCell id="col-input" value="Inputs / Config" style="swimlane;html=1;rounded=1;whiteSpace=wrap;fillColor=#EFF6FF;strokeColor=#2563EB;fontStyle=1;fontSize=15;startSize=34;" vertex="1" parent="1">
-          <mxGeometry x="40" y="110" width="240" height="560" as="geometry" />
+        <mxCell id="col-input" parent="1" style="swimlane;html=1;rounded=1;whiteSpace=wrap;fillColor=#EFF6FF;strokeColor=#2563EB;fontStyle=1;fontSize=15;startSize=34;" value="Inputs / Config" vertex="1">
+          <mxGeometry height="560" width="240" x="40" y="110" as="geometry" />
         </mxCell>
-        <mxCell id="col-sim" value="Simulation Source" style="swimlane;html=1;rounded=1;whiteSpace=wrap;fillColor=#F0FDF4;strokeColor=#16A34A;fontStyle=1;fontSize=15;startSize=34;" vertex="1" parent="1">
-          <mxGeometry x="310" y="110" width="240" height="560" as="geometry" />
+        <mxCell id="existing" parent="col-input" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#0284C7;fontSize=13;" value="Optional existing&lt;br&gt;DM / VS / LB / PC&lt;br&gt;skeletons" vertex="1">
+          <mxGeometry height="84" width="180" x="30" y="291" as="geometry" />
         </mxCell>
-        <mxCell id="col-control" value="Harness Control" style="swimlane;html=1;rounded=1;whiteSpace=wrap;fillColor=#F8FAFC;strokeColor=#64748B;fontStyle=1;fontSize=15;startSize=34;" vertex="1" parent="1">
-          <mxGeometry x="580" y="110" width="240" height="560" as="geometry" />
+        <mxCell id="druglib" parent="col-input" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontSize=13;" value="drugs/&amp;lt;slug&amp;gt;/&lt;br&gt;pk.yml&lt;br&gt;targets.yml&lt;br&gt;spec_pk1_*.yml" vertex="1">
+          <mxGeometry height="96" width="180" x="30" y="123" as="geometry" />
         </mxCell>
-        <mxCell id="col-workflow" value="Post-simulation Workflow" style="swimlane;html=1;rounded=1;whiteSpace=wrap;fillColor=#FFF7ED;strokeColor=#EA580C;fontStyle=1;fontSize=15;startSize=34;" vertex="1" parent="1">
-          <mxGeometry x="850" y="110" width="250" height="560" as="geometry" />
+        <mxCell id="col-sim" parent="1" style="swimlane;html=1;rounded=1;whiteSpace=wrap;fillColor=#F0FDF4;strokeColor=#16A34A;fontStyle=1;fontSize=15;startSize=34;" value="Simulation Source" vertex="1">
+          <mxGeometry height="560" width="240" x="310" y="110" as="geometry" />
         </mxCell>
-        <mxCell id="col-output" value="Outputs / Downstream Use" style="swimlane;html=1;rounded=1;whiteSpace=wrap;fillColor=#F5F3FF;strokeColor=#7C3AED;fontStyle=1;fontSize=15;startSize=34;" vertex="1" parent="1">
-          <mxGeometry x="1130" y="110" width="320" height="560" as="geometry" />
+        <mxCell id="demo" parent="col-sim" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBF7D0;strokeColor=#16A34A;fontSize=13;" value="run_demo_set.py&lt;br&gt;analytical demo&lt;br&gt;multi-drug smoke test" vertex="1">
+          <mxGeometry height="82" width="180" x="30" y="235" as="geometry" />
         </mxCell>
-        <mxCell id="cfg" value="harness.yml&lt;br&gt;or CLI arguments" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontSize=13;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="70" y="165" width="180" height="64" as="geometry" />
+        <mxCell id="runner" parent="col-sim" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontSize=13;fontStyle=1;" value="External runner&lt;br&gt;mrgsolve / local script" vertex="1">
+          <mxGeometry height="72" width="180" x="30" y="132" as="geometry" />
         </mxCell>
-        <mxCell id="druglib" value="drugs/&amp;lt;slug&amp;gt;/&lt;br&gt;pk.yml&lt;br&gt;targets.yml&lt;br&gt;spec_pk1_*.yml" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontSize=13;" vertex="1" parent="1">
-          <mxGeometry x="70" y="275" width="180" height="96" as="geometry" />
+        <mxCell id="col-control" parent="1" style="swimlane;html=1;rounded=1;whiteSpace=wrap;fillColor=#F8FAFC;strokeColor=#64748B;fontStyle=1;fontSize=15;startSize=34;" value="Harness Control" vertex="1">
+          <mxGeometry height="560" width="240" x="580" y="110" as="geometry" />
         </mxCell>
-        <mxCell id="existing" value="Optional existing&lt;br&gt;DM / VS / LB / PC&lt;br&gt;skeletons" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#0284C7;fontSize=13;" vertex="1" parent="1">
-          <mxGeometry x="70" y="450" width="180" height="84" as="geometry" />
+        <mxCell id="workflow" parent="col-control" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2E8F0;strokeColor=#475569;fontSize=13;fontStyle=1;" value="run_workflow.py&lt;br&gt;control loop after sim_full.csv" vertex="1">
+          <mxGeometry height="74" width="180" x="30" y="408" as="geometry" />
         </mxCell>
-        <mxCell id="runner" value="External runner&lt;br&gt;mrgsolve / local script" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontSize=13;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="340" y="205" width="180" height="72" as="geometry" />
+        <mxCell id="harness" parent="col-control" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2E8F0;strokeColor=#475569;fontSize=13;fontStyle=1;" value="run_harness.py&lt;br&gt;single config-driven entrypoint" vertex="1">
+          <mxGeometry height="74" width="180" x="30" y="51" as="geometry" />
         </mxCell>
-        <mxCell id="demo" value="run_demo_set.py&lt;br&gt;analytical demo&lt;br&gt;multi-drug smoke test" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBF7D0;strokeColor=#16A34A;fontSize=13;" vertex="1" parent="1">
-          <mxGeometry x="340" y="345" width="180" height="82" as="geometry" />
+        <mxCell id="e-harness-workflow" edge="1" parent="col-control" source="harness" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#64748B;fontSize=11;" target="workflow" value="post_simulation mode">
+          <mxGeometry relative="1" x="0.1661" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
         </mxCell>
-        <mxCell id="simfull" value="raw/sim_full.csv&lt;br&gt;dense concentration-time data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontSize=13;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="340" y="520" width="180" height="72" as="geometry" />
+        <mxCell id="col-workflow" parent="1" style="swimlane;html=1;rounded=1;whiteSpace=wrap;fillColor=#FFF7ED;strokeColor=#EA580C;fontStyle=1;fontSize=15;startSize=34;" value="Post-simulation Workflow" vertex="1">
+          <mxGeometry height="560" width="250" x="850" y="110" as="geometry" />
         </mxCell>
-        <mxCell id="harness" value="run_harness.py&lt;br&gt;single config-driven entrypoint" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2E8F0;strokeColor=#475569;fontSize=13;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="610" y="190" width="180" height="74" as="geometry" />
+        <mxCell id="validate" parent="col-workflow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FED7AA;strokeColor=#EA580C;fontSize=13;fontStyle=1;" value="validate_simulation.py&lt;br&gt;AUC / Cmax / Tmax / t1/2&lt;br&gt;OK / WARN / FAILED" vertex="1">
+          <mxGeometry height="90" width="190" x="30" y="42" as="geometry" />
         </mxCell>
-        <mxCell id="workflow" value="run_workflow.py&lt;br&gt;control loop after sim_full.csv" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2E8F0;strokeColor=#475569;fontSize=13;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="610" y="475" width="180" height="74" as="geometry" />
+        <mxCell id="col-output" parent="1" style="swimlane;html=1;rounded=1;whiteSpace=wrap;fillColor=#F5F3FF;strokeColor=#7C3AED;fontStyle=1;fontSize=15;startSize=34;" value="Outputs / Downstream Use" vertex="1">
+          <mxGeometry height="560" width="320" x="1130" y="110" as="geometry" />
         </mxCell>
-        <mxCell id="validate" value="validate_simulation.py&lt;br&gt;AUC / Cmax / Tmax / t1/2&lt;br&gt;OK / WARN / FAILED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FED7AA;strokeColor=#EA580C;fontSize=13;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="880" y="150" width="190" height="90" as="geometry" />
+        <mxCell id="validation-report" parent="col-output" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontSize=13;" value="reports/simulation_validation.md&lt;br&gt;validation status in manifest" vertex="1">
+          <mxGeometry height="72" width="250" x="30" y="51" as="geometry" />
         </mxCell>
-        <mxCell id="sample" value="sample_clinical_timepoints.py&lt;br&gt;match nominal sampling schedule" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEDD5;strokeColor=#EA580C;fontSize=13;" vertex="1" parent="1">
-          <mxGeometry x="880" y="285" width="190" height="76" as="geometry" />
+        <mxCell id="clinical" parent="col-output" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontSize=13;" value="raw/clinical_samples.csv&lt;br&gt;sparse clinical sampling points" vertex="1">
+          <mxGeometry height="72" width="250" x="30" y="175" as="geometry" />
         </mxCell>
-        <mxCell id="sdtm" value="make_sdtm_like_domains.py&lt;br&gt;DM / VS / LB / EX / PC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEDD5;strokeColor=#EA580C;fontSize=13;" vertex="1" parent="1">
-          <mxGeometry x="880" y="405" width="190" height="76" as="geometry" />
+        <mxCell id="domains" parent="col-output" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontSize=13;" value="sdtm_like/&lt;br&gt;DM.csv / VS.csv / LB.csv / EX.csv / PC.csv" vertex="1">
+          <mxGeometry height="82" width="250" x="30" y="290" as="geometry" />
         </mxCell>
-        <mxCell id="analysis" value="make_analysis_inputs.py&lt;br&gt;ADPC-like / NCA / PopPK CSV" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEDD5;strokeColor=#EA580C;fontSize=13;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="880" y="525" width="190" height="76" as="geometry" />
+        <mxCell id="analysisout" parent="col-output" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontSize=13;fontStyle=1;" value="analysis_inputs/&lt;br&gt;ADPC.csv&lt;br&gt;NCA_INPUT.csv&lt;br&gt;POPPK_INPUT.csv" vertex="1">
+          <mxGeometry height="92" width="250" x="30" y="408" as="geometry" />
         </mxCell>
-        <mxCell id="validation-report" value="reports/simulation_validation.md&lt;br&gt;validation status in manifest" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontSize=13;" vertex="1" parent="1">
-          <mxGeometry x="1160" y="150" width="250" height="72" as="geometry" />
+        <mxCell id="cfg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontSize=13;fontStyle=1;" value="harness.yml&lt;br&gt;or CLI arguments" vertex="1">
+          <mxGeometry height="64" width="180" x="70" y="165" as="geometry" />
         </mxCell>
-        <mxCell id="clinical" value="raw/clinical_samples.csv&lt;br&gt;sparse clinical sampling points" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontSize=13;" vertex="1" parent="1">
-          <mxGeometry x="1160" y="260" width="250" height="72" as="geometry" />
+        <mxCell id="simfull" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontSize=13;fontStyle=1;" value="raw/sim_full.csv&lt;br&gt;dense concentration-time data" vertex="1">
+          <mxGeometry height="72" width="180" x="340" y="520" as="geometry" />
         </mxCell>
-        <mxCell id="domains" value="sdtm_like/&lt;br&gt;DM.csv / VS.csv / LB.csv / EX.csv / PC.csv" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontSize=13;" vertex="1" parent="1">
-          <mxGeometry x="1160" y="365" width="250" height="82" as="geometry" />
+        <mxCell id="sample" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEDD5;strokeColor=#EA580C;fontSize=13;" value="sample_clinical_timepoints.py&lt;br&gt;match nominal sampling schedule" vertex="1">
+          <mxGeometry height="76" width="190" x="880" y="285" as="geometry" />
         </mxCell>
-        <mxCell id="analysisout" value="analysis_inputs/&lt;br&gt;ADPC.csv&lt;br&gt;NCA_INPUT.csv&lt;br&gt;POPPK_INPUT.csv" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontSize=13;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="1160" y="485" width="250" height="92" as="geometry" />
+        <mxCell id="sdtm" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEDD5;strokeColor=#EA580C;fontSize=13;" value="make_sdtm_like_domains.py&lt;br&gt;DM / VS / LB / EX / PC" vertex="1">
+          <mxGeometry height="76" width="190" x="880" y="405" as="geometry" />
         </mxCell>
-        <mxCell id="report" value="R reports&lt;br&gt;report_pk_fixture.R&lt;br&gt;summary CSV + ggplot PNG" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDD6FE;strokeColor=#7C3AED;fontSize=13;" vertex="1" parent="1">
-          <mxGeometry x="1160" y="610" width="250" height="84" as="geometry" />
+        <mxCell id="analysis" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEDD5;strokeColor=#EA580C;fontSize=13;fontStyle=1;" value="make_analysis_inputs.py&lt;br&gt;ADPC-like / NCA / PopPK CSV" vertex="1">
+          <mxGeometry height="76" width="190" x="880" y="525" as="geometry" />
         </mxCell>
-        <mxCell id="quarto" value="Quarto DOCX&lt;br&gt;render_pk_fixture_quarto.R&lt;br&gt;pk_fixture_report.docx" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDD6FE;strokeColor=#7C3AED;fontSize=13;" vertex="1" parent="1">
-          <mxGeometry x="1160" y="725" width="250" height="84" as="geometry" />
+        <mxCell id="report" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDD6FE;strokeColor=#7C3AED;fontSize=13;" value="R reports&lt;br&gt;report_pk_fixture.R&lt;br&gt;summary CSV + ggplot PNG" vertex="1">
+          <mxGeometry height="84" width="250" x="1160" y="697" as="geometry" />
         </mxCell>
-        <mxCell id="safeguard" value="Guardrails&lt;br&gt;&#8226; run_workflow.py never updates pk.yml / targets.yml / spec&lt;br&gt;&#8226; validation produces OK / WARN / FAILED only&lt;br&gt;&#8226; calibration or literature updates stay as separate review artifacts&lt;br&gt;&#8226; outputs are workflow fixtures, not clinical validation or submission-ready SDTM/ADaM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;fontSize=13;align=left;spacingLeft=12;" vertex="1" parent="1">
-          <mxGeometry x="40" y="735" width="1040" height="145" as="geometry" />
+        <mxCell id="quarto" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDD6FE;strokeColor=#7C3AED;fontSize=13;" value="Quarto DOCX&lt;br&gt;render_pk_fixture_quarto.R&lt;br&gt;pk_fixture_report.docx" vertex="1">
+          <mxGeometry height="84" width="250" x="1160" y="820.5" as="geometry" />
         </mxCell>
-        <mxCell id="trace" value="Traceability artifacts&lt;br&gt;MANIFEST.yml / trace.log / HARNESS_STATUS.json / summary.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3F4F6;strokeColor=#6B7280;fontSize=13;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="1160" y="845" width="250" height="78" as="geometry" />
+        <mxCell id="safeguard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;fontSize=13;align=left;spacingLeft=12;" value="Guardrails&lt;br&gt;• run_workflow.py never updates pk.yml / targets.yml / spec&lt;br&gt;• validation produces OK / WARN / FAILED only&lt;br&gt;• calibration or literature updates stay as separate review artifacts&lt;br&gt;• outputs are workflow fixtures, not clinical validation or submission-ready SDTM/ADaM" vertex="1">
+          <mxGeometry height="145" width="1040" x="40" y="790" as="geometry" />
         </mxCell>
-        <mxCell id="e-cfg-harness" value="" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#64748B;" edge="1" parent="1" source="cfg" target="harness">
+        <mxCell id="trace" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3F4F6;strokeColor=#6B7280;fontSize=13;fontStyle=1;" value="Traceability artifacts&lt;br&gt;MANIFEST.yml / trace.log / HARNESS_STATUS.json / summary.md" vertex="1">
+          <mxGeometry height="78" width="250" x="680" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="e-cfg-harness" edge="1" parent="1" source="cfg" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#64748B;" target="harness" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-drug-runner" value="" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#64748B;" edge="1" parent="1" source="druglib" target="runner">
+        <mxCell id="e-drug-runner" edge="1" parent="1" source="druglib" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#64748B;" target="runner" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-harness-demo" value="demo_set mode" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#64748B;fontSize=11;" edge="1" parent="1" source="harness" target="demo">
+        <mxCell id="e-runner-sim" edge="1" parent="1" source="runner" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#16A34A;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="simfull" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="540" y="278" />
+              <mxPoint x="540" y="470" />
+              <mxPoint x="430" y="470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-demo-sim" edge="1" parent="1" source="demo" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#16A34A;" target="simfull" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-harness-workflow" value="post_simulation mode" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#64748B;fontSize=11;" edge="1" parent="1" source="harness" target="workflow">
+        <mxCell id="e-sim-workflow" edge="1" parent="1" source="simfull" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#64748B;" target="workflow" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-runner-sim" value="" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#16A34A;" edge="1" parent="1" source="runner" target="simfull">
+        <mxCell id="e-workflow-validate" edge="1" parent="1" source="workflow" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#EA580C;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="validate" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="830" y="555" />
+              <mxPoint x="830" y="197" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-validate-sample" edge="1" parent="1" source="validate" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#EA580C;fontSize=11;" target="sample" value="if allowed">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-demo-sim" value="" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#16A34A;" edge="1" parent="1" source="demo" target="simfull">
+        <mxCell id="e-sample-sdtm" edge="1" parent="1" source="sample" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#EA580C;" target="sdtm" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-sim-workflow" value="" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#64748B;" edge="1" parent="1" source="simfull" target="workflow">
+        <mxCell id="e-existing-sdtm" edge="1" parent="1" source="existing" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;strokeColor=#0284C7;fontSize=11;" target="sdtm" value="optional skeleton path">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-workflow-validate" value="" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#EA580C;" edge="1" parent="1" source="workflow" target="validate">
+        <mxCell id="e-sdtm-analysis" edge="1" parent="1" source="sdtm" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#EA580C;" target="analysis" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-validate-sample" value="if allowed" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#EA580C;fontSize=11;" edge="1" parent="1" source="validate" target="sample">
+        <mxCell id="e-validate-report" edge="1" parent="1" source="validate" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#7C3AED;" target="validation-report" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-sample-sdtm" value="" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#EA580C;" edge="1" parent="1" source="sample" target="sdtm">
+        <mxCell id="e-sample-clinical" edge="1" parent="1" source="sample" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#7C3AED;" target="clinical" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-existing-sdtm" value="optional skeleton path" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;strokeColor=#0284C7;fontSize=11;" edge="1" parent="1" source="existing" target="sdtm">
+        <mxCell id="e-sdtm-domains" edge="1" parent="1" source="sdtm" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#7C3AED;" target="domains" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-sdtm-analysis" value="" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#EA580C;" edge="1" parent="1" source="sdtm" target="analysis">
+        <mxCell id="e-analysis-out" edge="1" parent="1" source="analysis" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#7C3AED;" target="analysisout" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-validate-report" value="" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#7C3AED;" edge="1" parent="1" source="validate" target="validation-report">
+        <mxCell id="e-analysis-report" edge="1" parent="1" source="analysisout" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;strokeColor=#7C3AED;fontSize=11;" target="report" value="optional">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-sample-clinical" value="" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#7C3AED;" edge="1" parent="1" source="sample" target="clinical">
+        <mxCell id="e-report-quarto" edge="1" parent="1" source="report" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;strokeColor=#7C3AED;fontSize=11;" target="quarto" value="optional Word sharing">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-sdtm-domains" value="" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#7C3AED;" edge="1" parent="1" source="sdtm" target="domains">
+        <mxCell id="e-workflow-trace" edge="1" parent="1" source="workflow" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;strokeColor=#6B7280;" target="trace" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-analysis-out" value="" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#7C3AED;" edge="1" parent="1" source="analysis" target="analysisout">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="e-harness-trace" edge="1" parent="1" source="harness" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;strokeColor=#6B7280;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="trace" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="810" y="200" />
+            </Array>
+          </mxGeometry>
         </mxCell>
-        <mxCell id="e-analysis-report" value="optional" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;strokeColor=#7C3AED;fontSize=11;" edge="1" parent="1" source="analysisout" target="report">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e-report-quarto" value="optional Word sharing" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;strokeColor=#7C3AED;fontSize=11;" edge="1" parent="1" source="report" target="quarto">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e-workflow-trace" value="" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;strokeColor=#6B7280;" edge="1" parent="1" source="workflow" target="trace">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e-harness-trace" value="" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;strokeColor=#6B7280;" edge="1" parent="1" source="harness" target="trace">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="e-harness-demo" edge="1" parent="1" source="harness" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#64748B;fontSize=11;exitX=0.178;exitY=0.973;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1.017;entryY=0.146;entryDx=0;entryDy=0;entryPerimeter=0;" target="demo" value="demo_set mode">
+          <mxGeometry relative="1" x="0.0294" y="13" as="geometry">
+            <mxPoint x="2" as="offset" />
+            <Array as="points">
+              <mxPoint x="640" y="357" />
+            </Array>
+            <mxPoint x="674.0799999999999" y="229.99800000000005" as="sourcePoint" />
+            <mxPoint x="520" y="365.5" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>

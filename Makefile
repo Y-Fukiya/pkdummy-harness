@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: all validate test regen-check regen-index-check codex-check examples-check doctor harness-check index excluded-summary clean
+.PHONY: all validate test regen-check regen-index-check codex-check examples-check downstream-check doctor harness-check index excluded-summary clean
 
 all: harness-check
 
@@ -23,10 +23,14 @@ codex-check:
 examples-check:
 	$(PYTHON) tools/check_examples.py examples
 
+downstream-check:
+	$(PYTHON) tools/run_downstream_smoke.py --analysis-dir examples/minimal_aciclovir/workflow/analysis_inputs --out-dir outputs/downstream_smoke_check/minimal_aciclovir
+	$(PYTHON) tools/run_downstream_smoke.py --analysis-dir examples/minimal_albuterol_iv/workflow/analysis_inputs --out-dir outputs/downstream_smoke_check/minimal_albuterol_iv
+
 doctor:
 	$(PYTHON) tools/doctor.py
 
-harness-check: clean validate test regen-check examples-check
+harness-check: clean validate test regen-check examples-check downstream-check
 	$(MAKE) clean
 	$(PYTHON) tools/codex_harness_check.py .
 

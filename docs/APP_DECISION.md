@@ -61,7 +61,8 @@
 | 4 | 軽量IIV/residual option | Implemented | 濃度統計やplotが実データに少し近づく |
 | 5 | Quarto reference-doc | Implemented | Word共有時の見た目を揃えやすい |
 | 6 | examples-check / doctor / manifest validation | Implemented | fixtureの出力drift、環境差、artifact構造を早く検出する |
-| 7 | thin UI / cloud runner検討 | Future | 上記が固定されてからでよい |
+| 7 | static manifest viewer | Implemented | UIを作らずにmanifest/statusを確認できる最小viewer |
+| 8 | thin UI / cloud runner検討 | Future | 上記が固定されてからでよい |
 
 ## Recommended App Shape If Built
 
