@@ -136,6 +136,18 @@ python3 tools/run_downstream_smoke.py \
 
 詳細は [docs/DOWNSTREAM_E2E.md](docs/DOWNSTREAM_E2E.md) を参照してください。
 
+Phoenix / NONMEM / nlmixr2 の実行環境がある場合は、同じrepo内の optional external validation layer から呼べます。
+
+```bash
+python3 tools/run_external_tool_validation.py \
+  --downstream-dir outputs/<run>/workflow/downstream_smoke \
+  --out-dir outputs/<run>/workflow/external_tool_validation \
+  --tools nonmem,nlmixr2 \
+  --execute
+```
+
+既定profileは `external_validation/tool_profiles.yml` です。外部ツール本体やライセンスは同梱しません。
+
 既存の `DM/LB/VS/PC` skeletonがない場合は、ハーネス側がSDTM-like CSVを生成します。既存の `DM/LB/VS` と濃度なし `PC` skeletonがある場合は、それらを渡して `PC` に濃度だけを注入できます。
 
 複数薬剤デモをまとめて作る場合:

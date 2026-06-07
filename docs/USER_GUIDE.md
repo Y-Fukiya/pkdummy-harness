@@ -401,6 +401,18 @@ python3 tools/run_downstream_smoke.py \
 
 これは正式なPhoenix/NONMEM/nlmixr2実行ではありません。下流parserやcontrol templateへつながるかのfixture-level E2E確認です。
 
+Phoenix / NONMEM / nlmixr2 の実行環境がある場合は、同じリポジトリ内の external validation profile から呼べます。
+
+```bash
+python3 tools/run_external_tool_validation.py \
+  --downstream-dir outputs/<run>/workflow/downstream_smoke \
+  --out-dir outputs/<run>/workflow/external_tool_validation \
+  --tools nonmem,nlmixr2 \
+  --execute
+```
+
+`--execute` を付けない場合は実行せず、コマンド存在確認だけを行います。profileは [../external_validation/tool_profiles.yml](../external_validation/tool_profiles.yml) を各施設の環境に合わせて調整してください。
+
 ## 10. 複数薬剤デモを作る場合
 
 Milestone 7では、3-5薬剤程度をまとめて流し、成功例、WARN例、限界例を確認します。
@@ -541,6 +553,7 @@ make harness-check
 | ADPC/NCA/PopPK入力生成 | `python3 tools/make_analysis_inputs.py --sdtm-like-dir outputs/<run>/workflow/sdtm_like --out-dir outputs/<run>/workflow/analysis_inputs` |
 | NCA/PopPK adapter生成 | `python3 tools/make_downstream_adapters.py --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/adapters` |
 | 下流E2E smoke check | `python3 tools/run_downstream_smoke.py --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/downstream_smoke` |
+| 外部tool validation probe | `python3 tools/run_external_tool_validation.py --downstream-dir outputs/<run>/workflow/downstream_smoke --out-dir outputs/<run>/workflow/external_tool_validation` |
 | adapter contract確認 | `python3 tools/validate_downstream_adapters.py outputs/<run>/workflow/downstream_smoke/adapters` |
 | manifest viewer生成 | `python3 tools/render_manifest_viewer.py outputs/<run>/workflow/MANIFEST.yml --out-html outputs/<run>/workflow/manifest_viewer.html` |
 | 記述統計レポート生成 | `Rscript tools/report_pk_fixture.R --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/reports/pk_fixture_report --title "<slug> PK fixture report"` |

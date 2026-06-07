@@ -187,6 +187,20 @@ Tauriで使う場合:
 - 画面は `HARNESS_STATUS.json`, `summary.md`, `MANIFEST.yml`, CSV previewに限定する
 - ローカルWindowsでmrgsolve/Rtoolsを必須にしない
 
+## External Tool Validation
+
+Phoenix / NONMEM / nlmixr2 の実行確認も、同じrepoのprofileから任意に呼べます。
+
+```bash
+python3 tools/run_external_tool_validation.py \
+  --downstream-dir outputs/<run>/workflow/downstream_smoke \
+  --out-dir outputs/<run>/workflow/external_tool_validation \
+  --tools nonmem,nlmixr2 \
+  --execute
+```
+
+UIはこのコマンドを必須にしないでください。外部ツール本体、ライセンス、実行可能ファイル名は施設や端末ごとに異なるため、`external_validation/tool_profiles.yml` を環境ごとに調整します。
+
 ## Acceptance
 
 launcher連携の最小到達条件:

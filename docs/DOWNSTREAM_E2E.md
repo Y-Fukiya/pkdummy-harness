@@ -12,10 +12,11 @@ python3 tools/run_downstream_smoke.py \
   --out-dir outputs/<run>/workflow/downstream_smoke
 ```
 
-`make harness-check` では、versioned examplesに対してこのsmoke checkを実行します。
+`make harness-check` では、versioned examplesに対してこのsmoke checkと外部validation profileのprobeを実行します。
 
 ```bash
 make downstream-check
+make external-validation-probe
 ```
 
 ## What It Does
@@ -64,3 +65,42 @@ This check improves workflow confidence, but it does not replace:
 - clinical pharmacology validation
 
 For formal tool use, treat the generated files as **starting fixtures** and add tool/project-specific control files, metadata, and validation outside this harness.
+
+## Optional External Tool Validation In This Repo
+
+Phoenix / NONMEM / nlmixr2 の実行環境がある場合は、同じリポジトリ内の optional validation layer から呼べます。
+
+```bash
+python3 tools/run_external_tool_validation.py \
+  --profile-yml external_validation/tool_profiles.yml \
+  --downstream-dir outputs/<run>/workflow/downstream_smoke \
+  --out-dir outputs/<run>/workflow/external_tool_validation \
+  --tools nonmem,nlmixr2 \
+  --execute
+```
+
+`--execute` を付けない場合は、実行せずにコマンド存在確認だけ行います。
+
+```bash
+python3 tools/run_external_tool_validation.py \
+  --downstream-dir outputs/<run>/workflow/downstream_smoke \
+  --out-dir outputs/<run>/workflow/external_tool_validation
+```
+
+既定profileは [external_validation/tool_profiles.yml](../external_validation/tool_profiles.yml) です。
+
+| Profile | Default behavior |
+| --- | --- |
+| `phoenix` | placeholder。各施設のPhoenix automation commandに置き換えて使う |
+| `nonmem` | `nmfe75` と生成済み `nonmem_parser_template.ctl` を使う想定 |
+| `nlmixr2` | `Rscript` から `nlmixr2` packageと生成済みtemplateを読む |
+
+出力:
+
+```text
+EXTERNAL_TOOL_VALIDATION.yml
+<tool>/stdout.log
+<tool>/stderr.log
+```
+
+このlayerは同じrepoにありますが、外部ツール本体やライセンスは同梱しません。CIや通常の `make harness-check` では外部ツール実行を必須にしません。

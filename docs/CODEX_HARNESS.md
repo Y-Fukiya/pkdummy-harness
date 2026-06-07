@@ -51,6 +51,7 @@ make harness-check
 | `tools/make_downstream_adapters.py` | ADPC/POPPK_INPUTからR NCA/Phoenix/NONMEM/nlmixr2風adapter CSVを生成 | parser/control-stream smoke test用。正式tool datasetではない |
 | `tools/validate_downstream_adapters.py` | adapter CSVのrepository-owned contractを検証する | 外部ツール公式仕様の認証ではない |
 | `tools/run_downstream_smoke.py` | adapter生成、簡易NCA、PopPK parser template作成を一括確認する | fixture-level E2E。Phoenix/NONMEM/nlmixr2本体は実行しない |
+| `tools/run_external_tool_validation.py` | 同じrepo内のprofileからPhoenix/NONMEM/nlmixr2等の外部実行環境を任意確認する | 外部ツール本体・ライセンスは同梱しない。`--execute`なしではprobeのみ |
 | `tools/render_manifest_viewer.py` | `MANIFEST.yml` を静的HTML viewerに変換する | thin UIの最小形。ハーネス実行やPK編集はしない |
 | `tools/check_examples.py` | versioned minimal examplesを一時再生成して出力driftを検出する | 例示用artifactの列・件数が知らないうちに変わるのを防ぐ |
 | `tools/doctor.py` | Python/R/Quarto/simPopのpreflight確認を行う | 任意依存不足はWARNとして扱い、CLI本体を過剰に重くしない |

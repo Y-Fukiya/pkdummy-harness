@@ -81,6 +81,7 @@ population:
 - `python tools/make_downstream_adapters.py --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/adapters`: `ADPC.csv` と `POPPK_INPUT.csv` から `nca_r.csv`, `nca_phoenix.csv`, `poppk_nonmem.csv`, `poppk_nlmixr2.csv` を生成する。これはparser/control-stream smoke test用adapterで、各ツールの正式dataset仕様を保証しない
 - `python tools/validate_downstream_adapters.py outputs/<run>/workflow/adapters`: adapter CSVのrepository-owned contractを検証する。外部ツール公式仕様の認証ではない
 - `python tools/run_downstream_smoke.py --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/downstream_smoke`: adapter生成、簡易NCA、PopPK parser template作成をまとめて行うfixture-level E2E smoke check
+- `python tools/run_external_tool_validation.py --downstream-dir outputs/<run>/workflow/downstream_smoke --out-dir outputs/<run>/workflow/external_tool_validation --tools nonmem,nlmixr2 --execute`: 同じrepo内のprofileから外部Phoenix/NONMEM/nlmixr2環境を任意実行する。外部ツール本体やライセンスは同梱しない
 - `python tools/validate_harness_config.py harness_examples/demo_set.yml`: `run_harness.py` 用configの必須項目、mode、sampling、validation、demo variability設定を検証する
 - `python tools/check_examples.py examples`: Git管理された `examples/minimal_*` を一時ディレクトリで再生成し、CSVとmanifestの安定項目が期待出力からずれていないか確認する
 - `python tools/doctor.py`: Python/R/Quarto/simPopなどのローカル環境をpreflight確認する。必須依存不足はFAILED、任意依存不足はWARN

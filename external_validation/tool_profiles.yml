@@ -1,0 +1,37 @@
+version: "0.1"
+purpose: optional_external_tool_validation_profiles
+profiles:
+  phoenix:
+    required: false
+    description: "Optional Phoenix validation hook. Configure command for your licensed Phoenix/WinNonlin environment."
+    command:
+      - phoenix-placeholder
+      - "--project"
+      - "{downstream_dir}/adapters/nca_phoenix.csv"
+    success_artifacts: []
+    notes:
+      - "Replace phoenix-placeholder with a site-approved Phoenix automation command before using --execute."
+      - "This repository does not bundle Phoenix or a Phoenix project file."
+  nonmem:
+    required: false
+    description: "Optional NONMEM parser/execution hook."
+    command:
+      - nmfe75
+      - "{downstream_dir}/poppk_smoke/nonmem_parser_template.ctl"
+      - "nonmem_parser_template.lst"
+    success_artifacts:
+      - "nonmem_parser_template.lst"
+    notes:
+      - "Adjust nmfe executable name/version and control stream path for your local NONMEM installation."
+      - "The generated control stream is a parser smoke template, not a model-specific estimation run."
+  nlmixr2:
+    required: false
+    description: "Optional nlmixr2 parser hook through Rscript."
+    command:
+      - Rscript
+      - "-e"
+      - "if (!requireNamespace('nlmixr2', quietly=TRUE)) quit(status=10); source('{downstream_dir}/poppk_smoke/nlmixr2_parser_template.R'); print(model)"
+    success_artifacts: []
+    notes:
+      - "Requires R and nlmixr2 installed in the execution environment."
+      - "This hook checks parser/model availability and does not perform estimation."
