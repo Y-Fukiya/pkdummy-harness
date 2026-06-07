@@ -26,6 +26,8 @@ UI/launcherから呼ぶ場合の契約は [LAUNCHER_CONTRACT.md](LAUNCHER_CONTRA
 
 説明資料用のdraw.io図は [assets/pk-harness-process.drawio](assets/pk-harness-process.drawio) にあります。図の読み方は [PROCESS_FLOW.md](PROCESS_FLOW.md) を参照してください。
 
+成果物の形だけ先に確認したい場合は、Git管理された最小例 [../examples/minimal_aciclovir](../examples/minimal_aciclovir) を見てください。
+
 ## 2. Install And Check
 
 リポジトリ直下で実行します。
@@ -36,6 +38,12 @@ make validate
 ```
 
 `make validate` がOKなら、薬剤テンプレート、必須ファイル、基本的なハーネス構造は読めています。
+
+configだけを確認する場合:
+
+```bash
+python3 tools/validate_harness_config.py harness_examples/demo_set.yml
+```
 
 ## 3. Run Multi-drug Demo
 
@@ -144,8 +152,30 @@ Rscript tools/render_pk_fixture_quarto.R \
 ```
 
 出力は `pk_fixture_report.qmd`, `pk_fixture_report.docx`, `QUARTO_REPORT_MANIFEST.yml` です。Wordスタイルを合わせたい場合は、任意で `--reference-doc reference.docx` を指定します。
+同梱のたたき台は `templates/pk_fixture_reference.docx` です。
 
-## 7. Two Input Patterns
+## 7. Generate Tool-specific Adapter CSVs
+
+ADPC/NCA/PopPK入力から、NCA/PopPKツール別の軽量adapter CSVを作れます。
+
+```bash
+python3 tools/make_downstream_adapters.py \
+  --analysis-dir outputs/demo_set_config/albuterol/workflow/analysis_inputs \
+  --out-dir outputs/demo_set_config/albuterol/workflow/adapters
+```
+
+出力:
+
+| File | Intended use |
+| --- | --- |
+| `nca_r.csv` | R系NCA parser smoke test |
+| `nca_phoenix.csv` | Phoenix風NCA取り込み確認 |
+| `poppk_nonmem.csv` | NONMEM風control-stream parser確認 |
+| `poppk_nlmixr2.csv` | nlmixr2風parser確認 |
+
+これは列名adapterであり、各ツールの正式な解析仕様を保証するものではありません。
+
+## 8. Two Input Patterns
 
 このハーネスは2パターンで使えます。
 
@@ -170,7 +200,7 @@ python3 tools/run_workflow.py \
 
 `PC` skeletonは `USUBJID + PCTPTNUM` を優先して照合します。次に `USUBJID + PCTPT`、最後に `USUBJID + PCELTM/TIME` を使います。
 
-## 8. External Runner Pattern
+## 9. External Runner Pattern
 
 実運用に近いシミュレーションでは、利用環境側のmrgsolve runnerで `sim_full.csv` を作ってから、後処理だけをこのハーネスで行います。
 
@@ -184,7 +214,7 @@ python3 tools/run_workflow.py \
   --out-dir outputs/<run>/workflow
 ```
 
-## 9. What To Show Reviewers
+## 10. What To Show Reviewers
 
 臨床薬理、統計、プログラマーに共有する場合は、次をセットで見せるのが安全です。
 
@@ -203,7 +233,7 @@ outputs/<run>/workflow/analysis_inputs/MANIFEST.yml
 
 複数薬剤デモでは、まず `outputs/demo_set_config/summary.md` を見せると全体像が伝わります。
 
-## 10. Completion Checklist
+## 11. Completion Checklist
 
 ```text
 [ ] make validate がOK
@@ -212,6 +242,7 @@ outputs/<run>/workflow/analysis_inputs/MANIFEST.yml
 [ ] 少なくとも1薬剤で ADPC/NCA/PopPK入力を確認
 [ ] 必要なら report_pk_fixture.R で記述統計レポートを作成
 [ ] Word共有が必要なら render_pk_fixture_quarto.R でdocxを作成
+[ ] 必要なら make_downstream_adapters.py でtool別adapter CSVを作成
 [ ] MANIFEST.yml と trace.log が残っている
 [ ] pk.yml は自動更新していない
 ```

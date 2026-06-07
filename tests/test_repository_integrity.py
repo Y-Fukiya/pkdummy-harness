@@ -46,3 +46,22 @@ def test_excluded_csv_is_header_only_when_library_has_no_exclusions():
     lines = (ROOT / "EXCLUDED.csv").read_text(encoding="utf-8").splitlines()
     assert len(lines) == 1
     assert lines[0].startswith("drug,slug,route_inferred,status,missing")
+
+
+def test_minimal_examples_are_versioned_for_new_users():
+    example_dir = ROOT / "examples" / "minimal_aciclovir"
+    required = [
+        example_dir / "README.md",
+        example_dir / "harness.yml",
+        example_dir / "workflow" / "analysis_inputs" / "ADPC.csv",
+        example_dir / "workflow" / "analysis_inputs" / "NCA_INPUT.csv",
+        example_dir / "workflow" / "analysis_inputs" / "POPPK_INPUT.csv",
+        example_dir / "workflow" / "reports" / "pk_fixture_report" / "REPORT.md",
+    ]
+    for path in required:
+        assert path.exists(), f"Missing minimal example artifact: {path.relative_to(ROOT)}"
+
+    with (example_dir / "workflow" / "analysis_inputs" / "ADPC.csv").open("r", encoding="utf-8", newline="") as f:
+        adpc_rows = list(csv.DictReader(f))
+    assert len(adpc_rows) == 4
+    assert {row["USUBJID"] for row in adpc_rows} == {"EXAMPLE-001", "EXAMPLE-002"}

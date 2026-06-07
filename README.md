@@ -40,6 +40,8 @@
 
 最短で動かす場合は [Quickstart](docs/QUICKSTART.md) を見てください。複数薬剤デモから `ADPC.csv`, `NCA_INPUT.csv`, `POPPK_INPUT.csv` まで確認できます。
 
+成果物の形だけ先に見たい場合は、Git管理された小さな例を [examples/minimal_aciclovir](examples/minimal_aciclovir) に置いています。
+
 まずリポジトリ整合性を確認します。
 
 ```bash
@@ -61,6 +63,12 @@ python3 tools/run_workflow.py \
   --drug <slug> \
   --times 0,0.5,1,2,4,8,12,24 \
   --out-dir outputs/<run>/workflow
+```
+
+設定ファイルの書き方だけ確認する場合:
+
+```bash
+python3 tools/validate_harness_config.py harness_examples/demo_set.yml
 ```
 
 このコマンドは以下をまとめて実行します。
@@ -94,6 +102,17 @@ Rscript tools/render_pk_fixture_quarto.R \
 ```
 
 このQuarto版は `templates/pk_fixture_report.qmd` を使い、同じ記述統計とggplot画像を `pk_fixture_report.docx` に変換します。Wordスタイルを指定したい場合は `--reference-doc reference.docx` を追加してください。
+同梱のたたき台は `templates/pk_fixture_reference.docx` です。
+
+NCA/PopPKツール別の軽量adapterが必要な場合:
+
+```bash
+python3 tools/make_downstream_adapters.py \
+  --analysis-dir outputs/<run>/workflow/analysis_inputs \
+  --out-dir outputs/<run>/workflow/adapters
+```
+
+これは `nca_r.csv`, `nca_phoenix.csv`, `poppk_nonmem.csv`, `poppk_nlmixr2.csv` を作ります。各ツールの正式仕様を保証するものではなく、parser/control-stream smoke test用の列名adapterです。
 
 既存の `DM/LB/VS/PC` skeletonがない場合は、ハーネス側がSDTM-like CSVを生成します。既存の `DM/LB/VS` と濃度なし `PC` skeletonがある場合は、それらを渡して `PC` に濃度だけを注入できます。
 
@@ -252,6 +271,7 @@ outputs/demo_set_milestone7/
 | `analysis_inputs/ADPC.csv` | ADPC-likeな濃度解析入力。submission-ready ADaMではない |
 | `analysis_inputs/NCA_INPUT.csv` | NCA pipeline smoke test用の濃度時系列 |
 | `analysis_inputs/POPPK_INPUT.csv` | NONMEM-like parser/control-stream smoke test用CSV |
+| `adapters/*.csv` | R NCA/Phoenix/NONMEM/nlmixr2向けの軽量adapter CSV |
 | `reports/pk_fixture_report/REPORT.md` | 被験者背景、時点別濃度統計、linear/log濃度プロットの記述統計レポート |
 | `reports/pk_fixture_quarto/pk_fixture_report.docx` | Quartoで生成したWord共有用レポート。任意 |
 | `MANIFEST.yml` | 入力、設定、件数、警告、安全策 |

@@ -138,3 +138,26 @@ def test_run_demo_set_cli(tmp_path: Path) -> None:
     assert "Demo set: " in completed.stdout
     assert (out_dir / "summary.csv").exists()
     assert (out_dir / "oral_demo" / "workflow" / "analysis_inputs" / "POPPK_INPUT.csv").exists()
+
+
+def test_run_demo_set_can_add_lightweight_iiv_and_residual_variability(tmp_path: Path) -> None:
+    drugs_dir = tmp_path / "drugs"
+    write_demo_drug(drugs_dir, "iv_demo", route="iv_bolus", template="pk1_iv_ode")
+    out_dir = tmp_path / "demo_set"
+
+    run_demo_set(
+        drugs=["iv_demo"],
+        drugs_dir=drugs_dir,
+        out_dir=out_dir,
+        sample_times_h=[0, 1, 2, 4],
+        variability={"iiv_cv": 0.2, "residual_cv": 0.1, "seed": 123},
+    )
+
+    sim_rows = read_csv(out_dir / "iv_demo" / "raw" / "sim_full.csv")
+    one_hour = [row for row in sim_rows if row["time"] == "1"]
+    assert len(one_hour) == 2
+    assert one_hour[0]["CP"] != one_hour[1]["CP"]
+    assert all(row["IPRED"] != row["DV"] for row in one_hour)
+
+    manifest = yaml.safe_load((out_dir / "DEMO_MANIFEST.yml").read_text(encoding="utf-8"))
+    assert manifest["settings"]["variability"] == {"iiv_cv": 0.2, "residual_cv": 0.1, "seed": 123}

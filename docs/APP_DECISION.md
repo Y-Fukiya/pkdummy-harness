@@ -49,6 +49,19 @@
 | NCA/PopPK adapter仕様が固定された | 出力列をUIで説明しやすい |
 | 外部mrgsolve runnerの実行方法が固定された | アプリから安全に呼び出せる |
 
+## Current Extension Priority
+
+フルアプリ化の前に、次の拡張を優先します。
+
+| Priority | Extension | Reason |
+| --- | --- | --- |
+| 1 | `examples/` の最小成果物 | 初見ユーザーが出力形をすぐ理解できる |
+| 2 | harness config schema validation | UIやCLIの設定ミスを早く止められる |
+| 3 | NCA/PopPK tool別adapter | 下流parser smoke testに使いやすくなる |
+| 4 | 軽量IIV/residual option | 濃度統計やplotが実データに少し近づく |
+| 5 | Quarto reference-doc | Word共有時の見た目を揃えやすい |
+| 6 | thin UI / cloud runner検討 | 上記が固定されてからでよい |
+
 ## Recommended App Shape If Built
 
 作るなら、最初のアプリは **thin launcher + manifest viewer** に限定します。

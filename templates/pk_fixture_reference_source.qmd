@@ -1,0 +1,28 @@
+---
+title: "PK Fixture Reference Styles"
+format:
+  docx:
+    toc: true
+---
+
+# Heading 1
+
+This file is used only to generate `pk_fixture_reference.docx`, a small Word
+style reference document for Quarto output.
+
+## Heading 2
+
+Normal body text for PK fixture reports.
+
+### Heading 3
+
+| Column | Meaning |
+| --- | --- |
+| TIME_H | Time after dose in hours |
+| AVAL | Concentration value |
+
+- Bulleted item
+- Another bulleted item
+
+1. Numbered item
+2. Another numbered item

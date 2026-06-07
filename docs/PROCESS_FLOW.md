@@ -29,6 +29,8 @@ flowchart LR
     L --> M["DM / VS / LB / EX / PC"]
     M --> N["make_analysis_inputs.py"]
     N --> O["ADPC / NCA_INPUT / POPPK_INPUT"]
+    O --> A1["make_downstream_adapters.py"]
+    A1 --> A2["NCA / PopPK adapter CSVs"]
     O --> P["report_pk_fixture.R"]
     P --> Q["Markdown / summary CSV / ggplot PNG"]
     Q --> R["render_pk_fixture_quarto.R"]

@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import csv
 import math
+import random
 import sys
 from dataclasses import dataclass
 from datetime import datetime
@@ -134,18 +135,26 @@ def _is_oral(spec: dict[str, Any]) -> bool:
     return route in {"oral", "po"} or "oral" in template
 
 
-def _concentration_ng_ml(spec: dict[str, Any], *, dose_mg: float, time_h: float) -> float:
+def _concentration_ng_ml(
+    spec: dict[str, Any],
+    *,
+    dose_mg: float,
+    time_h: float,
+    cl_factor: float = 1.0,
+    v_factor: float = 1.0,
+    ka_factor: float = 1.0,
+) -> float:
     model = spec.get("model") or {}
     theta = model.get("theta") or {}
     units = model.get("units") or {}
-    cl = _to_float(theta.get("CL"))
-    v = _to_float(theta.get("V"))
+    cl = (_to_float(theta.get("CL")) or 0.0) * cl_factor
+    v = (_to_float(theta.get("V")) or 0.0) * v_factor
     mult = _to_float(units.get("mult"), 1000.0) or 1000.0
-    if cl is None or v is None or cl <= 0 or v <= 0:
+    if cl <= 0 or v <= 0:
         raise ValueError("model.theta.CL and model.theta.V must be positive for demo simulation.")
     ke = cl / v
     if _is_oral(spec):
-        ka = _to_float(theta.get("KA"), 1.0) or 1.0
+        ka = (_to_float(theta.get("KA"), 1.0) or 1.0) * ka_factor
         f1 = _to_float(theta.get("F1"), 1.0) or 1.0
         alag = _to_float(theta.get("ALAG1"), 0.0) or 0.0
         tau = time_h - alag
@@ -175,22 +184,58 @@ def _subject_row_values(study_id: str, subject_index: int, arm: str, dose_mg: fl
     }
 
 
+def _variability_settings(variability: dict[str, Any] | None) -> dict[str, float | int]:
+    variability = variability or {}
+    return {
+        "iiv_cv": float(variability.get("iiv_cv", 0.0) or 0.0),
+        "residual_cv": float(variability.get("residual_cv", 0.0) or 0.0),
+        "seed": int(variability.get("seed", 20260217) or 20260217),
+    }
+
+
+def _lognormal_factor(rng: random.Random, cv: float) -> float:
+    if cv <= 0:
+        return 1.0
+    sigma = math.sqrt(math.log(cv * cv + 1.0))
+    return math.exp(rng.normalvariate(-0.5 * sigma * sigma, sigma))
+
+
+def _residual_observation(rng: random.Random, ipred: float, residual_cv: float) -> float:
+    if residual_cv <= 0 or ipred <= 0:
+        return ipred
+    return max(0.0, ipred * _lognormal_factor(rng, residual_cv))
+
+
 def make_demo_sim_full(
     *,
     spec_yml: Path | str,
     out_csv: Path | str,
+    variability: dict[str, Any] | None = None,
 ) -> Path:
     spec_path = Path(spec_yml)
     out_path = Path(out_csv)
     spec = _load_yaml(spec_path)
     study_id = str(((spec.get("study") or {}).get("id")) or spec_path.parent.name)
+    var = _variability_settings(variability)
+    rng = random.Random(int(var["seed"]))
     rows: list[dict[str, Any]] = []
     subject_index = 1
     for arm, n_subjects, dose_mg in _arms(spec):
         for _ in range(n_subjects):
             subject = _subject_row_values(study_id, subject_index, arm, dose_mg)
+            cl_factor = _lognormal_factor(rng, float(var["iiv_cv"]))
+            v_factor = _lognormal_factor(rng, float(var["iiv_cv"]))
+            ka_factor = _lognormal_factor(rng, float(var["iiv_cv"])) if _is_oral(spec) else 1.0
             for time_h in _time_grid(spec):
-                conc = _concentration_ng_ml(spec, dose_mg=dose_mg, time_h=time_h)
+                ipred = _concentration_ng_ml(
+                    spec,
+                    dose_mg=dose_mg,
+                    time_h=time_h,
+                    cl_factor=cl_factor,
+                    v_factor=v_factor,
+                    ka_factor=ka_factor,
+                )
+                dv = _residual_observation(rng, ipred, float(var["residual_cv"]))
                 rows.append(
                     {
                         **subject,
@@ -198,15 +243,32 @@ def make_demo_sim_full(
                         "evid": 0,
                         "MDV": 0,
                         "amt": 0,
-                        "CP": conc,
-                        "DV": conc,
+                        "CP": ipred,
+                        "IPRED": ipred,
+                        "DV": dv,
                     }
                 )
             subject_index += 1
     _write_csv(
         out_path,
         rows,
-        ["ID", "time", "evid", "MDV", "amt", "CP", "DV", "ARM", "WT", "AGE", "SEX_CHAR", "DOSE_MG", "STUDYID", "USUBJID"],
+        [
+            "ID",
+            "time",
+            "evid",
+            "MDV",
+            "amt",
+            "CP",
+            "IPRED",
+            "DV",
+            "ARM",
+            "WT",
+            "AGE",
+            "SEX_CHAR",
+            "DOSE_MG",
+            "STUDYID",
+            "USUBJID",
+        ],
     )
     return out_path
 
@@ -252,6 +314,7 @@ def run_demo_set(
     drugs_dir: Path | str = "drugs",
     sample_times_h: list[float] | None = None,
     allow_validation_failed: bool = True,
+    variability: dict[str, Any] | None = None,
 ) -> DemoSetResult:
     if not drugs:
         raise ValueError("At least one drug slug is required.")
@@ -266,7 +329,7 @@ def run_demo_set(
         _, _, spec_yml = _resolve_drug_files(drugs_path, slug)
         drug_out = out_path / slug
         sim_full = drug_out / "raw" / "sim_full.csv"
-        make_demo_sim_full(spec_yml=spec_yml, out_csv=sim_full)
+        make_demo_sim_full(spec_yml=spec_yml, out_csv=sim_full, variability=variability)
         workflow = run_workflow(
             sim_full_csv=sim_full,
             out_dir=drug_out / "workflow",
@@ -328,6 +391,7 @@ def run_demo_set(
                 "sample_times_h": times,
                 "allow_validation_failed": allow_validation_failed,
                 "demo_simulator": "analytical_1comp_fixture_generator_not_mrgsolve",
+                "variability": _variability_settings(variability),
             },
             "outputs": {key: str(value) for key, value in files.items()},
             "counts": counts,
@@ -364,6 +428,9 @@ def build_arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Do not continue run_workflow outputs when validation is FAILED.",
     )
+    parser.add_argument("--iiv-cv", type=float, default=0.0, help="Optional demo-only lognormal IIV CV for CL/V/KA")
+    parser.add_argument("--residual-cv", type=float, default=0.0, help="Optional demo-only lognormal residual CV for DV")
+    parser.add_argument("--variability-seed", type=int, default=20260217, help="Seed for demo-only variability")
     return parser
 
 
@@ -377,6 +444,7 @@ def main(argv: list[str] | None = None) -> int:
             out_dir=args.out_dir,
             sample_times_h=parse_times(args.times),
             allow_validation_failed=not args.stop_on_validation_failed,
+            variability={"iiv_cv": args.iiv_cv, "residual_cv": args.residual_cv, "seed": args.variability_seed},
         )
     except Exception as exc:
         print(f"ERROR: {exc}")

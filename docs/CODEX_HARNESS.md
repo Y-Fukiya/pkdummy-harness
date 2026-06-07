@@ -43,10 +43,12 @@ make harness-check
 | `tools/run_harness.py` | YAML configからdemo/post-simulation workflowを起動する共通入口 | UIやクラウドから呼んでもPK値変更はしない |
 | `tools/run_workflow.py` | `sim_full.csv` 後の検証、採血抽出、SDTM-like生成、ADPC-like/NCA/PopPK入力生成、trace作成を一括実行 | 外部runner実行やPK値変更はしない |
 | `tools/run_demo_set.py` | 複数薬剤デモ用 `sim_full.csv` 生成と `run_workflow.py` 一括実行 | mrgsolve runnerの代替やPK値変更はしない |
+| `tools/validate_harness_config.py` | `run_harness.py` のYAML configを軽量schema validationする | 実行前の設定ミス検出。PK値には触れない |
 | `tools/validate_simulation.py` | `sim_full.csv` のAUC/Cmax/Tmax/t1/2再計算 | 自動最適化ではなく検査 |
 | `tools/sample_clinical_timepoints.py` | dense simulation output を名目採血時点へ疎化 | SDTM/ADaM/NCA workflow fixture 用 |
 | `tools/make_sdtm_like_domains.py` | `clinical_samples.csv` から限定版 DM/VS/LB/EX/PC CSV とMANIFESTを生成 | submission-ready SDTMではない |
 | `tools/make_analysis_inputs.py` | SDTM-likeからADPC-like/NCA/PopPK smoke-test CSVとMANIFESTを生成 | submission-ready ADaMやモデル固有NONMEM datasetではない |
+| `tools/make_downstream_adapters.py` | ADPC/POPPK_INPUTからR NCA/Phoenix/NONMEM/nlmixr2風adapter CSVを生成 | parser/control-stream smoke test用。正式tool datasetではない |
 | `tools/report_pk_fixture.R` | ADPC-likeから被験者背景、濃度統計、linear/log ggplotを含む記述統計レポートを生成 | fixture確認用。臨床薬理妥当化やsubmission-ready ADaM reportではない |
 | `tools/render_pk_fixture_quarto.R` | `templates/pk_fixture_report.qmd` を使って記述統計レポートをQuarto docxへ変換 | 任意の共有用artifact。一次的な再現性はCSV/Markdown/PNG/manifest側 |
 | `outputs/review/` | review/calibration/validation notes | 監査ログ。canonical PK値ではない |
@@ -146,6 +148,14 @@ Word共有用のdocxが必要な場合だけ、tools/render_pk_fixture_quarto.R 
 
 ```text
 tools/run_harness.py harness_examples/demo_set.yml で albuterol, alprazolam, aciclovir, abciximab, felodipine の複数薬剤デモを実行してください。summary.csv / summary.md / DEMO_MANIFEST.yml / HARNESS_MANIFEST.yml を確認し、WARN/FAILEDはpk.ymlに自動反映しないでください。このデモ用sim_full.csvは解析式generator由来で、mrgsolve runnerの代替ではないことを説明してください。
+```
+
+demo用に軽い個体差や残差誤差が必要な場合だけ、`simulation.variability` または `run_demo_set.py --iiv-cv --residual-cv` を使ってください。これはworkflow fixture用の見た目調整で、薬剤固有のIIV/residual modelではありません。
+
+### Downstream adapter generation
+
+```text
+生成済み <run_dir>/workflow/analysis_inputs/ から、tools/make_downstream_adapters.py で nca_r.csv / nca_phoenix.csv / poppk_nonmem.csv / poppk_nlmixr2.csv を生成してください。これは下流parser smoke test用adapterで、各ツールの正式dataset仕様を保証しないことを説明してください。
 ```
 
 ## Known Limitations

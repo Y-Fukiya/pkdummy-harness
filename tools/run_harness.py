@@ -24,6 +24,7 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from tools.run_demo_set import run_demo_set
+from tools.validate_harness_config import validate_harness_config
 from tools.run_workflow import run_workflow
 
 
@@ -144,6 +145,7 @@ def _run_demo_set_mode(config: dict[str, Any], *, config_path: Path) -> HarnessR
         out_dir=out_dir,
         sample_times_h=_times(config),
         allow_validation_failed=bool((config.get("validation") or {}).get("allow_failed", True)),
+        variability=simulation.get("variability"),
     )
     files = {
         "manifest": manifest,
@@ -276,6 +278,9 @@ def _run_post_simulation_mode(config: dict[str, Any], *, config_path: Path) -> H
 def run_harness(config_yml: Path | str) -> HarnessResult:
     config_path = Path(config_yml)
     config = _load_yaml(config_path)
+    issues = validate_harness_config(config)
+    if issues:
+        raise ValueError("Invalid harness config: " + "; ".join(issues))
     mode = str(config.get("mode") or "").strip()
     if mode == "demo_set":
         return _run_demo_set_mode(config, config_path=config_path)

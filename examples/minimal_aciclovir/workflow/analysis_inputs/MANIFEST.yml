@@ -1,0 +1,15 @@
+purpose: analysis_input_smoke_test_fixture
+status: OK
+inputs:
+  source: "versioned minimal example"
+outputs:
+  ADPC: examples/minimal_aciclovir/workflow/analysis_inputs/ADPC.csv
+  NCA_INPUT: examples/minimal_aciclovir/workflow/analysis_inputs/NCA_INPUT.csv
+  POPPK_INPUT: examples/minimal_aciclovir/workflow/analysis_inputs/POPPK_INPUT.csv
+counts:
+  adpc_rows: 4
+  nca_rows: 4
+  poppk_rows: 6
+warnings: []
+notes:
+  - "Educational fixture only; not submission-ready ADaM or model-specific PopPK input."

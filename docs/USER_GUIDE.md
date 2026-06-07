@@ -6,6 +6,8 @@
 
 初めて実行する場合は、まず [QUICKSTART.md](QUICKSTART.md) の複数薬剤デモを試してください。このUSER_GUIDEは、Quickstart後に個別ツールや既存SDTM-like skeleton利用を詳しく確認するための詳細版です。
 
+生成物の形をすぐ確認したい場合は、Git管理された小さな例 [../examples/minimal_aciclovir](../examples/minimal_aciclovir) も参照できます。
+
 ## 1. 全体像
 
 ```mermaid
@@ -45,6 +47,7 @@ make harness-check
 make validate
 make test
 make regen-check
+python3 tools/validate_harness_config.py harness_examples/demo_set.yml
 ```
 
 ## 3. 薬剤を選ぶ
@@ -340,6 +343,27 @@ Rscript tools/render_pk_fixture_quarto.R \
 | `QUARTO_REPORT_MANIFEST.yml` | Quarto template、入力、出力、render状態 |
 
 Wordのスタイルを合わせたい場合は、任意で `--reference-doc reference.docx` を指定できます。Quartoの `reference-doc` は見た目のスタイル参照であり、統計ロジックは `.qmd` やCSV側で管理します。
+同梱のたたき台は `templates/pk_fixture_reference.docx` です。
+
+### NCA/PopPK tool別adapterを作る場合
+
+`analysis_inputs/` から、NCA/PopPKツール別の軽量CSV adapterを作れます。
+
+```bash
+python3 tools/make_downstream_adapters.py \
+  --analysis-dir outputs/<run>/workflow/analysis_inputs \
+  --out-dir outputs/<run>/workflow/adapters
+```
+
+| File | Intended use |
+| --- | --- |
+| `nca_r.csv` | R系NCA parser smoke test |
+| `nca_phoenix.csv` | Phoenix風NCA取り込み確認 |
+| `poppk_nonmem.csv` | NONMEM風control-stream parser確認 |
+| `poppk_nlmixr2.csv` | nlmixr2風parser確認 |
+| `MANIFEST.yml` | adapter出力、件数、注意事項 |
+
+これは列名や最小列セットを合わせるadapterです。各ツール固有の正式な解析datasetやcontrol streamを保証するものではありません。
 
 ## 10. 複数薬剤デモを作る場合
 
@@ -476,6 +500,7 @@ make harness-check
 | 採血時点抽出 | `python3 tools/sample_clinical_timepoints.py outputs/<run>/raw/sim_full.csv --times 0,0.5,1,2,4,8,12,24 --out outputs/<run>/raw/clinical_samples.csv` |
 | SDTM-like CSV生成 | `python3 tools/make_sdtm_like_domains.py --clinical-samples outputs/<run>/raw/clinical_samples.csv --spec drugs/<slug>/spec_pk1_oral.yml --out-dir outputs/<run>/sdtm_like` |
 | ADPC/NCA/PopPK入力生成 | `python3 tools/make_analysis_inputs.py --sdtm-like-dir outputs/<run>/workflow/sdtm_like --out-dir outputs/<run>/workflow/analysis_inputs` |
+| NCA/PopPK adapter生成 | `python3 tools/make_downstream_adapters.py --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/adapters` |
 | 記述統計レポート生成 | `Rscript tools/report_pk_fixture.R --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/reports/pk_fixture_report --title "<slug> PK fixture report"` |
 | Quarto docxレポート生成 | `Rscript tools/render_pk_fixture_quarto.R --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/reports/pk_fixture_quarto --title "<slug> PK fixture report"` |
 | 被験者CSV検証 | `python3 tools/validate_subjects_csv.py subjects/subjects.csv --expected-n 100 --allowed-arm A` |
@@ -530,6 +555,7 @@ make harness-check
 [ ] run_workflow.py で validation report / clinical_samples.csv / SDTM-like CSV / analysis_inputs / MANIFEST / trace.log を作る
 [ ] OK/WARN/FAILED の扱いを記録する
 [ ] ADPC.csv / NCA_INPUT.csv / POPPK_INPUT.csv を下流workflowに投入する
+[ ] 必要なら make_downstream_adapters.py でツール別adapterを作る
 [ ] 必要なら report_pk_fixture.R で被験者背景と濃度の記述統計レポートを出す
 [ ] Word共有が必要なら render_pk_fixture_quarto.R でdocxを出す
 [ ] 複数薬剤デモでは summary.csv / summary.md で薬剤間の成功/WARN/限界例を確認する
