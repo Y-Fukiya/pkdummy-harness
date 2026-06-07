@@ -6,7 +6,7 @@
 
 ![PK-like Synthetic Data Harness workflow](docs/assets/pk-harness-workflow.png)
 
-処理プロセスを説明するdraw.io形式の図は [docs/assets/pk-harness-process.drawio](docs/assets/pk-harness-process.drawio) にあります。図の読み方は [docs/PROCESS_FLOW.md](docs/PROCESS_FLOW.md) を参照してください。
+処理プロセスを説明するdraw.io形式の図は [docs/assets/pk-harness-process.drawio](docs/assets/pk-harness-process.drawio) と [docs/assets/pk-fixture-end-to-end-workflow.drawio](docs/assets/pk-fixture-end-to-end-workflow.drawio) にあります。図の読み方は [docs/PROCESS_FLOW.md](docs/PROCESS_FLOW.md) を参照してください。
 
 ## Positioning
 

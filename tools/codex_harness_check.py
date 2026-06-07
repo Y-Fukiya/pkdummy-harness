@@ -44,6 +44,7 @@ REQUIRED_FILES = [
     "docs/CODEX_HARNESS.md",
     "docs/assets/pk-harness-workflow.png",
     "docs/assets/pk-harness-process.drawio",
+    "docs/assets/pk-fixture-end-to-end-workflow.drawio",
     "examples/minimal_aciclovir/README.md",
     "examples/minimal_aciclovir/harness.yml",
     "examples/minimal_aciclovir/sdtm_like/DM.csv",

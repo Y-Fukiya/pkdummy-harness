@@ -6,7 +6,10 @@ draw.io / diagrams.net で編集できる図は次のファイルです。
 
 ```text
 docs/assets/pk-harness-process.drawio
+docs/assets/pk-fixture-end-to-end-workflow.drawio
 ```
+
+`pk-harness-process.drawio` は処理詳細、`pk-fixture-end-to-end-workflow.drawio` はCLI/PowerShell入口、下流検証、release/feedbackまで含めた全体像です。
 
 ## 図の読み方
 
