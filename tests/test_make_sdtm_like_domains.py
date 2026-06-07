@@ -335,6 +335,50 @@ def test_make_sdtm_like_domains_errors_when_existing_pc_has_no_matching_samples(
         )
 
 
+def test_make_sdtm_like_domains_rejects_existing_dm_without_usubjid(tmp_path: Path) -> None:
+    samples = tmp_path / "clinical_samples.csv"
+    spec = tmp_path / "spec.yml"
+    dm_csv = tmp_path / "DM_existing.csv"
+    out_dir = tmp_path / "sdtm"
+    write_clinical_samples(samples)
+    write_spec(spec)
+    write_csv(
+        dm_csv,
+        [{"STUDYID": "OSP_test_drug", "DOMAIN": "DM", "SUBJID": "1"}],
+        ["STUDYID", "DOMAIN", "SUBJID"],
+    )
+
+    with pytest.raises(ValueError, match="Existing DM CSV is missing required columns: USUBJID"):
+        make_sdtm_like_domains(
+            clinical_samples_csv=samples,
+            spec_yml=spec,
+            out_dir=out_dir,
+            dm_csv=dm_csv,
+        )
+
+
+def test_make_sdtm_like_domains_rejects_pc_skeleton_without_time_match_columns(tmp_path: Path) -> None:
+    samples = tmp_path / "clinical_samples.csv"
+    spec = tmp_path / "spec.yml"
+    pc_csv = tmp_path / "PC_skeleton.csv"
+    out_dir = tmp_path / "sdtm"
+    write_clinical_samples(samples)
+    write_spec(spec)
+    write_csv(
+        pc_csv,
+        [{"STUDYID": "OSP_test_drug", "DOMAIN": "PC", "USUBJID": "OSP_test-001", "PCSTRESN": ""}],
+        ["STUDYID", "DOMAIN", "USUBJID", "PCSTRESN"],
+    )
+
+    with pytest.raises(ValueError, match="Existing PC CSV needs at least one matching column"):
+        make_sdtm_like_domains(
+            clinical_samples_csv=samples,
+            spec_yml=spec,
+            out_dir=out_dir,
+            pc_csv=pc_csv,
+        )
+
+
 def test_make_sdtm_like_domains_warns_on_subject_mismatch(tmp_path: Path) -> None:
     samples = tmp_path / "clinical_samples.csv"
     subjects = tmp_path / "subjects.csv"

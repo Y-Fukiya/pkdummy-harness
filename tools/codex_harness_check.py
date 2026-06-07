@@ -16,6 +16,11 @@ from typing import Any
 
 import yaml
 
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from tools.validate_manifest import validate_manifest_file
+
 
 JUNK_FILE_NAMES = {".DS_Store"}
 JUNK_DIR_NAMES = {"__MACOSX", "__pycache__", ".pytest_cache"}
@@ -31,10 +36,26 @@ REQUIRED_FILES = [
     "docs/assets/pk-harness-process.drawio",
     "examples/minimal_aciclovir/README.md",
     "examples/minimal_aciclovir/harness.yml",
+    "examples/minimal_aciclovir/sdtm_like/DM.csv",
+    "examples/minimal_aciclovir/sdtm_like/VS.csv",
+    "examples/minimal_aciclovir/sdtm_like/LB.csv",
+    "examples/minimal_aciclovir/sdtm_like/EX.csv",
+    "examples/minimal_aciclovir/sdtm_like/PC.csv",
     "examples/minimal_aciclovir/workflow/analysis_inputs/ADPC.csv",
     "examples/minimal_aciclovir/workflow/analysis_inputs/NCA_INPUT.csv",
     "examples/minimal_aciclovir/workflow/analysis_inputs/POPPK_INPUT.csv",
     "examples/minimal_aciclovir/workflow/reports/pk_fixture_report/REPORT.md",
+    "examples/minimal_albuterol_iv/README.md",
+    "examples/minimal_albuterol_iv/harness.yml",
+    "examples/minimal_albuterol_iv/sdtm_like/DM.csv",
+    "examples/minimal_albuterol_iv/sdtm_like/VS.csv",
+    "examples/minimal_albuterol_iv/sdtm_like/LB.csv",
+    "examples/minimal_albuterol_iv/sdtm_like/EX.csv",
+    "examples/minimal_albuterol_iv/sdtm_like/PC.csv",
+    "examples/minimal_albuterol_iv/workflow/analysis_inputs/ADPC.csv",
+    "examples/minimal_albuterol_iv/workflow/analysis_inputs/NCA_INPUT.csv",
+    "examples/minimal_albuterol_iv/workflow/analysis_inputs/POPPK_INPUT.csv",
+    "examples/minimal_albuterol_iv/workflow/reports/pk_fixture_report/REPORT.md",
     "harness_examples/demo_set.yml",
     "harness_examples/post_simulation_template.yml",
     "Makefile",
@@ -55,6 +76,9 @@ REQUIRED_FILES = [
     "tools/make_sdtm_like_domains.py",
     "tools/make_analysis_inputs.py",
     "tools/make_downstream_adapters.py",
+    "tools/check_examples.py",
+    "tools/doctor.py",
+    "tools/validate_manifest.py",
     "tools/report_pk_fixture.R",
     "tools/render_pk_fixture_quarto.R",
     "tools/run_demo_set.py",
@@ -72,6 +96,9 @@ REQUIRED_FILES = [
     "tests/test_make_analysis_inputs.py",
     "tests/test_make_downstream_adapters.py",
     "tests/test_validate_harness_config.py",
+    "tests/test_check_examples.py",
+    "tests/test_doctor.py",
+    "tests/test_validate_manifest.py",
     "tests/test_report_pk_fixture_script.py",
     "tests/test_render_pk_fixture_quarto_script.py",
     "tests/test_run_demo_set.py",
@@ -217,6 +244,13 @@ def check_drug_files(root: Path, issues: list[str]) -> None:
             issues.append(f"{drug_dir.name}: missing derived CL or V at 70kg")
 
 
+def check_versioned_manifests(root: Path, issues: list[str]) -> None:
+    for path in sorted((root / "examples").glob("minimal_*/workflow/**/MANIFEST.yml")):
+        rel = path.relative_to(root)
+        for issue in validate_manifest_file(path):
+            issues.append(f"{rel}: {issue}")
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("root", nargs="?", default=".")
@@ -228,6 +262,7 @@ def main(argv: list[str] | None = None) -> int:
     check_no_junk(root, issues)
     check_manifest_counts(root, issues)
     check_drug_files(root, issues)
+    check_versioned_manifests(root, issues)
 
     if issues:
         print("Codex harness check: FAILED")

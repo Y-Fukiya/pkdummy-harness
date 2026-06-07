@@ -80,6 +80,9 @@ population:
 - `python tools/make_analysis_inputs.py --sdtm-like-dir outputs/<run>/workflow/sdtm_like --out-dir outputs/<run>/workflow/analysis_inputs`: 限定版SDTM-like `DM/VS/LB/EX/PC` から `ADPC.csv`, `NCA_INPUT.csv`, `POPPK_INPUT.csv`, `MANIFEST.yml` を生成する。これらは下流workflow smoke test用で、submission-ready ADaMやモデル固有NONMEM datasetではない
 - `python tools/make_downstream_adapters.py --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/adapters`: `ADPC.csv` と `POPPK_INPUT.csv` から `nca_r.csv`, `nca_phoenix.csv`, `poppk_nonmem.csv`, `poppk_nlmixr2.csv` を生成する。これはparser/control-stream smoke test用adapterで、各ツールの正式dataset仕様を保証しない
 - `python tools/validate_harness_config.py harness_examples/demo_set.yml`: `run_harness.py` 用configの必須項目、mode、sampling、validation、demo variability設定を検証する
+- `python tools/check_examples.py examples`: Git管理された `examples/minimal_*` を一時ディレクトリで再生成し、CSVとmanifestの安定項目が期待出力からずれていないか確認する
+- `python tools/doctor.py`: Python/R/Quarto/simPopなどのローカル環境をpreflight確認する。必須依存不足はFAILED、任意依存不足はWARN
+- `python tools/validate_manifest.py outputs/<run>/workflow/MANIFEST.yml`: run-levelまたはtool-level `MANIFEST.yml` の必須field、status、mapping/list型を確認する
 - `Rscript tools/report_pk_fixture.R --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/reports/pk_fixture_report --title "<slug> PK fixture report"`: `ADPC.csv` から被験者背景の要約統計、時点別濃度統計、ggplot2のlinear/log濃度プロット、Markdownレポートを生成する。これはfixture確認用の記述統計で、臨床薬理モデル妥当化ではない
 - `Rscript tools/render_pk_fixture_quarto.R --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/reports/pk_fixture_quarto --title "<slug> PK fixture report"`: `templates/pk_fixture_report.qmd` を使って、軽量レポートの内容をQuarto docxへ変換する任意ステップ。Word style referenceを使う場合は `--reference-doc reference.docx` を指定する
 - `Rscript tools/make_simpop_subjects.R --out subjects.csv --n 100 --dose-mg 100`: 任意の `simPop` ベース被験者CSV生成

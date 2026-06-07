@@ -49,6 +49,9 @@ make harness-check
 | `tools/make_sdtm_like_domains.py` | `clinical_samples.csv` から限定版 DM/VS/LB/EX/PC CSV とMANIFESTを生成 | submission-ready SDTMではない |
 | `tools/make_analysis_inputs.py` | SDTM-likeからADPC-like/NCA/PopPK smoke-test CSVとMANIFESTを生成 | submission-ready ADaMやモデル固有NONMEM datasetではない |
 | `tools/make_downstream_adapters.py` | ADPC/POPPK_INPUTからR NCA/Phoenix/NONMEM/nlmixr2風adapter CSVを生成 | parser/control-stream smoke test用。正式tool datasetではない |
+| `tools/check_examples.py` | versioned minimal examplesを一時再生成して出力driftを検出する | 例示用artifactの列・件数が知らないうちに変わるのを防ぐ |
+| `tools/doctor.py` | Python/R/Quarto/simPopのpreflight確認を行う | 任意依存不足はWARNとして扱い、CLI本体を過剰に重くしない |
+| `tools/validate_manifest.py` | `MANIFEST.yml` の必須fieldと基本型を確認する | artifactの監査性を保つ。臨床的正しさのvalidationではない |
 | `tools/report_pk_fixture.R` | ADPC-likeから被験者背景、濃度統計、linear/log ggplotを含む記述統計レポートを生成 | fixture確認用。臨床薬理妥当化やsubmission-ready ADaM reportではない |
 | `tools/render_pk_fixture_quarto.R` | `templates/pk_fixture_report.qmd` を使って記述統計レポートをQuarto docxへ変換 | 任意の共有用artifact。一次的な再現性はCSV/Markdown/PNG/manifest側 |
 | `outputs/review/` | review/calibration/validation notes | 監査ログ。canonical PK値ではない |

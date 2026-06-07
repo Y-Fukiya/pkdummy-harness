@@ -54,6 +54,31 @@ def _ensure_fields(fieldnames: list[str], extra_fields: list[str]) -> list[str]:
     return list(fieldnames) + [field for field in extra_fields if field not in fieldnames]
 
 
+def _require_columns(*, domain: str, fieldnames: list[str], required: list[str]) -> None:
+    present = set(fieldnames)
+    missing = [field for field in required if field not in present]
+    if missing:
+        raise ValueError(f"Existing {domain} CSV is missing required columns: {', '.join(missing)}")
+
+
+def _validate_existing_domain_csv(*, domain: str, fieldnames: list[str]) -> None:
+    required_by_domain = {
+        "DM": ["USUBJID"],
+        "VS": ["USUBJID", "VSTESTCD", "VSSTRESN"],
+        "LB": ["USUBJID", "LBTESTCD", "LBSTRESN"],
+        "EX": ["USUBJID", "EXTRT", "EXDOSE", "EXROUTE"],
+        "PC": ["USUBJID"],
+    }
+    _require_columns(domain=domain, fieldnames=fieldnames, required=required_by_domain[domain])
+    if domain == "PC":
+        match_columns = {"PCTPTNUM", "TPTNUM", "PCTPT", "TPT", "PCELTM", "TIME_H", "TIME", "time"}
+        if not match_columns.intersection(fieldnames):
+            raise ValueError(
+                "Existing PC CSV needs at least one matching column: "
+                "PCTPTNUM, PCTPT, PCELTM, TIME_H, TIME, or time"
+            )
+
+
 def _load_yaml(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as f:
         return yaml.safe_load(f) or {}
@@ -489,6 +514,7 @@ def _fill_existing_pc_skeleton(
     overwrite_existing_pc_conc: bool,
 ) -> tuple[list[str], list[dict[str, str]], list[str]]:
     fieldnames, pc_rows = _read_csv(pc_csv)
+    _validate_existing_domain_csv(domain="PC", fieldnames=fieldnames)
     out_fields = _ensure_fields(fieldnames, ["PCORRES", "PCORRESU", "PCSTRESN", "PCSTRESU"])
     match_map = _clinical_pc_match_map(clinical_rows, study_id=study_id, conc_col=conc_col)
     matched = 0
@@ -601,11 +627,13 @@ def make_sdtm_like_domains(
     }
     if dm_csv:
         dm_fields, dm_rows = _read_csv(Path(dm_csv))
+        _validate_existing_domain_csv(domain="DM", fieldnames=dm_fields)
     else:
         dm_rows = _make_dm(subjects, study_start=start)
         dm_fields = ["STUDYID", "DOMAIN", "USUBJID", "SUBJID", "RFSTDTC", "RFENDTC", "ARM", "ACTARM", "AGE", "AGEU", "SEX"]
     if vs_csv:
         vs_fields, vs_rows = _read_csv(Path(vs_csv))
+        _validate_existing_domain_csv(domain="VS", fieldnames=vs_fields)
     else:
         vs_rows = _make_vs(subjects, study_start=start, seed=seed)
         vs_fields = [
@@ -627,6 +655,7 @@ def make_sdtm_like_domains(
         ]
     if lb_csv:
         lb_fields, lb_rows = _read_csv(Path(lb_csv))
+        _validate_existing_domain_csv(domain="LB", fieldnames=lb_fields)
     else:
         lb_rows = _make_lb(subjects, study_start=start, seed=seed)
         lb_fields = [
@@ -649,6 +678,7 @@ def make_sdtm_like_domains(
         ]
     if ex_csv:
         ex_fields, ex_rows = _read_csv(Path(ex_csv))
+        _validate_existing_domain_csv(domain="EX", fieldnames=ex_fields)
     else:
         ex_rows = _make_ex(subjects, spec=spec, study_start=start)
         ex_fields = ["STUDYID", "DOMAIN", "USUBJID", "EXSEQ", "EXTRT", "EXDOSE", "EXDOSU", "EXROUTE", "EXSTDTC", "EXENDTC", "EXARM", "EXACTARM"]

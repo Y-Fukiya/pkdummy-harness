@@ -26,7 +26,7 @@ UI/launcherから呼ぶ場合の契約は [LAUNCHER_CONTRACT.md](LAUNCHER_CONTRA
 
 説明資料用のdraw.io図は [assets/pk-harness-process.drawio](assets/pk-harness-process.drawio) にあります。図の読み方は [PROCESS_FLOW.md](PROCESS_FLOW.md) を参照してください。
 
-成果物の形だけ先に確認したい場合は、Git管理された最小例 [../examples/minimal_aciclovir](../examples/minimal_aciclovir) を見てください。
+成果物の形だけ先に確認したい場合は、Git管理された最小例 [../examples/minimal_aciclovir](../examples/minimal_aciclovir) と [../examples/minimal_albuterol_iv](../examples/minimal_albuterol_iv) を見てください。
 
 ## 2. Install And Check
 
@@ -38,6 +38,18 @@ make validate
 ```
 
 `make validate` がOKなら、薬剤テンプレート、必須ファイル、基本的なハーネス構造は読めています。
+
+環境依存の確認を先に行う場合:
+
+```bash
+make doctor
+```
+
+Git管理された最小exampleの再生成チェック:
+
+```bash
+make examples-check
+```
 
 configだけを確認する場合:
 
@@ -199,6 +211,7 @@ python3 tools/run_workflow.py \
 ```
 
 `PC` skeletonは `USUBJID + PCTPTNUM` を優先して照合します。次に `USUBJID + PCTPT`、最後に `USUBJID + PCELTM/TIME` を使います。
+既存skeletonは実行前に最低限の列チェックを受けます。`DM` は `USUBJID`、`VS` は `USUBJID/VSTESTCD/VSSTRESN`、`LB` は `USUBJID/LBTESTCD/LBSTRESN`、`PC` は `USUBJID` と時点照合列が必要です。
 
 ## 9. External Runner Pattern
 
@@ -237,12 +250,15 @@ outputs/<run>/workflow/analysis_inputs/MANIFEST.yml
 
 ```text
 [ ] make validate がOK
+[ ] 必要なら make doctor で環境差を確認
+[ ] make examples-check でversioned exampleの出力形式を確認
 [ ] run_harness.py が完走
 [ ] summary.md で OK/WARN/FAILED の意味を確認
 [ ] 少なくとも1薬剤で ADPC/NCA/PopPK入力を確認
 [ ] 必要なら report_pk_fixture.R で記述統計レポートを作成
 [ ] Word共有が必要なら render_pk_fixture_quarto.R でdocxを作成
 [ ] 必要なら make_downstream_adapters.py でtool別adapter CSVを作成
+[ ] 必要なら validate_manifest.py でMANIFEST.yml構造を確認
 [ ] MANIFEST.yml と trace.log が残っている
 [ ] pk.yml は自動更新していない
 ```

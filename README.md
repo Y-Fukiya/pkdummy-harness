@@ -40,13 +40,19 @@
 
 最短で動かす場合は [Quickstart](docs/QUICKSTART.md) を見てください。複数薬剤デモから `ADPC.csv`, `NCA_INPUT.csv`, `POPPK_INPUT.csv` まで確認できます。
 
-成果物の形だけ先に見たい場合は、Git管理された小さな例を [examples/minimal_aciclovir](examples/minimal_aciclovir) に置いています。
+成果物の形だけ先に見たい場合は、Git管理された小さな例を [examples/minimal_aciclovir](examples/minimal_aciclovir) と [examples/minimal_albuterol_iv](examples/minimal_albuterol_iv) に置いています。
 
 まずリポジトリ整合性を確認します。
 
 ```bash
 python3 -m pip install -r requirements.txt
 make harness-check
+```
+
+ローカル環境のPython/R/Quarto/simPopまわりを先に確認する場合:
+
+```bash
+make doctor
 ```
 
 薬剤一覧を見る:
@@ -79,6 +85,12 @@ validate_simulation.py
 -> make_sdtm_like_domains.py
 -> make_analysis_inputs.py
 -> MANIFEST.yml / trace.log 作成
+```
+
+Git管理された最小exampleが再生成できるか確認する場合:
+
+```bash
+make examples-check
 ```
 
 ADPC-like出力から、被験者背景の記述統計、時点別濃度統計、ggplot2による濃度推移図を出す場合:
@@ -348,6 +360,8 @@ flowchart LR
 | 被験者属性だけ既存 | 上記 + `--subjects-csv` | `subjects.csv` から `DM/VS/LB` を生成 |
 | simPopを使う | `make_simpop_subjects.R` で `subjects.csv` を作成 | simPop由来属性を任意で利用 |
 
+既存skeletonには最低限の列チェックがあります。`DM` は `USUBJID`、`VS` は `USUBJID/VSTESTCD/VSSTRESN`、`LB` は `USUBJID/LBTESTCD/LBSTRESN`、`EX` は `USUBJID/EXTRT/EXDOSE/EXROUTE`、`PC` は `USUBJID` と `PCTPTNUM/PCTPT/PCELTM/TIME` 系の照合列が必要です。
+
 ## Optional Subject Covariates
 
 任意で `simPop` を使って被験者属性CSVを作れます。
@@ -444,6 +458,13 @@ make harness-check
 make validate
 make test
 make regen-check
+make examples-check
+```
+
+生成済みmanifestの構造だけを確認する場合:
+
+```bash
+python3 tools/validate_manifest.py outputs/<run>/workflow/MANIFEST.yml
 ```
 
 ## Expert-facing Summary

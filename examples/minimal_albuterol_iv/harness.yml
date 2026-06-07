@@ -1,0 +1,16 @@
+version: "0.1"
+mode: demo_set
+drugs_dir: drugs
+out_dir: outputs/example_albuterol_iv
+drugs:
+  - albuterol
+simulation:
+  engine: analytical_demo
+  variability:
+    iiv_cv: 0.0
+    residual_cv: 0.0
+    seed: 20260217
+sampling:
+  times_h: [0, 1]
+validation:
+  allow_failed: true

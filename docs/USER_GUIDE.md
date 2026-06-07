@@ -6,7 +6,7 @@
 
 初めて実行する場合は、まず [QUICKSTART.md](QUICKSTART.md) の複数薬剤デモを試してください。このUSER_GUIDEは、Quickstart後に個別ツールや既存SDTM-like skeleton利用を詳しく確認するための詳細版です。
 
-生成物の形をすぐ確認したい場合は、Git管理された小さな例 [../examples/minimal_aciclovir](../examples/minimal_aciclovir) も参照できます。
+生成物の形をすぐ確認したい場合は、Git管理された小さな例 [../examples/minimal_aciclovir](../examples/minimal_aciclovir) と [../examples/minimal_albuterol_iv](../examples/minimal_albuterol_iv) も参照できます。
 
 ## 1. 全体像
 
@@ -47,6 +47,8 @@ make harness-check
 make validate
 make test
 make regen-check
+make examples-check
+make doctor
 python3 tools/validate_harness_config.py harness_examples/demo_set.yml
 ```
 
@@ -271,6 +273,18 @@ python3 tools/run_workflow.py \
 
 `PC` skeletonは `USUBJID + PCTPTNUM` を優先して照合し、次に `USUBJID + PCTPT`、最後に `USUBJID + PCELTM/TIME` を使います。非空欄の既存濃度は上書きしません。上書きしたい場合だけ `--overwrite-existing-pc-conc` を使います。
 
+既存skeletonには最低限の列チェックがあります。
+
+| Domain | Required columns |
+| --- | --- |
+| `DM` | `USUBJID` |
+| `VS` | `USUBJID`, `VSTESTCD`, `VSSTRESN` |
+| `LB` | `USUBJID`, `LBTESTCD`, `LBSTRESN` |
+| `EX` | `USUBJID`, `EXTRT`, `EXDOSE`, `EXROUTE` |
+| `PC` | `USUBJID` plus at least one of `PCTPTNUM`, `PCTPT`, `PCELTM`, `TIME_H`, `TIME`, `time` |
+
+このチェックはsubmission-ready SDTM validationではなく、濃度注入とADPC/NCA/PopPK fixture作成に必要な最低限の入口チェックです。
+
 ## 9. ADPC/NCA/PopPK入力を作る場合
 
 `run_workflow.py` を使うと、SDTM-like生成後に自動で次のファイルが作られます。
@@ -492,6 +506,9 @@ make harness-check
 | 軽い整合性チェック | `make validate` |
 | 単体テスト | `make test` |
 | INDEX再現性確認 | `make regen-check` |
+| example再生成チェック | `make examples-check` |
+| 環境preflight | `make doctor` |
+| manifest構造確認 | `python3 tools/validate_manifest.py outputs/<run>/workflow/MANIFEST.yml` |
 | config一括ハーネス | `python3 tools/run_harness.py harness_examples/demo_set.yml` |
 | 一括workflow | `python3 tools/run_workflow.py --sim-full outputs/<run>/raw/sim_full.csv --drug <slug> --times 0,0.5,1,2,4,8,12,24 --out-dir outputs/<run>/workflow` |
 | 複数薬剤デモ | `python3 tools/run_harness.py harness_examples/demo_set.yml` |
@@ -518,6 +535,8 @@ make harness-check
 | `make_analysis_inputs.py` が停止する | PC濃度が全て欠損している | `PCSTRESN`, `PCORRES`, `DV`, `CP`, `IPRED` のいずれかが入っているか確認する |
 | `report_pk_fixture.R` が `ggplot2` 不足で停止する | R package未導入 | `install.packages("ggplot2")` を実行する。ハーネス本体はこのレポートなしでも実行可能 |
 | `render_pk_fixture_quarto.R` がQuarto不足で停止する | Quarto CLI未導入または実行制約 | Quartoを導入する。docx不要なら `report_pk_fixture.R` のMarkdown/PNG/CSVで運用する |
+| 既存skeletonで列不足エラー | fixture生成に必要な最小列がない | `DM/VS/LB/EX/PC` のrequired columnsを確認する |
+| MANIFEST構造をまとめて確認したい | 出力artifactのschemaを確認したい | `python3 tools/validate_manifest.py --recursive outputs/<run>` を使う |
 | `run_demo_set.py` の結果がWARNになる | 既存spec thetaとtargets/pk.ymlのズレ、1-comp限界、デモ解析式とmrgsolve runner差 | `summary.md` と各薬剤の `simulation_validation.md` を確認する。canonical PK値は自動変更しない |
 | subjectsとPCの被験者が合わない | `--subjects-csv` と `clinical_samples.csv` のID差 | `MANIFEST.yml` の警告を確認し、厳密に止めるなら `--strict-subject-match` を使う |
 | `simPop` が動かない | R package未導入または環境依存 | `simPop` なしで既定のpopulation設定を使う |

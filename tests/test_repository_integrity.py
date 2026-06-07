@@ -49,19 +49,30 @@ def test_excluded_csv_is_header_only_when_library_has_no_exclusions():
 
 
 def test_minimal_examples_are_versioned_for_new_users():
-    example_dir = ROOT / "examples" / "minimal_aciclovir"
-    required = [
-        example_dir / "README.md",
-        example_dir / "harness.yml",
-        example_dir / "workflow" / "analysis_inputs" / "ADPC.csv",
-        example_dir / "workflow" / "analysis_inputs" / "NCA_INPUT.csv",
-        example_dir / "workflow" / "analysis_inputs" / "POPPK_INPUT.csv",
-        example_dir / "workflow" / "reports" / "pk_fixture_report" / "REPORT.md",
-    ]
-    for path in required:
-        assert path.exists(), f"Missing minimal example artifact: {path.relative_to(ROOT)}"
+    examples = {
+        "minimal_aciclovir": {"subjects": {"EXAMPLE-001", "EXAMPLE-002"}, "route": "ORAL"},
+        "minimal_albuterol_iv": {"subjects": {"EXAMPLE_IV-001", "EXAMPLE_IV-002"}, "route": "INTRAVENOUS"},
+    }
+    for name, expected in examples.items():
+        example_dir = ROOT / "examples" / name
+        required = [
+            example_dir / "README.md",
+            example_dir / "harness.yml",
+            example_dir / "sdtm_like" / "DM.csv",
+            example_dir / "sdtm_like" / "VS.csv",
+            example_dir / "sdtm_like" / "LB.csv",
+            example_dir / "sdtm_like" / "EX.csv",
+            example_dir / "sdtm_like" / "PC.csv",
+            example_dir / "workflow" / "analysis_inputs" / "ADPC.csv",
+            example_dir / "workflow" / "analysis_inputs" / "NCA_INPUT.csv",
+            example_dir / "workflow" / "analysis_inputs" / "POPPK_INPUT.csv",
+            example_dir / "workflow" / "reports" / "pk_fixture_report" / "REPORT.md",
+        ]
+        for path in required:
+            assert path.exists(), f"Missing minimal example artifact: {path.relative_to(ROOT)}"
 
-    with (example_dir / "workflow" / "analysis_inputs" / "ADPC.csv").open("r", encoding="utf-8", newline="") as f:
-        adpc_rows = list(csv.DictReader(f))
-    assert len(adpc_rows) == 4
-    assert {row["USUBJID"] for row in adpc_rows} == {"EXAMPLE-001", "EXAMPLE-002"}
+        with (example_dir / "workflow" / "analysis_inputs" / "ADPC.csv").open("r", encoding="utf-8", newline="") as f:
+            adpc_rows = list(csv.DictReader(f))
+        assert len(adpc_rows) == 4
+        assert {row["USUBJID"] for row in adpc_rows} == expected["subjects"]
+        assert {row["ROUTE"] for row in adpc_rows} == {expected["route"]}

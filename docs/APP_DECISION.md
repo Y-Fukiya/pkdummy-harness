@@ -51,16 +51,17 @@
 
 ## Current Extension Priority
 
-フルアプリ化の前に、次の拡張を優先します。
+フルアプリ化の前に、次の拡張を優先します。2026-06-07時点では、CLI fixtureとして必要な硬化項目は実装済みで、thin UI / cloud runner は次フェーズ扱いです。
 
-| Priority | Extension | Reason |
-| --- | --- | --- |
-| 1 | `examples/` の最小成果物 | 初見ユーザーが出力形をすぐ理解できる |
-| 2 | harness config schema validation | UIやCLIの設定ミスを早く止められる |
-| 3 | NCA/PopPK tool別adapter | 下流parser smoke testに使いやすくなる |
-| 4 | 軽量IIV/residual option | 濃度統計やplotが実データに少し近づく |
-| 5 | Quarto reference-doc | Word共有時の見た目を揃えやすい |
-| 6 | thin UI / cloud runner検討 | 上記が固定されてからでよい |
+| Priority | Extension | Status | Reason |
+| --- | --- | --- | --- |
+| 1 | `examples/` の最小成果物 | Implemented | 初見ユーザーが出力形をすぐ理解できる |
+| 2 | harness config schema validation | Implemented | UIやCLIの設定ミスを早く止められる |
+| 3 | NCA/PopPK tool別adapter | Implemented | 下流parser smoke testに使いやすくなる |
+| 4 | 軽量IIV/residual option | Implemented | 濃度統計やplotが実データに少し近づく |
+| 5 | Quarto reference-doc | Implemented | Word共有時の見た目を揃えやすい |
+| 6 | examples-check / doctor / manifest validation | Implemented | fixtureの出力drift、環境差、artifact構造を早く検出する |
+| 7 | thin UI / cloud runner検討 | Future | 上記が固定されてからでよい |
 
 ## Recommended App Shape If Built
 

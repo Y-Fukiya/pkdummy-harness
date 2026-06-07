@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: all validate test regen-check regen-index-check codex-check harness-check index excluded-summary clean
+.PHONY: all validate test regen-check regen-index-check codex-check examples-check doctor harness-check index excluded-summary clean
 
 all: harness-check
 
@@ -20,7 +20,13 @@ regen-index-check:
 codex-check:
 	$(PYTHON) tools/codex_harness_check.py .
 
-harness-check: clean validate test regen-check
+examples-check:
+	$(PYTHON) tools/check_examples.py examples
+
+doctor:
+	$(PYTHON) tools/doctor.py
+
+harness-check: clean validate test regen-check examples-check
 	$(MAKE) clean
 	$(PYTHON) tools/codex_harness_check.py .
 

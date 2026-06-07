@@ -1,15 +1,27 @@
 purpose: analysis_input_smoke_test_fixture
 status: OK
 inputs:
-  source: "versioned minimal example"
+  DM: examples/minimal_aciclovir/sdtm_like/DM.csv
+  VS: examples/minimal_aciclovir/sdtm_like/VS.csv
+  LB: examples/minimal_aciclovir/sdtm_like/LB.csv
+  EX: examples/minimal_aciclovir/sdtm_like/EX.csv
+  PC: examples/minimal_aciclovir/sdtm_like/PC.csv
 outputs:
   ADPC: examples/minimal_aciclovir/workflow/analysis_inputs/ADPC.csv
   NCA_INPUT: examples/minimal_aciclovir/workflow/analysis_inputs/NCA_INPUT.csv
   POPPK_INPUT: examples/minimal_aciclovir/workflow/analysis_inputs/POPPK_INPUT.csv
+  MANIFEST: examples/minimal_aciclovir/workflow/analysis_inputs/MANIFEST.yml
 counts:
+  dm_subjects: 2
+  ex_subjects: 2
+  pc_rows: 4
   adpc_rows: 4
   nca_rows: 4
   poppk_rows: 6
 warnings: []
 notes:
-  - "Educational fixture only; not submission-ready ADaM or model-specific PopPK input."
+- ADPC.csv is ADPC-like and intended for workflow smoke tests, not submission-ready
+  ADaM.
+- NCA_INPUT.csv is a simple concentration-time table for NCA pipeline testing.
+- POPPK_INPUT.csv is NONMEM-like input for parser/control-stream smoke tests, not
+  a model-specific dataset.
