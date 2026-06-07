@@ -8,6 +8,8 @@
 
 Shiny Cloud/Tauri/CLI launcherから呼ぶ入出力契約は [LAUNCHER_CONTRACT.md](LAUNCHER_CONTRACT.md) に残します。UIは `run_harness.py` を呼び、`HARNESS_STATUS.json` を読む構成にしてください。
 
+Claude Code向けには、rootの `CLAUDE.md` から同じ `AGENTS.md` に誘導します。CodexとClaude Codeで別々の運用ルールを持たせず、repository canonical ruleは `AGENTS.md` に集約します。
+
 ## Scope
 
 このハーネスの目的は、SDTM -> ADaM -> NCA / PopPK ワークフロー検証用の **PK-like synthetic data** を安定して作ることです。臨床推論用モデルの妥当化、投与設計、規制提出用の証明は目的外です。
@@ -40,6 +42,7 @@ make harness-check
 | `drugs/<slug>/targets.yml` | AUC/t1/2 の最低限チェック用 target | 文献値や計算式と矛盾させない |
 | `drugs/<slug>/spec_pk1_*.yml` | 1-compartment simulation spec | workflow fixture として扱う |
 | `tools/harvest_and_generate.py` | DailyMed/PubMed harvest and generation | 文献更新経路として維持 |
+| `tools/pk_fixture_cli.py` | `pk-fixture` / `python -m tools.pk_fixture_cli` の正式CLI入口 | 既存ツールへdispatchする薄い層。PK値変更やworkflow再実装はしない |
 | `tools/run_harness.py` | YAML configからdemo/post-simulation workflowを起動する共通入口 | UIやクラウドから呼んでもPK値変更はしない |
 | `tools/run_workflow.py` | `sim_full.csv` 後の検証、採血抽出、SDTM-like生成、ADPC-like/NCA/PopPK入力生成、trace作成を一括実行 | 外部runner実行やPK値変更はしない |
 | `tools/run_demo_set.py` | 複数薬剤デモ用 `sim_full.csv` 生成と `run_workflow.py` 一括実行 | mrgsolve runnerの代替やPK値変更はしない |
@@ -100,6 +103,12 @@ flowchart LR
 
 ```text
 AGENTS.md を読んでから、make harness-check を実行し、失敗があれば原因を整理してください。
+```
+
+CLI入口を確認する場合:
+
+```text
+python3 -m tools.pk_fixture_cli --help と python3 -m tools.pk_fixture_cli doctor --json を実行し、standalone CLIが既存ツールへ正しくdispatchできるか確認してください。
 ```
 
 ### Parameter update from literature

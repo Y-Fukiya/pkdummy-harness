@@ -27,6 +27,7 @@ JUNK_DIR_NAMES = {"__MACOSX", "__pycache__", ".pytest_cache"}
 REQUIRED_FILES = [
     ".github/workflows/ci.yml",
     "AGENTS.md",
+    "CLAUDE.md",
     "docs/ACCEPTANCE_TEST.md",
     "docs/APP_DECISION.md",
     "docs/LAUNCHER_CONTRACT.md",
@@ -73,6 +74,7 @@ REQUIRED_FILES = [
     "tools/validate_library.py",
     "tools/rebuild_index.py",
     "tools/regen_check.py",
+    "tools/pk_fixture_cli.py",
     "tools/validate_subjects_csv.py",
     "tools/run_harness.py",
     "tools/run_workflow.py",
@@ -94,6 +96,7 @@ REQUIRED_FILES = [
     "tools/run_demo_set.py",
     "tools/make_simpop_subjects.R",
     "tests/test_repository_integrity.py",
+    "tests/test_pk_fixture_cli.py",
     "tests/test_pk_units.py",
     "tests/test_pk_extract.py",
     "tests/test_template_gen.py",

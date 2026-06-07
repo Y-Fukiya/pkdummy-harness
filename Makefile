@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: all validate test regen-check regen-index-check codex-check examples-check downstream-check site-adapter-check external-validation-probe doctor acceptance-check harness-check index excluded-summary clean
+.PHONY: all validate test regen-check regen-index-check codex-check cli-check examples-check downstream-check site-adapter-check external-validation-probe doctor acceptance-check harness-check index excluded-summary clean
 
 all: harness-check
 
@@ -19,6 +19,10 @@ regen-index-check:
 
 codex-check:
 	$(PYTHON) tools/codex_harness_check.py .
+
+cli-check:
+	$(PYTHON) -m tools.pk_fixture_cli --help
+	$(PYTHON) -m tools.pk_fixture_cli doctor --json
 
 examples-check:
 	$(PYTHON) tools/check_examples.py examples
@@ -39,7 +43,7 @@ doctor:
 acceptance-check: harness-check
 	$(MAKE) doctor
 
-harness-check: clean validate test regen-check examples-check downstream-check site-adapter-check external-validation-probe
+harness-check: clean validate test regen-check cli-check examples-check downstream-check site-adapter-check external-validation-probe
 	$(MAKE) clean
 	$(PYTHON) tools/codex_harness_check.py .
 
@@ -53,4 +57,5 @@ excluded-summary:
 
 clean:
 	find . -type d \( -name __pycache__ -o -name .pytest_cache \) -prune -exec rm -rf {} +
+	find . -maxdepth 2 -type d -name '*.egg-info' -prune -exec rm -rf {} +
 	find . -type f \( -name '*.pyc' -o -name '.DS_Store' -o -name '._*' \) -delete

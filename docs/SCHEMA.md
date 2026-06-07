@@ -70,6 +70,7 @@ population:
 - `python tools/validate_library.py <root>`: 整合性チェック
 - `python tools/rebuild_index.py <root>`: INDEX.csv 再生成
 - `python tools/validate_subjects_csv.py subjects.csv`: 外部被験者CSVの列・行数・基本値を検証
+- `python -m tools.pk_fixture_cli --help`: standalone CLI入口。`pk-fixture doctor`, `pk-fixture run`, `pk-fixture workflow` などから既存ツールへdispatchする
 - `python tools/run_harness.py harness_examples/demo_set.yml`: YAML configから複数薬剤デモまたはpost-simulation workflowを起動する共通入口。Shiny Cloud/Tauri/CLIから同じconfigを使うための薄いdispatcher
 - `python tools/run_workflow.py --sim-full outputs/<run>/raw/sim_full.csv --drug <slug> --times 0,0.5,1,2,4,8,12,24 --out-dir outputs/<run>/workflow`: 生成済み `sim_full.csv` から検証、採血時点抽出、SDTM-like CSV生成、ADPC-like/NCA/PopPK入力生成、run-level manifest/trace作成を一括実行する。必要に応じて `--pc-conc-unit`, `--dose-cmt`, `--observation-cmt` で濃度単位とPopPK CMT conventionを明示できる
 - `python tools/run_demo_set.py --drugs albuterol,alprazolam,aciclovir,abciximab,felodipine --out-dir outputs/demo_set_milestone7`: 複数薬剤のデモ用 `sim_full.csv` を既存spec thetaから解析式で作成し、各薬剤に `run_workflow.py` を適用する。これはworkflow smoke demo用で、mrgsolve runnerの代替ではない

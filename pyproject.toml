@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "osp-pk-templates-v0-10-codex-harness"
 version = "0.10.1"
@@ -12,6 +16,12 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
+
+[project.scripts]
+pk-fixture = "tools.pk_fixture_cli:main"
+
+[tool.setuptools.packages.find]
+include = ["tools*"]
 
 [tool.pytest.ini_options]
 addopts = "-q"

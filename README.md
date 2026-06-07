@@ -61,6 +61,21 @@ make acceptance-check
 make doctor
 ```
 
+正式CLI入口から同じ確認を行う場合:
+
+```bash
+python3 -m tools.pk_fixture_cli --help
+python3 -m tools.pk_fixture_cli doctor
+```
+
+editable install後は、同じ入口を `pk-fixture` として呼べます。
+
+```bash
+python3 -m pip install -e .
+pk-fixture doctor
+pk-fixture run harness_examples/demo_set.yml
+```
+
 薬剤一覧を見る:
 
 ```bash
@@ -191,7 +206,13 @@ READMEだけでの受け入れ確認手順は [docs/ACCEPTANCE_TEST.md](docs/ACC
 python3 tools/run_harness.py harness_examples/demo_set.yml
 ```
 
-`run_harness.py` は設定ファイルから既存ツールを呼ぶ共通入口です。`harness_examples/demo_set.yml` は、外部mrgsolve runnerがない環境でもsmoke demoを作れるように、既存specのthetaからデモ専用の解析式 `sim_full.csv` を作り、その後 `run_workflow.py` を各薬剤で実行します。これは下流接続確認用であり、mrgsolve runnerの代替ではありません。
+CLI入口を使う場合:
+
+```bash
+python3 -m tools.pk_fixture_cli run harness_examples/demo_set.yml
+```
+
+`run_harness.py` は設定ファイルから既存ツールを呼ぶ共通入口です。`tools/pk_fixture_cli.py` と `pk-fixture` は、その既存ツール群を薄く束ねる正式CLIです。`harness_examples/demo_set.yml` は、外部mrgsolve runnerがない環境でもsmoke demoを作れるように、既存specのthetaからデモ専用の解析式 `sim_full.csv` を作り、その後 `run_workflow.py` を各薬剤で実行します。これは下流接続確認用であり、mrgsolve runnerの代替ではありません。
 
 ## Standard Workflow
 

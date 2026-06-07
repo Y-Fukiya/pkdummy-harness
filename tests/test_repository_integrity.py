@@ -68,6 +68,18 @@ def test_acceptance_check_is_documented_for_readme_only_users():
     assert "external_validation/site_adapter_template.yml" in doc
 
 
+def test_claude_code_shim_points_to_shared_agent_rules():
+    claude_md = ROOT / "CLAUDE.md"
+
+    assert claude_md.exists()
+    text = claude_md.read_text(encoding="utf-8")
+    assert "AGENTS.md" in text
+    assert "make validate" in text
+    assert "make harness-check" in text
+    assert "clinical inference" in text
+    assert ".claude" not in text
+
+
 def test_minimal_examples_are_versioned_for_new_users():
     examples = {
         "minimal_aciclovir": {"subjects": {"EXAMPLE-001", "EXAMPLE-002"}, "route": "ORAL"},

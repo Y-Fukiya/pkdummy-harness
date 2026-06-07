@@ -22,6 +22,8 @@ flowchart LR
 
 `run_harness.py` は設定ファイルから既存ツールを呼び出す共通入口です。Shiny Cloud、Tauri、CLIのどれからでも同じconfigを使えるようにするための薄いdispatcherです。
 
+`tools/pk_fixture_cli.py` は正式なstandalone CLI入口です。直接Pythonで呼ぶ場合は `python3 -m tools.pk_fixture_cli ...`、editable install後は `pk-fixture ...` として同じ処理を実行できます。
+
 UI/launcherから呼ぶ場合の契約は [LAUNCHER_CONTRACT.md](LAUNCHER_CONTRACT.md) を参照してください。
 
 説明資料用のdraw.io図は [assets/pk-harness-process.drawio](assets/pk-harness-process.drawio) にあります。図の読み方は [PROCESS_FLOW.md](PROCESS_FLOW.md) を参照してください。
@@ -43,6 +45,7 @@ make validate
 
 ```bash
 make doctor
+python3 -m tools.pk_fixture_cli doctor
 ```
 
 Git管理された最小exampleの再生成チェック:
@@ -69,6 +72,12 @@ OK例、WARN例、限界例が混ざる標準デモセットです。
 
 ```bash
 python3 tools/run_harness.py harness_examples/demo_set.yml
+```
+
+CLI入口から実行する場合:
+
+```bash
+python3 -m tools.pk_fixture_cli run harness_examples/demo_set.yml
 ```
 
 主な出力:

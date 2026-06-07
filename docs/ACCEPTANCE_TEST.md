@@ -29,8 +29,16 @@ make acceptance-check
 | --- | --- |
 | `make harness-check` | library整合性、pytest、index再現性、example再生成、下流smoke、site adapter smokeを確認 |
 | `make doctor` | Python/R/Quarto/simPopなどのローカル環境を確認 |
+| `python3 -m tools.pk_fixture_cli doctor --json` | standalone CLI入口がpreflightへ正しくdispatchできることを確認 |
 
 `doctor` では任意依存の不足が `WARN` になることがあります。QuartoやsimPopがない場合でも、CLI本体とCSV fixture生成が通ればハーネスの中核は利用できます。
+
+editable install後は次の形でも同じ入口を使えます。
+
+```bash
+pk-fixture doctor
+pk-fixture run harness_examples/demo_set.yml
+```
 
 ## 3. Downstream Tool Boundary
 
@@ -101,6 +109,7 @@ outputs/site_adapter_check/minimal_aciclovir/
 受け入れOKと考えてよい状態:
 
 - `make acceptance-check` が通る
+- `python3 -m tools.pk_fixture_cli --help` で主要commandが表示される
 - `external_validation/tool_profiles.yml` に、施設で使う外部コマンド名と実行方針が書ける
 - `external_validation/site_adapter_template.yml` をコピーして、施設の列名・必須列に合わせたCSVを作れる
 - `SITE_ADAPTER_MANIFEST.yml`, `DOWNSTREAM_SMOKE_MANIFEST.yml`, `EXTERNAL_TOOL_VALIDATION.yml` で `OK/WARN/FAILED` の理由を確認できる
