@@ -49,6 +49,7 @@ make harness-check
 | `tools/make_sdtm_like_domains.py` | `clinical_samples.csv` から限定版 DM/VS/LB/EX/PC CSV とMANIFESTを生成 | submission-ready SDTMではない |
 | `tools/make_analysis_inputs.py` | SDTM-likeからADPC-like/NCA/PopPK smoke-test CSVとMANIFESTを生成 | submission-ready ADaMやモデル固有NONMEM datasetではない |
 | `tools/make_downstream_adapters.py` | ADPC/POPPK_INPUTからR NCA/Phoenix/NONMEM/nlmixr2風adapter CSVを生成 | parser/control-stream smoke test用。正式tool datasetではない |
+| `tools/make_site_adapters.py` | YAML mappingから施設別CSV adapterと `SITE_ADAPTER_MANIFEST.yml` を生成 | 施設別列名調整用。submission-ready ADaMや正式tool datasetではない |
 | `tools/validate_downstream_adapters.py` | adapter CSVのrepository-owned contractを検証する | 外部ツール公式仕様の認証ではない |
 | `tools/run_downstream_smoke.py` | adapter生成、簡易NCA、PopPK parser template作成を一括確認する | fixture-level E2E。Phoenix/NONMEM/nlmixr2本体は実行しない |
 | `tools/run_external_tool_validation.py` | 同じrepo内のprofileからPhoenix/NONMEM/nlmixr2等の外部実行環境を任意確認する | 外部ツール本体・ライセンスは同梱しない。`--execute`なしではprobeのみ |
@@ -163,6 +164,12 @@ demo用に軽い個体差や残差誤差が必要な場合だけ、`simulation.v
 
 ```text
 生成済み <run_dir>/workflow/analysis_inputs/ から、tools/make_downstream_adapters.py で nca_r.csv / nca_phoenix.csv / poppk_nonmem.csv / poppk_nlmixr2.csv を生成してください。これは下流parser smoke test用adapterで、各ツールの正式dataset仕様を保証しないことを説明してください。
+```
+
+### Site-specific adapter generation
+
+```text
+生成済み <run_dir>/workflow/analysis_inputs/ から、tools/make_site_adapters.py と external_validation/site_adapter_template.yml を使って施設別CSV adapterを生成してください。列名、固定値、必須非空欄はYAML mappingで定義し、SITE_ADAPTER_MANIFEST.ymlを残してください。これはsubmission-ready ADaMや正式Phoenix/NONMEM datasetではないことを説明してください。
 ```
 
 ## Known Limitations

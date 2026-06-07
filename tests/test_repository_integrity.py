@@ -56,6 +56,18 @@ def test_github_actions_use_node24_ready_action_versions():
     assert "actions/setup-python@v5" not in workflow
 
 
+def test_acceptance_check_is_documented_for_readme_only_users():
+    makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+    acceptance_doc = ROOT / "docs" / "ACCEPTANCE_TEST.md"
+
+    assert "acceptance-check:" in makefile
+    assert acceptance_doc.exists()
+    doc = acceptance_doc.read_text(encoding="utf-8")
+    assert "make acceptance-check" in doc
+    assert "external_validation/tool_profiles.yml" in doc
+    assert "external_validation/site_adapter_template.yml" in doc
+
+
 def test_minimal_examples_are_versioned_for_new_users():
     examples = {
         "minimal_aciclovir": {"subjects": {"EXAMPLE-001", "EXAMPLE-002"}, "route": "ORAL"},

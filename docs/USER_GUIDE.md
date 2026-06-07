@@ -413,6 +413,46 @@ python3 tools/run_external_tool_validation.py \
 
 `--execute` を付けない場合は実行せず、コマンド存在確認だけを行います。profileは [../external_validation/tool_profiles.yml](../external_validation/tool_profiles.yml) を各施設の環境に合わせて調整してください。
 
+### 施設ごとのCSV仕様に合わせる場合
+
+NCA/PopPK側の列名や必須列が施設ごとに決まっている場合は、site adapterを使います。標準の `make_downstream_adapters.py` は一般的なsmoke test用、`make_site_adapters.py` は施設ごとのCSV mapping用です。
+
+```bash
+python3 tools/make_site_adapters.py \
+  --analysis-dir outputs/<run>/workflow/analysis_inputs \
+  --spec-yml external_validation/site_adapter_template.yml \
+  --out-dir outputs/<run>/workflow/site_adapters
+```
+
+`external_validation/site_adapter_template.yml` をコピーし、列名、入力source、固定値、必須非空欄を施設仕様に合わせて編集してください。
+
+```yaml
+adapters:
+  site_nca:
+    source: ADPC
+    output: site_nca.csv
+    columns:
+      - name: SUBJECT
+        source: USUBJID
+      - name: TIME
+        source: TIME_H
+      - name: CONC
+        source: AVAL
+      - name: DATASET_PURPOSE
+        value: workflow_fixture_not_submission_ready
+    required_nonblank: [SUBJECT, TIME, CONC]
+```
+
+出力:
+
+| File | Content |
+| --- | --- |
+| `site_nca_example.csv` | site adapter specで定義したNCA向けCSV |
+| `site_poppk_example.csv` | site adapter specで定義したPopPK向けCSV |
+| `SITE_ADAPTER_MANIFEST.yml` | 入力、spec、出力、件数、警告 |
+
+これは施設ごとの取り込み確認をしやすくするための変換層です。submission-ready ADaM、正式Phoenix dataset、正式NONMEM datasetを保証するものではありません。
+
 ## 10. 複数薬剤デモを作る場合
 
 Milestone 7では、3-5薬剤程度をまとめて流し、成功例、WARN例、限界例を確認します。
@@ -554,6 +594,7 @@ make harness-check
 | NCA/PopPK adapter生成 | `python3 tools/make_downstream_adapters.py --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/adapters` |
 | 下流E2E smoke check | `python3 tools/run_downstream_smoke.py --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/downstream_smoke` |
 | 外部tool validation probe | `python3 tools/run_external_tool_validation.py --downstream-dir outputs/<run>/workflow/downstream_smoke --out-dir outputs/<run>/workflow/external_tool_validation` |
+| 施設別CSV adapter生成 | `python3 tools/make_site_adapters.py --analysis-dir outputs/<run>/workflow/analysis_inputs --spec-yml external_validation/site_adapter_template.yml --out-dir outputs/<run>/workflow/site_adapters` |
 | adapter contract確認 | `python3 tools/validate_downstream_adapters.py outputs/<run>/workflow/downstream_smoke/adapters` |
 | manifest viewer生成 | `python3 tools/render_manifest_viewer.py outputs/<run>/workflow/MANIFEST.yml --out-html outputs/<run>/workflow/manifest_viewer.html` |
 | 記述統計レポート生成 | `Rscript tools/report_pk_fixture.R --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/reports/pk_fixture_report --title "<slug> PK fixture report"` |
@@ -576,6 +617,7 @@ make harness-check
 | 既存skeletonで列不足エラー | fixture生成に必要な最小列がない | `DM/VS/LB/EX/PC` のrequired columnsを確認する |
 | MANIFEST構造をまとめて確認したい | 出力artifactのschemaを確認したい | `python3 tools/validate_manifest.py --recursive outputs/<run>` を使う |
 | `run_demo_set.py` の結果がWARNになる | 既存spec thetaとtargets/pk.ymlのズレ、1-comp限界、デモ解析式とmrgsolve runner差 | `summary.md` と各薬剤の `simulation_validation.md` を確認する。canonical PK値は自動変更しない |
+| site adapterでsource column not found | 施設別mapping specの `source` が `ADPC/NCA_INPUT/POPPK_INPUT` に存在しない | `analysis_inputs/*.csv` の列名を確認して `external_validation/site_adapter_template.yml` を修正する |
 | subjectsとPCの被験者が合わない | `--subjects-csv` と `clinical_samples.csv` のID差 | `MANIFEST.yml` の警告を確認し、厳密に止めるなら `--strict-subject-match` を使う |
 | `simPop` が動かない | R package未導入または環境依存 | `simPop` なしで既定のpopulation設定を使う |
 
@@ -597,6 +639,7 @@ make harness-check
 - SDTM-like生成時の `outputs/<run>/sdtm_like/MANIFEST.yml`
 - `outputs/<run>/workflow/analysis_inputs/*.csv`
 - `outputs/<run>/workflow/analysis_inputs/MANIFEST.yml`
+- 必要に応じて `outputs/<run>/workflow/site_adapters/SITE_ADAPTER_MANIFEST.yml`
 - 必要に応じて `outputs/<run>/workflow/reports/pk_fixture_report/REPORT.md`
 - Word共有が必要なら `outputs/<run>/workflow/reports/pk_fixture_quarto/pk_fixture_report.docx`
 - 複数薬剤デモでは `outputs/demo_set_milestone7/summary.csv` と `summary.md`
@@ -613,6 +656,7 @@ make harness-check
 [ ] OK/WARN/FAILED の扱いを記録する
 [ ] ADPC.csv / NCA_INPUT.csv / POPPK_INPUT.csv を下流workflowに投入する
 [ ] 必要なら make_downstream_adapters.py でツール別adapterを作る
+[ ] 施設仕様があるなら make_site_adapters.py で列名・必須列を合わせる
 [ ] 必要なら report_pk_fixture.R で被験者背景と濃度の記述統計レポートを出す
 [ ] Word共有が必要なら render_pk_fixture_quarto.R でdocxを出す
 [ ] 複数薬剤デモでは summary.csv / summary.md で薬剤間の成功/WARN/限界例を確認する

@@ -66,6 +66,44 @@ This check improves workflow confidence, but it does not replace:
 
 For formal tool use, treat the generated files as **starting fixtures** and add tool/project-specific control files, metadata, and validation outside this harness.
 
+## Site-specific Adapter Layer
+
+施設ごとの列名、固定値、必須列を合わせたい場合は、標準adapterの後ではなく `analysis_inputs/` から直接 site-specific CSV を作ります。
+
+```bash
+python3 tools/make_site_adapters.py \
+  --analysis-dir outputs/<run>/workflow/analysis_inputs \
+  --spec-yml external_validation/site_adapter_template.yml \
+  --out-dir outputs/<run>/workflow/site_adapters
+```
+
+`external_validation/site_adapter_template.yml` をコピーして、施設のNCA/PopPK dataset仕様に合わせます。
+
+```yaml
+adapters:
+  site_nca:
+    source: ADPC
+    output: site_nca.csv
+    columns:
+      - name: SUBJECT
+        source: USUBJID
+      - name: TIME
+        source: TIME_H
+      - name: CONC
+        source: AVAL
+    required_nonblank: [SUBJECT, TIME, CONC]
+```
+
+出力:
+
+```text
+site_nca.csv
+site_poppk.csv
+SITE_ADAPTER_MANIFEST.yml
+```
+
+このlayerは施設別mappingをrepo内でレビュー可能にするためのものです。submission-ready ADaM、正式Phoenix dataset、正式NONMEM datasetを保証しません。
+
 ## Optional External Tool Validation In This Repo
 
 Phoenix / NONMEM / nlmixr2 の実行環境がある場合は、同じリポジトリ内の optional validation layer から呼べます。

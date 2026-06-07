@@ -49,6 +49,12 @@ python3 -m pip install -r requirements.txt
 make harness-check
 ```
 
+第三者がREADMEだけで動かせるかを見る受け入れ確認:
+
+```bash
+make acceptance-check
+```
+
 ローカル環境のPython/R/Quarto/simPopまわりを先に確認する場合:
 
 ```bash
@@ -126,6 +132,17 @@ python3 tools/make_downstream_adapters.py \
 
 これは `nca_r.csv`, `nca_phoenix.csv`, `poppk_nonmem.csv`, `poppk_nlmixr2.csv` を作ります。各ツールの正式仕様を保証するものではなく、parser/control-stream smoke test用の列名adapterです。
 
+施設ごとの列名や必須列に合わせたCSVが必要な場合:
+
+```bash
+python3 tools/make_site_adapters.py \
+  --analysis-dir outputs/<run>/workflow/analysis_inputs \
+  --spec-yml external_validation/site_adapter_template.yml \
+  --out-dir outputs/<run>/workflow/site_adapters
+```
+
+`external_validation/site_adapter_template.yml` をコピーして、施設ごとのNCA/PopPK dataset仕様に合わせて編集してください。出力には `SITE_ADAPTER_MANIFEST.yml` が残ります。
+
 adapter生成、簡易NCA、PopPK parser template作成まで一括で確認する場合:
 
 ```bash
@@ -147,6 +164,8 @@ python3 tools/run_external_tool_validation.py \
 ```
 
 既定profileは `external_validation/tool_profiles.yml` です。外部ツール本体やライセンスは同梱しません。
+
+READMEだけでの受け入れ確認手順は [docs/ACCEPTANCE_TEST.md](docs/ACCEPTANCE_TEST.md) にまとめています。
 
 既存の `DM/LB/VS/PC` skeletonがない場合は、ハーネス側がSDTM-like CSVを生成します。既存の `DM/LB/VS` と濃度なし `PC` skeletonがある場合は、それらを渡して `PC` に濃度だけを注入できます。
 
@@ -457,6 +476,7 @@ docs/
 - [App Decision](docs/APP_DECISION.md): Shinyなどのアプリ化を今すぐ行わない判断と将来UIの境界
 - [Launcher Contract](docs/LAUNCHER_CONTRACT.md): Shiny Cloud/Tauri/CLIから `run_harness.py` を呼ぶ契約
 - [Downstream E2E Smoke](docs/DOWNSTREAM_E2E.md): NCA/PopPK下流接続のfixture-level smoke check
+- [Acceptance Test](docs/ACCEPTANCE_TEST.md): README-onlyユーザーテスト、外部profile、施設adapter確認
 - [Harvest Guide](docs/HARVEST.md): 文献・DailyMed・PubMedからパラメータを更新する手順
 - [Schema](docs/SCHEMA.md): `pk.yml`, `targets.yml`, `spec_pk1_*.yml` の構造
 - [Codex Harness Notes](docs/CODEX_HARNESS.md): Codexに作業させる時の内部運用

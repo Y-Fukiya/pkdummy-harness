@@ -51,6 +51,12 @@ Git管理された最小exampleの再生成チェック:
 make examples-check
 ```
 
+READMEだけで第三者が動かせるかまでまとめて確認する場合:
+
+```bash
+make acceptance-check
+```
+
 configだけを確認する場合:
 
 ```bash
@@ -186,6 +192,17 @@ python3 tools/make_downstream_adapters.py \
 | `poppk_nlmixr2.csv` | nlmixr2風parser確認 |
 
 これは列名adapterであり、各ツールの正式な解析仕様を保証するものではありません。
+
+施設ごとのCSV列名や必須列に合わせたい場合:
+
+```bash
+python3 tools/make_site_adapters.py \
+  --analysis-dir outputs/demo_set_config/albuterol/workflow/analysis_inputs \
+  --spec-yml external_validation/site_adapter_template.yml \
+  --out-dir outputs/demo_set_config/albuterol/workflow/site_adapters
+```
+
+`external_validation/site_adapter_template.yml` をコピーして、施設のNCA/PopPK dataset仕様に合わせて編集します。
 
 adapter生成、簡易NCA、PopPK parser template作成まで一括で確認する場合:
 

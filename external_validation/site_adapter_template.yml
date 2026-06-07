@@ -1,0 +1,41 @@
+version: "0.1"
+purpose: site_specific_adapter_template
+adapters:
+  site_nca_example:
+    source: ADPC
+    output: site_nca_example.csv
+    columns:
+      - name: SUBJECT
+        source: USUBJID
+      - name: TIME
+        source: TIME_H
+      - name: CONC
+        source: AVAL
+      - name: CONC_UNIT
+        source: AVALU
+      - name: DOSE
+        source: DOSE_MG
+      - name: ROUTE
+        source: ROUTE
+      - name: DATASET_PURPOSE
+        value: "workflow_fixture_not_submission_ready"
+    required_nonblank: [SUBJECT, TIME, CONC]
+  site_poppk_example:
+    source: POPPK_INPUT
+    output: site_poppk_example.csv
+    columns:
+      - name: ID
+        source: ID
+      - name: TIME
+        source: TIME
+      - name: EVID
+        source: EVID
+      - name: MDV
+        source: MDV
+      - name: AMT
+        source: AMT
+      - name: DV
+        source: DV
+      - name: CMT
+        source: CMT
+    required_nonblank: [ID, TIME, EVID, MDV]
