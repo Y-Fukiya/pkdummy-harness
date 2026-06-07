@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: all validate test regen-check regen-index-check codex-check cli-check examples-check downstream-check site-adapter-check external-validation-probe doctor acceptance-check harness-check index excluded-summary clean
+.PHONY: all validate test regen-check regen-index-check codex-check cli-check examples-check downstream-check site-adapter-check external-validation-probe doctor acceptance-check release-check harness-check index excluded-summary clean
 
 all: harness-check
 
@@ -42,6 +42,11 @@ doctor:
 
 acceptance-check: harness-check
 	$(MAKE) doctor
+
+release-check: acceptance-check
+	@echo "release-check includes make acceptance-check"
+	$(PYTHON) -m tools.pk_fixture_cli --help
+	$(PYTHON) -m tools.pk_fixture_cli doctor --json
 
 harness-check: clean validate test regen-check cli-check examples-check downstream-check site-adapter-check external-validation-probe
 	$(MAKE) clean

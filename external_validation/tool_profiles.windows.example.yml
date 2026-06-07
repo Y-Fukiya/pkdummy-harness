@@ -1,0 +1,37 @@
+version: "0.1"
+purpose: optional_external_tool_validation_profiles_windows_example
+profiles:
+  phoenix:
+    required: false
+    description: "Example Phoenix validation hook for a licensed Windows environment."
+    command:
+      - "C:/Program Files/Certara/Phoenix/Phoenix.exe"
+      - "--project"
+      - "{downstream_dir}/adapters/nca_phoenix.csv"
+    success_artifacts: []
+    notes:
+      - "Replace this placeholder command with the site-approved Phoenix automation command."
+      - "If Phoenix is GUI-only in your facility, record manual import evidence outside this command profile."
+  nonmem:
+    required: false
+    description: "Example NONMEM validation hook for Windows."
+    command:
+      - "nmfe75"
+      - "{downstream_dir}/poppk_smoke/nonmem_parser_template.ctl"
+      - "nonmem_parser_template.lst"
+    success_artifacts:
+      - "nonmem_parser_template.lst"
+    notes:
+      - "Adjust nmfe executable name, PATH, and license server configuration for your facility."
+      - "The generated control stream is a parser smoke template, not a model-specific estimation run."
+  nlmixr2:
+    required: false
+    description: "Example nlmixr2 parser hook through Rscript on Windows."
+    command:
+      - "Rscript"
+      - "-e"
+      - "if (!requireNamespace('nlmixr2', quietly=TRUE)) quit(status=10); source('{downstream_dir}/poppk_smoke/nlmixr2_parser_template.R'); print(model)"
+    success_artifacts: []
+    notes:
+      - "Requires R, nlmixr2, and any compiled package dependencies available in the Windows R library."
+      - "Rtools may be needed when packages must be compiled from source."

@@ -524,6 +524,10 @@ docs/
 - [Acceptance Test](docs/ACCEPTANCE_TEST.md): README-onlyユーザーテスト、外部profile、施設adapter確認
 - [Windows PowerShell Guide](docs/WINDOWS_POWERSHELL.md): WindowsでMakeなしにCLIと検証scriptを動かす手順
 - [Validation And Release Checklist](docs/VALIDATION_AND_RELEASE_CHECKLIST.md): 外部tool検証、README-only user test、release tag前確認
+- [README-only User Test Template](docs/USER_TEST_REPORT_TEMPLATE.md): 第三者テストの観察メモ用テンプレート
+- [External Tool Validation Guide](docs/EXTERNAL_TOOL_VALIDATION_GUIDE.md): Phoenix/NONMEM/nlmixr2実環境確認の記録手順
+- [Site Adapter Guide](docs/SITE_ADAPTER_GUIDE.md): 施設別NCA/PopPK dataset mappingの見直し手順
+- [Release Notes Template](docs/RELEASE_NOTES_TEMPLATE.md): private release/tag前のrelease noteひな形
 - [Harvest Guide](docs/HARVEST.md): 文献・DailyMed・PubMedからパラメータを更新する手順
 - [Schema](docs/SCHEMA.md): `pk.yml`, `targets.yml`, `spec_pk1_*.yml` の構造
 - [Codex Harness Notes](docs/CODEX_HARNESS.md): Codexに作業させる時の内部運用
