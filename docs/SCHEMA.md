@@ -67,7 +67,7 @@ population:
 
 ## ツール
 
-- `python tools/validate_library.py <root>`: 整合性チェック
+- `python tools/validate_library.py <root>`: 整合性チェック。`CL/V` から暗黙に決まる半減期と `pk_parsed.half_life_h` が大きく矛盾する場合は `1-compartment attainability warnings` を表示する。これは `pk.yml` の自動修正ではなく、1-compartment fixtureとして同時達成できないtargetを見える化する警告
 - `python tools/rebuild_index.py <root>`: INDEX.csv 再生成
 - `python tools/validate_subjects_csv.py subjects.csv`: 外部被験者CSVの列・行数・基本値を検証
 - `python -m tools.pk_fixture_cli --help`: standalone CLI入口。`pk-fixture doctor`, `pk-fixture run`, `pk-fixture workflow` などから既存ツールへdispatchする

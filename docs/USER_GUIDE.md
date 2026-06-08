@@ -123,6 +123,9 @@ python3 tools/validate_simulation.py \
 
 この検証は `sim_full.csv` から `AUC0-inf`, `Cmax`, `Tmax`, terminal `t1/2` を再計算します。現時点で主に判定に使うのは AUC と t1/2 です。
 入力CSVに `CP_UNIT`, `DV_UNIT`, `CONC_UNIT`, `PCSTRESU` などの単位列がある場合は、レポート表示とCL由来AUC比較の単位換算に使います。単位列がない場合は、従来どおり `ng/mL` 前提のfixtureとして扱います。
+このterminal `t1/2` は末尾の陽性濃度点から計算するfixture-level checkです。正式NCAのlambda-z候補選択、R2/adjusted R2、AUC extrapolation割合、linear-up/log-down台形法を代替するものではありません。
+
+`tools/validate_library.py` は、`CL`, `V`, `t1/2` が1-compartment関係 `t1/2 = ln(2) * V / CL` と大きく矛盾する場合に `1-compartment attainability warnings` を出します。この警告がある薬剤では、`validate_simulation.py` の t1/2 `WARN/FAILED` がシミュレーションのドリフトではなく、canonical target側の構造的不整合を反映している可能性があります。
 
 ### Step 3: 臨床試験の採血ポイントに合わせる
 
@@ -643,7 +646,7 @@ make harness-check
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
 | `validate_simulation.py` が WARN | t1/2やAUCがtargetから少し外れている | workflow fixtureとして使うならレポートを残す |
-| `validate_simulation.py` が FAILED | 1-compartment限界、CL/V basis、文献値不整合 | stress test扱い、またはsource review |
+| `validate_simulation.py` が FAILED | 1-compartment限界、CL/V basis、文献値不整合 | `validate_library.py` のattainability warningも確認し、stress test扱い、またはsource review |
 | `sample_clinical_timepoints.py` が範囲外エラー | 指定した採血時刻が `sim_full.csv` の時間範囲外 | `sampling.t_end_h` を延ばして再実行、または採血時刻を短くする |
 | `--method exact` でエラー | 指定時刻がCSVに存在しない | `linear` か `nearest` を使う |
 | `make_sdtm_like_domains.py` が濃度列を読めない | `clinical_samples.csv` に `DV` がない | `--pc-conc-col CP` など実列名を指定する |

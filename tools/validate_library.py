@@ -4,6 +4,7 @@
 Checks:
 - Each drug folder has pk.yml, targets.yml, and the correct spec file
 - Derived values in pk.yml are internally consistent
+- CL/V implied half-life is flagged when it conflicts with the 1-compartment target
 - spec theta matches pk.yml (CL/V chosen from derived abs values)
 - targets AUC matches Dose/CL rule in targets.yml note
 - INDEX.csv is consistent with pk.yml + file paths
@@ -36,6 +37,11 @@ def approx(a: float, b: float, tol: float = 1e-8) -> bool:
 def fail(msg: str, issues: List[str]) -> None:
     issues.append(msg)
 
+
+def warn(msg: str, warnings: List[str]) -> None:
+    warnings.append(msg)
+
+
 def normalize_route(route: Any) -> str:
     r = str(route or "").strip().lower()
     if r in {"po", "oral", "p.o.", "per os"} or r.startswith("oral"):
@@ -59,6 +65,7 @@ def main() -> int:
         return 2
 
     issues: List[str] = []
+    warnings: List[str] = []
 
     # Load INDEX.csv if present
     index_rows: Dict[str, Dict[str, str]] = {}
@@ -108,6 +115,25 @@ def main() -> int:
         CL_sys = derived.get("CL_systemic_L_per_h_at_70kg")
         V_sys = derived.get("V_systemic_L_at_70kg")
         F = parsed.get("bioavailability_frac")
+
+        if (
+            isinstance(t_half, (int, float))
+            and isinstance(CL_abs, (int, float))
+            and isinstance(V_abs, (int, float))
+            and float(t_half) > 0
+            and float(CL_abs) > 0
+            and float(V_abs) > 0
+        ):
+            implied_t_half = math.log(2.0) * float(V_abs) / float(CL_abs)
+            rel_error = abs(implied_t_half - float(t_half)) / abs(float(t_half))
+            if rel_error > 0.25:
+                warn(
+                    f"{slug}: t_half_h {t_half} h conflicts with CL/V implied "
+                    f"{implied_t_half:.6g} h (rel_error={rel_error:.3g}; threshold=0.25). "
+                    "This target may be unattainable by the 1-compartment fixture without "
+                    "choosing a different independent parameter pair.",
+                    warnings,
+                )
 
         if route == "po" and isinstance(F, (int, float)):
             if isinstance(CL_abs, (int, float)) and isinstance(CL_sys, (int, float)):
@@ -177,8 +203,16 @@ def main() -> int:
         print("Library validation: FAILED")
         for m in issues:
             print("-", m)
+        if warnings:
+            print("1-compartment attainability warnings:")
+            for m in warnings:
+                print("-", m)
         return 1
     print("Library validation: OK")
+    if warnings:
+        print("1-compartment attainability warnings:")
+        for m in warnings:
+            print("-", m)
     return 0
 
 

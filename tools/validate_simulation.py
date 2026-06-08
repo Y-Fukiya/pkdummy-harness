@@ -114,7 +114,7 @@ def _is_observation(row: dict[str, Any]) -> bool:
     if evid is not None and evid != 0:
         return False
     mdv = _to_float(row.get("MDV") if "MDV" in row else row.get("mdv"))
-    if mdv is not None and mdv == 1 and evid is None:
+    if mdv is not None and mdv == 1:
         return False
     return True
 

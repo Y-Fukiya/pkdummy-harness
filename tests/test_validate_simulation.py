@@ -67,6 +67,21 @@ def test_compute_subject_metrics_recalculates_auc_cmax_tmax_and_half_life() -> N
     assert math.isclose(metrics["1"].auc0_inf, expected_auc)
 
 
+def test_compute_subject_metrics_excludes_mdv1_rows_even_when_evid0() -> None:
+    rows = [
+        {"ID": "1", "time": "0", "EVID": "0", "MDV": "0", "DV": "100"},
+        {"ID": "1", "time": "1", "EVID": "0", "MDV": "1", "DV": "999"},
+        {"ID": "1", "time": "2", "EVID": "0", "MDV": "0", "DV": "25"},
+        {"ID": "1", "time": "3", "EVID": "0", "MDV": "0", "DV": "12.5"},
+    ]
+
+    metrics = compute_subject_metrics(rows)
+
+    assert metrics["1"].n_points == 3
+    assert metrics["1"].cmax == 100.0
+    assert math.isclose(metrics["1"].tmax_h, 0.0)
+
+
 def test_validate_simulation_compares_targets_and_pk_yaml(tmp_path: Path) -> None:
     sim_csv = tmp_path / "sim_full.csv"
     pk_yml = tmp_path / "pk.yml"

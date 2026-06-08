@@ -12,6 +12,8 @@
 
 このハーネスは、薬剤ごとの文献スケールの `CL`, `V`, `t1/2`, `AUC` を使い、解析パイプライン検証に使いやすい synthetic fixture を作るためのものです。
 
+1-compartment fixtureでは `t1/2 = ln(2) * V / CL` が成り立つため、文献由来の `CL`, `V`, `t1/2` を別々の条件から集めると、3つを同時に満たせない薬剤があります。`tools/validate_library.py` はこの状態を **1-compartment attainability warning** として表示します。これは `pk.yml` を自動修正するものではなく、simulation drift と canonical PK summary の構造的不整合を切り分けるための警告です。
+
 | Perspective | What this harness provides |
 | --- | --- |
 | 臨床薬理 | 文献スケールのPK値をもつ1-compartment dummy profile |
@@ -382,6 +384,7 @@ outputs/demo_set_milestone7/
 | `FAILED` | targetとのずれが大きい、または入力不足 | 原則停止。必要時のみ `--allow-validation-failed` |
 
 `WARN` や `FAILED` は、ワークフロー検証では必ずしも悪ではありません。ただし、臨床的に正しい再現とは説明しないでください。
+特に t1/2 の `FAILED` は、シミュレーション実装の異常ではなく、文献由来の `CL/V/t1/2` が1-compartment fixtureとして同時達成不能であることを示す場合があります。
 
 ## Safeguards
 
@@ -473,13 +476,13 @@ python3 tools/validate_subjects_csv.py subjects/subjects.csv \
 | `tools/run_harness.py` | YAML configからdemo/post-simulation workflowを起動する共通入口 |
 | `tools/run_workflow.py` | `sim_full.csv` 後の validate/sample/SDTM-like/analysis input 生成を一括実行 |
 | `tools/run_demo_set.py` | 複数薬剤のデモ用 `sim_full.csv` 作成と `run_workflow.py` 一括実行 |
-| `tools/validate_simulation.py` | `AUC0-inf`, `Cmax`, `Tmax`, terminal `t1/2` を再計算 |
+| `tools/validate_simulation.py` | `AUC0-inf`, `Cmax`, `Tmax`, terminal `t1/2` を再計算。正式NCAのlambda-z選択やAUC methodを代替しない |
 | `tools/sample_clinical_timepoints.py` | denseな時系列を名目採血時点へ疎化 |
 | `tools/make_sdtm_like_domains.py` | 限定版 `DM/VS/LB/EX/PC` とmanifestを生成 |
 | `tools/make_analysis_inputs.py` | SDTM-likeから `ADPC.csv`, `NCA_INPUT.csv`, `POPPK_INPUT.csv` を生成 |
 | `tools/make_simpop_subjects.R` | 任意のsimPopベース被験者属性CSVを生成 |
 | `tools/harvest_and_generate.py` | DailyMed/PubMed等からのPKパラメータ更新経路 |
-| `tools/validate_library.py` | `pk.yml` / spec / targets / indexの整合性チェック |
+| `tools/validate_library.py` | `pk.yml` / spec / targets / indexの整合性チェック。`CL/V/t1/2` の1-compartment到達可能性も警告する |
 
 ## Repository Map
 

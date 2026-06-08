@@ -20,6 +20,21 @@ def test_validate_library_cli_passes():
     assert completed.returncode == 0, completed.stdout
 
 
+def test_validate_library_reports_one_compartment_attainability_warnings():
+    completed = subprocess.run(
+        [sys.executable, "tools/validate_library.py", "."],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+
+    assert completed.returncode == 0, completed.stdout
+    assert "Library validation: OK" in completed.stdout
+    assert "1-compartment attainability warnings:" in completed.stdout
+    assert "verapamil: t_half_h 5.1 h conflicts with CL/V implied" in completed.stdout
+
+
 def test_regen_check_cli_passes():
     completed = subprocess.run(
         [sys.executable, "tools/regen_check.py", "."],
