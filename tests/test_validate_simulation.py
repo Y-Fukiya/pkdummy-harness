@@ -13,7 +13,7 @@ from tools.validate_simulation import (
     compute_subject_metrics,
     render_markdown,
     validate_simulation,
-    validate_simulation_loop,
+    validate_simulation_run,
 )
 
 
@@ -186,7 +186,7 @@ def test_validate_simulation_reports_failed_target_mismatch(tmp_path: Path) -> N
     assert any("targets.auc" in failure for failure in result.failures)
 
 
-def test_validate_simulation_loop_repeats_warn_or_failed_results_three_times_by_default(tmp_path: Path) -> None:
+def test_validate_simulation_run_evaluates_failed_results_once(tmp_path: Path) -> None:
     sim_csv = tmp_path / "sim_full.csv"
     pk_yml = tmp_path / "pk.yml"
     targets_yml = tmp_path / "targets.yml"
@@ -194,19 +194,18 @@ def test_validate_simulation_loop_repeats_warn_or_failed_results_three_times_by_
     write_yaml(targets_yml, {"targets": {"auc": {"value": 10.0, "unit": "ng*h/mL"}}})
     write_yaml(pk_yml, {"pk_parsed": {}, "derived": {}})
 
-    loop = validate_simulation_loop(
+    run = validate_simulation_run(
         sim_csv,
         pk_yml,
         targets_yml,
         tolerances=SimulationTolerances(warn_rel=0.10, fail_rel=0.20),
     )
 
-    assert loop.max_loops == 3
-    assert loop.final_result.status == "FAILED"
-    assert [attempt.status for attempt in loop.attempts] == ["FAILED", "FAILED", "FAILED"]
+    assert run.final_result.status == "FAILED"
+    assert [attempt.status for attempt in run.attempts] == ["FAILED"]
 
 
-def test_validate_simulation_report_describes_loop_as_recheck_not_calibration(tmp_path: Path) -> None:
+def test_validate_simulation_report_describes_single_deterministic_check(tmp_path: Path) -> None:
     sim_csv = tmp_path / "sim_full.csv"
     pk_yml = tmp_path / "pk.yml"
     targets_yml = tmp_path / "targets.yml"
@@ -214,20 +213,21 @@ def test_validate_simulation_report_describes_loop_as_recheck_not_calibration(tm
     write_yaml(targets_yml, {"targets": {"auc": {"value": 10.0, "unit": "ng*h/mL"}}})
     write_yaml(pk_yml, {"pk_parsed": {}, "derived": {}})
 
-    loop = validate_simulation_loop(
+    run = validate_simulation_run(
         sim_csv,
         pk_yml,
         targets_yml,
         tolerances=SimulationTolerances(warn_rel=0.10, fail_rel=0.20),
     )
 
-    report = render_markdown(loop.final_result, sim_csv, pk_yml, targets_yml, loop=loop)
+    report = render_markdown(run.final_result, sim_csv, pk_yml, targets_yml, run=run)
 
-    assert "Validation rechecks repeat the same calculation only" in report
+    assert "Validation is a single deterministic calculation" in report
     assert "No optimization or calibration is performed" in report
+    assert "Loop History" not in report
 
 
-def test_validate_simulation_loop_stops_after_one_ok_result(tmp_path: Path) -> None:
+def test_validate_simulation_run_evaluates_ok_result_once(tmp_path: Path) -> None:
     sim_csv = tmp_path / "sim_full.csv"
     pk_yml = tmp_path / "pk.yml"
     targets_yml = tmp_path / "targets.yml"
@@ -236,10 +236,10 @@ def test_validate_simulation_loop_stops_after_one_ok_result(tmp_path: Path) -> N
     write_yaml(targets_yml, {"targets": {"auc": {"value": expected_auc, "unit": "ng*h/mL"}}})
     write_yaml(pk_yml, {"pk_parsed": {"half_life_h": 1.0}, "derived": {}})
 
-    loop = validate_simulation_loop(sim_csv, pk_yml, targets_yml)
+    run = validate_simulation_run(sim_csv, pk_yml, targets_yml)
 
-    assert loop.final_result.status == "OK"
-    assert len(loop.attempts) == 1
+    assert run.final_result.status == "OK"
+    assert len(run.attempts) == 1
 
 
 def test_validate_simulation_cli_writes_markdown_report(tmp_path: Path) -> None:

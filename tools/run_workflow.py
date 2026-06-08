@@ -36,7 +36,7 @@ from tools.sample_clinical_timepoints import (
 from tools.validate_simulation import (
     SimulationTolerances,
     render_markdown,
-    validate_simulation_loop,
+    validate_simulation_run,
 )
 
 
@@ -163,7 +163,6 @@ def run_workflow(
     observation_cmt: str = "2",
     strict_subject_match: bool = False,
     overwrite_existing_pc_conc: bool = False,
-    max_validation_loops: int = 3,
     warn_rel: float = 0.25,
     fail_rel: float = 0.50,
     allow_validation_failed: bool = False,
@@ -194,18 +193,17 @@ def run_workflow(
     validation_md = reports_dir / "simulation_validation.md"
     clinical_samples = raw_dir / "clinical_samples.csv"
 
-    loop = validate_simulation_loop(
+    validation_run = validate_simulation_run(
         sim_path,
         pk_path,
         targets_path,
         tolerances=SimulationTolerances(warn_rel=warn_rel, fail_rel=fail_rel),
-        max_loops=max_validation_loops,
     )
-    validation_result = loop.final_result
+    validation_result = validation_run.final_result
     reports_dir.mkdir(parents=True, exist_ok=True)
-    validation_md.write_text(render_markdown(validation_result, sim_path, pk_path, targets_path, loop=loop), encoding="utf-8")
+    validation_md.write_text(render_markdown(validation_result, sim_path, pk_path, targets_path, run=validation_run), encoding="utf-8")
     trace_lines.append(
-        f"{datetime.now().isoformat(timespec='seconds')} VALIDATE status={validation_result.status} attempts={len(loop.attempts)}/{loop.max_loops}"
+        f"{datetime.now().isoformat(timespec='seconds')} VALIDATE status={validation_result.status} attempts={len(validation_run.attempts)}/1"
     )
 
     base_files = {
@@ -240,12 +238,12 @@ def run_workflow(
                 ex_csv=Path(ex_csv) if ex_csv else None,
                 pc_csv=Path(pc_csv) if pc_csv else None,
                 validation_status=result.validation_status,
-                validation_attempts=len(loop.attempts),
+                validation_attempts=len(validation_run.attempts),
                 files=result.files,
                 counts=result.counts,
                 warnings=result.warnings,
                 settings={
-                    "max_validation_loops": max_validation_loops,
+                    "validation_mode": "single_deterministic",
                     "warn_rel": warn_rel,
                     "fail_rel": fail_rel,
                     "allow_validation_failed": allow_validation_failed,
@@ -353,7 +351,7 @@ def run_workflow(
             ex_csv=Path(ex_csv) if ex_csv else None,
             pc_csv=Path(pc_csv) if pc_csv else None,
             validation_status=result.validation_status,
-            validation_attempts=len(loop.attempts),
+            validation_attempts=len(validation_run.attempts),
             files=result.files,
             counts=result.counts,
             warnings=result.warnings,
@@ -371,7 +369,7 @@ def run_workflow(
                 "observation_cmt": observation_cmt,
                 "strict_subject_match": strict_subject_match,
                 "overwrite_existing_pc_conc": overwrite_existing_pc_conc,
-                "max_validation_loops": max_validation_loops,
+                "validation_mode": "single_deterministic",
                 "warn_rel": warn_rel,
                 "fail_rel": fail_rel,
                 "allow_validation_failed": allow_validation_failed,
@@ -411,7 +409,6 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--observation-cmt", default="2", help="CMT value for PopPK observation rows")
     parser.add_argument("--strict-subject-match", action="store_true")
     parser.add_argument("--overwrite-existing-pc-conc", action="store_true")
-    parser.add_argument("--max-validation-loops", type=int, default=3)
     parser.add_argument("--warn-rel", type=float, default=0.25)
     parser.add_argument("--fail-rel", type=float, default=0.50)
     parser.add_argument("--allow-validation-failed", action="store_true")
@@ -449,7 +446,6 @@ def main(argv: list[str] | None = None) -> int:
             observation_cmt=args.observation_cmt,
             strict_subject_match=args.strict_subject_match,
             overwrite_existing_pc_conc=args.overwrite_existing_pc_conc,
-            max_validation_loops=args.max_validation_loops,
             warn_rel=args.warn_rel,
             fail_rel=args.fail_rel,
             allow_validation_failed=args.allow_validation_failed,

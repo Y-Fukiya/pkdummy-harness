@@ -9,7 +9,6 @@ sampling:
   times_h: [0, 0.5, 1, 2, 4, 8, 12, 24]
   method: linear
 validation:
-  max_loops: 3
   warn_rel: 0.25
   fail_rel: 0.5
   allow_failed: false

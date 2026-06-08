@@ -75,8 +75,7 @@ class ValidationResult:
 
 
 @dataclass(frozen=True)
-class ValidationLoopResult:
-    max_loops: int
+class ValidationRunResult:
     attempts: list[ValidationResult]
 
     @property
@@ -464,24 +463,15 @@ def validate_simulation(
     return ValidationResult(status, summary, comparisons, warnings, failures, subject_metrics)
 
 
-def validate_simulation_loop(
+def validate_simulation_run(
     sim_csv: Path,
     pk_yml: Path,
     targets_yml: Path,
     *,
     tolerances: SimulationTolerances | None = None,
-    max_loops: int = 3,
-) -> ValidationLoopResult:
-    if max_loops < 1:
-        raise ValueError("max_loops must be >= 1")
-
-    attempts: list[ValidationResult] = []
-    for _ in range(max_loops):
-        result = validate_simulation(sim_csv, pk_yml, targets_yml, tolerances=tolerances)
-        attempts.append(result)
-        if result.status == "OK":
-            break
-    return ValidationLoopResult(max_loops=max_loops, attempts=attempts)
+) -> ValidationRunResult:
+    result = validate_simulation(sim_csv, pk_yml, targets_yml, tolerances=tolerances)
+    return ValidationRunResult(attempts=[result])
 
 
 def _fmt(value: Any) -> str:
@@ -498,7 +488,7 @@ def render_markdown(
     pk_yml: Path,
     targets_yml: Path,
     *,
-    loop: ValidationLoopResult | None = None,
+    run: ValidationRunResult | None = None,
 ) -> str:
     auc_unit = str(result.summary.get("auc_unit") or "ng*h/mL")
     concentration_unit = str(result.summary.get("concentration_unit") or "ng/mL")
@@ -509,8 +499,8 @@ def render_markdown(
         f"- Simulation CSV: `{sim_csv}`",
         f"- pk.yml: `{pk_yml}`",
         f"- targets.yml: `{targets_yml}`",
-        f"- Validation attempts: `{len(loop.attempts) if loop else 1}` / `{loop.max_loops if loop else 1}`",
-        "- Validation rechecks repeat the same calculation only. No optimization or calibration is performed.",
+        f"- Validation attempts: `{len(run.attempts) if run else 1}` / `1`",
+        "- Validation is a single deterministic calculation. No optimization or calibration is performed.",
         "",
         "## Summary",
         "",
@@ -543,12 +533,6 @@ def render_markdown(
     if result.warnings:
         lines.extend(["", "## Warnings", ""])
         lines.extend(f"- {warning}" for warning in result.warnings)
-    if loop and len(loop.attempts) > 1:
-        lines.extend(["", "## Loop History", ""])
-        lines.extend(
-            f"- Attempt {idx}: `{attempt.status}`"
-            for idx, attempt in enumerate(loop.attempts, start=1)
-        )
     lines.append("")
     return "\n".join(lines)
 
@@ -561,26 +545,21 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out-md", type=Path, default=None, help="optional markdown report path")
     parser.add_argument("--warn-rel", type=float, default=0.25, help="relative error threshold for warnings")
     parser.add_argument("--fail-rel", type=float, default=0.50, help="relative error threshold for failures")
-    parser.add_argument("--max-loops", type=int, default=3, help="max validation attempts when WARN/FAILED is returned")
     args = parser.parse_args(argv)
 
-    loop = validate_simulation_loop(
+    run = validate_simulation_run(
         args.sim_csv,
         args.pk,
         args.targets,
         tolerances=SimulationTolerances(warn_rel=args.warn_rel, fail_rel=args.fail_rel),
-        max_loops=args.max_loops,
     )
-    result = loop.final_result
+    result = run.final_result
     if args.out_md:
         args.out_md.parent.mkdir(parents=True, exist_ok=True)
-        args.out_md.write_text(render_markdown(result, args.sim_csv, args.pk, args.targets, loop=loop), encoding="utf-8")
+        args.out_md.write_text(render_markdown(result, args.sim_csv, args.pk, args.targets, run=run), encoding="utf-8")
 
     print(f"Simulation validation: {result.status}")
-    print(f"Validation attempts: {len(loop.attempts)}/{loop.max_loops}")
-    if len(loop.attempts) > 1:
-        for idx, attempt in enumerate(loop.attempts, start=1):
-            print(f"- Attempt {idx}: {attempt.status}")
+    print(f"Validation attempts: {len(run.attempts)}/1")
     for failure in result.failures:
         print(f"- FAIL: {failure}")
     for warning in result.warnings:

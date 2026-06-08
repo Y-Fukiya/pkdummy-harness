@@ -31,11 +31,27 @@ def test_validate_harness_config_accepts_demo_set_config() -> None:
                 "variability": {"iiv_cv": 0.1, "residual_cv": 0.05, "seed": 123},
             },
             "sampling": {"times_h": [0, 1, 2, 4]},
-            "validation": {"allow_failed": True, "max_loops": 3},
+            "validation": {"allow_failed": True},
         }
     )
 
     assert issues == []
+
+
+def test_validate_harness_config_rejects_deprecated_max_loops() -> None:
+    issues = validate_harness_config(
+        {
+            "version": "0.1",
+            "mode": "demo_set",
+            "drugs_dir": "drugs",
+            "out_dir": "outputs/demo_set_config",
+            "drugs": ["aciclovir"],
+            "sampling": {"times_h": [0, 1, 2, 4]},
+            "validation": {"max_loops": 3},
+        }
+    )
+
+    assert "validation.max_loops is no longer supported; validation is a single deterministic check" in issues
 
 
 def test_validate_harness_config_rejects_missing_required_fields() -> None:

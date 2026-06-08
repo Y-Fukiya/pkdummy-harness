@@ -26,13 +26,6 @@ def _is_non_negative_number(value: Any) -> bool:
         return False
 
 
-def _is_positive_int(value: Any) -> bool:
-    try:
-        return int(value) > 0
-    except (TypeError, ValueError):
-        return False
-
-
 def _validate_sampling(config: dict[str, Any], issues: list[str]) -> None:
     sampling = config.get("sampling") or {}
     if not isinstance(sampling, dict):
@@ -63,8 +56,8 @@ def _validate_validation(config: dict[str, Any], issues: list[str]) -> None:
     if not isinstance(validation, dict):
         issues.append("validation must be a mapping")
         return
-    if "max_loops" in validation and not _is_positive_int(validation["max_loops"]):
-        issues.append("validation.max_loops must be a positive integer")
+    if "max_loops" in validation:
+        issues.append("validation.max_loops is no longer supported; validation is a single deterministic check")
     for key in ("warn_rel", "fail_rel"):
         if key in validation and not _is_non_negative_number(validation[key]):
             issues.append(f"validation.{key} must be a non-negative number")

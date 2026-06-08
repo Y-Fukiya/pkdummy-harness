@@ -221,7 +221,6 @@ def _run_post_simulation_mode(config: dict[str, Any], *, config_path: Path) -> H
         seed=int(config.get("seed", 20260217)),
         strict_subject_match=bool(config.get("strict_subject_match", False)),
         overwrite_existing_pc_conc=bool(config.get("overwrite_existing_pc_conc", False)),
-        max_validation_loops=int(validation.get("max_loops", 3)),
         warn_rel=float(validation.get("warn_rel", 0.25)),
         fail_rel=float(validation.get("fail_rel", 0.50)),
         allow_validation_failed=bool(validation.get("allow_failed", False)),
