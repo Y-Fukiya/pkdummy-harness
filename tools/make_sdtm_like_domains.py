@@ -203,7 +203,14 @@ def _arm_infusion_h(spec: dict[str, Any], arm: str) -> float:
 
 def _spec_lloq(spec: dict[str, Any]) -> float | None:
     assay = spec.get("assay") or {}
-    for value in (assay.get("lloq"), spec.get("lloq")):
+    model = spec.get("model") or {}
+    model_assay = model.get("assay") or {}
+    for value in (
+        assay.get("lloq"),
+        spec.get("lloq"),
+        model_assay.get("lloq"),
+        model.get("lloq"),
+    ):
         if isinstance(value, dict):
             parsed = _to_float(value.get("value"))
         else:

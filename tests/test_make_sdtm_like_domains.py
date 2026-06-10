@@ -240,6 +240,42 @@ def test_make_sdtm_like_domains_marks_blq_when_spec_has_lloq(tmp_path: Path) -> 
     assert {row["PCBLFL"] for row in predose} == {"Y"}
 
 
+@pytest.mark.parametrize(
+    ("container", "expected_lloq"),
+    [
+        ("model_assay", "50"),
+        ("model", "40"),
+    ],
+)
+def test_make_sdtm_like_domains_accepts_legacy_model_lloq_locations(
+    tmp_path: Path,
+    container: str,
+    expected_lloq: str,
+) -> None:
+    samples = tmp_path / "clinical_samples.csv"
+    spec = tmp_path / "spec.yml"
+    out_dir = tmp_path / "sdtm"
+    write_clinical_samples(samples)
+    write_spec(spec)
+    spec_data = yaml.safe_load(spec.read_text(encoding="utf-8"))
+    if container == "model_assay":
+        spec_data["model"] = {"assay": {"lloq": {"value": 50, "unit": "ng/mL"}}}
+    else:
+        spec_data["model"] = {"lloq": 40}
+    spec.write_text(yaml.safe_dump(spec_data, sort_keys=False), encoding="utf-8")
+
+    make_sdtm_like_domains(
+        clinical_samples_csv=samples,
+        spec_yml=spec,
+        out_dir=out_dir,
+    )
+
+    pc = read_csv(out_dir / "PC.csv")
+    predose = [row for row in pc if row["PCTPT"] == "Pre-dose"]
+    assert {row["PCSTAT"] for row in predose} == {"BLQ"}
+    assert {row["PCLLOQ"] for row in predose} == {expected_lloq}
+
+
 def test_make_sdtm_like_domains_carries_predose_mdv_flag(tmp_path: Path) -> None:
     samples = tmp_path / "clinical_samples.csv"
     spec = tmp_path / "spec.yml"

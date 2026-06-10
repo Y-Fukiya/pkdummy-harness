@@ -528,7 +528,8 @@ outputs/demo_set_milestone7/
 - 既存の `spec_pk1_*.yml` のthetaを読みますが、`pk.yml`, `targets.yml`, specは更新しません。
 - demo generatorが消費する薬剤固有PKは主に `model.theta` です。`iiv` と `residual` は外部mrgsolve runner向けのspec情報で、demo単体では薬剤固有のIIV/residual errorとしては消費しません。将来配線する場合は、`iiv.eta` を分散（omega squared）として扱うのかCVとして扱うのかを明示してから変換してください。
 - 経口predoseの既定は `DV=0/MDV=0` です。`run_workflow.py` または `sample_clinical_timepoints.py` で `--predose-mdv1` を指定すると、名目0時間の観測を残したままPopPK側で `MDV=1` にできます。
-- `assay.lloq` または top-level `lloq` をspecへ追加すると、限定版PCに `PCLLOQ`, `PCSTAT=BLQ`, `PCBLFL=Y` が出ます。PopPK smoke inputではBLQ観測に `BLQ=1`, `MDV=1`, `CENS=1`, `LIMIT=LLOQ` を付けます。NONMEM/nlmixr2 adapterにも `CENS/LIMIT` が流れるため、外部control stream側でM3 likelihoodへ接続できます。
+- `assay.lloq` または top-level `lloq` をspecへ追加すると、限定版PCに `PCLLOQ`, `PCSTAT=BLQ`, `PCBLFL=Y` が出ます。`model.assay.lloq` / `model.lloq` も互換フォールバックとして読みますが、新規specでは `assay.lloq` を使ってください。PopPK smoke inputではBLQ観測に `BLQ=1`, `MDV=1`, `CENS=1`, `LIMIT=LLOQ` を付けます。NONMEM/nlmixr2 adapterにも `CENS/LIMIT` が流れるため、外部control stream側でM3 likelihoodへ接続できます。
+- BLQのSDTM-like表現は提出用標準SDTMへの完全準拠ではありません。`PCSTAT=BLQ` と `PCBLFL=Y` はfixtureの簡略フラグです。Pinnacle 21等に通す用途では、施設仕様に合わせて `PCORRES="<LLOQ"`、`PCSTRESN` blank、SUPPPCまたはADaM側BLQフラグへ変換してください。PopPK側も既定は `DV=0`, `CENS=1`, `LIMIT=LLOQ` なので、M3 control streamが `DV=LLOQ` など別規約を期待する場合はadapter側で調整してください。
 - demo generatorは `oral/po/sc/im/iv/iv_bolus/iv_infusion` に対応します。SC/IMは経口と同じ一次吸収式を使う軽量fixtureです。その他の未対応経路は、吸収相なしbolusへ黙って落とさずエラーにします。
 - mrgsolve runnerの代替ではありません。実運用に近いシミュレーションデモでは、外部runnerで作った `sim_full.csv` を `run_workflow.py` に渡してください。
 - WARN/FAILEDは「臨床的に悪い」と同義ではなく、workflow fixtureとして扱うべき境界条件のラベルです。
