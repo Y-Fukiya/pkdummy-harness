@@ -30,7 +30,7 @@ def test_validate_harness_config_accepts_demo_set_config() -> None:
                 "engine": "analytical_demo",
                 "variability": {"iiv_cv": 0.1, "residual_cv": 0.05, "seed": 123},
             },
-            "sampling": {"times_h": [0, 1, 2, 4]},
+            "sampling": {"times_h": [0, 1, 2, 4], "method": "log-linear", "predose_mdv1": True},
             "validation": {"allow_failed": True},
         }
     )

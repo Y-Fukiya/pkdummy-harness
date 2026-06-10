@@ -206,7 +206,9 @@ def test_make_analysis_inputs_carries_blq_flags_to_poppk(tmp_path: Path) -> None
     predose = poppk[1]
     assert predose["EVID"] == "0"
     assert predose["BLQ"] == "1"
+    assert predose["CENS"] == "1"
     assert predose["LLOQ"] == "10"
+    assert predose["LIMIT"] == "10"
     assert predose["MDV"] == "1"
 
 

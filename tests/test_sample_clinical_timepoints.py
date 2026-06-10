@@ -62,6 +62,32 @@ def test_sample_clinical_timepoints_linearly_interpolates_each_subject(tmp_path:
     assert rows[2]["CP"] == "105"
 
 
+def test_sample_clinical_timepoints_log_linearly_interpolates_concentrations_only(tmp_path: Path) -> None:
+    sim_csv = tmp_path / "sim_full.csv"
+    out_csv = tmp_path / "clinical.csv"
+    write_csv(
+        sim_csv,
+        [
+            {"ID": "1", "time": "0", "evid": "0", "CP": "100", "DV": "100", "WT": "70"},
+            {"ID": "1", "time": "1", "evid": "0", "CP": "25", "DV": "25", "WT": "80"},
+        ],
+        ["ID", "time", "evid", "CP", "DV", "WT"],
+    )
+
+    sample_clinical_timepoints(
+        sim_csv,
+        out_csv,
+        times_h=[0.5],
+        method="log-linear",
+    )
+
+    rows = read_csv(out_csv)
+    assert rows[0]["CP"] == "50"
+    assert rows[0]["DV"] == "50"
+    assert rows[0]["WT"] == "75"
+    assert rows[0]["SAMPLE_METHOD"] == "log-linear"
+
+
 def test_sample_clinical_timepoints_uses_observation_row_when_dose_and_obs_share_time(
     tmp_path: Path,
 ) -> None:
@@ -85,6 +111,26 @@ def test_sample_clinical_timepoints_uses_observation_row_when_dose_and_obs_share
     assert rows[0]["evid"] == "0"
     assert rows[0]["MDV"] == "0"
     assert rows[0]["TPT"] == "Pre-dose"
+
+
+def test_sample_clinical_timepoints_can_mark_predose_mdv1(tmp_path: Path) -> None:
+    sim_csv = tmp_path / "sim_full.csv"
+    out_csv = tmp_path / "clinical.csv"
+    write_csv(
+        sim_csv,
+        [
+            {"ID": "1", "time": "0", "evid": "0", "CP": "0", "MDV": "0"},
+            {"ID": "1", "time": "1", "evid": "0", "CP": "10", "MDV": "0"},
+        ],
+        ["ID", "time", "evid", "CP", "MDV"],
+    )
+
+    sample_clinical_timepoints(sim_csv, out_csv, times_h=[0.0, 1.0], method="exact", predose_mdv1=True)
+
+    rows = read_csv(out_csv)
+    assert rows[0]["TPT"] == "Pre-dose"
+    assert rows[0]["MDV"] == "1"
+    assert rows[1]["MDV"] == "0"
 
 
 def test_sample_clinical_timepoints_cli_reads_schedule_csv(tmp_path: Path) -> None:

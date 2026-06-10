@@ -138,12 +138,17 @@ def _is_oral(spec: dict[str, Any]) -> bool:
     return route in {"oral", "po"} or "oral" in template
 
 
+def _has_first_order_absorption(spec: dict[str, Any], route: str) -> bool:
+    template = str(((spec.get("model") or {}).get("template")) or "").strip().lower()
+    return route in {"oral", "po", "sc", "im", "subcutaneous", "intramuscular"} or "oral" in template
+
+
 def _is_iv_infusion(route: str, *, infusion_h: float) -> bool:
     return route in {"iv", "iv_infusion"} and infusion_h > 0
 
 
 def _is_supported_demo_route(route: str) -> bool:
-    return route in {"oral", "po", "iv", "iv_bolus", "iv_infusion", "intravenous"}
+    return route in {"oral", "po", "sc", "im", "subcutaneous", "intramuscular", "iv", "iv_bolus", "iv_infusion", "intravenous"}
 
 
 def _concentration_ng_ml(
@@ -177,7 +182,7 @@ def _concentration_ng_ml(
         else:
             conc_mg_l = dose_mg / (cl * t_inf) * (1.0 - math.exp(-ke * t_inf)) * math.exp(-ke * (time_h - t_inf))
         return max(0.0, conc_mg_l * mult)
-    if _is_oral(spec):
+    if _has_first_order_absorption(spec, route):
         ka = (_to_float(theta.get("KA"), 1.0) or 1.0) * ka_factor
         f1 = _to_float(theta.get("F1"), 1.0) or 1.0
         alag = _to_float(theta.get("ALAG1"), 0.0) or 0.0
@@ -249,7 +254,8 @@ def make_demo_sim_full(
             subject = _subject_row_values(study_id, subject_index, arm, dose_mg)
             cl_factor = _lognormal_factor(rng, float(var["iiv_cv"]))
             v_factor = _lognormal_factor(rng, float(var["iiv_cv"]))
-            ka_factor = _lognormal_factor(rng, float(var["iiv_cv"])) if _is_oral(spec) else 1.0
+            route = str(((spec.get("regimen") or {}).get("route")) or "").strip().lower()
+            ka_factor = _lognormal_factor(rng, float(var["iiv_cv"])) if _has_first_order_absorption(spec, route) else 1.0
             for time_h in _time_grid(spec):
                 ipred = _concentration_ng_ml(
                     spec,

@@ -112,6 +112,8 @@ def _nonmem_rows(poppk_rows: list[dict[str, str]]) -> list[dict[str, Any]]:
             "DV": row.get("DV", ""),
             "CMT": row.get("CMT", ""),
             "RATE": row.get("RATE", ""),
+            "CENS": row.get("CENS", ""),
+            "LIMIT": row.get("LIMIT", row.get("LLOQ", "")),
             "DOSE": row.get("DOSE_MG", ""),
             "ROUTE": row.get("ROUTE", ""),
             "WT": row.get("WT", ""),
@@ -136,6 +138,8 @@ def _nlmixr2_rows(poppk_rows: list[dict[str, str]]) -> list[dict[str, Any]]:
             "dv": row.get("DV", ""),
             "cmt": row.get("CMT", ""),
             "rate": row.get("RATE", ""),
+            "cens": row.get("CENS", ""),
+            "limit": row.get("LIMIT", row.get("LLOQ", "")),
             "dose": row.get("DOSE_MG", ""),
             "route": row.get("ROUTE", ""),
             "wt": row.get("WT", ""),
@@ -196,11 +200,11 @@ def make_downstream_adapters(
         files["phoenix_nca"] = path
     if "nonmem" in target_list:
         path = out_path / "poppk_nonmem.csv"
-        _write_csv(path, _nonmem_rows(poppk_rows), ["ID", "TIME", "EVID", "MDV", "AMT", "DV", "CMT", "RATE", "DOSE", "ROUTE", "WT", "AGE", "SEX", "BSA", "CREAT", "USUBJID"])
+        _write_csv(path, _nonmem_rows(poppk_rows), ["ID", "TIME", "EVID", "MDV", "AMT", "DV", "CMT", "RATE", "CENS", "LIMIT", "DOSE", "ROUTE", "WT", "AGE", "SEX", "BSA", "CREAT", "USUBJID"])
         files["nonmem"] = path
     if "nlmixr2" in target_list:
         path = out_path / "poppk_nlmixr2.csv"
-        _write_csv(path, _nlmixr2_rows(poppk_rows), ["id", "time", "evid", "mdv", "amt", "dv", "cmt", "rate", "dose", "route", "wt", "age", "sex", "bsa", "creat", "usubjid"])
+        _write_csv(path, _nlmixr2_rows(poppk_rows), ["id", "time", "evid", "mdv", "amt", "dv", "cmt", "rate", "cens", "limit", "dose", "route", "wt", "age", "sex", "bsa", "creat", "usubjid"])
         files["nlmixr2"] = path
 
     if any(_norm(row.get("AVAL")) == "" for row in adpc_rows):

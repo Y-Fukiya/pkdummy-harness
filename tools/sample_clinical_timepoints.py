@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import math
 import random
 import sys
 from dataclasses import dataclass
@@ -17,7 +18,7 @@ from pathlib import Path
 from typing import Iterable, Literal
 
 
-Method = Literal["exact", "nearest", "linear"]
+Method = Literal["exact", "nearest", "linear", "log-linear"]
 
 
 @dataclass(frozen=True)
@@ -49,6 +50,10 @@ def _format_float(value: float) -> str:
     if abs(value) < 1e-12:
         value = 0.0
     return f"{value:.12g}"
+
+
+def _is_concentration_field(field: str) -> bool:
+    return field.upper() in {"CP", "IPRED", "DV", "CONC", "PCSTRESN", "PCORRES", "AVAL"}
 
 
 def _time_col(fieldnames: Iterable[str]) -> str:
@@ -210,6 +215,7 @@ def _merge_row(
     target_time: float,
     time_col: str,
     fieldnames: list[str],
+    method: Method,
 ) -> dict[str, str]:
     lower_time = float(lower[time_col])
     upper_time = float(upper[time_col])
@@ -227,9 +233,10 @@ def _merge_row(
         lower_value = _to_float(lower.get(field))
         upper_value = _to_float(upper.get(field))
         if lower_value is not None and upper_value is not None:
-            # Fixture-level interpolation is linear for all numeric columns, including concentration.
-            # Formal NCA choices such as log-linear terminal interpolation belong downstream.
-            interpolated = lower_value + ratio * (upper_value - lower_value)
+            if method == "log-linear" and _is_concentration_field(field) and lower_value > 0 and upper_value > 0:
+                interpolated = math.exp(math.log(lower_value) + ratio * (math.log(upper_value) - math.log(lower_value)))
+            else:
+                interpolated = lower_value + ratio * (upper_value - lower_value)
             row[field] = _format_float(interpolated)
         else:
             row[field] = nearest.get(field, "")
@@ -265,6 +272,7 @@ def _sample_one(
             target_time=target_time,
             time_col=time_col,
             fieldnames=fieldnames,
+            method=method,
         )
     if method == "nearest":
         nearest = _find_nearest(rows, time_col, target_time, nearest_window_h)
@@ -274,8 +282,9 @@ def _sample_one(
             target_time=target_time,
             time_col=time_col,
             fieldnames=fieldnames,
+            method=method,
         )
-    if method == "linear":
+    if method in {"linear", "log-linear"}:
         lower, upper = _bracket_rows(rows, time_col, target_time)
         return _merge_row(
             lower=lower,
@@ -283,6 +292,7 @@ def _sample_one(
             target_time=target_time,
             time_col=time_col,
             fieldnames=fieldnames,
+            method=method,
         )
     raise ValueError(f"Unsupported sampling method: {method}")
 
@@ -309,6 +319,7 @@ def sample_clinical_timepoints(
     nearest_window_h: float | None = None,
     jitter_min: float = 0.0,
     seed: int = 20260217,
+    predose_mdv1: bool = False,
 ) -> SamplingResult:
     sim_path = Path(sim_csv)
     out_path = Path(out_csv)
@@ -320,6 +331,8 @@ def sample_clinical_timepoints(
     sampling_schedule = schedule if schedule is not None else schedule_from_times(times_h or [])
     rng = random.Random(seed)
     extra_fields = ["NOMTIME_H", "TIME_H", "TPT", "TPTNUM", "SAMPLE_METHOD"]
+    if predose_mdv1 and "MDV" not in fieldnames and "mdv" not in fieldnames:
+        extra_fields.append("MDV")
     out_fields = list(fieldnames) + [field for field in extra_fields if field not in fieldnames]
 
     out_rows: list[dict[str, str]] = []
@@ -341,6 +354,8 @@ def sample_clinical_timepoints(
             sampled["TPT"] = point.tpt
             sampled["TPTNUM"] = str(point.tptnum)
             sampled["SAMPLE_METHOD"] = method
+            if predose_mdv1 and abs(point.nominal_time_h) < 1e-12:
+                sampled["MDV" if "mdv" not in sampled else "mdv"] = "1"
             out_rows.append(sampled)
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -365,10 +380,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
     group.add_argument("--times", help="Comma-separated nominal sampling times in hours, e.g. 0,0.5,1,2,4,8,12,24.")
     group.add_argument("--schedule-csv", help="CSV with NOMTIME_H and optional TPT/TPTNUM columns.")
     parser.add_argument("--out", required=True, help="Output sparse clinical-sampling CSV.")
-    parser.add_argument("--method", choices=["exact", "nearest", "linear"], default="linear")
+    parser.add_argument("--method", choices=["exact", "nearest", "linear", "log-linear"], default="linear")
     parser.add_argument("--nearest-window-h", type=float, default=None, help="Maximum allowed distance for --method nearest.")
     parser.add_argument("--jitter-min", type=float, default=0.0, help="Uniform actual-time jitter in +/- minutes.")
     parser.add_argument("--seed", type=int, default=20260217, help="Random seed for actual-time jitter.")
+    parser.add_argument("--predose-mdv1", action="store_true", help="Mark nominal predose samples as MDV=1 while keeping the row for stress fixtures.")
     return parser
 
 
@@ -388,6 +404,7 @@ def main(argv: list[str] | None = None) -> int:
             nearest_window_h=args.nearest_window_h,
             jitter_min=args.jitter_min,
             seed=args.seed,
+            predose_mdv1=args.predose_mdv1,
         )
     except Exception as exc:
         print(f"ERROR: {exc}", file=sys.stderr)

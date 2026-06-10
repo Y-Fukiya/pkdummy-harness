@@ -156,6 +156,7 @@ def run_workflow(
     nearest_window_h: float | None = None,
     jitter_min: float = 0.0,
     seed: int = 20260217,
+    predose_mdv1: bool = False,
     study_start: str = "2026-01-01T08:00:00",
     pc_conc_col: str = "DV",
     pc_conc_unit: str | None = None,
@@ -267,6 +268,7 @@ def run_workflow(
         nearest_window_h=nearest_window_h,
         jitter_min=jitter_min,
         seed=seed,
+        predose_mdv1=predose_mdv1,
     )
     trace_lines.append(
         f"{datetime.now().isoformat(timespec='seconds')} SAMPLE rows={sampling_result.n_rows} method={sampling_result.method}"
@@ -361,6 +363,7 @@ def run_workflow(
                 "method": method,
                 "nearest_window_h": nearest_window_h,
                 "jitter_min": jitter_min,
+                "predose_mdv1": predose_mdv1,
                 "seed": seed,
                 "study_start": study_start,
                 "pc_conc_col": pc_conc_col,
@@ -398,9 +401,10 @@ def build_arg_parser() -> argparse.ArgumentParser:
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--times", help="Comma-separated nominal sampling times in hours")
     group.add_argument("--schedule-csv", type=Path, help="CSV with NOMTIME_H and optional TPT/TPTNUM")
-    parser.add_argument("--method", choices=["exact", "nearest", "linear"], default="linear")
+    parser.add_argument("--method", choices=["exact", "nearest", "linear", "log-linear"], default="linear")
     parser.add_argument("--nearest-window-h", type=float, default=None)
     parser.add_argument("--jitter-min", type=float, default=0.0)
+    parser.add_argument("--predose-mdv1", action="store_true", help="Mark nominal predose samples as MDV=1 in downstream PopPK fixtures.")
     parser.add_argument("--seed", type=int, default=20260217)
     parser.add_argument("--study-start", default="2026-01-01T08:00:00")
     parser.add_argument("--pc-conc-col", default="DV")
@@ -438,6 +442,7 @@ def main(argv: list[str] | None = None) -> int:
             method=args.method,
             nearest_window_h=args.nearest_window_h,
             jitter_min=args.jitter_min,
+            predose_mdv1=args.predose_mdv1,
             seed=args.seed,
             study_start=args.study_start,
             pc_conc_col=args.pc_conc_col,

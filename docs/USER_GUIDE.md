@@ -148,7 +148,7 @@ python3 tools/sample_clinical_timepoints.py \
 | `TIME_H` | 実採血時刻 |
 | `TPT` | 採血時点名 |
 | `TPTNUM` | 採血時点番号 |
-| `SAMPLE_METHOD` | `linear`, `exact`, `nearest` |
+| `SAMPLE_METHOD` | `linear`, `log-linear`, `exact`, `nearest` |
 
 ### Step 4: SDTM/ADaM/NCA/PopPKへ投入する
 
@@ -199,10 +199,11 @@ python3 tools/sample_clinical_timepoints.py \
 | Method | Use case |
 | --- | --- |
 | `linear` | 推奨。密な時系列から名目時刻へ線形補間する |
+| `log-linear` | 終末相などで陽性濃度列をlog-linear補間したい場合。濃度以外の数値列は線形補間する |
 | `exact` | `sim_full.csv` にその時刻が必ず存在する場合 |
 | `nearest` | 補間せず、近い時刻の行を使いたい場合 |
 
-`linear` は濃度も線形補間します。終末相ではlog-linear補間よりわずかに高めに出ることがありますが、dense gridのworkflow fixtureでは実害を小さくできます。正式NCA用の補間・lambda-z判断・AUC methodは下流ツール側で明示してください。
+`linear` は濃度も線形補間します。`log-linear` は `CP`, `IPRED`, `DV`, `CONC`, `PCSTRESN`, `PCORRES`, `AVAL` のような陽性濃度列だけをlog-linear補間し、体重などの共変量は線形補間します。正式NCA用の補間・lambda-z判断・AUC methodは下流ツール側で明示してください。
 
 例:
 
@@ -526,9 +527,9 @@ outputs/demo_set_milestone7/
 - `run_demo_set.py` はデモ専用の解析式generatorで `sim_full.csv` を作ります。
 - 既存の `spec_pk1_*.yml` のthetaを読みますが、`pk.yml`, `targets.yml`, specは更新しません。
 - demo generatorが消費する薬剤固有PKは主に `model.theta` です。`iiv` と `residual` は外部mrgsolve runner向けのspec情報で、demo単体では薬剤固有のIIV/residual errorとしては消費しません。将来配線する場合は、`iiv.eta` を分散（omega squared）として扱うのかCVとして扱うのかを明示してから変換してください。
-- 経口predoseの `DV=0/MDV=0` は、0濃度観測を含むstress fixtureとして意図的に残します。log変換やNCA前処理では、非陽性濃度を除外するかBLQ扱いへ変換するかを下流側で明示してください。
-- `assay.lloq` または top-level `lloq` をspecへ追加すると、限定版PCに `PCLLOQ`, `PCSTAT=BLQ`, `PCBLFL=Y` が出ます。PopPK smoke inputではBLQ観測に `BLQ=1`, `MDV=1` を付けます。これはBLQ経路を踏むfixtureであり、正式なM3 likelihoodの代替ではありません。
-- demo generatorは `oral/po/iv/iv_bolus/iv_infusion` のみ対応します。SC/IMなどを追加した場合は、吸収相なしbolusへ黙って落とさずエラーにします。
+- 経口predoseの既定は `DV=0/MDV=0` です。`run_workflow.py` または `sample_clinical_timepoints.py` で `--predose-mdv1` を指定すると、名目0時間の観測を残したままPopPK側で `MDV=1` にできます。
+- `assay.lloq` または top-level `lloq` をspecへ追加すると、限定版PCに `PCLLOQ`, `PCSTAT=BLQ`, `PCBLFL=Y` が出ます。PopPK smoke inputではBLQ観測に `BLQ=1`, `MDV=1`, `CENS=1`, `LIMIT=LLOQ` を付けます。NONMEM/nlmixr2 adapterにも `CENS/LIMIT` が流れるため、外部control stream側でM3 likelihoodへ接続できます。
+- demo generatorは `oral/po/sc/im/iv/iv_bolus/iv_infusion` に対応します。SC/IMは経口と同じ一次吸収式を使う軽量fixtureです。その他の未対応経路は、吸収相なしbolusへ黙って落とさずエラーにします。
 - mrgsolve runnerの代替ではありません。実運用に近いシミュレーションデモでは、外部runnerで作った `sim_full.csv` を `run_workflow.py` に渡してください。
 - WARN/FAILEDは「臨床的に悪い」と同義ではなく、workflow fixtureとして扱うべき境界条件のラベルです。
 
@@ -658,7 +659,7 @@ make harness-check
 | `validate_simulation.py` が WARN | t1/2やAUCがtargetから少し外れている | workflow fixtureとして使うならレポートを残す |
 | `validate_simulation.py` が FAILED | 1-compartment限界、CL/V basis、文献値不整合 | `validate_library.py` のattainability warningも確認し、stress test扱い、またはsource review |
 | `sample_clinical_timepoints.py` が範囲外エラー | 指定した採血時刻が `sim_full.csv` の時間範囲外 | `sampling.t_end_h` を延ばして再実行、または採血時刻を短くする |
-| `--method exact` でエラー | 指定時刻がCSVに存在しない | `linear` か `nearest` を使う |
+| `--method exact` でエラー | 指定時刻がCSVに存在しない | `linear`, `log-linear`, `nearest` のいずれかを使う |
 | `make_sdtm_like_domains.py` が濃度列を読めない | `clinical_samples.csv` に `DV` がない | `--pc-conc-col CP` など実列名を指定する |
 | 濃度単位が期待と違う | 入力CSVに単位列がない、または施設単位と異なる | `--pc-conc-unit` を指定する。入力列では `DV_UNIT`, `DVU`, `CONC_UNIT`, `PCSTRESU` などを利用できる |
 | 既存PC skeletonに濃度が入らない | `USUBJID` と `PCTPTNUM/PCTPT/PCELTM` が合わない | skeleton側の時点キーを確認する |

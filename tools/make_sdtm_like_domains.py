@@ -179,6 +179,10 @@ def _spec_route(spec: dict[str, Any]) -> str:
         return "ORAL"
     if route in {"iv", "iv_bolus", "iv_infusion", "intravenous"}:
         return "INTRAVENOUS"
+    if route in {"sc", "subcutaneous"}:
+        return "SUBCUTANEOUS"
+    if route in {"im", "intramuscular"}:
+        return "INTRAMUSCULAR"
     return route.upper() or "UNKNOWN"
 
 
@@ -514,6 +518,7 @@ def _make_pc(
                 "PCSTAT": "BLQ" if blq else "",
                 "PCREASND": "Below lower limit of quantification" if blq else "",
                 "PCBLFL": "Y" if blq else "",
+                "PCMDV": row.get("MDV") or row.get("mdv") or "",
                 "PCDTC": _iso_from_hours(study_start, time_h),
                 "PCTPT": row.get("TPT") or "",
                 "PCTPTNUM": row.get("TPTNUM") or "",
@@ -585,7 +590,7 @@ def _fill_existing_pc_skeleton(
 ) -> tuple[list[str], list[dict[str, str]], list[str]]:
     fieldnames, pc_rows = _read_csv(pc_csv)
     _validate_existing_domain_csv(domain="PC", fieldnames=fieldnames)
-    out_fields = _ensure_fields(fieldnames, ["PCORRES", "PCORRESU", "PCSTRESN", "PCSTRESU", "PCLLOQ", "PCSTAT", "PCREASND", "PCBLFL"])
+    out_fields = _ensure_fields(fieldnames, ["PCORRES", "PCORRESU", "PCSTRESN", "PCSTRESU", "PCLLOQ", "PCSTAT", "PCREASND", "PCBLFL", "PCMDV"])
     match_map = _clinical_pc_match_map(clinical_rows, study_id=study_id, conc_col=conc_col, conc_unit=conc_unit)
     matched = 0
     unmatched_blank = 0
@@ -802,6 +807,7 @@ def make_sdtm_like_domains(
             "PCSTAT",
             "PCREASND",
             "PCBLFL",
+            "PCMDV",
             "PCDTC",
             "PCTPT",
             "PCTPTNUM",

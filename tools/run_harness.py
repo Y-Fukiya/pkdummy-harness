@@ -218,6 +218,7 @@ def _run_post_simulation_mode(config: dict[str, Any], *, config_path: Path) -> H
         schedule_csv=(config.get("sampling") or {}).get("schedule_csv"),
         method=str((config.get("sampling") or {}).get("method", "linear")),  # type: ignore[arg-type]
         jitter_min=float((config.get("sampling") or {}).get("jitter_min", 0.0)),
+        predose_mdv1=bool((config.get("sampling") or {}).get("predose_mdv1", False)),
         seed=int(config.get("seed", 20260217)),
         strict_subject_match=bool(config.get("strict_subject_match", False)),
         overwrite_existing_pc_conc=bool(config.get("overwrite_existing_pc_conc", False)),

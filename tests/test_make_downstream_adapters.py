@@ -103,6 +103,8 @@ def write_analysis_inputs(root: Path) -> Path:
                 "DV": "",
                 "CMT": "1",
                 "RATE": "0",
+                "CENS": "0",
+                "LIMIT": "",
                 "DOSE_MG": "100",
                 "ROUTE": "ORAL",
                 "AGE": "40",
@@ -123,6 +125,8 @@ def write_analysis_inputs(root: Path) -> Path:
                 "DV": "50",
                 "CMT": "2",
                 "RATE": "0",
+                "CENS": "1",
+                "LIMIT": "10",
                 "DOSE_MG": "100",
                 "ROUTE": "ORAL",
                 "AGE": "40",
@@ -144,6 +148,8 @@ def write_analysis_inputs(root: Path) -> Path:
             "DV",
             "CMT",
             "RATE",
+            "CENS",
+            "LIMIT",
             "DOSE_MG",
             "ROUTE",
             "AGE",
@@ -183,6 +189,12 @@ def test_make_downstream_adapters_creates_nca_and_poppk_tool_csvs(tmp_path: Path
     nlmixr = read_csv(out_dir / "poppk_nlmixr2.csv")
     assert nlmixr[0]["evid"] == "1"
     assert nlmixr[1]["dv"] == "50"
+    assert nlmixr[1]["cens"] == "1"
+    assert nlmixr[1]["limit"] == "10"
+
+    nonmem = read_csv(out_dir / "poppk_nonmem.csv")
+    assert nonmem[1]["CENS"] == "1"
+    assert nonmem[1]["LIMIT"] == "10"
 
     manifest = yaml.safe_load((out_dir / "MANIFEST.yml").read_text(encoding="utf-8"))
     assert manifest["purpose"] == "downstream_tool_adapter_fixture"

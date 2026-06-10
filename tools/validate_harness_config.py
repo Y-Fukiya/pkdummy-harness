@@ -47,8 +47,8 @@ def _validate_sampling(config: dict[str, Any], issues: list[str]) -> None:
                     issues.append("sampling.times_h must contain only numeric values")
                     break
     method = sampling.get("method")
-    if method is not None and str(method) not in {"linear", "exact", "nearest"}:
-        issues.append("sampling.method must be one of: linear, exact, nearest")
+    if method is not None and str(method) not in {"linear", "log-linear", "exact", "nearest"}:
+        issues.append("sampling.method must be one of: linear, log-linear, exact, nearest")
 
 
 def _validate_validation(config: dict[str, Any], issues: list[str]) -> None:

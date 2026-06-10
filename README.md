@@ -490,8 +490,10 @@ python3 tools/validate_subjects_csv.py subjects/subjects.csv \
 - `targets.auc.value` は原則として `Dose/CL` 由来です。AUCがpassしても、生物学的妥当性や文献AUCとの一致を示すものではありません。文献AUCで検証したい場合は `targets.auc.value/unit/summary` を差し替え、source/raw/parsed/derived の根拠を notes に残してください。
 - `spec_pk1_*.yml` の `model.theta.CL` と `model.theta.V` が demo generator の独立パラメータです。`t1/2` は下流検証targetとして残し、CL/Vを自動調整しません。
 - `iiv` と `residual` は外部mrgsolve等のrunner向けのspec情報です。組み込みdemo generator単体では、CLI/configの軽量variability指定を除き、薬剤固有のIIV/residualモデルとしては消費しません。
-- `lloq` を spec に追加すると、限定版SDTM-like PCとPopPK smoke inputにBLQフラグを出せます。これはBLQ処理経路を踏むためのfixtureであり、正式なM3 likelihood実装ではありません。
-- 経口predoseの `DV=0/MDV=0` は、0濃度観測を含むstress fixtureとして意図的に残しています。log変換する解析では非陽性値の除外やBLQ扱いを下流側で明示してください。
+- `lloq` を spec に追加すると、限定版SDTM-like PCとPopPK smoke inputにBLQ/M3-readyフラグを出せます。PopPK側には `BLQ`, `CENS`, `LLOQ`, `LIMIT` が入り、NONMEM/nlmixr2 adapterにも流れます。
+- 経口predoseの既定は `DV=0/MDV=0` です。`--predose-mdv1` を使うと名目0時間の観測行を残したままPopPK側で `MDV=1` にできます。
+- `sample_clinical_timepoints.py --method log-linear` は陽性濃度列だけをlog-linear補間します。濃度以外の数値列は線形補間のままです。
+- SC/IMは経口と同じ一次吸収式の軽量fixtureとして扱えます。未対応経路は黙示的bolus化せずエラーにします。
 
 ## Repository Map
 

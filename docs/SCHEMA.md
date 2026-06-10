@@ -34,7 +34,7 @@
 - `sampling`: 観測スケジュール
 - `model.theta`: 主に `CL`/`V`/（oral は `KA`/`F1`/`ALAG1`）
 - `model.notes`: demo generatorで独立に採用するパラメータ対や、1-compartment attainability警告の扱いを記録します
-- `assay.lloq`（任意）: BLQ fixture用のLower Limit of Quantification。`value` と `unit` を持てます。top-level `lloq` も後方互換の簡略指定として読めます
+- `assay.lloq`（任意）: BLQ/M3-ready fixture用のLower Limit of Quantification。`value` と `unit` を持てます。top-level `lloq` も後方互換の簡略指定として読めます
 
 ```yaml
 assay:
@@ -45,7 +45,11 @@ assay:
 
 `iiv` と `residual` は外部mrgsolve等のrunner向けのspec情報です。組み込みdemo generator単体では `model.theta` を主に消費し、薬剤固有のIIV/residual modelとしては消費しません。demo-only variabilityはCLI/config側の軽量オプションで別管理します。
 
-demo generatorの対応経路は `oral`, `po`, `iv`, `iv_bolus`, `iv_infusion`, `intravenous` です。SC/IMなどは吸収相の黙示的bolus化を避けるため、現時点では未対応経路としてエラーにします。
+demo generatorの対応経路は `oral`, `po`, `sc`, `im`, `iv`, `iv_bolus`, `iv_infusion`, `intravenous` です。SC/IMは一次吸収式の軽量fixtureとして扱います。その他の未対応経路は吸収相の黙示的bolus化を避けるためエラーにします。
+
+`sample_clinical_timepoints.py` の `method` は `linear`, `log-linear`, `exact`, `nearest` を受け付けます。`log-linear` は陽性濃度列のみlog-linear補間し、濃度以外の数値列は線形補間します。`sampling.predose_mdv1: true` またはCLI `--predose-mdv1` を使うと、名目0時間の観測をPopPK側で `MDV=1` として扱えます。
+
+BLQ行は `PCSTAT=BLQ`, `PCBLFL=Y`, `PCLLOQ` としてSDTM-like PCへ出力され、analysis inputでは `BLQ=1`, `CENS=1`, `LIMIT=LLOQ` としてPopPK fixtureへ伝搬します。これは外部NONMEM/nlmixr2 control streamでM3 likelihoodへ接続するための列契約です。
 
 ### `population.subject_source`（任意）
 

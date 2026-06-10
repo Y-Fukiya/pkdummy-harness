@@ -240,6 +240,27 @@ def test_make_sdtm_like_domains_marks_blq_when_spec_has_lloq(tmp_path: Path) -> 
     assert {row["PCBLFL"] for row in predose} == {"Y"}
 
 
+def test_make_sdtm_like_domains_carries_predose_mdv_flag(tmp_path: Path) -> None:
+    samples = tmp_path / "clinical_samples.csv"
+    spec = tmp_path / "spec.yml"
+    out_dir = tmp_path / "sdtm"
+    write_clinical_samples(samples)
+    write_spec(spec)
+    rows = read_csv(samples)
+    rows[0]["MDV"] = "1"
+    write_csv(samples, rows, list(rows[0]))
+
+    make_sdtm_like_domains(
+        clinical_samples_csv=samples,
+        spec_yml=spec,
+        out_dir=out_dir,
+    )
+
+    pc = read_csv(out_dir / "PC.csv")
+    assert pc[0]["PCMDV"] == "1"
+    assert pc[1]["PCMDV"] == ""
+
+
 def test_make_sdtm_like_domains_uses_subject_height_when_available(tmp_path: Path) -> None:
     samples = tmp_path / "clinical_samples.csv"
     subjects = tmp_path / "subjects.csv"

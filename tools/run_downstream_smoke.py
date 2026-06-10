@@ -190,7 +190,7 @@ def _make_poppk_smoke(analysis_dir: Path, summary_yml: Path, nonmem_ctl: Path, n
         "\n".join(
             [
                 "$PROBLEM PK fixture parser smoke template",
-                "$INPUT ID TIME EVID MDV AMT DV CMT RATE DOSE ROUTE WT AGE SEX BSA CREAT USUBJID",
+                "$INPUT ID TIME EVID MDV AMT DV CMT RATE CENS LIMIT DOSE ROUTE WT AGE SEX BSA CREAT USUBJID",
                 "$DATA poppk_nonmem.csv IGNORE=@",
                 "$SUBROUTINES ADVAN2 TRANS2",
                 "$PK",
@@ -198,6 +198,8 @@ def _make_poppk_smoke(analysis_dir: Path, summary_yml: Path, nonmem_ctl: Path, n
                 "V  = THETA(2)",
                 "S2 = V",
                 "$ERROR",
+                "; M3-ready fixture columns: CENS=1 and LIMIT=LLOQ identify BLQ observations.",
+                "; This parser smoke template does not estimate an M3 likelihood.",
                 "Y = F",
                 "$THETA (0, 1) (0, 10)",
                 "$ESTIMATION MAXEVAL=0",
@@ -210,6 +212,8 @@ def _make_poppk_smoke(analysis_dir: Path, summary_yml: Path, nonmem_ctl: Path, n
         "\n".join(
             [
                 "# nlmixr2 parser smoke template for poppk_nlmixr2.csv",
+                "# M3-ready fixture columns: cens=1 and limit=LLOQ identify BLQ observations.",
+                "# This parser smoke template does not estimate an M3 likelihood.",
                 "model <- function() {",
                 "  ini({",
                 "    tcl <- log(1)",

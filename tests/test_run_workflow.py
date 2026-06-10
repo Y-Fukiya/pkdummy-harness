@@ -130,6 +130,27 @@ def test_run_workflow_propagates_concentration_unit_and_poppk_cmt_convention(tmp
     assert {row["CMT"] for row in poppk[1:]} == {"20"}
 
 
+def test_run_workflow_can_mark_predose_observation_mdv1(tmp_path: Path) -> None:
+    sim_csv, pk_yml, targets_yml, spec_yml = write_inputs(tmp_path)
+    out_dir = tmp_path / "workflow"
+
+    run_workflow(
+        sim_full_csv=sim_csv,
+        out_dir=out_dir,
+        pk_yml=pk_yml,
+        targets_yml=targets_yml,
+        spec_yml=spec_yml,
+        times_h=[0, 1],
+        predose_mdv1=True,
+    )
+
+    poppk = list(csv.DictReader((out_dir / "analysis_inputs" / "POPPK_INPUT.csv").open(encoding="utf-8", newline="")))
+    predose = poppk[1]
+    assert predose["TIME"] == "0"
+    assert predose["EVID"] == "0"
+    assert predose["MDV"] == "1"
+
+
 def test_run_workflow_accepts_existing_domain_csvs_and_fills_pc_skeleton(tmp_path: Path) -> None:
     sim_csv, pk_yml, targets_yml, spec_yml = write_inputs(tmp_path)
     dm_csv = tmp_path / "DM_existing.csv"

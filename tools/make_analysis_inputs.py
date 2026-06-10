@@ -46,6 +46,7 @@ ADPC_FIELDS = [
     "TPT",
     "TPTNUM",
     "ADTM",
+    "MDV",
     "BLQ",
     "LLOQ",
     "PCSTAT",
@@ -72,6 +73,7 @@ NCA_FIELDS = [
     "ROUTE",
     "TPT",
     "TPTNUM",
+    "MDV",
     "BLQ",
     "LLOQ",
     "PCSTAT",
@@ -95,7 +97,9 @@ POPPK_FIELDS = [
     "CMT",
     "RATE",
     "BLQ",
+    "CENS",
     "LLOQ",
+    "LIMIT",
     "DOSE_MG",
     "ROUTE",
     "TPT",
@@ -251,6 +255,13 @@ def _pc_blq(row: dict[str, str]) -> str:
     return "0"
 
 
+def _pc_mdv(row: dict[str, str]) -> str:
+    parsed = _to_float(row.get("PCMDV") or row.get("MDV"))
+    if parsed is not None and int(parsed) == 1:
+        return "1"
+    return "0"
+
+
 def _base_subject(
     usubjid: str,
     *,
@@ -315,6 +326,7 @@ def _make_adpc(
                 "TPT": _norm(pc.get("PCTPT")),
                 "TPTNUM": _norm(pc.get("PCTPTNUM")),
                 "ADTM": _norm(pc.get("PCDTC")),
+                "MDV": _pc_mdv(pc),
                 "BLQ": _pc_blq(pc),
                 "LLOQ": _norm(pc.get("PCLLOQ")),
                 "PCSTAT": _norm(pc.get("PCSTAT")),
@@ -337,6 +349,7 @@ def _make_nca(adpc_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "ROUTE": row["ROUTE"],
             "TPT": row["TPT"],
             "TPTNUM": row["TPTNUM"],
+            "MDV": row["MDV"],
             "BLQ": row["BLQ"],
             "LLOQ": row["LLOQ"],
             "PCSTAT": row["PCSTAT"],
@@ -382,7 +395,9 @@ def _make_poppk(
                 "CMT": dose_cmt,
                 "RATE": _poppk_rate(ex, dose, route),
                 "BLQ": "0",
+                "CENS": "0",
                 "LLOQ": "",
+                "LIMIT": "",
                 "DOSE_MG": dose,
                 "ROUTE": route,
                 "TPT": "Dose",
@@ -399,19 +414,22 @@ def _make_poppk(
         for obs in sorted(subject_rows, key=lambda row: _to_float(row["TIME_H"]) or 0.0):
             has_dv = _norm(obs["AVAL"]) != ""
             is_blq = _norm(obs["BLQ"]) == "1"
+            is_mdv = _norm(obs["MDV"]) == "1"
             rows.append(
                 {
                     "ID": subject_order[usubjid],
                     "USUBJID": usubjid,
                     "TIME": obs["TIME_H"],
                     "EVID": "0",
-                    "MDV": "0" if has_dv and not is_blq else "1",
+                    "MDV": "0" if has_dv and not is_blq and not is_mdv else "1",
                     "AMT": "0",
                     "DV": obs["AVAL"],
                     "CMT": observation_cmt,
                     "RATE": "0",
                     "BLQ": obs["BLQ"],
+                    "CENS": "1" if is_blq else "0",
                     "LLOQ": obs["LLOQ"],
+                    "LIMIT": obs["LLOQ"],
                     "DOSE_MG": obs["DOSE_MG"],
                     "ROUTE": obs["ROUTE"],
                     "TPT": obs["TPT"],
