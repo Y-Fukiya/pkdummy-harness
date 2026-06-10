@@ -197,6 +197,18 @@ def _arm_infusion_h(spec: dict[str, Any], arm: str) -> float:
     return infusion_h
 
 
+def _spec_lloq(spec: dict[str, Any]) -> float | None:
+    assay = spec.get("assay") or {}
+    for value in (assay.get("lloq"), spec.get("lloq")):
+        if isinstance(value, dict):
+            parsed = _to_float(value.get("value"))
+        else:
+            parsed = _to_float(value)
+        if parsed is not None and parsed > 0:
+            return parsed
+    return None
+
+
 def _iso_from_hours(start: datetime, hours: float | None) -> str:
     if hours is None:
         return start.isoformat(timespec="seconds")
@@ -475,6 +487,7 @@ def _make_pc(
     study_start: datetime,
     conc_col: str,
     conc_unit: str | None,
+    lloq: float | None = None,
 ) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for seq, row in enumerate(clinical_rows, start=1):
@@ -484,6 +497,7 @@ def _make_pc(
         if conc is None:
             conc = _to_float(row.get("DV") or row.get("CP") or row.get("IPRED"))
         unit = _pc_conc_unit_from_row(row, conc_col=conc_col, conc_unit=conc_unit)
+        blq = conc is not None and lloq is not None and conc < lloq
         rows.append(
             {
                 "STUDYID": str(row.get("STUDYID") or study_id),
@@ -496,6 +510,10 @@ def _make_pc(
                 "PCORRESU": unit,
                 "PCSTRESN": conc if conc is not None else "",
                 "PCSTRESU": unit,
+                "PCLLOQ": lloq if lloq is not None else "",
+                "PCSTAT": "BLQ" if blq else "",
+                "PCREASND": "Below lower limit of quantification" if blq else "",
+                "PCBLFL": "Y" if blq else "",
                 "PCDTC": _iso_from_hours(study_start, time_h),
                 "PCTPT": row.get("TPT") or "",
                 "PCTPTNUM": row.get("TPTNUM") or "",
@@ -567,7 +585,7 @@ def _fill_existing_pc_skeleton(
 ) -> tuple[list[str], list[dict[str, str]], list[str]]:
     fieldnames, pc_rows = _read_csv(pc_csv)
     _validate_existing_domain_csv(domain="PC", fieldnames=fieldnames)
-    out_fields = _ensure_fields(fieldnames, ["PCORRES", "PCORRESU", "PCSTRESN", "PCSTRESU"])
+    out_fields = _ensure_fields(fieldnames, ["PCORRES", "PCORRESU", "PCSTRESN", "PCSTRESU", "PCLLOQ", "PCSTAT", "PCREASND", "PCBLFL"])
     match_map = _clinical_pc_match_map(clinical_rows, study_id=study_id, conc_col=conc_col, conc_unit=conc_unit)
     matched = 0
     unmatched_blank = 0
@@ -767,6 +785,7 @@ def make_sdtm_like_domains(
             study_start=start,
             conc_col=pc_conc_col,
             conc_unit=pc_conc_unit,
+            lloq=_spec_lloq(spec),
         )
         pc_fields = [
             "STUDYID",
@@ -779,6 +798,10 @@ def make_sdtm_like_domains(
             "PCORRESU",
             "PCSTRESN",
             "PCSTRESU",
+            "PCLLOQ",
+            "PCSTAT",
+            "PCREASND",
+            "PCBLFL",
             "PCDTC",
             "PCTPT",
             "PCTPTNUM",

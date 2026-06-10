@@ -127,6 +127,8 @@ python3 tools/validate_simulation.py \
 
 `tools/validate_library.py` は、`CL`, `V`, `t1/2` が1-compartment関係 `t1/2 = ln(2) * V / CL` と大きく矛盾する場合に `1-compartment attainability warnings` を出します。この警告がある薬剤では、`validate_simulation.py` の t1/2 `WARN/FAILED` がシミュレーションのドリフトではなく、canonical target側の構造的不整合を反映している可能性があります。
 
+各薬剤の `targets.yml` と `spec_pk1_*.yml` には、どのパラメータ対を独立に採るかを notes として残しています。現在のdemo generatorでは `CL` と `V` を独立パラメータとして採用し、`t1/2` は下流検証targetとして扱います。AUC targetは多くの薬剤で `Dose/CL` 由来のため、AUC passは積分器・単位・後処理の整合性確認であり、独立した文献AUCとの一致や臨床妥当性の証拠ではありません。文献AUCで検証したい場合は、`targets.auc.value/unit/summary` を差し替え、source/raw/parsed/derived と単位変換式を notes に残してください。
+
 ### Step 3: 臨床試験の採血ポイントに合わせる
 
 密な `sim_full.csv` を、名目採血時点だけの疎なデータにします。
@@ -199,6 +201,8 @@ python3 tools/sample_clinical_timepoints.py \
 | `linear` | 推奨。密な時系列から名目時刻へ線形補間する |
 | `exact` | `sim_full.csv` にその時刻が必ず存在する場合 |
 | `nearest` | 補間せず、近い時刻の行を使いたい場合 |
+
+`linear` は濃度も線形補間します。終末相ではlog-linear補間よりわずかに高めに出ることがありますが、dense gridのworkflow fixtureでは実害を小さくできます。正式NCA用の補間・lambda-z判断・AUC methodは下流ツール側で明示してください。
 
 例:
 
@@ -521,6 +525,10 @@ outputs/demo_set_milestone7/
 - `run_harness.py` はYAML configから既存ツールを呼ぶ共通入口です。Shiny CloudやTauriから呼ぶ場合も、この入口または `pk-fixture run` を使う想定です。
 - `run_demo_set.py` はデモ専用の解析式generatorで `sim_full.csv` を作ります。
 - 既存の `spec_pk1_*.yml` のthetaを読みますが、`pk.yml`, `targets.yml`, specは更新しません。
+- demo generatorが消費する薬剤固有PKは主に `model.theta` です。`iiv` と `residual` は外部mrgsolve runner向けのspec情報で、demo単体では薬剤固有のIIV/residual errorとしては消費しません。将来配線する場合は、`iiv.eta` を分散（omega squared）として扱うのかCVとして扱うのかを明示してから変換してください。
+- 経口predoseの `DV=0/MDV=0` は、0濃度観測を含むstress fixtureとして意図的に残します。log変換やNCA前処理では、非陽性濃度を除外するかBLQ扱いへ変換するかを下流側で明示してください。
+- `assay.lloq` または top-level `lloq` をspecへ追加すると、限定版PCに `PCLLOQ`, `PCSTAT=BLQ`, `PCBLFL=Y` が出ます。PopPK smoke inputではBLQ観測に `BLQ=1`, `MDV=1` を付けます。これはBLQ経路を踏むfixtureであり、正式なM3 likelihoodの代替ではありません。
+- demo generatorは `oral/po/iv/iv_bolus/iv_infusion` のみ対応します。SC/IMなどを追加した場合は、吸収相なしbolusへ黙って落とさずエラーにします。
 - mrgsolve runnerの代替ではありません。実運用に近いシミュレーションデモでは、外部runnerで作った `sim_full.csv` を `run_workflow.py` に渡してください。
 - WARN/FAILEDは「臨床的に悪い」と同義ではなく、workflow fixtureとして扱うべき境界条件のラベルです。
 
@@ -552,6 +560,8 @@ python3 tools/validate_subjects_csv.py subjects/subjects.csv \
 `simPop` は年齢、性別、体重などの属性生成に限定します。PK個人差、`CL`, `V`, `KA`, `ETA` の根拠にはしません。
 
 `make_simpop_subjects.R` は任意列 `HEIGHT_CM` も出力します。`make_sdtm_like_domains.py` に `--subjects-csv` を渡すと、VSの身長、BMI、BSA作成に使われます。
+
+demo generatorの固定被験者は軽量確認用です。共変量モデルや吸収多様性の検証には使わず、現実的な人口統計が必要な場合は `subjects_csv` / `simPop` 経路で被験者属性だけを差し替えてください。WT/AGE/SEX/CREATはSDTM-like/analysis inputには流れますが、現行の解析式ではCL/V/KA/Fへは接続していません。
 
 ```bash
 python3 tools/make_sdtm_like_domains.py \

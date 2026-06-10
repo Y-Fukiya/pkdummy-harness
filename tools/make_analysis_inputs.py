@@ -46,6 +46,9 @@ ADPC_FIELDS = [
     "TPT",
     "TPTNUM",
     "ADTM",
+    "BLQ",
+    "LLOQ",
+    "PCSTAT",
     "WT",
     "HEIGHT_CM",
     "BMI",
@@ -69,6 +72,9 @@ NCA_FIELDS = [
     "ROUTE",
     "TPT",
     "TPTNUM",
+    "BLQ",
+    "LLOQ",
+    "PCSTAT",
     "SUBJID",
     "ARM",
     "AGE",
@@ -88,6 +94,8 @@ POPPK_FIELDS = [
     "DV",
     "CMT",
     "RATE",
+    "BLQ",
+    "LLOQ",
     "DOSE_MG",
     "ROUTE",
     "TPT",
@@ -113,7 +121,7 @@ def _read_csv(path: Path) -> tuple[list[str], list[dict[str, str]]]:
 def _write_csv(path: Path, rows: list[dict[str, Any]], fieldnames: list[str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         for row in rows:
             writer.writerow({field: _format_value(row.get(field, "")) for field in fieldnames})
@@ -233,6 +241,16 @@ def _pc_unit(row: dict[str, str]) -> str:
     return _norm(row.get("PCSTRESU") or row.get("PCORRESU") or "ng/mL")
 
 
+def _pc_blq(row: dict[str, str]) -> str:
+    if _upper(row.get("PCSTAT")) == "BLQ" or _upper(row.get("PCBLFL")) == "Y":
+        return "1"
+    conc = _to_float(row.get("PCSTRESN") or row.get("PCORRES"))
+    lloq = _to_float(row.get("PCLLOQ"))
+    if conc is not None and lloq is not None and conc < lloq:
+        return "1"
+    return "0"
+
+
 def _base_subject(
     usubjid: str,
     *,
@@ -297,6 +315,9 @@ def _make_adpc(
                 "TPT": _norm(pc.get("PCTPT")),
                 "TPTNUM": _norm(pc.get("PCTPTNUM")),
                 "ADTM": _norm(pc.get("PCDTC")),
+                "BLQ": _pc_blq(pc),
+                "LLOQ": _norm(pc.get("PCLLOQ")),
+                "PCSTAT": _norm(pc.get("PCSTAT")),
                 "PCSEQ": _norm(pc.get("PCSEQ")),
             }
         )
@@ -316,6 +337,9 @@ def _make_nca(adpc_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "ROUTE": row["ROUTE"],
             "TPT": row["TPT"],
             "TPTNUM": row["TPTNUM"],
+            "BLQ": row["BLQ"],
+            "LLOQ": row["LLOQ"],
+            "PCSTAT": row["PCSTAT"],
             "SUBJID": row["SUBJID"],
             "ARM": row["ARM"],
             "AGE": row["AGE"],
@@ -357,6 +381,8 @@ def _make_poppk(
                 "DV": "",
                 "CMT": dose_cmt,
                 "RATE": _poppk_rate(ex, dose, route),
+                "BLQ": "0",
+                "LLOQ": "",
                 "DOSE_MG": dose,
                 "ROUTE": route,
                 "TPT": "Dose",
@@ -372,17 +398,20 @@ def _make_poppk(
         )
         for obs in sorted(subject_rows, key=lambda row: _to_float(row["TIME_H"]) or 0.0):
             has_dv = _norm(obs["AVAL"]) != ""
+            is_blq = _norm(obs["BLQ"]) == "1"
             rows.append(
                 {
                     "ID": subject_order[usubjid],
                     "USUBJID": usubjid,
                     "TIME": obs["TIME_H"],
                     "EVID": "0",
-                    "MDV": "0" if has_dv else "1",
+                    "MDV": "0" if has_dv and not is_blq else "1",
                     "AMT": "0",
                     "DV": obs["AVAL"],
                     "CMT": observation_cmt,
                     "RATE": "0",
+                    "BLQ": obs["BLQ"],
+                    "LLOQ": obs["LLOQ"],
                     "DOSE_MG": obs["DOSE_MG"],
                     "ROUTE": obs["ROUTE"],
                     "TPT": obs["TPT"],

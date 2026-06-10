@@ -37,6 +37,7 @@
 - 規制提出用のモデル妥当化
 - 薬剤固有の吸収相、IIV、残差誤差、VPC/GOF の代替
 - 腎機能、共変量効果、非線形PK、TMDDなどの臨床的検証
+- 共変量モデルや吸収多様性そのものの検証（demo generatorのWT/AGE/SEX/CREATはPK式に未接続で、経口吸収パラメータも簡略化されています）
 
 ## Quick Start
 
@@ -483,6 +484,14 @@ python3 tools/validate_subjects_csv.py subjects/subjects.csv \
 | `tools/make_simpop_subjects.R` | 任意のsimPopベース被験者属性CSVを生成 |
 | `tools/harvest_and_generate.py` | DailyMed/PubMed等からのPKパラメータ更新経路 |
 | `tools/validate_library.py` | `pk.yml` / spec / targets / indexの整合性チェック。`CL/V/t1/2` の1-compartment到達可能性も警告する |
+
+## Fixture Scope Notes
+
+- `targets.auc.value` は原則として `Dose/CL` 由来です。AUCがpassしても、生物学的妥当性や文献AUCとの一致を示すものではありません。文献AUCで検証したい場合は `targets.auc.value/unit/summary` を差し替え、source/raw/parsed/derived の根拠を notes に残してください。
+- `spec_pk1_*.yml` の `model.theta.CL` と `model.theta.V` が demo generator の独立パラメータです。`t1/2` は下流検証targetとして残し、CL/Vを自動調整しません。
+- `iiv` と `residual` は外部mrgsolve等のrunner向けのspec情報です。組み込みdemo generator単体では、CLI/configの軽量variability指定を除き、薬剤固有のIIV/residualモデルとしては消費しません。
+- `lloq` を spec に追加すると、限定版SDTM-like PCとPopPK smoke inputにBLQフラグを出せます。これはBLQ処理経路を踏むためのfixtureであり、正式なM3 likelihood実装ではありません。
+- 経口predoseの `DV=0/MDV=0` は、0濃度観測を含むstress fixtureとして意図的に残しています。log変換する解析では非陽性値の除外やBLQ扱いを下流側で明示してください。
 
 ## Repository Map
 

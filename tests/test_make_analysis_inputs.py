@@ -182,6 +182,34 @@ def test_make_analysis_inputs_sets_poppk_rate_for_iv_infusion(tmp_path: Path) ->
     assert {row["RATE"] for row in poppk[1:]} == {"0"}
 
 
+def test_make_analysis_inputs_carries_blq_flags_to_poppk(tmp_path: Path) -> None:
+    sdtm = write_sdtm_like(tmp_path)
+    pc_path = sdtm / "PC.csv"
+    pc_rows = read_csv(pc_path)
+    pc_rows[0]["PCLLOQ"] = "10"
+    pc_rows[0]["PCSTAT"] = "BLQ"
+    pc_rows[0]["PCBLFL"] = "Y"
+    write_csv(
+        pc_path,
+        pc_rows,
+        ["STUDYID", "DOMAIN", "USUBJID", "PCSEQ", "PCSTRESN", "PCSTRESU", "PCTPT", "PCTPTNUM", "PCELTM", "PCLLOQ", "PCSTAT", "PCBLFL"],
+    )
+    out_dir = tmp_path / "analysis_inputs"
+
+    make_analysis_inputs(sdtm_like_dir=sdtm, out_dir=out_dir)
+
+    adpc = read_csv(out_dir / "ADPC.csv")
+    assert adpc[0]["BLQ"] == "1"
+    assert adpc[0]["LLOQ"] == "10"
+
+    poppk = read_csv(out_dir / "POPPK_INPUT.csv")
+    predose = poppk[1]
+    assert predose["EVID"] == "0"
+    assert predose["BLQ"] == "1"
+    assert predose["LLOQ"] == "10"
+    assert predose["MDV"] == "1"
+
+
 def test_make_analysis_inputs_cli(tmp_path: Path) -> None:
     sdtm = write_sdtm_like(tmp_path)
     out_dir = tmp_path / "analysis_inputs"

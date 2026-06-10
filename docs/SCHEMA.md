@@ -30,8 +30,22 @@
 - `population`: 体重分布など
   - `subject_source`（任意）: `subjects.csv` のような外部被験者テーブルを使うための参照情報
 - `regimen`: 投与経路と用量
+  - `arms.<arm>.infusion_h`（任意）: IV infusion duration in hours。`route: iv` または `iv_infusion` かつ `infusion_h > 0` の場合、demo generatorは注入式を使い、PopPK fixtureの投与行 `RATE = dose_mg / infusion_h` を出力します
 - `sampling`: 観測スケジュール
 - `model.theta`: 主に `CL`/`V`/（oral は `KA`/`F1`/`ALAG1`）
+- `model.notes`: demo generatorで独立に採用するパラメータ対や、1-compartment attainability警告の扱いを記録します
+- `assay.lloq`（任意）: BLQ fixture用のLower Limit of Quantification。`value` と `unit` を持てます。top-level `lloq` も後方互換の簡略指定として読めます
+
+```yaml
+assay:
+  lloq:
+    value: 10
+    unit: ng/mL
+```
+
+`iiv` と `residual` は外部mrgsolve等のrunner向けのspec情報です。組み込みdemo generator単体では `model.theta` を主に消費し、薬剤固有のIIV/residual modelとしては消費しません。demo-only variabilityはCLI/config側の軽量オプションで別管理します。
+
+demo generatorの対応経路は `oral`, `po`, `iv`, `iv_bolus`, `iv_infusion`, `intravenous` です。SC/IMなどは吸収相の黙示的bolus化を避けるため、現時点では未対応経路としてエラーにします。
 
 ### `population.subject_source`（任意）
 
@@ -64,6 +78,9 @@ population:
 `pk-targets`（想定）に渡すためのターゲット定義。
 
 - `targets.auc.value` は v0.1 では **Dose/CL から自動計算**（暫定）
+- `notes` には、AUCが `Dose/CL` 由来で独立文献AUCではないこと、spec側で採用する独立パラメータ対、1-compartment attainability labelを残します
+
+AUCがpassしても臨床妥当性の証拠にはなりません。文献AUCで検証したい場合は、`targets.auc.value/unit/summary` を文献値に差し替え、source/raw/parsed/derived の対応と単位変換式を notes に残してください。
 
 ## ツール
 

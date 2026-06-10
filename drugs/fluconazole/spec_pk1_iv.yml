@@ -32,6 +32,10 @@ model:
   theta:
     CL: 0.966
     V: 41.80930228496216
+  notes:
+  - 'Demo theta policy: CL and V are the independent simulation parameters for this
+    1-compartment fixture. t_half is checked downstream and is not used to recalibrate
+    theta.'
 iiv:
   eta:
     CL: 0.09

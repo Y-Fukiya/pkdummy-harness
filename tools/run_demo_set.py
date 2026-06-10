@@ -142,6 +142,10 @@ def _is_iv_infusion(route: str, *, infusion_h: float) -> bool:
     return route in {"iv", "iv_infusion"} and infusion_h > 0
 
 
+def _is_supported_demo_route(route: str) -> bool:
+    return route in {"oral", "po", "iv", "iv_bolus", "iv_infusion", "intravenous"}
+
+
 def _concentration_ng_ml(
     spec: dict[str, Any],
     *,
@@ -162,6 +166,8 @@ def _concentration_ng_ml(
         raise ValueError("model.theta.CL and model.theta.V must be positive for demo simulation.")
     ke = cl / v
     route = str(((spec.get("regimen") or {}).get("route")) or "").strip().lower()
+    if not _is_supported_demo_route(route):
+        raise ValueError(f"Unsupported demo route for analytic generator: {route or 'UNKNOWN'}")
     if _is_iv_infusion(route, infusion_h=infusion_h):
         if time_h <= 0:
             return 0.0

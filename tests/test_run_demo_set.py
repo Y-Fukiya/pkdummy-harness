@@ -8,6 +8,8 @@ from pathlib import Path
 
 import yaml
 
+import pytest
+
 from tools.run_demo_set import make_demo_sim_full, run_demo_set
 
 
@@ -183,3 +185,14 @@ def test_make_demo_sim_full_uses_iv_infusion_when_infusion_h_is_set(tmp_path: Pa
     assert by_time[1.0] > by_time[0.0]
     assert by_time[1.0] > by_time[2.0]
     assert by_time[1.0] < 100.0 / 20.0 * 1000.0
+
+
+def test_make_demo_sim_full_rejects_unsupported_route_instead_of_bolus_fallback(tmp_path: Path) -> None:
+    drugs_dir = tmp_path / "drugs"
+    write_demo_drug(drugs_dir, "sc_demo", route="sc", template="pk1_iv_ode")
+
+    with pytest.raises(ValueError, match="Unsupported demo route"):
+        make_demo_sim_full(
+            spec_yml=drugs_dir / "sc_demo" / "spec_pk1_iv.yml",
+            out_csv=tmp_path / "sim_full.csv",
+        )

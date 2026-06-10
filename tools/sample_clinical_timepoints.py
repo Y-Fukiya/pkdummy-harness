@@ -227,6 +227,8 @@ def _merge_row(
         lower_value = _to_float(lower.get(field))
         upper_value = _to_float(upper.get(field))
         if lower_value is not None and upper_value is not None:
+            # Fixture-level interpolation is linear for all numeric columns, including concentration.
+            # Formal NCA choices such as log-linear terminal interpolation belong downstream.
             interpolated = lower_value + ratio * (upper_value - lower_value)
             row[field] = _format_float(interpolated)
         else:
@@ -321,6 +323,7 @@ def sample_clinical_timepoints(
     out_fields = list(fieldnames) + [field for field in extra_fields if field not in fieldnames]
 
     out_rows: list[dict[str, str]] = []
+    # Numeric-looking subject IDs sort before longer text IDs while keeping stable lexical order.
     for subject_id in sorted(grouped, key=lambda v: (len(v), v)):
         subject_rows = grouped[subject_id]
         for point in sampling_schedule:

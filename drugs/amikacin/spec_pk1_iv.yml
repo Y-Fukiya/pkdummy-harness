@@ -31,6 +31,12 @@ model:
   theta:
     CL: 6.0
     V: 24.0
+  notes:
+  - 'Demo theta policy: CL and V are the independent simulation parameters for this
+    1-compartment fixture. t_half is checked downstream and is not used to recalibrate
+    theta.'
+  - 'Known stress-test label: library validation flags CL/V/t_half structural mismatch
+    for this drug, so terminal t_half WARN/FAILED can be expected in demo validation.'
 iiv:
   eta:
     CL: 0.09

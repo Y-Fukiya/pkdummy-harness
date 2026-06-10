@@ -30,3 +30,13 @@ notes:
   CL/F unless you explicitly choose systemic parameters.
 - Variability fields are placeholders unless you replace them with drug-specific PopPK
   values.
+- 'AUC target provenance: computed as Dose/CL from the extracted CL used by this fixture.
+  It is an integration consistency check, not an independent literature AUC or clinical
+  validity claim. To validate against a literature AUC, replace targets.auc.value/unit/summary
+  and add the source, raw text, unit conversion, and derivation note.'
+- 'Parameter-pair policy: spec theta uses CL and V from pk.yml derived absolute values
+  as the independent simulation parameters. The literature t_half is retained as a
+  target/check and is not used to recalibrate CL or V automatically.'
+- '1-compartment attainability label: no CL/V/t_half warning is currently flagged
+  by validate_library at the repository threshold. This is still a workflow-fixture
+  label, not evidence of clinical model validity.'
