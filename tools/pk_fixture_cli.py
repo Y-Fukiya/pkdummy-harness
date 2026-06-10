@@ -33,6 +33,7 @@ COMMANDS: dict[str, CommandSpec] = {
     "external-validation": CommandSpec("tools.run_external_tool_validation", "Probe or run optional Phoenix/NONMEM/nlmixr2 profiles."),
     "manifest-viewer": CommandSpec("tools.render_manifest_viewer", "Render a MANIFEST.yml to a static HTML viewer."),
     "examples-check": CommandSpec("tools.check_examples", "Regenerate versioned examples in a temp dir and compare."),
+    "audit-library": CommandSpec("tools.audit_library_priorities", "Read-only internal-first library priority audit."),
 }
 
 

@@ -101,6 +101,16 @@ pk-fixture doctor
 pk-fixture run harness_examples/demo_set.yml
 ```
 
+薬剤ライブラリの次の見直し優先度をread-onlyで確認する場合:
+
+```bash
+python3 tools/audit_library_priorities.py . --out-dir outputs/library_audit
+# or
+python3 -m tools.pk_fixture_cli audit-library . --out-dir outputs/library_audit
+```
+
+このauditは `pk.yml`, `targets.yml`, specを更新せず、ネットワークにも接続しません。drug × route/spec粒度で、`P0_CORRECTNESS`, `P1_STRUCTURAL`, `P2_PROVENANCE`, `P3_REFERENCE`, `STRESS_FIXTURE`, `OK` のtierを出します。優先度は加重和ではなく、correctnessをprovenanceより上に置く辞書式です。
+
 薬剤一覧を見る:
 
 ```bash
@@ -502,6 +512,7 @@ python3 tools/validate_subjects_csv.py subjects/subjects.csv \
 | `tools/make_simpop_subjects.R` | 任意のsimPopベース被験者属性CSVを生成 |
 | `tools/harvest_and_generate.py` | DailyMed/PubMed等からのPKパラメータ更新経路 |
 | `tools/validate_library.py` | `pk.yml` / spec / targets / indexの整合性チェック。`CL/V/t1/2` の1-compartment到達可能性も警告する |
+| `tools/audit_library_priorities.py` | drug×route/spec粒度で内部リスクをtiered auditし、任意のローカル外部snapshot照合列を付ける |
 
 ## Fixture Scope Notes
 

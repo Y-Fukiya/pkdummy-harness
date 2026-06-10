@@ -30,6 +30,7 @@ def test_pk_fixture_cli_help_lists_core_commands() -> None:
     assert "run" in completed.stdout
     assert "workflow" in completed.stdout
     assert "validate-simulation" in completed.stdout
+    assert "audit-library" in completed.stdout
 
 
 def test_pk_fixture_cli_dispatches_doctor_json() -> None:
