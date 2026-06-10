@@ -160,6 +160,28 @@ def test_make_analysis_inputs_allows_poppk_cmt_convention_override(tmp_path: Pat
     assert {row["CMT"] for row in poppk[1:]} == {"20"}
 
 
+def test_make_analysis_inputs_sets_poppk_rate_for_iv_infusion(tmp_path: Path) -> None:
+    sdtm = write_sdtm_like(tmp_path)
+    ex_path = sdtm / "EX.csv"
+    ex_rows = read_csv(ex_path)
+    for row in ex_rows:
+        row["EXROUTE"] = "INTRAVENOUS"
+        row["EXINFH"] = "2"
+    write_csv(
+        ex_path,
+        ex_rows,
+        ["STUDYID", "DOMAIN", "USUBJID", "EXSEQ", "EXTRT", "EXDOSE", "EXDOSU", "EXROUTE", "EXINFH", "EXSTDTC"],
+    )
+    out_dir = tmp_path / "analysis_inputs"
+
+    make_analysis_inputs(sdtm_like_dir=sdtm, out_dir=out_dir)
+
+    poppk = read_csv(out_dir / "POPPK_INPUT.csv")
+    assert poppk[0]["EVID"] == "1"
+    assert poppk[0]["RATE"] == "50"
+    assert {row["RATE"] for row in poppk[1:]} == {"0"}
+
+
 def test_make_analysis_inputs_cli(tmp_path: Path) -> None:
     sdtm = write_sdtm_like(tmp_path)
     out_dir = tmp_path / "analysis_inputs"

@@ -118,14 +118,17 @@ def _time_grid(spec: dict[str, Any]) -> list[float]:
     return times
 
 
-def _arms(spec: dict[str, Any]) -> list[tuple[str, int, float]]:
+def _arms(spec: dict[str, Any]) -> list[tuple[str, int, float, float]]:
     regimen = spec.get("regimen") or {}
     arms = regimen.get("arms") or {"A": {"n": (spec.get("population") or {}).get("n", 1), "dose_mg": 100.0}}
-    out: list[tuple[str, int, float]] = []
+    out: list[tuple[str, int, float, float]] = []
     for arm, block in arms.items():
         n = int(_to_float((block or {}).get("n"), (spec.get("population") or {}).get("n", 1)) or 1)
         dose = _to_float((block or {}).get("dose_mg"), 100.0) or 100.0
-        out.append((str(arm), n, dose))
+        infusion_h = _to_float((block or {}).get("infusion_h"), 0.0) or 0.0
+        if infusion_h < 0:
+            infusion_h = 0.0
+        out.append((str(arm), n, dose, infusion_h))
     return out
 
 
@@ -133,6 +136,10 @@ def _is_oral(spec: dict[str, Any]) -> bool:
     route = str(((spec.get("regimen") or {}).get("route")) or "").strip().lower()
     template = str(((spec.get("model") or {}).get("template")) or "").strip().lower()
     return route in {"oral", "po"} or "oral" in template
+
+
+def _is_iv_infusion(route: str, *, infusion_h: float) -> bool:
+    return route in {"iv", "iv_infusion"} and infusion_h > 0
 
 
 def _concentration_ng_ml(
@@ -143,6 +150,7 @@ def _concentration_ng_ml(
     cl_factor: float = 1.0,
     v_factor: float = 1.0,
     ka_factor: float = 1.0,
+    infusion_h: float = 0.0,
 ) -> float:
     model = spec.get("model") or {}
     theta = model.get("theta") or {}
@@ -153,6 +161,16 @@ def _concentration_ng_ml(
     if cl <= 0 or v <= 0:
         raise ValueError("model.theta.CL and model.theta.V must be positive for demo simulation.")
     ke = cl / v
+    route = str(((spec.get("regimen") or {}).get("route")) or "").strip().lower()
+    if _is_iv_infusion(route, infusion_h=infusion_h):
+        if time_h <= 0:
+            return 0.0
+        t_inf = infusion_h
+        if time_h <= t_inf:
+            conc_mg_l = dose_mg / (cl * t_inf) * (1.0 - math.exp(-ke * time_h))
+        else:
+            conc_mg_l = dose_mg / (cl * t_inf) * (1.0 - math.exp(-ke * t_inf)) * math.exp(-ke * (time_h - t_inf))
+        return max(0.0, conc_mg_l * mult)
     if _is_oral(spec):
         ka = (_to_float(theta.get("KA"), 1.0) or 1.0) * ka_factor
         f1 = _to_float(theta.get("F1"), 1.0) or 1.0
@@ -220,7 +238,7 @@ def make_demo_sim_full(
     rng = random.Random(int(var["seed"]))
     rows: list[dict[str, Any]] = []
     subject_index = 1
-    for arm, n_subjects, dose_mg in _arms(spec):
+    for arm, n_subjects, dose_mg, infusion_h in _arms(spec):
         for _ in range(n_subjects):
             subject = _subject_row_values(study_id, subject_index, arm, dose_mg)
             cl_factor = _lognormal_factor(rng, float(var["iiv_cv"]))
@@ -234,6 +252,7 @@ def make_demo_sim_full(
                     cl_factor=cl_factor,
                     v_factor=v_factor,
                     ka_factor=ka_factor,
+                    infusion_h=infusion_h,
                 )
                 dv = _residual_observation(rng, ipred, float(var["residual_cv"]))
                 rows.append(

@@ -177,7 +177,7 @@ def _spec_route(spec: dict[str, Any]) -> str:
     route = str(((spec.get("regimen") or {}).get("route")) or "").strip().lower()
     if route in {"oral", "po"}:
         return "ORAL"
-    if route in {"iv", "intravenous"}:
+    if route in {"iv", "iv_bolus", "iv_infusion", "intravenous"}:
         return "INTRAVENOUS"
     return route.upper() or "UNKNOWN"
 
@@ -186,6 +186,15 @@ def _arm_dose(spec: dict[str, Any], arm: str) -> float | None:
     arms = ((spec.get("regimen") or {}).get("arms")) or {}
     arm_block = arms.get(arm) or (next(iter(arms.values())) if arms else {})
     return _to_float((arm_block or {}).get("dose_mg"))
+
+
+def _arm_infusion_h(spec: dict[str, Any], arm: str) -> float:
+    arms = ((spec.get("regimen") or {}).get("arms")) or {}
+    arm_block = arms.get(arm) or (next(iter(arms.values())) if arms else {})
+    infusion_h = _to_float((arm_block or {}).get("infusion_h")) or 0.0
+    if infusion_h < 0:
+        return 0.0
+    return infusion_h
 
 
 def _iso_from_hours(start: datetime, hours: float | None) -> str:
@@ -402,6 +411,7 @@ def _make_ex(
     rows: list[dict[str, Any]] = []
     for seq, subject in enumerate(subjects, start=1):
         dose = subject.get("DOSE_MG") or _arm_dose(spec, str(subject.get("ARM") or "A")) or ""
+        infusion_h = _arm_infusion_h(spec, str(subject.get("ARM") or "A"))
         rows.append(
             {
                 "STUDYID": subject["STUDYID"],
@@ -412,6 +422,7 @@ def _make_ex(
                 "EXDOSE": dose,
                 "EXDOSU": "mg",
                 "EXROUTE": route,
+                "EXINFH": infusion_h,
                 "EXSTDTC": study_start.isoformat(timespec="seconds"),
                 "EXENDTC": study_start.isoformat(timespec="seconds"),
                 "EXARM": subject["ARM"],
@@ -724,7 +735,21 @@ def make_sdtm_like_domains(
         _validate_existing_domain_csv(domain="EX", fieldnames=ex_fields)
     else:
         ex_rows = _make_ex(subjects, spec=spec, study_start=start)
-        ex_fields = ["STUDYID", "DOMAIN", "USUBJID", "EXSEQ", "EXTRT", "EXDOSE", "EXDOSU", "EXROUTE", "EXSTDTC", "EXENDTC", "EXARM", "EXACTARM"]
+        ex_fields = [
+            "STUDYID",
+            "DOMAIN",
+            "USUBJID",
+            "EXSEQ",
+            "EXTRT",
+            "EXDOSE",
+            "EXDOSU",
+            "EXROUTE",
+            "EXINFH",
+            "EXSTDTC",
+            "EXENDTC",
+            "EXARM",
+            "EXACTARM",
+        ]
     if pc_csv:
         pc_fields, pc_rows, pc_warnings = _fill_existing_pc_skeleton(
             pc_csv=Path(pc_csv),

@@ -8,7 +8,7 @@ from pathlib import Path
 
 import yaml
 
-from tools.run_demo_set import run_demo_set
+from tools.run_demo_set import make_demo_sim_full, run_demo_set
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,6 +30,7 @@ def write_demo_drug(
     *,
     route: str,
     template: str,
+    infusion_h: float | None = None,
 ) -> None:
     drug_dir = drugs_dir / slug
     dose_mg = 100.0
@@ -64,12 +65,15 @@ def write_demo_drug(
     theta = {"CL": cl, "V": v}
     if route == "oral":
         theta.update({"KA": 1.2, "F1": 1.0, "ALAG1": 0.0})
+    arm = {"n": 2, "dose_mg": dose_mg}
+    if infusion_h is not None:
+        arm["infusion_h"] = infusion_h
     write_yaml(
         drug_dir / f"spec_pk1_{'oral' if route == 'oral' else 'iv'}.yml",
         {
             "study": {"id": f"OSP_{slug}", "title": f"{slug} demo"},
             "population": {"n": 2},
-            "regimen": {"route": route, "arms": {"A": {"n": 2, "dose_mg": dose_mg}}},
+            "regimen": {"route": route, "arms": {"A": arm}},
             "sampling": {"t_end_h": 24.0, "dt_h": 1.0, "include_t0": True},
             "model": {
                 "template": template,
@@ -161,3 +165,21 @@ def test_run_demo_set_can_add_lightweight_iiv_and_residual_variability(tmp_path:
 
     manifest = yaml.safe_load((out_dir / "DEMO_MANIFEST.yml").read_text(encoding="utf-8"))
     assert manifest["settings"]["variability"] == {"iiv_cv": 0.2, "residual_cv": 0.1, "seed": 123}
+
+
+def test_make_demo_sim_full_uses_iv_infusion_when_infusion_h_is_set(tmp_path: Path) -> None:
+    drugs_dir = tmp_path / "drugs"
+    write_demo_drug(drugs_dir, "iv_infusion_demo", route="iv", template="pk1_iv_ode", infusion_h=1.0)
+    sim_full = tmp_path / "sim_full.csv"
+
+    make_demo_sim_full(
+        spec_yml=drugs_dir / "iv_infusion_demo" / "spec_pk1_iv.yml",
+        out_csv=sim_full,
+    )
+
+    rows = read_csv(sim_full)
+    by_time = {float(row["time"]): float(row["CP"]) for row in rows if row["ID"] == "1"}
+    assert by_time[0.0] == 0.0
+    assert by_time[1.0] > by_time[0.0]
+    assert by_time[1.0] > by_time[2.0]
+    assert by_time[1.0] < 100.0 / 20.0 * 1000.0

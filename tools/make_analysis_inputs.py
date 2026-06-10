@@ -216,6 +216,19 @@ def _conc(row: dict[str, str]) -> str:
     return ""
 
 
+def _poppk_rate(ex_row: dict[str, str], dose_mg: str, fallback_route: str) -> str:
+    route = _upper(ex_row.get("EXROUTE") or fallback_route).replace("-", "").replace("_", "")
+    if route not in {"IV", "INTRAVENOUS", "IVINFUSION"}:
+        return "0"
+    infusion_h = _to_float(ex_row.get("EXINFH"))
+    if infusion_h is None or infusion_h <= 0:
+        return "0"
+    dose = _to_float(dose_mg)
+    if dose is None or dose <= 0:
+        return "0"
+    return _format_number(dose / infusion_h)
+
+
 def _pc_unit(row: dict[str, str]) -> str:
     return _norm(row.get("PCSTRESU") or row.get("PCORRESU") or "ng/mL")
 
@@ -331,6 +344,8 @@ def _make_poppk(
         subject_rows = [row for row in adpc_rows if row["USUBJID"] == usubjid]
         first = subject_rows[0]
         ex = ex_by_subject.get(usubjid, {})
+        dose = _norm(ex.get("EXDOSE") or first["DOSE_MG"])
+        route = _norm(ex.get("EXROUTE") or first["ROUTE"])
         rows.append(
             {
                 "ID": subject_order[usubjid],
@@ -338,12 +353,12 @@ def _make_poppk(
                 "TIME": "0",
                 "EVID": "1",
                 "MDV": "1",
-                "AMT": _norm(ex.get("EXDOSE") or first["DOSE_MG"]),
+                "AMT": dose,
                 "DV": "",
                 "CMT": dose_cmt,
-                "RATE": "0",
-                "DOSE_MG": _norm(ex.get("EXDOSE") or first["DOSE_MG"]),
-                "ROUTE": _norm(ex.get("EXROUTE") or first["ROUTE"]),
+                "RATE": _poppk_rate(ex, dose, route),
+                "DOSE_MG": dose,
+                "ROUTE": route,
                 "TPT": "Dose",
                 "TPTNUM": "0",
                 "AGE": first["AGE"],
