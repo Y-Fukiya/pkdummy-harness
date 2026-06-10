@@ -4,7 +4,23 @@
 
 主な目的は、臨床薬理モデルの妥当化ではなく、**SDTM -> ADaM -> NCA / PopPK 解析ワークフローを素早く回すための、実データ風ダミーデータ生成**です。
 
-![PK-like Synthetic Data Harness workflow](docs/assets/pk-harness-workflow.png)
+```mermaid
+flowchart LR
+    A["harness.yml / CLI / pk-fixture"] --> B["run_harness.py"]
+    C["drugs/&lt;slug&gt;<br/>pk.yml / targets.yml / spec"] --> D{"Simulation source"}
+    B --> D
+    D -->|external runner| E["raw/sim_full.csv"]
+    D -->|run_demo_set.py<br/>oral / SC / IM / IV infusion| E
+    E --> F["run_workflow.py<br/>does not update pk.yml/spec"]
+    F --> G["validate_simulation.py<br/>OK / WARN / FAILED"]
+    G --> H["sample_clinical_timepoints.py<br/>exact / nearest / linear / log-linear<br/>optional predose MDV=1"]
+    H --> I["clinical_samples.csv"]
+    I --> J["make_sdtm_like_domains.py<br/>new DM/VS/LB/EX/PC or existing skeletons<br/>optional BLQ PC flags"]
+    J --> K["make_analysis_inputs.py<br/>ADPC / NCA_INPUT / POPPK_INPUT<br/>CMT/RATE + BLQ/CENS/LIMIT"]
+    K --> L["Downstream smoke / site adapters<br/>NONMEM / nlmixr2 / Phoenix-facing CSV"]
+    K --> M["Reports<br/>R ggplot + optional Quarto DOCX"]
+    F -.-> N["MANIFEST.yml / trace.log / status"]
+```
 
 処理プロセスを説明するdraw.io形式の図は [docs/assets/pk-harness-process.drawio](docs/assets/pk-harness-process.drawio) と [docs/assets/pk-fixture-end-to-end-workflow.drawio](docs/assets/pk-fixture-end-to-end-workflow.drawio) にあります。図の読み方は [docs/PROCESS_FLOW.md](docs/PROCESS_FLOW.md) を参照してください。
 
@@ -414,12 +430,14 @@ flowchart LR
     B --> C{PK update candidate}
     C -->|review source/raw/unit/formula| D[drugs/<slug>/pk.yml]
     D --> E[spec_pk1_*.yml / targets.yml]
-    E --> F[external simulation runner]
-    F --> G[raw/sim_full.csv]
+    E --> F{simulation source}
+    F -->|external runner| G[raw/sim_full.csv]
+    F -->|demo: oral/SC/IM/IV infusion| G
     G --> H[run_workflow.py]
     H --> I[validation report / MANIFEST / trace]
     H --> J[clinical_samples.csv / SDTM-like CSV]
-    H --> L[ADPC-like / NCA / PopPK input CSV]
+    J --> L[ADPC-like / NCA / PopPK input CSV]
+    L --> M[downstream smoke / site adapters / reports]
     I --> K[calibration or review artifact]
     K -. not merged automatically .-> D
 ```
@@ -525,7 +543,10 @@ docs/
   HARVEST.md
   SCHEMA.md
   CODEX_HARNESS.md
-  assets/pk-harness-workflow.png
+  PROCESS_FLOW.md
+  assets/pk-harness-process.drawio
+  assets/pk-fixture-end-to-end-workflow.drawio
+  assets/pk-harness-workflow.png  # legacy snapshot; README uses Mermaid for current flow
 ```
 
 ## Main Documentation

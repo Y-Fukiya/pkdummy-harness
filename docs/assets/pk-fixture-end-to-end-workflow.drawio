@@ -30,7 +30,7 @@
         <mxCell id="lane-config" value="Config / Source Inputs" style="swimlane;html=1;rounded=1;whiteSpace=wrap;fillColor=#F0FDF4;strokeColor=#16A34A;fontStyle=1;fontSize=15;startSize=34;" parent="1" vertex="1">
           <mxGeometry x="330" y="120" width="250" height="700" as="geometry" />
         </mxCell>
-        <mxCell id="config-yml" value="harness.yml&lt;br&gt;mode, drugs, sampling,&lt;br&gt;validation, existing domains" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontSize=13;fontStyle=1;" parent="lane-config" vertex="1">
+        <mxCell id="config-yml" value="harness.yml&lt;br&gt;mode, drugs, sampling,&lt;br&gt;LLOQ, CMT, existing domains" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontSize=13;fontStyle=1;" parent="lane-config" vertex="1">
           <mxGeometry x="30" y="58" width="190" height="92" as="geometry" />
         </mxCell>
         <mxCell id="drug-files" value="drugs/&amp;lt;slug&amp;gt;/&lt;br&gt;pk.yml&lt;br&gt;targets.yml&lt;br&gt;spec_pk1_*.yml" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBF7D0;strokeColor=#16A34A;fontSize=13;" parent="lane-config" vertex="1">
@@ -49,7 +49,7 @@
         <mxCell id="external-runner" value="External simulation runner&lt;br&gt;mrgsolve / local script&lt;br&gt;facility environment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEDD5;strokeColor=#EA580C;fontSize=13;" parent="lane-sim" vertex="1">
           <mxGeometry x="30" y="92" width="190" height="88" as="geometry" />
         </mxCell>
-        <mxCell id="demo-runner" value="Analytical demo path&lt;br&gt;run_demo_set.py&lt;br&gt;multi-drug smoke data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FED7AA;strokeColor=#EA580C;fontSize=13;fontStyle=1;" parent="lane-sim" vertex="1">
+        <mxCell id="demo-runner" value="Analytical demo path&lt;br&gt;run_demo_set.py&lt;br&gt;oral / SC / IM / IV infusion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FED7AA;strokeColor=#EA580C;fontSize=13;fontStyle=1;" parent="lane-sim" vertex="1">
           <mxGeometry x="30" y="235" width="190" height="88" as="geometry" />
         </mxCell>
         <mxCell id="sim-full" value="raw/sim_full.csv&lt;br&gt;dense concentration-time data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDBA74;strokeColor=#EA580C;fontSize=13;fontStyle=1;" parent="lane-sim" vertex="1">
@@ -68,10 +68,10 @@
         <mxCell id="validate" value="validate_simulation.py&lt;br&gt;AUC / Cmax / Tmax / t1/2&lt;br&gt;OK / WARN / FAILED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;fontSize=13;" parent="lane-core" vertex="1">
           <mxGeometry x="35" y="322" width="210" height="92" as="geometry" />
         </mxCell>
-        <mxCell id="sample" value="sample_clinical_timepoints.py&lt;br&gt;nominal clinical sampling schedule" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;fontSize=13;" parent="lane-core" vertex="1">
+        <mxCell id="sample" value="sample_clinical_timepoints.py&lt;br&gt;exact / nearest / linear / log-linear&lt;br&gt;optional predose MDV=1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;fontSize=13;" parent="lane-core" vertex="1">
           <mxGeometry x="35" y="456" width="210" height="78" as="geometry" />
         </mxCell>
-        <mxCell id="sdtm-analysis" value="make_sdtm_like_domains.py&lt;br&gt;make_analysis_inputs.py&lt;br&gt;limited SDTM-like + analysis CSV" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;fontSize=13;fontStyle=1;" parent="lane-core" vertex="1">
+        <mxCell id="sdtm-analysis" value="make_sdtm_like_domains.py&lt;br&gt;make_analysis_inputs.py&lt;br&gt;skeleton fill + BLQ/CENS/LIMIT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;fontSize=13;fontStyle=1;" parent="lane-core" vertex="1">
           <mxGeometry x="35" y="570" width="210" height="86" as="geometry" />
         </mxCell>
 
@@ -87,7 +87,7 @@
         <mxCell id="sdtm-domains" value="sdtm_like/&lt;br&gt;DM / VS / LB / EX / PC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDD6FE;strokeColor=#7C3AED;fontSize=13;fontStyle=1;" parent="lane-artifacts" vertex="1">
           <mxGeometry x="30" y="276" width="190" height="78" as="geometry" />
         </mxCell>
-        <mxCell id="analysis-inputs" value="analysis_inputs/&lt;br&gt;ADPC.csv&lt;br&gt;NCA_INPUT.csv&lt;br&gt;POPPK_INPUT.csv" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDD6FE;strokeColor=#7C3AED;fontSize=13;fontStyle=1;" parent="lane-artifacts" vertex="1">
+        <mxCell id="analysis-inputs" value="analysis_inputs/&lt;br&gt;ADPC.csv&lt;br&gt;NCA_INPUT.csv&lt;br&gt;POPPK_INPUT.csv&lt;br&gt;CMT/RATE + CENS/LIMIT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDD6FE;strokeColor=#7C3AED;fontSize=13;fontStyle=1;" parent="lane-artifacts" vertex="1">
           <mxGeometry x="30" y="392" width="190" height="94" as="geometry" />
         </mxCell>
         <mxCell id="traceability" value="Traceability&lt;br&gt;MANIFEST.yml&lt;br&gt;trace.log&lt;br&gt;HARNESS_STATUS.json&lt;br&gt;summary.md" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontSize=13;" parent="lane-artifacts" vertex="1">
@@ -113,7 +113,7 @@
           <mxGeometry x="25" y="574" width="190" height="100" as="geometry" />
         </mxCell>
 
-        <mxCell id="guardrails" value="Guardrails: canonical pk.yml is not auto-edited by workflow runs. Validation emits OK/WARN/FAILED only. Calibration and external tool results stay as separate artifacts. SDTM-like and ADPC-like outputs are workflow fixtures, not submission-ready datasets." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;fontSize=13;align=left;spacingLeft=14;fontStyle=1;" parent="1" vertex="1">
+        <mxCell id="guardrails" value="Guardrails: canonical pk.yml is not auto-edited by workflow runs. Validation emits OK/WARN/FAILED only. Calibration and external tool results stay as separate artifacts. BLQ/M3-ready columns are fixture contracts, not formal likelihood estimation. SDTM-like and ADPC-like outputs are workflow fixtures, not submission-ready datasets." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;fontSize=13;align=left;spacingLeft=14;fontStyle=1;" parent="1" vertex="1">
           <mxGeometry x="40" y="855" width="1720" height="88" as="geometry" />
         </mxCell>
         <mxCell id="ci" value="CI / reproducibility: GitHub Actions runs Ubuntu harness and Windows PowerShell smoke checks. Local release checks mirror the same intended workflow." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3F4F6;strokeColor=#6B7280;fontSize=13;align=left;spacingLeft=14;" parent="1" vertex="1">

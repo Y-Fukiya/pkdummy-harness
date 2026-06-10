@@ -22,7 +22,7 @@
         <mxCell id="col-sim" parent="1" style="swimlane;html=1;rounded=1;whiteSpace=wrap;fillColor=#F0FDF4;strokeColor=#16A34A;fontStyle=1;fontSize=15;startSize=34;" value="Simulation Source" vertex="1">
           <mxGeometry height="560" width="240" x="310" y="110" as="geometry" />
         </mxCell>
-        <mxCell id="demo" parent="col-sim" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBF7D0;strokeColor=#16A34A;fontSize=13;" value="run_demo_set.py&lt;br&gt;analytical demo&lt;br&gt;multi-drug smoke test" vertex="1">
+        <mxCell id="demo" parent="col-sim" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBF7D0;strokeColor=#16A34A;fontSize=13;" value="run_demo_set.py&lt;br&gt;analytical demo&lt;br&gt;oral / SC / IM / IV infusion" vertex="1">
           <mxGeometry height="82" width="180" x="30" y="235" as="geometry" />
         </mxCell>
         <mxCell id="runner" parent="col-sim" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontSize=13;fontStyle=1;" value="External runner&lt;br&gt;mrgsolve / local script" vertex="1">
@@ -60,22 +60,22 @@
         <mxCell id="domains" parent="col-output" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontSize=13;" value="sdtm_like/&lt;br&gt;DM.csv / VS.csv / LB.csv / EX.csv / PC.csv" vertex="1">
           <mxGeometry height="82" width="250" x="30" y="290" as="geometry" />
         </mxCell>
-        <mxCell id="analysisout" parent="col-output" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontSize=13;fontStyle=1;" value="analysis_inputs/&lt;br&gt;ADPC.csv&lt;br&gt;NCA_INPUT.csv&lt;br&gt;POPPK_INPUT.csv" vertex="1">
+        <mxCell id="analysisout" parent="col-output" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE9FE;strokeColor=#7C3AED;fontSize=13;fontStyle=1;" value="analysis_inputs/&lt;br&gt;ADPC.csv&lt;br&gt;NCA_INPUT.csv&lt;br&gt;POPPK_INPUT.csv&lt;br&gt;CENS / LIMIT where BLQ" vertex="1">
           <mxGeometry height="92" width="250" x="30" y="408" as="geometry" />
         </mxCell>
-        <mxCell id="cfg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontSize=13;fontStyle=1;" value="harness.yml&lt;br&gt;or CLI arguments" vertex="1">
+        <mxCell id="cfg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontSize=13;fontStyle=1;" value="harness.yml&lt;br&gt;or CLI arguments&lt;br&gt;sampling / LLOQ / CMT" vertex="1">
           <mxGeometry height="64" width="180" x="70" y="165" as="geometry" />
         </mxCell>
         <mxCell id="simfull" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontSize=13;fontStyle=1;" value="raw/sim_full.csv&lt;br&gt;dense concentration-time data" vertex="1">
           <mxGeometry height="72" width="180" x="340" y="520" as="geometry" />
         </mxCell>
-        <mxCell id="sample" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEDD5;strokeColor=#EA580C;fontSize=13;" value="sample_clinical_timepoints.py&lt;br&gt;match nominal sampling schedule" vertex="1">
+        <mxCell id="sample" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEDD5;strokeColor=#EA580C;fontSize=13;" value="sample_clinical_timepoints.py&lt;br&gt;exact / nearest / linear / log-linear&lt;br&gt;optional predose MDV=1" vertex="1">
           <mxGeometry height="76" width="190" x="880" y="285" as="geometry" />
         </mxCell>
-        <mxCell id="sdtm" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEDD5;strokeColor=#EA580C;fontSize=13;" value="make_sdtm_like_domains.py&lt;br&gt;DM / VS / LB / EX / PC" vertex="1">
+        <mxCell id="sdtm" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEDD5;strokeColor=#EA580C;fontSize=13;" value="make_sdtm_like_domains.py&lt;br&gt;generate or fill skeletons&lt;br&gt;DM / VS / LB / EX / PC + BLQ flags" vertex="1">
           <mxGeometry height="76" width="190" x="880" y="405" as="geometry" />
         </mxCell>
-        <mxCell id="analysis" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEDD5;strokeColor=#EA580C;fontSize=13;fontStyle=1;" value="make_analysis_inputs.py&lt;br&gt;ADPC-like / NCA / PopPK CSV" vertex="1">
+        <mxCell id="analysis" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEDD5;strokeColor=#EA580C;fontSize=13;fontStyle=1;" value="make_analysis_inputs.py&lt;br&gt;ADPC-like / NCA / PopPK CSV&lt;br&gt;CMT/RATE + BLQ/CENS/LIMIT" vertex="1">
           <mxGeometry height="76" width="190" x="880" y="525" as="geometry" />
         </mxCell>
         <mxCell id="report" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDD6FE;strokeColor=#7C3AED;fontSize=13;" value="R reports&lt;br&gt;report_pk_fixture.R&lt;br&gt;summary CSV + ggplot PNG" vertex="1">
@@ -84,7 +84,7 @@
         <mxCell id="quarto" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDD6FE;strokeColor=#7C3AED;fontSize=13;" value="Quarto DOCX&lt;br&gt;render_pk_fixture_quarto.R&lt;br&gt;pk_fixture_report.docx" vertex="1">
           <mxGeometry height="84" width="250" x="1160" y="820.5" as="geometry" />
         </mxCell>
-        <mxCell id="safeguard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;fontSize=13;align=left;spacingLeft=12;" value="Guardrails&lt;br&gt;• run_workflow.py never updates pk.yml / targets.yml / spec&lt;br&gt;• validation produces OK / WARN / FAILED only&lt;br&gt;• calibration or literature updates stay as separate review artifacts&lt;br&gt;• outputs are workflow fixtures, not clinical validation or submission-ready SDTM/ADaM" vertex="1">
+        <mxCell id="safeguard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;fontSize=13;align=left;spacingLeft=12;" value="Guardrails&lt;br&gt;• run_workflow.py never updates pk.yml / targets.yml / spec&lt;br&gt;• validation produces OK / WARN / FAILED only&lt;br&gt;• calibration or literature updates stay as separate review artifacts&lt;br&gt;• BLQ/M3-ready columns are fixture contracts, not formal likelihood estimation&lt;br&gt;• outputs are workflow fixtures, not clinical validation or submission-ready SDTM/ADaM" vertex="1">
           <mxGeometry height="145" width="1040" x="40" y="790" as="geometry" />
         </mxCell>
         <mxCell id="trace" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3F4F6;strokeColor=#6B7280;fontSize=13;fontStyle=1;" value="Traceability artifacts&lt;br&gt;MANIFEST.yml / trace.log / HARNESS_STATUS.json / summary.md" vertex="1">
