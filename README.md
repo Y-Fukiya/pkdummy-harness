@@ -1,289 +1,61 @@
 # OSP PK Codex Harness
 
-このリポジトリは、文献由来のPK要約を使って **PK-like synthetic data** を作るための軽量ハーネスです。
+臨床試験の実データ風PKデータは「正確な患者生体内動態」ではなく、**SDTM→ADaM→NCA/PopPK ワークフローを検証するための配管テスト用データ**として必要になります。 このリポジトリはそのための**CLIツール群**です。
 
-主な目的は、臨床薬理モデルの妥当化ではなく、**SDTM -> ADaM -> NCA / PopPK 解析ワークフローを素早く回すための、実データ風ダミーデータ生成**です。
+---
 
-```mermaid
-flowchart LR
-    A["harness.yml / CLI / pk-fixture"] --> B["run_harness.py"]
-    C["drugs/&lt;slug&gt;<br/>pk.yml / targets.yml / spec"] --> D{"Simulation source"}
-    B --> D
-    D -->|external runner| E["raw/sim_full.csv"]
-    D -->|run_demo_set.py<br/>oral / SC / IM / IV infusion| E
-    E --> F["run_workflow.py<br/>does not update pk.yml/spec"]
-    F --> G["validate_simulation.py<br/>OK / WARN / FAILED"]
-    G --> H["sample_clinical_timepoints.py<br/>exact / nearest / linear / log-linear<br/>optional predose MDV=1"]
-    H --> I["clinical_samples.csv"]
-    I --> J["make_sdtm_like_domains.py<br/>new DM/VS/LB/EX/PC or existing skeletons<br/>optional BLQ PC flags"]
-    J --> K["make_analysis_inputs.py<br/>ADPC / NCA_INPUT / POPPK_INPUT<br/>CMT/RATE + BLQ/CENS/LIMIT"]
-    K --> L["Downstream smoke / site adapters<br/>NONMEM / nlmixr2 / Phoenix-facing CSV"]
-    K --> M["Reports<br/>R ggplot + optional Quarto DOCX"]
-    F -.-> N["MANIFEST.yml / trace.log / status"]
-```
+## 1分でわかるこのハーネスの価値
 
-処理プロセスを説明するdraw.io形式の図は [docs/assets/pk-harness-process.drawio](docs/assets/pk-harness-process.drawio) と [docs/assets/pk-fixture-end-to-end-workflow.drawio](docs/assets/pk-fixture-end-to-end-workflow.drawio) にあります。図の読み方は [docs/PROCESS_FLOW.md](docs/PROCESS_FLOW.md) を参照してください。
+- SDTM/ADaM風の中間データを、入力データ1セットから再現性高く作れる
+- 生成データに対して AUC/Cmax/Tmax/t1/2 の再計算チェックを自動実行できる
+- NCA / PopPK につなぐための薄い adapter CSV をまとめて作れる
+- `pk.yml` や `targets.yml` は**勝手に書き換えず**、検証ログと結果を残して監査しやすい
+- 既存の研究施設のデータ形式（DM/LB/VS/PC）を使ったスキームにも対応できる
 
-## Positioning
+**アピールポイント**
+- パイプラインを短いコマンドで通せる（デモ→検証→下流adapter→レポート）
+- 研究現場でよく困る「見出し不足」「欠損時刻」「検証ログの不整合」を、manifest と trace で固定できる
+- 外部ツール依存を分離し、mrgsolve実行と後処理を切り分けて安全に運用できる
 
-このハーネスは、薬剤ごとの文献スケールの `CL`, `V`, `t1/2`, `AUC` を使い、解析パイプライン検証に使いやすい synthetic fixture を作るためのものです。
+---
 
-1-compartment fixtureでは `t1/2 = ln(2) * V / CL` が成り立つため、文献由来の `CL`, `V`, `t1/2` を別々の条件から集めると、3つを同時に満たせない薬剤があります。`tools/validate_library.py` はこの状態を **1-compartment attainability warning** として表示します。これは `pk.yml` を自動修正するものではなく、simulation drift と canonical PK summary の構造的不整合を切り分けるための警告です。
+## どういうデータを作る？
 
-| Perspective | What this harness provides |
-| --- | --- |
-| 臨床薬理 | 文献スケールのPK値をもつ1-compartment dummy profile |
-| 統計 | 再現可能な入力、seed、検証結果、trace、manifest |
-| プログラマー | `sim_full.csv` から下流データセットまでの決定論的な後処理 |
-| Codex/agent | task, context, safeguards, logs を分離した作業しやすい構造 |
+- 薬剤のPKパラメータ: `drugs/<slug>/pk.yml`
+- 目標値(AUC/t1/2など): `drugs/<slug>/targets.yml`
+- 1-compartmentの簡易シミュレーション仕様: `drugs/<slug>/spec_pk1_*.yml`
+- 実行定義: `harness_examples/*.yml`
 
-## Intended Use
+### フローの全体像（draw.io）
 
-使ってよい目的:
+- 処理本体: [docs/assets/pk-harness-process.drawio](docs/assets/pk-harness-process.drawio)
+- 末端まで含めた全体: [docs/assets/pk-fixture-end-to-end-workflow.drawio](docs/assets/pk-fixture-end-to-end-workflow.drawio)
+- 図の読み方: [docs/PROCESS_FLOW.md](docs/PROCESS_FLOW.md)
 
-- SDTM/ADaM/NCA/PopPK パイプラインの開発と動作確認
-- PK解析用CSV、NONMEM風データ、集計レポートの生成テスト
-- 文献スケールの `CL/V/t1/2/AUC` を持つ synthetic fixture の作成
-- 類似薬デモや解析コードの smoke test
-- WARN/FAILED ケースを使った処理系の stress test
+---
 
-使うべきではない目的:
+## まず実行してみる（最短）
 
-- 臨床推論、投与設計、曝露予測の根拠
-- 規制提出用のモデル妥当化
-- 薬剤固有の吸収相、IIV、残差誤差、VPC/GOF の代替
-- 腎機能、共変量効果、非線形PK、TMDDなどの臨床的検証
-- 共変量モデルや吸収多様性そのものの検証（demo generatorのWT/AGE/SEX/CREATはPK式に未接続で、経口吸収パラメータも簡略化されています）
-
-## Quick Start
-
-最短で動かす場合は [Quickstart](docs/QUICKSTART.md) を見てください。複数薬剤デモから `ADPC.csv`, `NCA_INPUT.csv`, `POPPK_INPUT.csv` まで確認できます。
-
-成果物の形だけ先に見たい場合は、Git管理された小さな例を [examples/minimal_aciclovir](examples/minimal_aciclovir) と [examples/minimal_albuterol_iv](examples/minimal_albuterol_iv) に置いています。
-
-まずリポジトリ整合性を確認します。
+まず環境整合を確認:
 
 ```bash
 python3 -m pip install -r requirements.txt
 make harness-check
 ```
 
-第三者がREADMEだけで動かせるかを見る受け入れ確認:
+### 典型的な最短デモ
 
 ```bash
-make acceptance-check
-```
-
-Windows PowerShellで `make` を使わず確認する場合は [docs/WINDOWS_POWERSHELL.md](docs/WINDOWS_POWERSHELL.md) を参照してください。
-
-```powershell
-.\scripts\acceptance-check.ps1 -SkipExternalProbe
-```
-
-ローカル環境のPython/R/Quarto/simPopまわりを先に確認する場合:
-
-```bash
-make doctor
-```
-
-正式CLI入口から同じ確認を行う場合:
-
-```bash
-python3 -m tools.pk_fixture_cli --help
-python3 -m tools.pk_fixture_cli doctor
-```
-
-editable install後は、同じ入口を `pk-fixture` として呼べます。
-
-```bash
-python3 -m pip install -e .
-pk-fixture doctor
-pk-fixture run harness_examples/demo_set.yml
-```
-
-薬剤ライブラリの次の見直し優先度をread-onlyで確認する場合:
-
-```bash
-python3 tools/audit_library_priorities.py . --out-dir outputs/library_audit
-# or
-python3 -m tools.pk_fixture_cli audit-library . --out-dir outputs/library_audit
-```
-
-このauditは `pk.yml`, `targets.yml`, specを更新せず、ネットワークにも接続しません。drug × route/spec粒度で、`P0_CORRECTNESS`, `P1_STRUCTURAL`, `P2_PROVENANCE`, `P3_REFERENCE`, `STRESS_FIXTURE`, `OK` のtierを出します。優先度は加重和ではなく、correctnessをprovenanceより上に置く辞書式です。
-
-薬剤一覧を見る:
-
-```bash
-column -s, -t < INDEX.csv | less -S
-```
-
-外部runnerで `sim_full.csv` を作成した後、後処理を一括で回します。
-
-```bash
-python3 tools/run_workflow.py \
-  --sim-full outputs/<run>/raw/sim_full.csv \
-  --drug <slug> \
-  --times 0,0.5,1,2,4,8,12,24 \
-  --out-dir outputs/<run>/workflow
-```
-
-濃度単位やPopPKのcompartment conventionを明示したい場合:
-
-```bash
-python3 tools/run_workflow.py \
-  --sim-full outputs/<run>/raw/sim_full.csv \
-  --drug <slug> \
-  --times 0,0.5,1,2,4,8,12,24 \
-  --pc-conc-unit ng/mL \
-  --dose-cmt 1 \
-  --observation-cmt 2 \
-  --out-dir outputs/<run>/workflow
-```
-
-`--pc-conc-unit` を省略した場合、`clinical_samples.csv` の `DV_UNIT`, `CONC_UNIT`, `PCSTRESU` などから単位を引き継ぎ、見つからなければ `ng/mL` を使います。`--dose-cmt` と `--observation-cmt` はparser smoke test用のCMT値で、正式モデルのcompartment定義は施設側control streamやsite adapterで合わせてください。
-`validate_simulation.py` も入力CSVの単位列を読み、CL由来AUC比較の単位換算に使います。
-
-設定ファイルの書き方だけ確認する場合:
-
-```bash
-python3 tools/validate_harness_config.py harness_examples/demo_set.yml
-```
-
-このコマンドは以下をまとめて実行します。
-
-```text
-validate_simulation.py
--> sample_clinical_timepoints.py
--> make_sdtm_like_domains.py
--> make_analysis_inputs.py
--> MANIFEST.yml / trace.log 作成
-```
-
-Git管理された最小exampleが再生成できるか確認する場合:
-
-```bash
-make examples-check
-```
-
-ADPC-like出力から、被験者背景の記述統計、時点別濃度統計、ggplot2による濃度推移図を出す場合:
-
-```bash
-Rscript tools/report_pk_fixture.R \
-  --analysis-dir outputs/<run>/workflow/analysis_inputs \
-  --out-dir outputs/<run>/workflow/reports/pk_fixture_report \
-  --title "<slug> PK fixture report"
-```
-
-このレポートはfixture確認用の記述統計です。臨床薬理モデルの妥当化やsubmission-ready ADaMレポートではありません。
-
-Word共有用のdocxが必要な場合は、Quarto版を追加で作れます。
-
-```bash
-Rscript tools/render_pk_fixture_quarto.R \
-  --analysis-dir outputs/<run>/workflow/analysis_inputs \
-  --out-dir outputs/<run>/workflow/reports/pk_fixture_quarto \
-  --title "<slug> PK fixture report"
-```
-
-このQuarto版は `templates/pk_fixture_report.qmd` を使い、同じ記述統計とggplot画像を `pk_fixture_report.docx` に変換します。Wordスタイルを指定したい場合は `--reference-doc reference.docx` を追加してください。
-同梱のたたき台は `templates/pk_fixture_reference.docx` です。
-
-NCA/PopPKツール別の軽量adapterが必要な場合:
-
-```bash
-python3 tools/make_downstream_adapters.py \
-  --analysis-dir outputs/<run>/workflow/analysis_inputs \
-  --out-dir outputs/<run>/workflow/adapters
-```
-
-これは `nca_r.csv`, `nca_phoenix.csv`, `poppk_nonmem.csv`, `poppk_nlmixr2.csv` を作ります。各ツールの正式仕様を保証するものではなく、parser/control-stream smoke test用の列名adapterです。
-
-施設ごとの列名や必須列に合わせたCSVが必要な場合:
-
-```bash
-python3 tools/make_site_adapters.py \
-  --analysis-dir outputs/<run>/workflow/analysis_inputs \
-  --spec-yml external_validation/site_adapter_template.yml \
-  --out-dir outputs/<run>/workflow/site_adapters
-```
-
-`external_validation/site_adapter_template.yml` をコピーして、施設ごとのNCA/PopPK dataset仕様に合わせて編集してください。出力には `SITE_ADAPTER_MANIFEST.yml` が残ります。
-
-adapter生成、簡易NCA、PopPK parser template作成まで一括で確認する場合:
-
-```bash
-python3 tools/run_downstream_smoke.py \
-  --analysis-dir outputs/<run>/workflow/analysis_inputs \
-  --out-dir outputs/<run>/workflow/downstream_smoke
-```
-
-詳細は [docs/DOWNSTREAM_E2E.md](docs/DOWNSTREAM_E2E.md) を参照してください。
-
-Phoenix / NONMEM / nlmixr2 の実行環境がある場合は、同じrepo内の optional external validation layer から呼べます。
-
-```bash
-python3 tools/run_external_tool_validation.py \
-  --downstream-dir outputs/<run>/workflow/downstream_smoke \
-  --out-dir outputs/<run>/workflow/external_tool_validation \
-  --tools nonmem,nlmixr2 \
-  --execute
-```
-
-既定profileは `external_validation/tool_profiles.yml` です。外部ツール本体やライセンスは同梱しません。
-
-READMEだけでの受け入れ確認手順は [docs/ACCEPTANCE_TEST.md](docs/ACCEPTANCE_TEST.md) にまとめています。
-
-既存の `DM/LB/VS/PC` skeletonがない場合は、ハーネス側がSDTM-like CSVを生成します。既存の `DM/LB/VS` と濃度なし `PC` skeletonがある場合は、それらを渡して `PC` に濃度だけを注入できます。
-
-複数薬剤デモをまとめて作る場合:
-
-```bash
+# 1) 複数薬剤デモを作成（外部runnerがなくてもdemo simを使って進行）
 python3 tools/run_harness.py harness_examples/demo_set.yml
-```
 
-CLI入口を使う場合:
-
-```bash
+# 2) 同じ処理を CLI 入口から実行
 python3 -m tools.pk_fixture_cli run harness_examples/demo_set.yml
 ```
 
-`run_harness.py` は設定ファイルから既存ツールを呼ぶ共通入口です。`tools/pk_fixture_cli.py` と `pk-fixture` は、その既存ツール群を薄く束ねる正式CLIです。`harness_examples/demo_set.yml` は、外部mrgsolve runnerがない環境でもsmoke demoを作れるように、既存specのthetaからデモ専用の解析式 `sim_full.csv` を作り、その後 `run_workflow.py` を各薬剤で実行します。これは下流接続確認用であり、mrgsolve runnerの代替ではありません。
+### 外部mrgsolveがある場合
 
-## Standard Workflow
-
-### 1. Choose a drug
-
-薬剤テンプレートは `drugs/<slug>/` にあります。
-
-```text
-drugs/<slug>/
-  pk.yml              # source/raw/parsed/derived PK summary
-  targets.yml         # AUC and t1/2 minimum check targets
-  spec_pk1_*.yml      # runnable 1-compartment simulation spec
-```
-
-`INDEX.csv` で slug、route、半減期、CL/V、specの有無を確認できます。
-
-### 2. Run an external simulation runner
-
-このリポジトリは mrgsolve runner 本体を同梱していません。利用環境側のrunnerに `spec_pk1_*.yml` を渡してください。
-
-```bash
-Rscript <mrgsolve-runner> drugs/<slug>/spec_pk1_oral.yml
-```
-
-典型的な生成物:
-
-```text
-outputs/<run>/
-  raw/sim_full.csv
-  nonmem/*.csv
-  reports/*.md
-```
-
-### 3. Run the post-simulation workflow
-
-`sim_full.csv` ができたら、`run_workflow.py` が後処理の中心になります。
+`sim_full.csv` がある前提で後段処理を実行:
 
 ```bash
 python3 tools/run_workflow.py \
@@ -293,7 +65,7 @@ python3 tools/run_workflow.py \
   --out-dir outputs/<run>/workflow
 ```
 
-既存試験の採血スケジュールに合わせる場合:
+既存の採血時点を使う場合:
 
 ```bash
 python3 tools/run_workflow.py \
@@ -303,17 +75,12 @@ python3 tools/run_workflow.py \
   --out-dir outputs/<run>/workflow
 ```
 
-`validate_simulation.py` が `FAILED` の場合、既定では `clinical_samples.csv` やSDTM-like CSVの生成に進みません。stress testとして続行したい場合だけ `--allow-validation-failed` を付けます。その場合も最終ステータスは `WARN` として記録されます。
-
-### 4. Use existing SDTM-like skeletons when available
-
-既存の `DM`, `VS`, `LB`, `PC` skeletonがある場合は、生成済みドメインをそのまま使い、`PC` の濃度だけをシミュレーション由来の `clinical_samples.csv` から埋められます。
+既存DM/LB/VS/PCのskeletonを使う場合:
 
 ```bash
 python3 tools/run_workflow.py \
   --sim-full outputs/<run>/raw/sim_full.csv \
   --drug <slug> \
-  --times 0,0.5,1,2,4,8,12,24 \
   --dm-csv existing/DM.csv \
   --vs-csv existing/VS.csv \
   --lb-csv existing/LB.csv \
@@ -321,220 +88,109 @@ python3 tools/run_workflow.py \
   --out-dir outputs/<run>/workflow
 ```
 
-`PC` skeletonは、原則として `USUBJID` と `PCTPTNUM` で `clinical_samples.csv` と照合します。難しい場合は `PCTPT` または `PCELTM` / `TIME` も使います。既存の `PCSTRESN` / `PCORRES` が空欄の行だけを埋め、非空欄の濃度はデフォルトでは上書きしません。
+---
 
-既存濃度を上書きしたい場合だけ、明示的に指定します。
-
-```bash
---overwrite-existing-pc-conc
-```
-
-## Output Structure
-
-`run_workflow.py` の出力例:
+## 出力イメージ
 
 ```text
 outputs/<run>/workflow/
   MANIFEST.yml
   trace.log
-  reports/
-    simulation_validation.md
-    pk_fixture_report/
-      REPORT.md
-      subject_numeric_summary.csv
-      subject_categorical_summary.csv
-      concentration_summary.csv
-      concentration_profile_linear.png
-      concentration_profile_log.png
-      REPORT_MANIFEST.yml
-    pk_fixture_quarto/
-      pk_fixture_report.qmd
-      pk_fixture_report.docx
-      QUARTO_REPORT_MANIFEST.yml
-  raw/
-    clinical_samples.csv
-  sdtm_like/
-    DM.csv
-    VS.csv
-    LB.csv
-    EX.csv
-    PC.csv
-    MANIFEST.yml
-  analysis_inputs/
-    ADPC.csv
-    NCA_INPUT.csv
-    POPPK_INPUT.csv
-    MANIFEST.yml
+  raw/clinical_samples.csv
+  reports/simulation_validation.md
+  reports/pk_fixture_report/REPORT.md
+  reports/pk_fixture_report/subject_numeric_summary.csv
+  reports/pk_fixture_report/concentration_summary.csv
+  sdtm_like/DM.csv
+  sdtm_like/VS.csv
+  sdtm_like/LB.csv
+  sdtm_like/EX.csv
+  sdtm_like/PC.csv
+  analysis_inputs/ADPC.csv
+  analysis_inputs/NCA_INPUT.csv
+  analysis_inputs/POPPK_INPUT.csv
+  adapters/*.csv
 ```
 
-複数薬剤デモの出力例:
+### status の見方
 
-```text
-outputs/demo_set_milestone7/
-  DEMO_MANIFEST.yml
-  summary.csv
-  summary.md
-  aciclovir/
-    raw/sim_full.csv
-    workflow/
-      MANIFEST.yml
-      sdtm_like/
-      analysis_inputs/
-  abciximab/
-    ...
-```
+- `OK`: 標準チェックが許容範囲
+- `WARN`: 想定外でも使えるが、原因をノート化して運用
+- `FAILED`: 原則停止（必要に応じて `--allow-validation-failed`）
 
-| Output | Purpose |
-| --- | --- |
-| `reports/simulation_validation.md` | AUC/Cmax/Tmax/t1/2 の再計算と target 比較 |
-| `raw/clinical_samples.csv` | 名目採血時点に合わせた疎なPK濃度データ |
-| `sdtm_like/DM.csv` | 被験者ID、年齢、性別、arm |
-| `sdtm_like/VS.csv` | `HEIGHT`, `WEIGHT`, `BMI`, `BSA` の限定版 |
-| `sdtm_like/LB.csv` | `CREAT` のみ |
-| `sdtm_like/EX.csv` | spec/subject由来の投与情報 |
-| `sdtm_like/PC.csv` | `clinical_samples.csv` 由来の濃度時点 |
-| `analysis_inputs/ADPC.csv` | ADPC-likeな濃度解析入力。submission-ready ADaMではない |
-| `analysis_inputs/NCA_INPUT.csv` | NCA pipeline smoke test用の濃度時系列 |
-| `analysis_inputs/POPPK_INPUT.csv` | NONMEM-like parser/control-stream smoke test用CSV |
-| `adapters/*.csv` | R NCA/Phoenix/NONMEM/nlmixr2向けの軽量adapter CSV |
-| `reports/pk_fixture_report/REPORT.md` | 被験者背景、時点別濃度統計、linear/log濃度プロットの記述統計レポート |
-| `reports/pk_fixture_quarto/pk_fixture_report.docx` | Quartoで生成したWord共有用レポート。任意 |
-| `MANIFEST.yml` | 入力、設定、件数、警告、安全策 |
-| `trace.log` | 実行順序と主要イベント |
+---
 
-## Status Handling
+## 使うべきでない用途（重要）
 
-| Status | Meaning | Recommended handling |
-| --- | --- | --- |
-| `OK` | AUC/t1/2 などの最低限チェックが許容範囲 | 通常の workflow fixture として使う |
-| `WARN` | ずれや警告はあるが、stress/demo用途では有用 | レポートとmanifestを残して使う |
-| `FAILED` | targetとのずれが大きい、または入力不足 | 原則停止。必要時のみ `--allow-validation-failed` |
+このハーネスは「実臨床の予測モデル」ではありません。以下は別解析で扱います。
 
-`WARN` や `FAILED` は、ワークフロー検証では必ずしも悪ではありません。ただし、臨床的に正しい再現とは説明しないでください。
-特に t1/2 の `FAILED` は、シミュレーション実装の異常ではなく、文献由来の `CL/V/t1/2` が1-compartment fixtureとして同時達成不能であることを示す場合があります。
+- 投与設計・用量推定・規制提出用の妥当化
+- 共変量モデル（年齢/体重/性別等）や非線形PKの正当化
+- IIV/residual を使った厳密な再現性評価（現在はfixture用途向け）
 
-## Safeguards
+`targets.auc.value` は通常 `Dose/CL` 由来で、厳密な文献AUCと同一視しないでください。文献AUCを主目的に使う場合は、`targets.yml`更新前提の明示的な差し替えレビューが必要です。
 
-このハーネスでは、次の安全策を意図的に入れています。
+---
 
-| Safeguard | Implementation |
-| --- | --- |
-| PK値を勝手に変えない | `run_workflow.py` は `pk.yml`, `targets.yml`, specを変更しない |
-| 文献値と生成値を分ける | calibrationやvalidationはcanonical PK値に混ぜない |
-| WARN/FAILEDを残す | `simulation_validation.md`, `MANIFEST.yml`, `trace.log` |
-| SDTM-likeの限界を明示 | `sdtm_like/MANIFEST.yml` に submission-ready ではない旨を保存 |
-| ADaM/PopPK入力の限界を明示 | `analysis_inputs/MANIFEST.yml` に smoke-test fixture である旨を保存 |
-| PC濃度欠損を検出 | 全欠損はエラー、部分欠損は警告 |
-| 被験者ID不一致を検出 | `--strict-subject-match` で厳密停止可能 |
-| 既存PC濃度を保護 | `--overwrite-existing-pc-conc` なしでは非空欄濃度を上書きしない |
-| 濃度単位を明示可能 | `--pc-conc-unit` または入力CSVの単位列を `PCSTRESU/AVALU/CONC_UNIT` へ引き継ぐ |
-| PopPK CMTを明示可能 | `--dose-cmt`, `--observation-cmt` でparser smoke fixtureのCMT conventionを設定する |
+## 図・ガイド・運用の行き先
 
-## PK Value Governance
+- [docs/USER_GUIDE.md](docs/USER_GUIDE.md): 日常操作（コマンド解説、エラー時の注意点）
+- [docs/QUICKSTART.md](docs/QUICKSTART.md): 初見向けの短い順番
+- [docs/ACCEPTANCE_TEST.md](docs/ACCEPTANCE_TEST.md): README-onlyで第三者が回せる確認手順
+- [docs/DOWNSTREAM_E2E.md](docs/DOWNSTREAM_E2E.md): NCA/PopPK下流 smoke 検証
+- [docs/EXTERNAL_TOOL_VALIDATION_GUIDE.md](docs/EXTERNAL_TOOL_VALIDATION_GUIDE.md): Phoenix/NONMEM/nlmixr2での実行検証
+- [docs/VALIDATION_AND_RELEASE_CHECKLIST.md](docs/VALIDATION_AND_RELEASE_CHECKLIST.md): リリース前のチェック
+- [docs/WINDOWS_POWERSHELL.md](docs/WINDOWS_POWERSHELL.md): Windows向け実行手順
+- [docs/CODEX_HARNESS.md](docs/CODEX_HARNESS.md): Codex での運用メモ
 
-`pk.yml` は文献由来のcanonical PK summaryです。シミュレーション結果やcalibration結果に合わせて自動更新しません。
+---
 
-```mermaid
-flowchart LR
-    A[Literature / Label sources] --> B[harvest_and_generate.py]
-    B --> C{PK update candidate}
-    C -->|review source/raw/unit/formula| D[drugs/<slug>/pk.yml]
-    D --> E[spec_pk1_*.yml / targets.yml]
-    E --> F{simulation source}
-    F -->|external runner| G[raw/sim_full.csv]
-    F -->|demo: oral/SC/IM/IV infusion| G
-    G --> H[run_workflow.py]
-    H --> I[validation report / MANIFEST / trace]
-    H --> J[clinical_samples.csv / SDTM-like CSV]
-    J --> L[ADPC-like / NCA / PopPK input CSV]
-    L --> M[downstream smoke / site adapters / reports]
-    I --> K[calibration or review artifact]
-    K -. not merged automatically .-> D
-```
-
-| Component | What it may do | What it must not do |
-| --- | --- | --- |
-| `run_workflow.py` | 検証、採血時点抽出、SDTM-like CSV生成、ADPC-like/NCA/PopPK入力生成、manifest/trace作成 | `pk.yml`, `targets.yml`, specを書き換えない |
-| `validate_simulation.py` | AUC/Cmax/Tmax/t1/2を再計算し、`OK/WARN/FAILED`を出す | WARN/FAILEDを理由にPK値を自動調整しない |
-| `harvest_and_generate.py` | 文献・label情報からPK更新候補を作る | simulation fitに合わせて文献値を作らない |
-| `pk.yml` update | source/raw/parsed/derived、単位、変換式を保って更新する | 根拠不明の推測値やcalibration値をcanonical値として混ぜない |
-| calibration artifact | デモやstress test用の補正結果を別管理する | canonicalな `pk.yml` に自動反映しない |
-
-判断基準:
-
-| Situation | Recommended action |
-| --- | --- |
-| 文献値に誤りやより良いsourceが見つかった | `harvest_and_generate.py` または手動reviewで `pk.yml` 更新候補を作る |
-| simulation validationがWARN/FAILED | レポートとmanifestに残し、原因候補を確認する |
-| workflow fixtureとして少し補正したい | calibration artifactを別ファイルに保存する |
-| canonical PK libraryを更新したい | source/raw/parsed/derivedの整合性を説明し、`make harness-check` を通す |
-
-## Two Input Patterns
-
-| Pattern | Input | Behavior |
-| --- | --- | --- |
-| 既存DM/LB/VS/PCなし | `sim_full.csv`, `pk.yml`, `targets.yml`, `spec_pk1_*.yml` | `clinical_samples.csv` と限定版 `DM/VS/LB/EX/PC` を生成 |
-| 既存DM/LB/VS/PC skeletonあり | 上記 + `--dm-csv`, `--vs-csv`, `--lb-csv`, `--pc-csv` | 既存 `DM/VS/LB` を保持し、`PC` skeletonに濃度を注入 |
-| 被験者属性だけ既存 | 上記 + `--subjects-csv` | `subjects.csv` から `DM/VS/LB` を生成 |
-| simPopを使う | `make_simpop_subjects.R` で `subjects.csv` を作成 | simPop由来属性を任意で利用 |
-
-既存skeletonには最低限の列チェックがあります。`DM` は `USUBJID`、`VS` は `USUBJID/VSTESTCD/VSSTRESN`、`LB` は `USUBJID/LBTESTCD/LBSTRESN`、`EX` は `USUBJID/EXTRT/EXDOSE/EXROUTE`、`PC` は `USUBJID` と `PCTPTNUM/PCTPT/PCELTM/TIME` 系の照合列が必要です。
-
-## Optional Subject Covariates
-
-任意で `simPop` を使って被験者属性CSVを作れます。
+## メインコマンド
 
 ```bash
-Rscript tools/make_simpop_subjects.R \
-  --out subjects/subjects.csv \
-  --n 100 \
-  --dose-mg 100 \
-  --seed 20260217
-
-python3 tools/validate_subjects_csv.py subjects/subjects.csv \
-  --expected-n 100 \
-  --allowed-arm A
+python3 tools/validate_subjects_csv.py subjects/subjects.csv --expected-n 100
+python3 tools/sample_clinical_timepoints.py --help
+python3 tools/make_sdtm_like_domains.py --help
+python3 tools/make_analysis_inputs.py --help
+python3 tools/make_downstream_adapters.py --help
+python3 tools/run_downstream_smoke.py --help
+python3 tools/run_external_tool_validation.py --help
+python3 tools/audit_library_priorities.py . --out-dir outputs/library_audit
 ```
 
-`simPop` は年齢、性別、体重、身長などの属性生成に限定します。`CL`, `V`, `KA`, `F`, `ETA` などのPK個人差の根拠にはしません。
+必要に応じて、同じコマンド群は CLI にも同梱されています:
 
-## Tool Map
+```bash
+python3 -m tools.pk_fixture_cli --help
+python3 -m tools.pk_fixture_cli doctor
+python3 -m tools.pk_fixture_cli audit-library . --out-dir outputs/library_audit
+```
 
-| Tool | Role |
-| --- | --- |
-| `tools/run_harness.py` | YAML configからdemo/post-simulation workflowを起動する共通入口 |
-| `tools/run_workflow.py` | `sim_full.csv` 後の validate/sample/SDTM-like/analysis input 生成を一括実行 |
-| `tools/run_demo_set.py` | 複数薬剤のデモ用 `sim_full.csv` 作成と `run_workflow.py` 一括実行 |
-| `tools/validate_simulation.py` | `AUC0-inf`, `Cmax`, `Tmax`, terminal `t1/2` を再計算。正式NCAのlambda-z選択やAUC methodを代替しない |
-| `tools/sample_clinical_timepoints.py` | denseな時系列を名目採血時点へ疎化 |
-| `tools/make_sdtm_like_domains.py` | 限定版 `DM/VS/LB/EX/PC` とmanifestを生成 |
-| `tools/make_analysis_inputs.py` | SDTM-likeから `ADPC.csv`, `NCA_INPUT.csv`, `POPPK_INPUT.csv` を生成 |
-| `tools/make_simpop_subjects.R` | 任意のsimPopベース被験者属性CSVを生成 |
-| `tools/harvest_and_generate.py` | DailyMed/PubMed等からのPKパラメータ更新経路 |
-| `tools/validate_library.py` | `pk.yml` / spec / targets / indexの整合性チェック。`CL/V/t1/2` の1-compartment到達可能性も警告する |
-| `tools/audit_library_priorities.py` | drug×route/spec粒度で内部リスクをtiered auditし、任意のローカル外部snapshot照合列を付ける |
+---
 
-## Fixture Scope Notes
+## 主要設計思想（なぜこの形にしたか）
 
-- `targets.auc.value` は原則として `Dose/CL` 由来です。AUCがpassしても、生物学的妥当性や文献AUCとの一致を示すものではありません。文献AUCで検証したい場合は `targets.auc.value/unit/summary` を差し替え、source/raw/parsed/derived の根拠を notes に残してください。
-- `spec_pk1_*.yml` の `model.theta.CL` と `model.theta.V` が demo generator の独立パラメータです。`t1/2` は下流検証targetとして残し、CL/Vを自動調整しません。
-- `iiv` と `residual` は外部mrgsolve等のrunner向けのspec情報です。組み込みdemo generator単体では、CLI/configの軽量variability指定を除き、薬剤固有のIIV/residualモデルとしては消費しません。
-- `assay.lloq` を spec に追加すると、限定版SDTM-like PCとPopPK smoke inputにBLQ/M3-readyフラグを出せます。`model.assay.lloq` / `model.lloq` も互換フォールバックとして読みますが、新規specでは `assay.lloq` を推奨します。PopPK側には `BLQ`, `CENS`, `LLOQ`, `LIMIT` が入り、NONMEM/nlmixr2 adapterにも流れます。BLQのPC表現は提出用標準SDTMではなくfixture用の簡略形です。
-- 経口predoseの既定は `DV=0/MDV=0` です。`--predose-mdv1` を使うと名目0時間の観測行を残したままPopPK側で `MDV=1` にできます。
-- `sample_clinical_timepoints.py --method log-linear` は陽性濃度列だけをlog-linear補間します。濃度以外の数値列は線形補間のままです。
-- SC/IMは経口と同じ一次吸収式の軽量fixtureとして扱えます。未対応経路は黙示的bolus化せずエラーにします。
+1. **canonicalは壊さない**
+   - `pk.yml`, `targets.yml`, `spec` は自動更新しない
+2. **再現性を優先**
+   - seed、manifest、trace、ログを残して実行履歴を固定
+3. **接続性を優先**
+   - 下流のNCA/PopPKツール仕様は site adapter で吸収し、ハーネスは fixture と検証に集中
+4. **検証と実臨床を分離**
+   - 本リポジトリは「実データ風 fixture 作成」。臨床妥当化は別レイヤーで行う
+
+---
 
 ## Repository Map
 
 ```text
-drugs/<slug>/
-  pk.yml
-  targets.yml
-  spec_pk1_*.yml
-
-harness_examples/
-  demo_set.yml
-  post_simulation_template.yml
+docs/
+  PROCESS_FLOW.md
+  USER_GUIDE.md
+  QUICKSTART.md
+  VALIDATION_AND_RELEASE_CHECKLIST.md
+  SCHEMA.md
+  HARVEST.md
 
 tools/
   run_harness.py
@@ -544,80 +200,26 @@ tools/
   sample_clinical_timepoints.py
   make_sdtm_like_domains.py
   make_analysis_inputs.py
-  make_simpop_subjects.R
-  harvest_and_generate.py
+  make_downstream_adapters.py
+  audit_library_priorities.py
+  run_downstream_smoke.py
 
-docs/
-  USER_GUIDE.md
-  QUICKSTART.md
-  APP_DECISION.md
-  HARVEST.md
-  SCHEMA.md
-  CODEX_HARNESS.md
-  PROCESS_FLOW.md
-  assets/pk-harness-process.drawio
-  assets/pk-fixture-end-to-end-workflow.drawio
-  assets/pk-harness-workflow.png  # legacy snapshot; README uses Mermaid for current flow
+docs/assets/
+  pk-harness-process.drawio
+  pk-fixture-end-to-end-workflow.drawio
+
+drugs/<slug>/
+  pk.yml / targets.yml / spec_pk1_*.yml
 ```
 
-## Main Documentation
+---
 
-- [Quickstart](docs/QUICKSTART.md): 初見ユーザー向けの最短デモ手順
-- [User Guide](docs/USER_GUIDE.md): 通常の使い方、図解、成果物の見方
-- [App Decision](docs/APP_DECISION.md): Shinyなどのアプリ化を今すぐ行わない判断と将来UIの境界
-- [Launcher Contract](docs/LAUNCHER_CONTRACT.md): Shiny Cloud/Tauri/CLIから `run_harness.py` を呼ぶ契約
-- [Downstream E2E Smoke](docs/DOWNSTREAM_E2E.md): NCA/PopPK下流接続のfixture-level smoke check
-- [Acceptance Test](docs/ACCEPTANCE_TEST.md): README-onlyユーザーテスト、外部profile、施設adapter確認
-- [Windows PowerShell Guide](docs/WINDOWS_POWERSHELL.md): WindowsでMakeなしにCLIと検証scriptを動かす手順
-- [Validation And Release Checklist](docs/VALIDATION_AND_RELEASE_CHECKLIST.md): 外部tool検証、README-only user test、release tag前確認
-- [README-only User Test Template](docs/USER_TEST_REPORT_TEMPLATE.md): 第三者テストの観察メモ用テンプレート
-- [External Tool Validation Guide](docs/EXTERNAL_TOOL_VALIDATION_GUIDE.md): Phoenix/NONMEM/nlmixr2実環境確認の記録手順
-- [Site Adapter Guide](docs/SITE_ADAPTER_GUIDE.md): 施設別NCA/PopPK dataset mappingの見直し手順
-- [Release Notes Template](docs/RELEASE_NOTES_TEMPLATE.md): private release/tag前のrelease noteひな形
-- [Harvest Guide](docs/HARVEST.md): 文献・DailyMed・PubMedからパラメータを更新する手順
-- [Schema](docs/SCHEMA.md): `pk.yml`, `targets.yml`, `spec_pk1_*.yml` の構造
-- [Codex Harness Notes](docs/CODEX_HARNESS.md): Codexに作業させる時の内部運用
+## 一言で言うと
 
-## Maintenance Checks
+このハーネスは、
 
-通常の確認:
+**「本番の解析モデルを作るための、速く壊れにくい検証配管を先に作る」**
 
-```bash
-make validate
-```
+ための道具です。
 
-コード、生成ロジック、薬剤YAML、INDEXを触った後:
-
-```bash
-make harness-check
-```
-
-内訳:
-
-```bash
-make validate
-make test
-make regen-check
-make examples-check
-```
-
-生成済みmanifestの構造だけを確認する場合:
-
-```bash
-python3 tools/validate_manifest.py outputs/<run>/workflow/MANIFEST.yml
-```
-
-manifestを薄いローカルHTML viewerで確認する場合:
-
-```bash
-python3 tools/render_manifest_viewer.py outputs/<run>/workflow/MANIFEST.yml \
-  --out-html outputs/<run>/workflow/manifest_viewer.html
-```
-
-## Expert-facing Summary
-
-そのまま説明に使える短文:
-
-> This harness generates literature-scale PK-like synthetic data for SDTM/ADaM/NCA/PopPK workflow testing. It is not intended for clinical inference, dose selection, or regulatory model qualification.
-
-臨床薬理専門家・統計家・プログラマーに共有するときは、対象薬剤の `pk.yml`, `targets.yml`, `spec_pk1_*.yml`, `simulation_validation.md`, run-level `MANIFEST.yml`, `trace.log` をセットで見せるのが安全です。
+外部でのモデル実装とパラメータ更新を分離し、実装者・統計家・臨床薬理担当が同じログを見ながら同じ議論をできる状態にすることを目的にしています。
