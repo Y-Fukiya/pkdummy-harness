@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate OSP PK template library integrity.
+"""Validate pkdummy-harness PK template library integrity.
 
 Checks:
 - Each drug folder has pk.yml, targets.yml, and the correct spec file
@@ -10,7 +10,7 @@ Checks:
 - INDEX.csv is consistent with pk.yml + file paths
 
 Usage:
-  python tools/validate_library.py /path/to/osp_pk_templates_v0_2
+  python tools/validate_library.py /path/to/pkdummy-harness
 """
 
 from __future__ import annotations

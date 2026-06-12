@@ -1,4 +1,4 @@
-name: PK template harness
+name: pkdummy-harness CI
 
 on:
   pull_request:

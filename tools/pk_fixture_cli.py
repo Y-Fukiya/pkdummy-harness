@@ -40,7 +40,7 @@ COMMANDS: dict[str, CommandSpec] = {
 def _help_text() -> str:
     width = max(len(name) for name in COMMANDS)
     lines = [
-        "pk-fixture: CLI entrypoint for the OSP PK synthetic fixture harness",
+        "pk-fixture: CLI entrypoint for pkdummy-harness",
         "",
         "Usage:",
         "  pk-fixture <command> [args...]",

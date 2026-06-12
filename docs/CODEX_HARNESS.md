@@ -1,4 +1,4 @@
-# Codex Harness Notes
+# pkdummy-harness Codex Notes
 
 この文書は、Codexや開発者がこのリポジトリを安全に編集するための内部運用メモです。利用者向けの実行手順は [USER_GUIDE.md](USER_GUIDE.md) を見てください。
 

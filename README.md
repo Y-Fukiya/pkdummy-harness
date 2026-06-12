@@ -1,6 +1,6 @@
-# OSP PK Codex Harness
+# pkdummy-harness
 
-臨床試験の実データ風PKデータは「正確な患者生体内動態」ではなく、**SDTM→ADaM→NCA/PopPK ワークフローを検証するための配管テスト用データ**として必要になります。 このリポジトリはそのための**CLIツール群**です。
+臨床試験の実データ風PKデータは「正確な患者生体内動態」ではなく、**SDTM→ADaM→NCA/PopPK ワークフローを検証するための配管テスト用データ**として必要になります。`pkdummy-harness` はそのための**CLIツール群**です。
 
 ---
 
@@ -139,7 +139,10 @@ outputs/<run>/workflow/
 - [docs/ACCEPTANCE_TEST.md](docs/ACCEPTANCE_TEST.md): README-onlyで第三者が回せる確認手順
 - [docs/DOWNSTREAM_E2E.md](docs/DOWNSTREAM_E2E.md): NCA/PopPK下流 smoke 検証
 - [docs/EXTERNAL_TOOL_VALIDATION_GUIDE.md](docs/EXTERNAL_TOOL_VALIDATION_GUIDE.md): Phoenix/NONMEM/nlmixr2での実行検証
+- [docs/SITE_ADAPTER_GUIDE.md](docs/SITE_ADAPTER_GUIDE.md): 施設別CSV adapterの作り方
+- [docs/USER_TEST_REPORT_TEMPLATE.md](docs/USER_TEST_REPORT_TEMPLATE.md): 利用者テスト報告テンプレート
 - [docs/VALIDATION_AND_RELEASE_CHECKLIST.md](docs/VALIDATION_AND_RELEASE_CHECKLIST.md): リリース前のチェック
+- [docs/RELEASE_NOTES_TEMPLATE.md](docs/RELEASE_NOTES_TEMPLATE.md): リリースノート雛形
 - [docs/WINDOWS_POWERSHELL.md](docs/WINDOWS_POWERSHELL.md): Windows向け実行手順
 - [docs/CODEX_HARNESS.md](docs/CODEX_HARNESS.md): Codex での運用メモ
 

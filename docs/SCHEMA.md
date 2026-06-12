@@ -1,4 +1,4 @@
-# OSP PK template schema (v0.1–v0.2)
+# pkdummy-harness PK template schema (v0.1–v0.2)
 
 このフォルダは **「薬剤ごとの PopPK サマリ（ラベル/論文）」→「1-compartment mrgsolve テンプレ」** を最短で回すための、軽量スキーマです。
 
