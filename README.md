@@ -1,5 +1,8 @@
 # pkdummy-harness
 
+[![CI](https://github.com/Y-Fukiya/pkdummy-harness/actions/workflows/ci.yml/badge.svg)](https://github.com/Y-Fukiya/pkdummy-harness/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 臨床試験の実データ風PKデータは「正確な患者生体内動態」ではなく、**SDTM→ADaM→NCA/PopPK ワークフローを検証するための配管テスト用データ**として必要になります。`pkdummy-harness` はそのための**CLIツール群**です。
 
 ---
@@ -41,6 +44,14 @@
 ```bash
 python3 -m pip install -r requirements.txt
 make harness-check
+```
+
+CLIコマンドとして使う場合:
+
+```bash
+python3 -m pip install -e .
+pk-fixture doctor
+pk-fixture run harness_examples/demo_set.yml
 ```
 
 ### 典型的な最短デモ
@@ -112,6 +123,30 @@ outputs/<run>/workflow/
   adapters/*.csv
 ```
 
+### 最小サンプル
+
+`examples/minimal_aciclovir/workflow/analysis_inputs/ADPC.csv` は次のようなADPC-like CSVを含みます。
+
+```csv
+STUDYID,USUBJID,PARAMCD,AVAL,AVALU,TIME_H,MDV,BLQ,EXTRT,DOSE_MG,ROUTE
+EXAMPLE,EXAMPLE-001,CONC,0,ng/mL,0,0,0,ACICLOVIR,100,ORAL
+EXAMPLE,EXAMPLE-001,CONC,950,ng/mL,1,0,0,ACICLOVIR,100,ORAL
+```
+
+対応する `MANIFEST.yml` には、生成目的、入力、出力、警告を残します。
+
+```yaml
+purpose: analysis_input_smoke_test_fixture
+status: OK
+outputs:
+  ADPC: examples/minimal_aciclovir/workflow/analysis_inputs/ADPC.csv
+  NCA_INPUT: examples/minimal_aciclovir/workflow/analysis_inputs/NCA_INPUT.csv
+  POPPK_INPUT: examples/minimal_aciclovir/workflow/analysis_inputs/POPPK_INPUT.csv
+warnings: []
+notes:
+  - ADPC.csv is ADPC-like and intended for workflow smoke tests, not submission-ready ADaM.
+```
+
 ### status の見方
 
 - `OK`: 標準チェックが許容範囲
@@ -130,6 +165,13 @@ outputs/<run>/workflow/
 
 `targets.auc.value` は通常 `Dose/CL` 由来で、厳密な文献AUCと同一視しないでください。文献AUCを主目的に使う場合は、`targets.yml`更新前提の明示的な差し替えレビューが必要です。
 
+## ライセンスとデータ境界
+
+- このリポジトリのコードとドキュメントは [MIT License](LICENSE) で公開しています。
+- DailyMed、PubMed、OSP PBPK Model Library などの外部情報は参照元として扱い、上流ソースの利用条件はそれぞれの提供元に従います。
+- 外部ツール本体、商用ライセンス、施設SOP、実患者データはこのリポジトリに含めません。
+- 生成CSVやテンプレートは workflow fixture であり、submission-ready SDTM/ADaM、臨床推論、投与設計、規制提出用モデル妥当化の証拠ではありません。
+
 ---
 
 ## 図・ガイド・運用の行き先
@@ -143,8 +185,11 @@ outputs/<run>/workflow/
 - [docs/USER_TEST_REPORT_TEMPLATE.md](docs/USER_TEST_REPORT_TEMPLATE.md): 利用者テスト報告テンプレート
 - [docs/VALIDATION_AND_RELEASE_CHECKLIST.md](docs/VALIDATION_AND_RELEASE_CHECKLIST.md): リリース前のチェック
 - [docs/RELEASE_NOTES_TEMPLATE.md](docs/RELEASE_NOTES_TEMPLATE.md): リリースノート雛形
+- [docs/releases/v0.10.2.md](docs/releases/v0.10.2.md): v0.10.2 リリースノート
 - [docs/WINDOWS_POWERSHELL.md](docs/WINDOWS_POWERSHELL.md): Windows向け実行手順
 - [docs/CODEX_HARNESS.md](docs/CODEX_HARNESS.md): Codex での運用メモ
+- [CONTRIBUTING.md](CONTRIBUTING.md): 変更提案時のルール
+- [SECURITY.md](SECURITY.md): 脆弱性・安全性問題の報告方針
 
 ---
 

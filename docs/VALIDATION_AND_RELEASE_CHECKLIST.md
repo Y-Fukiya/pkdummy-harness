@@ -78,9 +78,9 @@ R, Quarto, simPopは任意機能です。simPopや一部R packageの導入時に
 
 Windowsで最初に保証したいのは、RtoolsなしでもPython CLIとCSV fixture生成が動くことです。
 
-## 5. Private release / tag
+## 5. Public release / tag
 
-private GitHub repoで共有する場合は、release tagの前に次を確認します。
+public GitHub repoで共有する場合は、release tagの前に次を確認します。
 release noteのひな形は [RELEASE_NOTES_TEMPLATE.md](RELEASE_NOTES_TEMPLATE.md) です。
 
 1. `make harness-check` on macOS/Linux

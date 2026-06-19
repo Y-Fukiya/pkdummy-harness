@@ -4,9 +4,17 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pkdummy-harness"
-version = "0.10.1"
+version = "0.10.2"
 description = "Validation harness for PK-like SDTM/ADaM/NCA/PopPK workflow fixtures"
+license = { file = "LICENSE" }
 requires-python = ">=3.10"
+keywords = ["pharmacokinetics", "sdtm", "adam", "nca", "poppk", "fixtures"]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
 dependencies = [
   "PyYAML>=6.0",
   "pandas>=2.0",
@@ -19,6 +27,11 @@ dev = ["pytest>=8.0"]
 
 [project.scripts]
 pk-fixture = "tools.pk_fixture_cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Y-Fukiya/pkdummy-harness"
+Repository = "https://github.com/Y-Fukiya/pkdummy-harness"
+Issues = "https://github.com/Y-Fukiya/pkdummy-harness/issues"
 
 [tool.setuptools.packages.find]
 include = ["tools*"]
