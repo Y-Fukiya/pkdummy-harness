@@ -8,6 +8,7 @@
 
 第三者にREADMEだけを見て実行してもらう場合、次を記録します。
 記録用テンプレートは [USER_TEST_REPORT_TEMPLATE.md](USER_TEST_REPORT_TEMPLATE.md) です。
+未完了項目の追跡は [READINESS_GAPS.md](READINESS_GAPS.md) に集約します。
 
 | Item | Expected evidence |
 | --- | --- |
@@ -88,12 +89,13 @@ release noteのひな形は [RELEASE_NOTES_TEMPLATE.md](RELEASE_NOTES_TEMPLATE.m
 3. GitHub Actions green on Ubuntu and Windows smoke
 4. README-only user test result
 5. Known limitations are unchanged and visible
+6. `CITATION.cff`, `LICENSE`, `CONTRIBUTING.md`, `SECURITY.md`, and `CODE_OF_CONDUCT.md` are current
 
 tag例:
 
 ```bash
-git tag -a v0.10.2 -m "Release v0.10.2 PK fixture harness"
-git push origin v0.10.2
+git tag -a vX.Y.Z -m "Release vX.Y.Z PK fixture harness"
+git push origin vX.Y.Z
 ```
 
 release noteには「workflow fixture用であり、clinical inferenceやdose selectionには使わない」ことを明記します。

@@ -1,6 +1,7 @@
 # pkdummy-harness
 
 [![CI](https://github.com/Y-Fukiya/pkdummy-harness/actions/workflows/ci.yml/badge.svg)](https://github.com/Y-Fukiya/pkdummy-harness/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/Y-Fukiya/pkdummy-harness/actions/workflows/codeql.yml/badge.svg)](https://github.com/Y-Fukiya/pkdummy-harness/actions/workflows/codeql.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 臨床試験の実データ風PKデータは「正確な患者生体内動態」ではなく、**SDTM→ADaM→NCA/PopPK ワークフローを検証するための配管テスト用データ**として必要になります。`pkdummy-harness` はそのための**CLIツール群**です。
@@ -178,6 +179,7 @@ notes:
 
 - [docs/USER_GUIDE.md](docs/USER_GUIDE.md): 日常操作（コマンド解説、エラー時の注意点）
 - [docs/QUICKSTART.md](docs/QUICKSTART.md): 初見向けの短い順番
+- [docs/index.md](docs/index.md): GitHub Pages向けdocs入口
 - [docs/ACCEPTANCE_TEST.md](docs/ACCEPTANCE_TEST.md): README-onlyで第三者が回せる確認手順
 - [docs/DOWNSTREAM_E2E.md](docs/DOWNSTREAM_E2E.md): NCA/PopPK下流 smoke 検証
 - [docs/EXTERNAL_TOOL_VALIDATION_GUIDE.md](docs/EXTERNAL_TOOL_VALIDATION_GUIDE.md): Phoenix/NONMEM/nlmixr2での実行検証
@@ -186,10 +188,14 @@ notes:
 - [docs/VALIDATION_AND_RELEASE_CHECKLIST.md](docs/VALIDATION_AND_RELEASE_CHECKLIST.md): リリース前のチェック
 - [docs/RELEASE_NOTES_TEMPLATE.md](docs/RELEASE_NOTES_TEMPLATE.md): リリースノート雛形
 - [docs/releases/v0.10.2.md](docs/releases/v0.10.2.md): v0.10.2 リリースノート
+- [docs/releases/v0.10.3.md](docs/releases/v0.10.3.md): v0.10.3 リリースノート
+- [docs/READINESS_GAPS.md](docs/READINESS_GAPS.md): 外部環境が必要な残タスクの追跡
 - [docs/WINDOWS_POWERSHELL.md](docs/WINDOWS_POWERSHELL.md): Windows向け実行手順
 - [docs/CODEX_HARNESS.md](docs/CODEX_HARNESS.md): Codex での運用メモ
 - [CONTRIBUTING.md](CONTRIBUTING.md): 変更提案時のルール
 - [SECURITY.md](SECURITY.md): 脆弱性・安全性問題の報告方針
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md): コミュニティ行動規範
+- [CITATION.cff](CITATION.cff): 引用メタデータ
 
 ---
 

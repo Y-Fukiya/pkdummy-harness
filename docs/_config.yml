@@ -1,0 +1,5 @@
+title: pkdummy-harness
+description: PK-like SDTM/ADaM/NCA/PopPK workflow fixture harness
+theme: minima
+markdown: kramdown
+plugins: []

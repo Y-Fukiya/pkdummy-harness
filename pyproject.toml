@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pkdummy-harness"
-version = "0.10.2"
+version = "0.10.3"
 description = "Validation harness for PK-like SDTM/ADaM/NCA/PopPK workflow fixtures"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
