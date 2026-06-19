@@ -18,6 +18,7 @@ Generated data are not for clinical inference, dose selection, or regulatory mod
 - [Release Notes Template](RELEASE_NOTES_TEMPLATE.md)
 - [v0.10.2 Release Notes](releases/v0.10.2.md)
 - [v0.10.3 Release Notes](releases/v0.10.3.md)
+- [v0.10.4 Release Notes](releases/v0.10.4.md)
 
 ## External And Site-Specific Use
 

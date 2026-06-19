@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use pkdummy-harness, please cite it using this metadata."
 title: "pkdummy-harness"
-version: "0.10.3"
+version: "0.10.4"
 date-released: "2026-06-19"
 type: software
 license: MIT

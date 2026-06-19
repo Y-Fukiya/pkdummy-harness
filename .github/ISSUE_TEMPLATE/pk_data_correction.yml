@@ -1,0 +1,56 @@
+name: PK data correction
+description: Propose a correction to PK source, raw text, parsed values, or derived values.
+title: "[PK data]: "
+labels: ["pk-data", "needs-source-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        PK values are scientific data. Please provide source text, units, assumptions, and conversion details. Do not submit inferred or rounded values without evidence.
+  - type: input
+    id: drug
+    attributes:
+      label: Drug slug/name
+      placeholder: "aciclovir"
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source
+      description: Provide URL, citation, label section, or PubMed ID.
+      placeholder: "URL / PMID / label section"
+    validations:
+      required: true
+  - type: textarea
+    id: raw_text
+    attributes:
+      label: Raw PK text
+      description: Paste the source wording with units and ranges.
+    validations:
+      required: true
+  - type: textarea
+    id: proposed_change
+    attributes:
+      label: Proposed change
+      description: List the affected `pk_raw`, `sources`, `pk_parsed`, `derived`, `targets.yml`, or `spec_pk1_*.yml` fields.
+    validations:
+      required: true
+  - type: textarea
+    id: conversion
+    attributes:
+      label: Unit conversion and assumptions
+      description: Include 70 kg, BSA 1.73 m2, per-kg, route, CL/F vs systemic CL, and F assumptions if relevant.
+    validations:
+      required: true
+  - type: checkboxes
+    id: governance
+    attributes:
+      label: Governance checks
+      options:
+        - label: I kept `pk_raw`, `sources`, `pk_parsed`, and `derived` aligned in the proposal.
+          required: true
+        - label: I identified whether CL/V is apparent CL/F or systemic CL/V when relevant.
+          required: true
+        - label: I did not include private clinical data or proprietary source material.
+          required: true

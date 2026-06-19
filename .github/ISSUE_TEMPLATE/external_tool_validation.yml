@@ -1,0 +1,57 @@
+name: External tool validation report
+description: Record Phoenix, NONMEM, nlmixr2, or site adapter execution evidence.
+title: "[External validation]: "
+labels: ["external-validation"]
+body:
+  - type: dropdown
+    id: tool
+    attributes:
+      label: Tool
+      options:
+        - Phoenix
+        - NONMEM
+        - nlmixr2
+        - Site adapter
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, tool version, license/runtime notes, and command profile used.
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command or workflow
+      description: Include `run_external_tool_validation.py` arguments or manual workflow steps.
+      render: shell
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Summarize generated manifests, logs, project imports, parser output, or `.lst` files. Do not attach proprietary files.
+    validations:
+      required: true
+  - type: dropdown
+    id: result
+    attributes:
+      label: Result
+      options:
+        - Passed
+        - Passed with notes
+        - Failed
+        - Skipped
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety checks
+      options:
+        - label: I did not include license files, proprietary tool projects, private clinical data, secrets, or facility SOPs.
+          required: true
+        - label: I understand this validates fixture interoperability, not clinical or regulatory model qualification.
+          required: true

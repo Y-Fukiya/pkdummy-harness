@@ -1,0 +1,32 @@
+name: Documentation improvement
+description: Suggest a README, guide, quickstart, or release documentation improvement.
+title: "[Docs]: "
+labels: ["documentation"]
+body:
+  - type: textarea
+    id: location
+    attributes:
+      label: Location
+      description: Which document, heading, command, or line is confusing?
+      placeholder: "README.md > まず実行してみる"
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: Problem
+      description: What was unclear, missing, or misleading?
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested improvement
+      description: Proposed wording, command, screenshot, or link.
+  - type: checkboxes
+    id: boundary
+    attributes:
+      label: Boundary
+      options:
+        - label: This suggestion keeps the fixture-vs-clinical-use boundary clear.
+          required: true

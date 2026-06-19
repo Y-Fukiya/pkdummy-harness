@@ -8,7 +8,9 @@ __pycache__/
 .$*.bkp
 reports/harvest_report.json
 build/
+dist/
 *.egg-info/
+.venv-smoke/
 .tmp/
 outputs/
 .quarto/

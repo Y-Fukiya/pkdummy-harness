@@ -189,6 +189,7 @@ notes:
 - [docs/RELEASE_NOTES_TEMPLATE.md](docs/RELEASE_NOTES_TEMPLATE.md): リリースノート雛形
 - [docs/releases/v0.10.2.md](docs/releases/v0.10.2.md): v0.10.2 リリースノート
 - [docs/releases/v0.10.3.md](docs/releases/v0.10.3.md): v0.10.3 リリースノート
+- [docs/releases/v0.10.4.md](docs/releases/v0.10.4.md): v0.10.4 リリースノート
 - [docs/READINESS_GAPS.md](docs/READINESS_GAPS.md): 外部環境が必要な残タスクの追跡
 - [docs/WINDOWS_POWERSHELL.md](docs/WINDOWS_POWERSHELL.md): Windows向け実行手順
 - [docs/CODEX_HARNESS.md](docs/CODEX_HARNESS.md): Codex での運用メモ
