@@ -36,6 +36,16 @@ drug library's derived semantics are called out explicitly.
   templates, not clinically validated. See `docs/CALIBRATED_PROFILES.md`.
 - CI now runs the Ubuntu harness on Python 3.10, 3.11, 3.12, and 3.13.
 
+### Changed
+- Treated as a git-checkout / Makefile tool (not pip-distributed): removed the
+  `pk-fixture` console script; the CLI is invoked as `python -m tools.pk_fixture_cli`
+  from the repository root. README/docs/help updated; pyproject documents that the
+  wheel ships `tools/` only (no drug-library data).
+- Dependency hygiene: core runtime is PyYAML only; requests/lxml (harvest) and
+  pandas (jobs) moved to optional extras; requirements.txt slimmed and
+  requirements-dev.txt de-duplicated; CI installs requirements-dev.txt; pyproject
+  version is dynamic from tools.__version__; Python 3.11-3.13 classifiers added.
+
 ### Fixed
 - Oral CL basis worklist resolved: the nine oral drugs whose source clearance
   used a mL/min-family unit (aciclovir, alprazolam, cimetidine, felodipine,

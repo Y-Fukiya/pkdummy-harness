@@ -34,8 +34,13 @@ harvest = ["requests>=2.31", "lxml>=4.9"]
 jobs = ["pandas>=2.0"]
 dev = ["pytest>=8.0"]
 
-[project.scripts]
-pk-fixture = "tools.pk_fixture_cli:main"
+# No [project.scripts] console script. This project is used from a git checkout
+# (run via `make` targets or `python -m tools.pk_fixture_cli`), not as a
+# pip-distributed package: the wheel/sdist intentionally ships only `tools/` and
+# not the drug library (`drugs/`, `pk_library.yml`, `templates/`, ...), so an
+# installed `pk-fixture` command could not find the data it needs. Editable
+# installs from a checkout (`pip install -e .`) work because the data is in the
+# tree; run commands from the repository root.
 
 [project.urls]
 Homepage = "https://github.com/Y-Fukiya/pkdummy-harness"

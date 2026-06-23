@@ -40,20 +40,23 @@
 
 ## まず実行してみる（最短）
 
+このツールは **git チェックアウト前提**で使います（PyPI 配布はしていません）。クローンして依存を入れ、`make` か `python -m tools.pk_fixture_cli` で実行します。
+
 まず環境整合を確認:
 
 ```bash
-python3 -m pip install -r requirements.txt
+python3 -m pip install -r requirements-dev.txt   # コア(PyYAML)+pytest
 make harness-check
 ```
 
-CLIコマンドとして使う場合:
+CLI 入口として使う場合（リポジトリのルートで実行）:
 
 ```bash
-python3 -m pip install -e .
-pk-fixture doctor
-pk-fixture run harness_examples/demo_set.yml
+python3 -m tools.pk_fixture_cli doctor
+python3 -m tools.pk_fixture_cli run harness_examples/demo_set.yml
 ```
+
+> 補足: 配布 wheel/sdist には `tools/` のコードのみが含まれ、薬剤ライブラリ（`drugs/`、`pk_library.yml`、`templates/` ほか）は同梱しません。したがって素の `pip install` 後の実行は想定外です。`pip install -e .` での editable install はチェックアウト内のデータを参照できるため動作しますが、いずれもリポジトリのルートから実行してください。Web採取やジョブ生成など一部ツールを使う場合は追加依存を `pip install .[harvest]` / `.[jobs]` で入れます。
 
 ### 典型的な最短デモ
 
@@ -172,6 +175,7 @@ notes:
 - DailyMed、PubMed、OSP PBPK Model Library などの外部情報は参照元として扱い、上流ソースの利用条件はそれぞれの提供元に従います。
 - 外部ツール本体、商用ライセンス、施設SOP、実患者データはこのリポジトリに含めません。
 - 生成CSVやテンプレートは workflow fixture であり、submission-ready SDTM/ADaM、臨床推論、投与設計、規制提出用モデル妥当化の証拠ではありません。
+- 配布形態: git チェックアウト前提のツールです。PyPI 配布はしておらず、wheel/sdist には `tools/` のみが含まれます（薬剤ライブラリ等のデータは非同梱）。`make` または `python -m tools.pk_fixture_cli` でリポジトリのルートから実行してください。
 
 ---
 
