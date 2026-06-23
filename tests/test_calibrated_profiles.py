@@ -38,9 +38,9 @@ def test_committed_profiles_match_generator() -> None:
 
 def test_profile_only_changes_F1() -> None:
     for slug in _eligible(ROOT):
-        default = yaml.safe_load((ROOT / "drugs" / slug / "spec_pk1_oral.yml").read_text())
-        profile = yaml.safe_load(_profile_path(ROOT, slug).read_text())
-        f = yaml.safe_load((ROOT / "drugs" / slug / "pk.yml").read_text())["pk_parsed"]["bioavailability_frac"]
+        default = yaml.safe_load((ROOT / "drugs" / slug / "spec_pk1_oral.yml").read_text(encoding="utf-8"))
+        profile = yaml.safe_load(_profile_path(ROOT, slug).read_text(encoding="utf-8"))
+        f = yaml.safe_load((ROOT / "drugs" / slug / "pk.yml").read_text(encoding="utf-8"))["pk_parsed"]["bioavailability_frac"]
         dt, pt = default["model"]["theta"], profile["model"]["theta"]
         assert pt["F1"] == float(f) and dt["F1"] == 1.0
         for k in ("CL", "V", "KA", "ALAG1"):
@@ -49,12 +49,12 @@ def test_profile_only_changes_F1() -> None:
 
 def test_profile_exposure_equals_F_times_systemic(tmp_path: Path) -> None:
     for slug in _eligible(ROOT):
-        pk = yaml.safe_load((ROOT / "drugs" / slug / "pk.yml").read_text())
+        pk = yaml.safe_load((ROOT / "drugs" / slug / "pk.yml").read_text(encoding="utf-8"))
         cl_sys = pk["derived"]["CL_systemic_L_per_h_at_70kg"]
         f = float(pk["pk_parsed"]["bioavailability_frac"])
         profile_path = _profile_path(ROOT, slug)
         default_path = ROOT / "drugs" / slug / "spec_pk1_oral.yml"
-        profile = yaml.safe_load(profile_path.read_text())
+        profile = yaml.safe_load(profile_path.read_text(encoding="utf-8"))
         dose = float(profile["regimen"]["arms"]["A"]["dose_mg"])
         mult = float(profile["model"]["units"]["mult"])
 
