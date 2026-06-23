@@ -25,11 +25,14 @@ from tools.run_demo_set import make_demo_sim_full
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_tools_version_matches_pyproject() -> None:
+def test_pyproject_version_is_single_sourced_from_tools() -> None:
+    # pyproject uses a dynamic version sourced from tools.__version__, so there is
+    # only one place to bump. Assert the wiring is intact and the value is sane.
     text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
-    m = re.search(r'(?m)^version\s*=\s*"([^"]+)"', text)
-    assert m, "version not found in pyproject.toml"
-    assert tools.__version__ == m.group(1)
+    assert 'dynamic = ["version"]' in text
+    m = re.search(r'version\s*=\s*\{\s*attr\s*=\s*"([^"]+)"\s*\}', text)
+    assert m and m.group(1) == "tools.__version__", "dynamic version must source tools.__version__"
+    assert re.match(r"^\d+\.\d+", tools.__version__), tools.__version__
 
 
 def test_validation_summary_is_self_describing(tmp_path: Path) -> None:
