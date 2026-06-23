@@ -9,6 +9,8 @@ drug library's derived semantics are called out explicitly.
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-06-24
+
 ### Added
 - `tools/check_derived_drift.py`: diagnoses divergence between committed pk.yml
   `derived` blocks and `derive_quantities`; `--strict` is wired into
@@ -50,6 +52,13 @@ drug library's derived semantics are called out explicitly.
   pandas (jobs) moved to optional extras; requirements.txt slimmed and
   requirements-dev.txt de-duplicated; CI installs requirements-dev.txt; pyproject
   version is dynamic from tools.__version__; Python 3.11-3.13 classifiers added.
+- Canonical ke is now CL/V. `validate_library` checks `derived.ke == CL_abs/V_abs`
+  (the convention the simulator obeys); the t_half-vs-CL/V discrepancy remains a
+  1-compartment attainability warning. See `docs/DERIVED_DRIFT_DECISIONS.md`.
+- All 37 `pk.yml` `derived` blocks regenerated under the CL/V convention with an
+  explicit, persisted `clearance_basis` (route-auto default: oral -> apparent,
+  iv -> systemic). `CL_systemic` values are unchanged where bioavailability is
+  known; `ke` now reflects CL/V and `CL_apparent`/`V_apparent` are populated.
 
 ### Fixed
 - Oral CL basis worklist resolved: the nine oral drugs whose source clearance
@@ -60,15 +69,6 @@ drug library's derived semantics are called out explicitly.
   CL/F` is populated. Specs are untouched, so fixture profiles are unchanged;
   only the basis metadata is corrected. `validate_library` consistency checks are
   now basis-aware (systemic vs apparent). See `docs/BASIS_WORKLIST_RESOLUTION.md`.
-
-### Changed
-- Canonical ke is now CL/V. `validate_library` checks `derived.ke == CL_abs/V_abs`
-  (the convention the simulator obeys); the t_half-vs-CL/V discrepancy remains a
-  1-compartment attainability warning. See `docs/DERIVED_DRIFT_DECISIONS.md`.
-- All 37 `pk.yml` `derived` blocks regenerated under the CL/V convention with an
-  explicit, persisted `clearance_basis` (route-auto default: oral -> apparent,
-  iv -> systemic). `CL_systemic` values are unchanged where bioavailability is
-  known; `ke` now reflects CL/V and `CL_apparent`/`V_apparent` are populated.
 
 ## [0.10.4] and earlier
 
