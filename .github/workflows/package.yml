@@ -25,7 +25,9 @@ jobs:
           . .venv-smoke/bin/activate
           python -m pip install --upgrade pip
           python -m pip install dist/*.whl
-          pk-fixture --help
+          # Checkout-based tool: the wheel ships tools/ only (no drug-library data),
+          # and there is no console script, so this smoke is an import/CLI-help check.
+          python -m tools.pk_fixture_cli --help
       - name: Upload package artifacts
         uses: actions/upload-artifact@v4
         with:
