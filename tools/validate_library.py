@@ -21,7 +21,7 @@ import math
 import re
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List
 
 import yaml
 
@@ -190,9 +190,6 @@ def main() -> int:
             basis = str(parsed.get("clearance_basis") or "apparent").strip().lower()
             basis_source = str(parsed.get("clearance_basis_source") or "").strip().lower()
             raw_cl = str(((pk.get("pk_raw") or {}).get("clearance")) or "")
-            looks_systemic = bool(
-                _SYSTEMIC_STYLE_CL_UNIT.search(raw_cl) or _SYSTEMIC_KEYWORDS.search(raw_cl)
-            )
 
             if basis == "systemic":
                 # CL_abs is the systemic value: CL_systemic == CL_abs, CL_apparent == CL_abs/F.

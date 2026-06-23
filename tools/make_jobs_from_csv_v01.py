@@ -80,7 +80,8 @@ def parse_bioavailability_frac(raw_bio: Any) -> Optional[float]:
     # percent range
     m = re.search(r"(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)\s*%", s)
     if m:
-        a = float(m.group(1)); b = float(m.group(2))
+        a = float(m.group(1))
+        b = float(m.group(2))
         return ((a + b) / 2.0) / 100.0
     # percent single
     m = re.search(r"(\d+(?:\.\d+)?)\s*%", s)

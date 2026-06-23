@@ -19,7 +19,6 @@ from .pk_units import (
     convert_clearance,
     convert_volume,
     convert_half_life_to_h,
-    ParsedQuantity,
 )
 
 _WS = re.compile(r"\s+")

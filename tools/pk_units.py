@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import Optional, Tuple, List
+from typing import List
 
 _SPACE_RE = re.compile(r"\s+")
 _UNIT_CLEAN = {

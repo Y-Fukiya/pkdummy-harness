@@ -1,3 +1,4 @@
 # Everything needed to run `make harness-check` and the test suite.
 -r requirements.txt
 pytest>=8.0
+ruff>=0.6

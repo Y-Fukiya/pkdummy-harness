@@ -32,7 +32,7 @@ harvest = ["requests>=2.31", "lxml>=4.9"]
 # Job/excluded CSV utilities: tools/make_jobs_from_excluded.py,
 # tools/make_jobs_from_csv_v01.py, tools/summarize_excluded.py
 jobs = ["pandas>=2.0"]
-dev = ["pytest>=8.0"]
+dev = ["pytest>=8.0", "ruff>=0.6"]
 
 # No [project.scripts] console script. This project is used from a git checkout
 # (run via `make` targets or `python -m tools.pk_fixture_cli`), not as a
@@ -57,3 +57,13 @@ version = {attr = "tools.__version__"}
 addopts = "-q"
 testpaths = ["tests"]
 pythonpath = ["."]
+
+[tool.ruff]
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+# E501 (line length) is intentionally not enforced. E402 (import not at top) is
+# expected from the small sys.path bootstrap that lets each tool run both as a
+# script and via `python -m tools.<name>`.
+ignore = ["E501", "E402"]

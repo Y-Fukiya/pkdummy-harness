@@ -3,10 +3,9 @@
 from __future__ import annotations
 
 import datetime as _dt
-import json
 import re
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple
+from typing import List, Optional, Tuple
 from urllib.parse import urlencode
 
 import requests
@@ -238,8 +237,8 @@ def extract_relevant_text_from_spl_xml(xml_bytes: bytes, only_pk_sections: bool 
 
         # Emit PKROW lines first to aid extraction, then the raw lines for audit.
         out_lines: List[str] = []
-        for l in kv_lines[:120]:
-            out_lines.append("PKROW: " + l)
+        for kv_line in kv_lines[:120]:
+            out_lines.append("PKROW: " + kv_line)
         out_lines.extend(raw_lines[:200])
         return out_lines
 

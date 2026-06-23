@@ -34,6 +34,11 @@ drug library's derived semantics are called out explicitly.
   `profiles/` (outside `drugs/`) so they never collide with the one-spec-per-drug
   rule; `--check` is wired into `make harness-check` as a drift lock. Still fixture
   templates, not clinically validated. See `docs/CALIBRATED_PROFILES.md`.
+- Lint gate: added ruff (rules E, F, W; E501 line-length and E402 are not
+  enforced — E402 is expected from the sys.path bootstrap). Cleaned up unused
+  imports/variables and a few style nits across tools/ and tests/. `make lint`
+  and a dedicated CI `lint` job run `ruff check .`; harness-check stays
+  dependency-light (PyYAML + pytest) and does not require ruff.
 - CI now runs the Ubuntu harness on Python 3.10, 3.11, 3.12, and 3.13.
 
 ### Changed

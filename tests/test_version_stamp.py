@@ -10,14 +10,11 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-import math
-import yaml
 
 import tools
 from tools.validate_simulation import (
     HARNESS_VERSION,
     NCA_RECALC_METHOD,
-    read_csv_rows,
     validate_simulation,
 )
 from tools.run_demo_set import make_demo_sim_full

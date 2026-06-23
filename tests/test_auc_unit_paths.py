@@ -68,7 +68,6 @@ def test_validate_simulation_uses_ug_per_ml_path(tmp_path: Path) -> None:
     make_demo_sim_full(spec_yml=spec, out_csv=sim,
                        variability={"iiv_cv": 0.0, "residual_cv": 0.0, "seed": 1})
     # tag the rows with a ug/mL unit column so the validator infers the unit
-    rows = read_csv_rows(sim)
     header_csv = sim.read_text(encoding="utf-8").splitlines()
     head, *body = header_csv
     sim.write_text(

@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: all validate test regen-check derived-drift-check calibrated-profiles-check regen-index-check codex-check cli-check examples-check downstream-check site-adapter-check external-validation-probe doctor acceptance-check release-check harness-check index excluded-summary clean
+.PHONY: all validate test regen-check derived-drift-check calibrated-profiles-check lint regen-index-check codex-check cli-check examples-check downstream-check site-adapter-check external-validation-probe doctor acceptance-check release-check harness-check index excluded-summary clean
 
 all: harness-check
 
@@ -13,6 +13,9 @@ test:
 
 regen-check:
 	$(PYTHON) tools/regen_check.py .
+
+lint:
+	$(PYTHON) -m ruff check .
 
 derived-drift-check:
 	$(PYTHON) tools/check_derived_drift.py . --strict
