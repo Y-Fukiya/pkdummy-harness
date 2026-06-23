@@ -22,14 +22,26 @@ pk_parsed:
     unit: L
   bioavailability_frac: 0.615
   weight_ref_kg_for_abs: 70.0
+  clearance_basis: systemic
+  volume_basis: systemic
+  clearance_basis_source: unit_inferred
+  clearance_basis_note: 'clearance_basis set to systemic: source clearance is reported
+    in a mL/min-family unit (systemic plasma/renal clearance), not apparent CL/F.
+    Inferred from the source unit, not verified against full label text. NOTE: the
+    spec simulates a self-consistent fixture profile and is not calibrated to systemic-CL
+    + F (clinical exposure would use CL_apparent or F1=bioavailability); these remain
+    fixture values, not clinical PK.'
 derived:
-  ke_1_per_h: 0.10345480306864854
+  ke_1_per_h: 0.19051546391752577
   CL_abs_L_per_h_at_70kg: 1.8479999999999999
   V_abs_L_at_70kg: 9.7
-  CL_systemic_L_per_h_at_70kg: 1.13652
-  V_systemic_L_at_70kg: 5.9655
+  CL_apparent_L_per_h_at_70kg: 3.004878048780488
+  V_apparent_L_at_70kg: 15.772357723577235
+  CL_systemic_L_per_h_at_70kg: 1.8479999999999999
+  V_systemic_L_at_70kg: 9.7
   notes:
-  - 'Oral entries: CL/V from label are often apparent (CL/F, V/F). If so, use CL_abs/V_abs
-    as apparent and set F1=1 in the simulation model.'
-  - If you are confident the source reports systemic CL and V, you can use CL_systemic/V_systemic
-    with F1=bioavailability.
+  - Apparent CL/V were derived as (systemic CL/V) / F.
+  - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability
+    with systemic CL/V.'
+  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
+    typically report systemic parameters.'
