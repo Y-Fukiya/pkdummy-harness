@@ -31,7 +31,7 @@ def test_validate_library_reports_one_compartment_attainability_warnings():
 
     assert completed.returncode == 0, completed.stdout
     assert "Library validation: OK" in completed.stdout
-    assert "1-compartment attainability warnings:" in completed.stdout
+    assert "Warnings (1-compartment attainability and basis assumptions):" in completed.stdout
     assert "verapamil: t_half_h 5.1 h conflicts with CL/V implied" in completed.stdout
 
 

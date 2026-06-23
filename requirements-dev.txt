@@ -1,5 +1,4 @@
-PyYAML>=6.0
-pandas>=2.0
-requests>=2.31
-lxml>=4.9
+# Everything needed to run `make harness-check` and the test suite.
+-r requirements.txt
 pytest>=8.0
+ruff>=0.6

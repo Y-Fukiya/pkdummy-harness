@@ -1,0 +1,78 @@
+version: 0.1
+study:
+  id: OSP_felodipine_Fcorrected
+  title: Felodipine (template from label/PopPK summary)
+population:
+  n: 100
+  covariates:
+    wt_kg:
+      dist: lognormal
+      median: 70.0
+      cv: 0.25
+      min: 40
+      max: 120
+regimen:
+  route: oral
+  units:
+    dose: mg
+  arms:
+    A:
+      n: 100
+      dose_mg: 100
+sampling:
+  t_end_h: 147.0
+  dt_h: 0.5
+  include_t0: true
+model:
+  template: pk1_oral_ode
+  units:
+    conc: ng/mL
+    mult: 1000
+  theta:
+    CL: 90.0
+    V: 700.0
+    KA: 1.2
+    F1: 0.15
+    ALAG1: 0.5
+  notes:
+  - Default assumes CL and V from sources are apparent (CL/F, V/F). Set theta.F1 to
+    your chosen bioavailability AND adjust CL/V accordingly if your sources report
+    systemic CL/V.
+  - 'Demo theta policy: CL and V are the independent simulation parameters for this
+    1-compartment fixture. t_half is checked downstream and is not used to recalibrate
+    theta.'
+  - 'Known stress-test label: library validation flags CL/V/t_half structural mismatch
+    for this drug, so terminal t_half WARN/FAILED can be expected in demo validation.'
+  - 'F-corrected profile: theta.F1 set to label bioavailability and theta.CL kept
+    as the systemic clearance, so simulated exposure is F*Dose/CL_systemic. This is
+    a parameterization consistent with the systemic basis; it is still a fixture template,
+    not a clinically validated PK model.'
+iiv:
+  eta:
+    CL: 0.09
+    V: 0.04
+    KA: 0.16
+  corr: false
+residual:
+  type: prop+add
+  prop: 0.25
+  add: 0.0
+output:
+  out_dir: outputs
+  seed: 20260217
+  write:
+    raw_csv: true
+    nonmem_csv: true
+    summary_md: true
+meta:
+  sources:
+  - https://pubmed.ncbi.nlm.nih.gov/1782737/
+  - https://pubmed.ncbi.nlm.nih.gov/3327676/
+  pk_summary_raw:
+    half_life: 24-25 hours
+    clearance: 1-1.5 L/min
+    volume: 10 L/kg
+    bioavailability: 15%
+    elimination: 肝代謝
+  profile: oral_systemic_basis_Fcorrected
+  derived_from: drugs/felodipine/spec_pk1_oral.yml

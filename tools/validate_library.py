@@ -18,11 +18,23 @@ from __future__ import annotations
 import argparse
 import csv
 import math
+import re
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List
 
 import yaml
+
+
+# Per-time volumetric clearance units (mL/min, L/min, mL/min/kg, mL/min/1.73 m2, ...)
+# In drug labels these are almost always *systemic* clearances (plasma/renal),
+# not apparent oral clearance (CL/F). Used to flag an implicit/likely-inverted
+# basis assumption on oral drugs.
+_SYSTEMIC_STYLE_CL_UNIT = re.compile(
+    r"(?:m?l)\s*/\s*min(?:\s*/\s*(?:kg|1\.?\s*73\s*m\s*2|m\s*2|70\s*kg))?",
+    re.IGNORECASE,
+)
+_SYSTEMIC_KEYWORDS = re.compile(r"\b(?:renal|systemic|intravenous|i\.?v\.?)\b", re.IGNORECASE)
 
 
 def load_yaml(path: Path) -> Dict[str, Any]:
@@ -49,6 +61,34 @@ def normalize_route(route: Any) -> str:
     if r in {"iv", "i.v.", "intravenous"} or r.startswith("iv") or r.startswith("intraven"):
         return "iv"
     return r
+
+
+def _looks_systemic_unit(raw_cl: str) -> bool:
+    return bool(_SYSTEMIC_STYLE_CL_UNIT.search(raw_cl or "") or _SYSTEMIC_KEYWORDS.search(raw_cl or ""))
+
+
+def oral_basis_warning(
+    slug: str, *, basis: str, basis_source: str, raw_cl: str,
+    CL_abs: float, CL_sys: float | None, F: float,
+) -> str | None:
+    """Return a worklist warning if an oral apparent basis sits on a systemic-style
+    source unit and has not been resolved (basis->systemic) or confirmed apparent.
+    Pure function so the trigger logic is unit-testable.
+    """
+    if str(basis).strip().lower() == "systemic":
+        return None  # basis corrected; systemic unit and systemic basis now agree
+    if str(basis_source).strip().lower() == "confirmed":
+        return None  # maintainer verified apparent is correct
+    if not _looks_systemic_unit(raw_cl) or not F:
+        return None
+    cl_sys_val = CL_sys if isinstance(CL_sys, (int, float)) else CL_abs * F
+    return (
+        f"{slug}: oral CL treated as apparent (CL_systemic = CL_abs*F = {float(cl_sys_val):.6g}), "
+        f"but the raw source clearance '{raw_cl.strip()}' uses a systemic-style unit. "
+        f"If systemic, set pk_parsed.clearance_basis: systemic (then CL_apparent = CL/F = "
+        f"{float(CL_abs) / float(F):.6g} L/h), or mark clearance_basis_source: confirmed "
+        "if apparent is correct."
+    )
 
 
 def main() -> int:
@@ -105,15 +145,26 @@ def main() -> int:
         # Derived checks
         t_half = parsed.get("half_life_h")
         ke = derived.get("ke_1_per_h")
-        if isinstance(t_half, (int, float)) and isinstance(ke, (int, float)):
-            exp_ke = math.log(2) / float(t_half)
-            if not approx(float(ke), exp_ke, tol=1e-6):
-                fail(f"{slug}: ke mismatch (got {ke}, expected {exp_ke})", issues)
-
         CL_abs = derived.get("CL_abs_L_per_h_at_70kg")
         V_abs = derived.get("V_abs_L_at_70kg")
+
+        # Canonical ke is CL/V: CL and V are the independent simulation parameters
+        # (see every targets.yml note), so derived.ke must equal CL_abs/V_abs, which
+        # is what the simulated concentrations actually obey. The discrepancy between
+        # this ke and ln2/t_half is reported separately as a 1-compartment
+        # attainability warning, not as a hard failure.
+        if (
+            isinstance(ke, (int, float))
+            and isinstance(CL_abs, (int, float))
+            and isinstance(V_abs, (int, float))
+            and float(V_abs) > 0
+        ):
+            exp_ke = float(CL_abs) / float(V_abs)
+            if not approx(float(ke), exp_ke, tol=1e-6):
+                fail(f"{slug}: ke mismatch (got {ke}, expected CL_abs/V_abs={exp_ke})", issues)
         CL_sys = derived.get("CL_systemic_L_per_h_at_70kg")
         V_sys = derived.get("V_systemic_L_at_70kg")
+        CL_app = derived.get("CL_apparent_L_per_h_at_70kg")
         F = parsed.get("bioavailability_frac")
 
         if (
@@ -136,14 +187,46 @@ def main() -> int:
                 )
 
         if route == "po" and isinstance(F, (int, float)):
-            if isinstance(CL_abs, (int, float)) and isinstance(CL_sys, (int, float)):
-                exp = float(CL_abs) * float(F)
-                if not approx(float(CL_sys), exp, tol=1e-6):
-                    fail(f"{slug}: CL_systemic mismatch (got {CL_sys}, expected {exp})", issues)
-            if isinstance(V_abs, (int, float)) and isinstance(V_sys, (int, float)):
-                exp = float(V_abs) * float(F)
-                if not approx(float(V_sys), exp, tol=1e-6):
-                    fail(f"{slug}: V_systemic mismatch (got {V_sys}, expected {exp})", issues)
+            basis = str(parsed.get("clearance_basis") or "apparent").strip().lower()
+            basis_source = str(parsed.get("clearance_basis_source") or "").strip().lower()
+            raw_cl = str(((pk.get("pk_raw") or {}).get("clearance")) or "")
+
+            if basis == "systemic":
+                # CL_abs is the systemic value: CL_systemic == CL_abs, CL_apparent == CL_abs/F.
+                if isinstance(CL_abs, (int, float)) and isinstance(CL_sys, (int, float)):
+                    if not approx(float(CL_sys), float(CL_abs), tol=1e-6):
+                        fail(f"{slug}: systemic-basis CL_systemic should equal CL_abs "
+                             f"(got {CL_sys}, expected {CL_abs})", issues)
+                if isinstance(CL_abs, (int, float)) and isinstance(CL_app, (int, float)) and float(F) > 0:
+                    exp = float(CL_abs) / float(F)
+                    if not approx(float(CL_app), exp, tol=1e-6):
+                        fail(f"{slug}: systemic-basis CL_apparent should equal CL_abs/F "
+                             f"(got {CL_app}, expected {exp})", issues)
+                if isinstance(V_abs, (int, float)) and isinstance(V_sys, (int, float)):
+                    if not approx(float(V_sys), float(V_abs), tol=1e-6):
+                        fail(f"{slug}: systemic-basis V_systemic should equal V_abs", issues)
+            else:
+                # Apparent basis (default): CL_abs treated as CL/F, so CL_systemic == CL_abs*F.
+                if isinstance(CL_abs, (int, float)) and isinstance(CL_sys, (int, float)):
+                    exp = float(CL_abs) * float(F)
+                    if not approx(float(CL_sys), exp, tol=1e-6):
+                        fail(f"{slug}: CL_systemic mismatch (got {CL_sys}, expected {exp})", issues)
+                if isinstance(V_abs, (int, float)) and isinstance(V_sys, (int, float)):
+                    exp = float(V_abs) * float(F)
+                    if not approx(float(V_sys), exp, tol=1e-6):
+                        fail(f"{slug}: V_systemic mismatch (got {V_sys}, expected {exp})", issues)
+                # The apparent basis on a systemic-style source unit is the inversion the
+                # basis worklist is about. Resolved by setting basis->systemic, or by
+                # marking clearance_basis_source: confirmed when apparent is correct.
+                if isinstance(CL_abs, (int, float)):
+                    msg = oral_basis_warning(
+                        slug, basis=basis, basis_source=basis_source, raw_cl=raw_cl,
+                        CL_abs=float(CL_abs),
+                        CL_sys=CL_sys if isinstance(CL_sys, (int, float)) else None,
+                        F=float(F),
+                    )
+                    if msg:
+                        warn(msg, warnings)
         if route == "iv":
             if isinstance(CL_abs, (int, float)) and isinstance(CL_sys, (int, float)):
                 if not approx(float(CL_sys), float(CL_abs), tol=1e-9):
@@ -204,13 +287,13 @@ def main() -> int:
         for m in issues:
             print("-", m)
         if warnings:
-            print("1-compartment attainability warnings:")
+            print("Warnings (1-compartment attainability and basis assumptions):")
             for m in warnings:
                 print("-", m)
         return 1
     print("Library validation: OK")
     if warnings:
-        print("1-compartment attainability warnings:")
+        print("Warnings (1-compartment attainability and basis assumptions):")
         for m in warnings:
             print("-", m)
     return 0

@@ -43,8 +43,8 @@ editable install後は次の形でも呼べます。
 
 ```powershell
 python -m pip install -e .
-pk-fixture doctor
-pk-fixture run harness_examples/demo_set.yml
+python -m tools.pk_fixture_cli doctor
+python -m tools.pk_fixture_cli run harness_examples/demo_set.yml
 ```
 
 ## 3. Makeなしの検証

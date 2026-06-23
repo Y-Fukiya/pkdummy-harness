@@ -523,7 +523,7 @@ outputs/demo_set_milestone7/
 重要な注意点:
 
 - `tools/pk_fixture_cli.py` / `pk-fixture` は既存ツールを束ねる正式CLI入口です。
-- `run_harness.py` はYAML configから既存ツールを呼ぶ共通入口です。Shiny CloudやTauriから呼ぶ場合も、この入口または `pk-fixture run` を使う想定です。
+- `run_harness.py` はYAML configから既存ツールを呼ぶ共通入口です。Shiny CloudやTauriから呼ぶ場合も、この入口または `python -m tools.pk_fixture_cli run` を使う想定です。
 - `run_demo_set.py` はデモ専用の解析式generatorで `sim_full.csv` を作ります。
 - 既存の `spec_pk1_*.yml` のthetaを読みますが、`pk.yml`, `targets.yml`, specは更新しません。
 - demo generatorが消費する薬剤固有PKは主に `model.theta` です。`iiv` と `residual` は外部mrgsolve runner向けのspec情報で、demo単体では薬剤固有のIIV/residual errorとしては消費しません。将来配線する場合は、`iiv.eta` を分散（omega squared）として扱うのかCVとして扱うのかを明示してから変換してください。

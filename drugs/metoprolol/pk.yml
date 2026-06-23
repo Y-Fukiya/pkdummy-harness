@@ -27,16 +27,19 @@ pk_parsed:
   - 0.5
   - 0.5
   weight_ref_kg_for_abs: 70.0
+  clearance_basis: apparent
+  volume_basis: apparent
 derived:
-  ke_1_per_h: 0.13862943611198905
+  ke_1_per_h: 0.13862943611198908
   CL_abs_L_per_h_at_70kg: 48.0
   V_abs_L_at_70kg: 346.2468098133512
+  CL_apparent_L_per_h_at_70kg: 48.0
+  V_apparent_L_at_70kg: 346.2468098133512
   CL_systemic_L_per_h_at_70kg: 24.0
   V_systemic_L_at_70kg: 173.1234049066756
   notes:
-  - Derived V from CL and t1/2 assuming ke=ln(2)/t1/2 (one-compartment
-    rescue; not a direct literature V).
-  - 'Oral entries: CL/V from label are often apparent (CL/F, V/F). If so, use CL_abs/V_abs
-    as apparent and set F1=1 in the simulation model.'
-  - If you are confident the source reports systemic CL and V, you can use CL_systemic/V_systemic
-    with F1=bioavailability.
+  - Systemic CL/V were derived as (apparent CL/V) * F (assumes values are CL/F, V/F).
+  - 'Basis detected/selected: apparent (CL/F, V/F). Model default can use CL_abs/V_abs
+    as apparent and set F1=1.'
+  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
+    typically report systemic parameters.'

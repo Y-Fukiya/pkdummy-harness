@@ -40,11 +40,11 @@ COMMANDS: dict[str, CommandSpec] = {
 def _help_text() -> str:
     width = max(len(name) for name in COMMANDS)
     lines = [
-        "pk-fixture: CLI entrypoint for pkdummy-harness",
+        "pk_fixture_cli: CLI entrypoint for pkdummy-harness",
         "",
         "Usage:",
-        "  pk-fixture <command> [args...]",
         "  python -m tools.pk_fixture_cli <command> [args...]",
+        "  (run from the repository root)",
         "",
         "Commands:",
     ]
@@ -54,9 +54,9 @@ def _help_text() -> str:
         [
             "",
             "Examples:",
-            "  pk-fixture doctor",
-            "  pk-fixture run harness_examples/demo_set.yml",
-            "  pk-fixture workflow --sim-full outputs/<run>/raw/sim_full.csv --drug aciclovir --times 0,1,2 --out-dir outputs/<run>/workflow",
+            "  python -m tools.pk_fixture_cli doctor",
+            "  python -m tools.pk_fixture_cli run harness_examples/demo_set.yml",
+            "  python -m tools.pk_fixture_cli workflow --sim-full outputs/<run>/raw/sim_full.csv --drug aciclovir --times 0,1,2 --out-dir outputs/<run>/workflow",
             "",
             "Boundary:",
             "  Generated data are workflow fixtures, not clinical inference or dose-selection evidence.",

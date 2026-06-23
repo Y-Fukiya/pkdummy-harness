@@ -4,12 +4,12 @@
 
 ## Principle
 
-UIはハーネスの中身を再実装しません。UIは設定ファイルを選び、`pk-fixture run` または `run_harness.py` を実行し、生成されたmanifest/status/CSVを表示します。
+UIはハーネスの中身を再実装しません。UIは設定ファイルを選び、`python -m tools.pk_fixture_cli run` または `run_harness.py` を実行し、生成されたmanifest/status/CSVを表示します。
 
 ```mermaid
 flowchart LR
     A["Launcher / UI"] --> B["harness.yml"]
-    B --> C["pk-fixture run harness.yml"]
+    B --> C["python -m tools.pk_fixture_cli run harness.yml"]
     C --> D["HARNESS_STATUS.json"]
     C --> E["HARNESS_MANIFEST.yml"]
 C --> F["summary / reports / CSV outputs"]
@@ -32,7 +32,7 @@ python3 -m tools.pk_fixture_cli run harness_examples/demo_set.yml
 python3 tools/run_harness.py harness_examples/demo_set.yml
 ```
 
-editable install後は `pk-fixture run harness_examples/demo_set.yml` として呼べます。UI側で `run_demo_set.py` や `run_workflow.py` の細かい引数を直接組み立てないでください。
+editable install後は `python -m tools.pk_fixture_cli run harness_examples/demo_set.yml` として呼べます。UI側で `run_demo_set.py` や `run_workflow.py` の細かい引数を直接組み立てないでください。
 
 ## Inputs
 

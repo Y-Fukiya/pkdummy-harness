@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pkdummy-harness"
-version = "0.10.4"
+dynamic = ["version"]
 description = "Validation harness for PK-like SDTM/ADaM/NCA/PopPK workflow fixtures"
 license = "MIT"
 license-files = ["LICENSE"]
@@ -13,20 +13,34 @@ keywords = ["pharmacokinetics", "sdtm", "adam", "nca", "poppk", "fixtures"]
 classifiers = [
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Topic :: Scientific/Engineering :: Medical Science Apps.",
 ]
+# Core dependency only. The generate -> validate -> NCA recalc -> profiles path
+# (everything `make harness-check` exercises) needs nothing beyond PyYAML; this is
+# verified by running the full harness-check in a PyYAML+pytest-only environment.
+# Heavier libraries are pulled in only by peripheral tools and live in extras below.
 dependencies = [
   "PyYAML>=6.0",
-  "pandas>=2.0",
-  "requests>=2.31",
-  "lxml>=4.9",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0"]
+# Web harvesting tools: tools/dailymed.py, tools/ncbi_eutils.py
+harvest = ["requests>=2.31", "lxml>=4.9"]
+# Job/excluded CSV utilities: tools/make_jobs_from_excluded.py,
+# tools/make_jobs_from_csv_v01.py, tools/summarize_excluded.py
+jobs = ["pandas>=2.0"]
+dev = ["pytest>=8.0", "ruff>=0.6"]
 
-[project.scripts]
-pk-fixture = "tools.pk_fixture_cli:main"
+# No [project.scripts] console script. This project is used from a git checkout
+# (run via `make` targets or `python -m tools.pk_fixture_cli`), not as a
+# pip-distributed package: the wheel/sdist intentionally ships only `tools/` and
+# not the drug library (`drugs/`, `pk_library.yml`, `templates/`, ...), so an
+# installed `pk-fixture` command could not find the data it needs. Editable
+# installs from a checkout (`pip install -e .`) work because the data is in the
+# tree; run commands from the repository root.
 
 [project.urls]
 Homepage = "https://github.com/Y-Fukiya/pkdummy-harness"
@@ -36,7 +50,20 @@ Issues = "https://github.com/Y-Fukiya/pkdummy-harness/issues"
 [tool.setuptools.packages.find]
 include = ["tools*"]
 
+[tool.setuptools.dynamic]
+version = {attr = "tools.__version__"}
+
 [tool.pytest.ini_options]
 addopts = "-q"
 testpaths = ["tests"]
 pythonpath = ["."]
+
+[tool.ruff]
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+# E501 (line length) is intentionally not enforced. E402 (import not at top) is
+# expected from the small sys.path bootstrap that lets each tool run both as a
+# script and via `python -m tools.<name>`.
+ignore = ["E501", "E402"]

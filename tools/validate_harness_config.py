@@ -8,7 +8,6 @@ dependency so the harness remains easy to run in constrained environments.
 from __future__ import annotations
 
 import argparse
-import sys
 from pathlib import Path
 from typing import Any
 
@@ -153,7 +152,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         issues = validate_harness_config_file(args.config_yml)
     except Exception as exc:
-        print(f"Harness config validation: FAILED")
+        print("Harness config validation: FAILED")
         print(f"- {exc}")
         return 1
     if issues:

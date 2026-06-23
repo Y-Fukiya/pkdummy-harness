@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-import re
-from dataclasses import dataclass
-from typing import List, Optional, Dict, Any
+from typing import List
 from urllib.parse import urlencode
 import xml.etree.ElementTree as ET
 

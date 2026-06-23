@@ -1,5 +1,4 @@
+# Core runtime for the main harness (generate -> validate -> NCA -> profiles).
+# Optional tool groups install via extras, e.g. `pip install .[harvest]` (web
+# harvesting) or `pip install .[jobs]` (job/excluded CSV utilities).
 PyYAML>=6.0
-pandas>=2.0
-requests>=2.31
-lxml>=4.9
-pytest>=8.0

@@ -11,12 +11,26 @@ from __future__ import annotations
 import argparse
 import csv
 import math
-import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
 
 import yaml
+
+try:
+    from tools import __version__ as HARNESS_VERSION
+except Exception:  # pragma: no cover - allows running as a loose script
+    HARNESS_VERSION = "unknown"
+
+# Identifier for the NCA recalculation method that produced the summary values.
+# Stamped into every validation summary so a fixture is self-describing: the
+# numbers below are fixture-level sanity recalculations, not a formal NCA. See
+# docs and tests/test_nca_recalc_ground_truth.py for the characterised behaviour.
+NCA_RECALC_METHOD = (
+    "auc=linear_trapezoid; "
+    "lambda_z=last_3_log_linear_points; "
+    "auc0inf=auc0last+Clast/lambda_z"
+)
 
 
 CONC_COLUMNS = ["CP", "IPRED", "DV", "CONC"]
@@ -263,6 +277,16 @@ def _geomean(values: list[float]) -> float | None:
     return math.exp(sum(math.log(v) for v in positive) / len(positive))
 
 
+def _harmonic_mean(values: list[float]) -> float | None:
+    # Convention for summarising terminal half-life: t1/2 = ln2/ke, and ke (a rate)
+    # averages arithmetically, so the central t1/2 is the harmonic mean of t1/2,
+    # equivalently ln2 / mean(ke). Arithmetic mean of t1/2 is upward biased.
+    positive = [v for v in values if v > 0]
+    if not positive:
+        return None
+    return len(positive) / sum(1.0 / v for v in positive)
+
+
 def _median(values: list[float]) -> float | None:
     if not values:
         return None
@@ -290,6 +314,8 @@ def summarize_metrics(metrics: dict[str, SubjectMetrics], *, concentration_unit:
         "tmax_h_median": _median(tmax),
         "half_life_h_mean": _mean(half_lives),
         "half_life_h_median": _median(half_lives),
+        "half_life_h_geomean": _geomean(half_lives),
+        "half_life_h_harmonic": _harmonic_mean(half_lives),
         "concentration_unit": concentration_unit,
         "auc_unit": _auc_unit(concentration_unit),
     }
@@ -358,6 +384,12 @@ def _target_observed(summary: dict[str, Any], metric: str, target: dict[str, Any
     if metric == "t_half":
         if summary_name == "median":
             return summary.get("half_life_h_median")
+        if summary_name == "harmonic_mean":
+            return summary.get("half_life_h_harmonic")
+        if summary_name == "geometric_mean":
+            return summary.get("half_life_h_geomean")
+        # arithmetic_mean (and any unspecified value) -> arithmetic mean. Note the
+        # biostatistical convention for terminal half-life is the harmonic mean.
         return summary.get("half_life_h_mean")
     return None
 
@@ -389,6 +421,9 @@ def validate_simulation(
     auc_unit = _auc_unit(concentration_unit)
     subject_metrics = compute_subject_metrics(rows, tolerances=tolerances)
     summary = summarize_metrics(subject_metrics, concentration_unit=concentration_unit)
+    # Self-describe the provenance of these recalculated numbers.
+    summary["harness_version"] = HARNESS_VERSION
+    summary["nca_recalc_method"] = NCA_RECALC_METHOD
     comparisons: list[Comparison] = []
     warnings: list[str] = []
     failures: list[str] = []
