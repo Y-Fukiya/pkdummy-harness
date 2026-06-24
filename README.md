@@ -151,6 +151,24 @@ notes:
   - ADPC.csv is ADPC-like and intended for workflow smoke tests, not submission-ready ADaM.
 ```
 
+### 生物製剤（mAb）の例 — days スケールの終末相
+
+時間スケールの小分子とは形が異なります。`examples/minimal_cda1_mab_iv/`
+（長半減期モノクローナル抗体 CDA1、fixture の終末相 t1/2 ~ 24 日）の
+`workflow/analysis_inputs/ADPC.csv` は、週〜月にわたる緩やかな減衰を示します。
+
+```csv
+STUDYID,USUBJID,PARAMCD,AVAL,AVALU,TIME_H,MDV,BLQ,EXTRT,DOSE_MG,ROUTE
+OSP_cda1,OSP_cda1-001,CONC,20408.163265,ng/mL,0,0,0,CDA1,100,INTRAVENOUS
+OSP_cda1,OSP_cda1-001,CONC,19828.791167,ng/mL,24,0,0,CDA1,100,INTRAVENOUS
+OSP_cda1,OSP_cda1-001,CONC,9111.478396,ng/mL,672,0,0,CDA1,100,INTRAVENOUS
+OSP_cda1,OSP_cda1-001,CONC,1816.179249,ng/mL,2016,0,0,CDA1,100,INTRAVENOUS
+```
+
+t=0 の ~20,400 ng/mL から 84 日（2016 h、~3.5 半減期）で ~1,800 ng/mL まで減衰します。
+この fixture を生成する定義は `examples/minimal_cda1_mab_iv/harness.yml` にあり、
+`python -m tools.check_examples` が `sdtm_like/` からの再生成でドリフトを検査します。
+
 ### status の見方
 
 - `OK`: 標準チェックが許容範囲

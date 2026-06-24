@@ -14,7 +14,7 @@ def test_check_examples_regenerates_versioned_minimal_examples() -> None:
     result = check_examples(ROOT / "examples")
 
     assert result.status == "OK"
-    assert result.checked_examples == ["minimal_aciclovir", "minimal_albuterol_iv"]
+    assert result.checked_examples == ["minimal_aciclovir", "minimal_albuterol_iv", "minimal_cda1_mab_iv"]
     assert result.warnings == []
 
 
