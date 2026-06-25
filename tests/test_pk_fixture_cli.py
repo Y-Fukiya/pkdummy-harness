@@ -8,10 +8,7 @@ from pathlib import Path
 if sys.version_info >= (3, 11):
     import tomllib
 else:
-    try:
-        import tomllib  # type: ignore[no-redef]
-    except ImportError:
-        import tomli as tomllib  # type: ignore[no-redef]
+    import tomli as tomllib  # type: ignore[no-redef]
 
 
 ROOT = Path(__file__).resolve().parents[1]
