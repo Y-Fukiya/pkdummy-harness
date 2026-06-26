@@ -7,7 +7,7 @@
 ## 1. Fresh Setup
 
 ```bash
-python3 -m pip install -r requirements.txt
+python3 -m pip install -r requirements-dev.txt
 make validate
 ```
 

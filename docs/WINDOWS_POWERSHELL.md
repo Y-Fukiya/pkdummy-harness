@@ -13,7 +13,7 @@ py -3.11 --version
 py -3.11 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+python -m pip install -r requirements-dev.txt
 ```
 
 Python launcherを使わない環境では、同じ意味で次のように作成しても構いません。
