@@ -24,7 +24,7 @@ targets:
     role: consistency_check
   t_half:
     phase: terminal
-    value: 3.25
+    value: 1.675
     unit: h
     summary: arithmetic_mean
     variability:

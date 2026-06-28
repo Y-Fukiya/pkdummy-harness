@@ -57,7 +57,7 @@ meta:
   sources:
   - https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=c965d63f-933b-4a83-88f6-c8c74159530b
   pk_summary_raw:
-    half_life: 2.5-4 hours
+    half_life: 90-111 minutes
     clearance: 5 mL/kg/min
     volume: 0.4-1 L/kg
     bioavailability: N/A (IV only)

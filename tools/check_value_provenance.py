@@ -334,6 +334,140 @@ def _unresolved_reasons(entry: dict[str, Any]) -> list[str]:
     return reasons
 
 
+def _unresolved_entry_detail(
+    slug: str,
+    field: str,
+    entry: dict[str, Any],
+    *,
+    source_review_status: Any,
+    available_source_ids: list[str],
+    available_source_refs: list[dict[str, Any]],
+) -> dict[str, Any]:
+    detail = {
+        "entry": f"{slug}.{field}",
+        "drug": slug,
+        "field": field,
+        "priority": _review_priority(field),
+        "reasons": _unresolved_reasons(entry),
+        "role": entry.get("role"),
+        "value_basis": entry.get("value_basis"),
+        "source_review_status": source_review_status,
+        "fixture_limitation_status": entry.get("fixture_limitation_status"),
+        "source_field": entry.get("source_field"),
+        "raw_value": entry.get("raw_value"),
+        "raw_unit": entry.get("raw_unit"),
+        "normalized_value": entry.get("normalized_value"),
+        "normalized_unit": entry.get("normalized_unit"),
+        "available_source_ids": available_source_ids,
+        "available_source_refs": available_source_refs,
+    }
+    source_verification = entry.get("source_verification")
+    if isinstance(source_verification, dict):
+        detail.update(
+            {
+                "source_verification_status": source_verification.get("status"),
+                "source_review_blocker": source_verification.get("blocker"),
+                "reviewed_source_ids": list(source_verification.get("reviewed_source_ids") or []),
+                "reviewed_external_queries": list(
+                    source_verification.get("reviewed_external_queries") or []
+                ),
+                "next_source_review_action": source_verification.get("next_action"),
+                "source_verification_note": source_verification.get("reviewer_note"),
+            }
+        )
+    return detail
+
+
+def _source_review_queue_item(
+    slug: str,
+    unresolved_fields: list[str],
+    coverage: dict[str, int | float],
+    *,
+    available_source_ids: list[str],
+    used_source_ids: set[str],
+    available_source_refs: list[dict[str, Any]],
+) -> dict[str, Any]:
+    unresolved_priorities = [_review_priority(field) for field in unresolved_fields]
+    highest_priority = sorted(unresolved_priorities, key=_priority_rank)[0]
+    unused_source_ids = set(available_source_ids) - used_source_ids
+    used_source_refs = _filter_source_refs(available_source_refs, used_source_ids)
+    unused_source_refs = _filter_source_refs(available_source_refs, unused_source_ids)
+    suggested_source_refs = _sort_source_refs_for_review(unused_source_refs or used_source_refs)
+
+    return {
+        "drug": slug,
+        "highest_priority": highest_priority,
+        "review_action": _review_action(available_source_ids, used_source_ids),
+        "unresolved_fields": unresolved_fields,
+        "unresolved_entries": [f"{slug}.{field}" for field in unresolved_fields],
+        "coverage": dict(coverage),
+        "available_source_ids": available_source_ids,
+        "used_source_ids": sorted(used_source_ids),
+        "unused_source_ids": sorted(unused_source_ids),
+        "available_source_refs": available_source_refs,
+        "used_source_refs": used_source_refs,
+        "unused_source_refs": unused_source_refs,
+        "suggested_source_refs": suggested_source_refs,
+    }
+
+
+def _count_queue_suggestions(
+    item: dict[str, Any],
+    *,
+    source_review_action_counts: dict[str, int],
+    suggested_source_kind_counts: dict[str, int],
+) -> None:
+    action = str(item["review_action"])
+    source_review_action_counts[action] = source_review_action_counts.get(action, 0) + 1
+    for source_ref in item["suggested_source_refs"]:
+        source_kind = source_ref["source_kind"]
+        suggested_source_kind_counts[source_kind] = suggested_source_kind_counts.get(source_kind, 0) + 1
+
+
+def _apply_coverage_rates(
+    coverage_by_field: dict[str, dict[str, int | float]],
+    coverage_by_drug: dict[str, dict[str, int | float]],
+) -> None:
+    for field_coverage in coverage_by_field.values():
+        total = field_coverage["total"]
+        field_coverage["rate"] = field_coverage["resolved"] / total if total else 0.0
+    for drug_coverage in coverage_by_drug.values():
+        total = drug_coverage["total"]
+        drug_coverage["rate"] = drug_coverage["resolved"] / total if total else 0.0
+
+
+def _next_review_items(
+    unresolved_entries: list[str],
+    unresolved_entry_details: list[dict[str, Any]],
+) -> tuple[list[str], list[dict[str, Any]]]:
+    field_priority = {
+        "t_half_h": 0,
+        "CL_abs_L_per_h_at_70kg": 1,
+        "V_abs_L_at_70kg": 2,
+    }
+    detail_by_entry = {detail["entry"]: detail for detail in unresolved_entry_details}
+    next_review_entries = sorted(
+        unresolved_entries,
+        key=lambda entry: (field_priority.get(entry.split(".", 1)[1], 99), entry),
+    )
+    next_review_details = [
+        detail_by_entry[entry] for entry in next_review_entries if entry in detail_by_entry
+    ]
+    return next_review_entries, next_review_details
+
+
+def _sort_source_review_queue(queue: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return sorted(
+        queue,
+        key=lambda item: (
+            _priority_rank(str(item["highest_priority"])),
+            item["coverage"]["resolved"],
+            -item["coverage"]["unresolved"],
+            item["drug"],
+        ),
+    )
+
+
 def value_provenance_report(root: Path | str) -> dict[str, Any]:
     root_path = Path(root)
     fields_needing_review: list[str] = []
@@ -422,24 +556,14 @@ def value_provenance_report(root: Path | str) -> dict[str, Any]:
                 for reason in reasons:
                     unresolved_reason_counts[reason] = unresolved_reason_counts.get(reason, 0) + 1
                 unresolved_entry_details.append(
-                    {
-                        "entry": entry_name,
-                        "drug": slug,
-                        "field": field,
-                        "priority": _review_priority(field),
-                        "reasons": reasons,
-                        "role": entry.get("role"),
-                        "value_basis": entry.get("value_basis"),
-                        "source_review_status": source_review_status,
-                        "fixture_limitation_status": entry.get("fixture_limitation_status"),
-                        "source_field": entry.get("source_field"),
-                        "raw_value": entry.get("raw_value"),
-                        "raw_unit": entry.get("raw_unit"),
-                        "normalized_value": entry.get("normalized_value"),
-                        "normalized_unit": entry.get("normalized_unit"),
-                        "available_source_ids": available_source_ids,
-                        "available_source_refs": available_source_refs,
-                    }
+                    _unresolved_entry_detail(
+                        slug,
+                        field,
+                        entry,
+                        source_review_status=source_review_status,
+                        available_source_ids=available_source_ids,
+                        available_source_refs=available_source_refs,
+                    )
                 )
 
         half_life = provenance.get("t_half_h")
@@ -456,66 +580,29 @@ def value_provenance_report(root: Path | str) -> dict[str, Any]:
             unmapped_warning_drugs.append(slug)
 
         if unresolved_fields_for_drug:
-            unresolved_priorities = [_review_priority(field) for field in unresolved_fields_for_drug]
-            highest_priority = sorted(unresolved_priorities, key=_priority_rank)[0]
-            unused_source_ids = set(available_source_ids) - used_source_ids_for_drug
-            action = _review_action(available_source_ids, used_source_ids_for_drug)
-            source_review_action_counts[action] = source_review_action_counts.get(action, 0) + 1
-            used_source_refs = _filter_source_refs(available_source_refs, used_source_ids_for_drug)
-            unused_source_refs = _filter_source_refs(available_source_refs, unused_source_ids)
-            suggested_source_refs = _sort_source_refs_for_review(unused_source_refs or used_source_refs)
-            for source_ref in suggested_source_refs:
-                source_kind = source_ref["source_kind"]
-                suggested_source_kind_counts[source_kind] = suggested_source_kind_counts.get(source_kind, 0) + 1
-            source_review_queue.append(
-                {
-                    "drug": slug,
-                    "highest_priority": highest_priority,
-                    "review_action": action,
-                    "unresolved_fields": unresolved_fields_for_drug,
-                    "unresolved_entries": [
-                        f"{slug}.{field}" for field in unresolved_fields_for_drug
-                    ],
-                    "coverage": dict(coverage_by_drug[slug]),
-                    "available_source_ids": available_source_ids,
-                    "used_source_ids": sorted(used_source_ids_for_drug),
-                    "unused_source_ids": sorted(unused_source_ids),
-                    "available_source_refs": available_source_refs,
-                    "used_source_refs": used_source_refs,
-                    "unused_source_refs": unused_source_refs,
-                    "suggested_source_refs": suggested_source_refs,
-                }
+            queue_item = _source_review_queue_item(
+                slug,
+                unresolved_fields_for_drug,
+                coverage_by_drug[slug],
+                available_source_ids=available_source_ids,
+                used_source_ids=used_source_ids_for_drug,
+                available_source_refs=available_source_refs,
             )
+            _count_queue_suggestions(
+                queue_item,
+                source_review_action_counts=source_review_action_counts,
+                suggested_source_kind_counts=suggested_source_kind_counts,
+            )
+            source_review_queue.append(queue_item)
 
     t_half_rate = warning_t_half_resolved / warning_t_half_total if warning_t_half_total else 0.0
     source_mapping_rate = non_null_source_id_entries / entries if entries else 0.0
-    for field, field_coverage in coverage_by_field.items():
-        total = field_coverage["total"]
-        field_coverage["rate"] = field_coverage["resolved"] / total if total else 0.0
-    for drug_coverage in coverage_by_drug.values():
-        total = drug_coverage["total"]
-        drug_coverage["rate"] = drug_coverage["resolved"] / total if total else 0.0
-
-    field_priority = {
-        "t_half_h": 0,
-        "CL_abs_L_per_h_at_70kg": 1,
-        "V_abs_L_at_70kg": 2,
-    }
-    detail_by_entry = {detail["entry"]: detail for detail in unresolved_entry_details}
-    next_review_entries = sorted(
+    _apply_coverage_rates(coverage_by_field, coverage_by_drug)
+    next_review_entries, next_review_details = _next_review_items(
         unresolved_entries,
-        key=lambda entry: (field_priority.get(entry.split(".", 1)[1], 99), entry),
+        unresolved_entry_details,
     )
-    next_review_details = [detail_by_entry[entry] for entry in next_review_entries if entry in detail_by_entry]
-    source_review_queue = sorted(
-        source_review_queue,
-        key=lambda item: (
-            _priority_rank(str(item["highest_priority"])),
-            item["coverage"]["resolved"],
-            -item["coverage"]["unresolved"],
-            item["drug"],
-        ),
-    )
+    source_review_queue = _sort_source_review_queue(source_review_queue)
     return {
         "warning_drugs": list(WARNING_DRUGS),
         "provenance_entries": entries,
@@ -612,11 +699,18 @@ def main(argv: list[str] | None = None) -> int:
         print("unresolved_entry_details:")
         for detail in report["unresolved_entry_details"]:
             reasons = ",".join(detail["reasons"])
-            print(
+            line = (
                 f"- {detail['entry']}: priority={detail['priority']} "
                 f"reasons={reasons} normalized={detail['normalized_value']} {detail['normalized_unit']} "
                 f"role={detail['role']}"
             )
+            if detail.get("source_verification_status"):
+                line += (
+                    f" source_verification_status={detail['source_verification_status']}"
+                    f" blocker={detail.get('source_review_blocker')}"
+                    f" next_action={detail.get('next_source_review_action')}"
+                )
+            print(line)
         print("unresolved_reason_counts:")
         for reason, count in report["unresolved_reason_counts"].items():
             print(f"- {reason}: {count}")
@@ -646,7 +740,14 @@ def main(argv: list[str] | None = None) -> int:
         print("next_review_details:")
         for detail in report["next_review_details"]:
             reasons = ",".join(detail["reasons"])
-            print(f"- {detail['entry']}: priority={detail['priority']} reasons={reasons}")
+            line = f"- {detail['entry']}: priority={detail['priority']} reasons={reasons}"
+            if detail.get("source_verification_status"):
+                line += (
+                    f" source_verification_status={detail['source_verification_status']}"
+                    f" blocker={detail.get('source_review_blocker')}"
+                    f" next_action={detail.get('next_source_review_action')}"
+                )
+            print(line)
         print("source_review_queue:")
         for item in report["source_review_queue"]:
             fields = ",".join(item["unresolved_fields"])

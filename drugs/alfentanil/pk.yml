@@ -5,16 +5,16 @@ sources:
 - id: source_1
   url: https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=c965d63f-933b-4a83-88f6-c8c74159530b
 pk_raw:
-  half_life: 2.5-4 hours
+  half_life: 90-111 minutes
   clearance: 5 mL/kg/min
   volume_of_distribution: 0.4-1 L/kg
   bioavailability: N/A (IV only)
   elimination_route: 肝代謝, 腎排泄
 pk_parsed:
-  half_life_h: 3.25
+  half_life_h: 1.675
   half_life_h_range:
-  - 2.5
-  - 4.0
+  - 1.5
+  - 1.85
   clearance:
     value: 0.3
     unit: L/h/kg
@@ -82,23 +82,23 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
   t_half_h:
-    source_id: null
-    source_field: pk_parsed.half_life_h
+    source_id: source_1
+    source_field: terminal_elimination_half_life_range
     value_basis: derived_from_reported
-    raw_value: 3.25
-    raw_unit: h
-    normalized_value: 3.25
+    raw_value: 90-111
+    raw_unit: min
+    normalized_value: 1.675
     normalized_unit: h
     conversion:
-      method: direct
-      formula: pk_parsed.half_life_h
-      assumptions: {}
+      method: derived_formula
+      formula: mean of reported 90-111 min range / 60 min/h
+      assumptions:
+        range_summary: midpoint
     role: check_only
-    reviewer_status: acknowledged_fixture_limitation
-    reviewer_note: Half-life is retained as a check target only. CL and V are not
-      jointly calibrated to match terminal half-life in this deterministic one-compartment
-      fixture. Existing source URLs do not identify the exact value-level source for
-      this parameter. This provenance records the canonical parsed/derived fixture
-      value and intentionally marks source mapping for future review.
-    source_review_status: needs_source_review
+    reviewer_status: checked
+    reviewer_note: DailyMed source_1 reports terminal elimination half-life of 90
+      to 111 minutes. Canonical t_half_h uses the midpoint converted to hours and
+      remains a check target only. CL and V are not jointly calibrated to match terminal
+      half-life in this deterministic one-compartment fixture.
+    source_review_status: checked
     fixture_limitation_status: acknowledged

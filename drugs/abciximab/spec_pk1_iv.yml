@@ -59,8 +59,9 @@ meta:
   - https://pubmed.ncbi.nlm.nih.gov/11907493/
   - https://www.researchgate.net/publication/232754238_Pharmacokinetics_PK_pharmacodynamics_PD_and_GPIIBIIIA_receptor_blockade_of_ABCIXIMAB_in_stable_angina_pectoris_patients
   - https://www.sciencedirect.com/topics/biochemistry-genetics-and-molecular-biology/abciximab
+  - https://pubmed.ncbi.nlm.nih.gov/14618072/
   pk_summary_raw:
-    half_life: 10-30 minutes
+    half_life: 20-30 minutes
     clearance: 183 +/- 72 mL/min
     volume: 1.44 L/kg
     bioavailability: N/A (IV only)

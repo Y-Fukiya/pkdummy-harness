@@ -103,5 +103,20 @@ value_provenance:
       fixture. Existing source URLs do not identify the exact value-level source for
       this parameter. This provenance records the canonical parsed/derived fixture
       value and intentionally marks source mapping for future review.
+    source_verification:
+      status: no_exact_public_source_match
+      reviewed_source_ids:
+      - source_1
+      - source_2
+      reviewed_external_queries:
+      - PubMed search: inulin pharmacokinetics human clearance half-life
+      - PubMed exact search: inulin half-life 2-4 hours clearance 7.2 L/hr
+      blocker: exact_value_not_found_in_public_primary_source
+      next_action: add_primary_source_or_replace_fixture_value
+      reviewer_note: Public unauthenticated DrugBank access did not expose exact
+        source text for source_1. The fetched ScienceDirect topic page for source_2
+        did not expose an exact inulin value. PubMed abstract searches did not identify
+        a public primary source matching the local 2-4 h inulin half-life range, so
+        source_id remains null instead of being inferred.
     source_review_status: needs_source_review
     fixture_limitation_status: acknowledged

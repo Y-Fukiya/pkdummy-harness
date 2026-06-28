@@ -1,8 +1,8 @@
 drug,slug,route,half_life_h,CL_abs_L_h_at_70kg,V_abs_L_at_70kg,F,spec_file,pk_file,sources_n,targets_file
-Abciximab,abciximab,iv,0.3333333333333333,4.32,100.8,1.0,drugs/abciximab/spec_pk1_iv.yml,drugs/abciximab/pk.yml,4,drugs/abciximab/targets.yml
+Abciximab,abciximab,iv,0.3333333333333333,4.32,100.8,1.0,drugs/abciximab/spec_pk1_iv.yml,drugs/abciximab/pk.yml,5,drugs/abciximab/targets.yml
 Aciclovir,aciclovir,po,2.5,19.62,42.0,0.1,drugs/aciclovir/spec_pk1_oral.yml,drugs/aciclovir/pk.yml,3,drugs/aciclovir/targets.yml
 Albuterol,albuterol,iv,3.86,28.8,160.38152230554428,1.0,drugs/albuterol/spec_pk1_iv.yml,drugs/albuterol/pk.yml,1,drugs/albuterol/targets.yml
-Alfentanil,alfentanil,iv,3.25,21.0,70.0,1.0,drugs/alfentanil/spec_pk1_iv.yml,drugs/alfentanil/pk.yml,1,drugs/alfentanil/targets.yml
+Alfentanil,alfentanil,iv,1.675,21.0,70.0,1.0,drugs/alfentanil/spec_pk1_iv.yml,drugs/alfentanil/pk.yml,1,drugs/alfentanil/targets.yml
 Alprazolam,alprazolam,po,12.5,6.3,91.0,0.9,drugs/alprazolam/spec_pk1_oral.yml,drugs/alprazolam/pk.yml,1,drugs/alprazolam/targets.yml
 Amikacin,amikacin,iv,2.0,6.0,24.0,1.0,drugs/amikacin/spec_pk1_iv.yml,drugs/amikacin/pk.yml,1,drugs/amikacin/targets.yml
 Apixaban,apixaban,po,12.0,3.3,57.130723619202946,0.5,drugs/apixaban/spec_pk1_oral.yml,drugs/apixaban/pk.yml,1,drugs/apixaban/targets.yml
