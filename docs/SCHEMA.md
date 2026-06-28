@@ -64,7 +64,7 @@ Enumは `tools/check_value_provenance.py` で検証します。
 - `reviewer_status`: `checked`, `acknowledged_fixture_limitation`, `needs_source_review`, `needs_unit_review`, `not_applicable`
 
 `source_id` が `null` でない場合は `sources[].id` に解決できる必要があります。既存source URLから値ごとの直接出典を特定できない場合は、出典を推測せず `source_id: null` として `fields_needing_review` に残します。
-`reviewer_status` は後方互換の要約フィールドです。新しいチェックでは、値ごとのsource確認は `source_review_status`、1-compartment fixture limitation の確認は `fixture_limitation_status` を優先します。
+`reviewer_status` は後方互換の legacy summary です。新規レビューでは、値ごとのsource確認は `source_review_status`、1-compartment fixture limitation の確認は `fixture_limitation_status` に分けて記録します。validator や `--report` の集計も、この2つの分離フィールドを優先します。
 
 ## `drugs/<slug>/spec_pk1_oral.yml` / `spec_pk1_iv.yml`
 

@@ -48,30 +48,28 @@ derived:
     typically report systemic parameters.'
 value_provenance:
   CL_abs_L_per_h_at_70kg:
-    source_id: null
-    source_field: pk_parsed.clearance
-    value_basis: derived_from_reported
-    raw_value: 1.8479999999999999
-    raw_unit: L/h
+    source_id: source_1
+    source_field: plasma_clearance
+    value_basis: literature_reported
+    raw_value: 30.8
+    raw_unit: mL/min
     normalized_value: 1.8479999999999999
     normalized_unit: L/h
     conversion:
-      method: direct
-      formula: pk_parsed.clearance.value
+      method: unit_conversion
+      formula: 30.8 mL/min * 60 min/h / 1000 mL/L
       assumptions: {}
     role: simulation_parameter
-    reviewer_status: needs_source_review
-    reviewer_note: Clearance is used as a deterministic fixture model parameter and
-      is not recalibrated to force agreement with terminal half-life. Existing source
-      URLs do not identify the exact value-level source for this parameter. This provenance
-      records the canonical parsed/derived fixture value and intentionally marks source
-      mapping for future review.
-    source_review_status: needs_source_review
+    reviewer_status: checked
+    reviewer_note: PubMed source_1 reports mean plasma clearance of 30.8 mL/min after
+      intravenous dosing. Clearance is used as a deterministic fixture model parameter
+      and is not recalibrated to force agreement with terminal half-life.
+    source_review_status: checked
     fixture_limitation_status: not_applicable
   V_abs_L_at_70kg:
-    source_id: null
-    source_field: pk_parsed.volume
-    value_basis: derived_from_reported
+    source_id: source_1
+    source_field: volume_of_distribution
+    value_basis: literature_reported
     raw_value: 9.7
     raw_unit: L
     normalized_value: 9.7
@@ -81,18 +79,16 @@ value_provenance:
       formula: pk_parsed.volume.value
       assumptions: {}
     role: simulation_parameter
-    reviewer_status: needs_source_review
-    reviewer_note: Volume is retained as the one-compartment fixture volume and is
-      not recalibrated to force agreement with terminal half-life. Existing source
-      URLs do not identify the exact value-level source for this parameter. This provenance
-      records the canonical parsed/derived fixture value and intentionally marks source
-      mapping for future review.
-    source_review_status: needs_source_review
+    reviewer_status: checked
+    reviewer_note: PubMed source_1 reports mean volume of distribution of 9.7 L after
+      intravenous dosing. Volume is retained as the one-compartment fixture volume
+      and is not recalibrated to force agreement with terminal half-life.
+    source_review_status: checked
     fixture_limitation_status: not_applicable
   t_half_h:
-    source_id: null
-    source_field: pk_parsed.half_life_h
-    value_basis: derived_from_reported
+    source_id: source_1
+    source_field: terminal_half_life
+    value_basis: literature_reported
     raw_value: 6.7
     raw_unit: h
     normalized_value: 6.7
@@ -102,11 +98,10 @@ value_provenance:
       formula: pk_parsed.half_life_h
       assumptions: {}
     role: check_only
-    reviewer_status: acknowledged_fixture_limitation
-    reviewer_note: Half-life is retained as a check target only. CL and V are not
-      jointly calibrated to match terminal half-life in this deterministic one-compartment
-      fixture. Existing source URLs do not identify the exact value-level source for
-      this parameter. This provenance records the canonical parsed/derived fixture
-      value and intentionally marks source mapping for future review.
-    source_review_status: needs_source_review
+    reviewer_status: checked
+    reviewer_note: PubMed source_1 reports mean terminal half-life of 6.7 h after
+      intravenous dosing. Canonical t_half_h remains a check target only. CL and V
+      are not jointly calibrated to match terminal half-life in this deterministic
+      one-compartment fixture.
+    source_review_status: checked
     fixture_limitation_status: acknowledged

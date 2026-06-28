@@ -91,9 +91,9 @@ value_provenance:
     source_review_status: needs_source_review
     fixture_limitation_status: not_applicable
   t_half_h:
-    source_id: null
-    source_field: pk_parsed.half_life_h
-    value_basis: derived_from_reported
+    source_id: source_1
+    source_field: terminal_half_life
+    value_basis: label_reported
     raw_value: 2.0
     raw_unit: h
     normalized_value: 2.0
@@ -103,11 +103,10 @@ value_provenance:
       formula: pk_parsed.half_life_h
       assumptions: {}
     role: check_only
-    reviewer_status: acknowledged_fixture_limitation
-    reviewer_note: Half-life is retained as a check target only. CL and V are not
-      jointly calibrated to match terminal half-life in this deterministic one-compartment
-      fixture. Existing source URLs do not identify the exact value-level source for
-      this parameter. This provenance records the canonical parsed/derived fixture
-      value and intentionally marks source mapping for future review.
-    source_review_status: needs_source_review
+    reviewer_status: checked
+    reviewer_note: DailyMed source_1 reports cimetidine half-life as approximately
+      2 h. Canonical t_half_h remains a check target only. CL and V are not jointly
+      calibrated to match terminal half-life in this deterministic one-compartment
+      fixture.
+    source_review_status: checked
     fixture_limitation_status: acknowledged

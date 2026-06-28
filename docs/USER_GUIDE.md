@@ -156,8 +156,8 @@ run-level `MANIFEST.yml` には full provenance をコピーせず、`value_prov
 | `value_provenance_summary.source_ids` | manifest summary上で参照された非null source id |
 | `value_provenance_summary.mismatch_acknowledged_fields` | fixture limitation として確認済みの mismatch field |
 
-`--report` は `fields_needing_review` を一覧化します。`source_id: null` の項目は、値ごとの直接source mappingが未確認であることを明示するために残しています。sourceを確認できた場合だけ `source_id` を `sources[].id` に接続してください。
-source mapping の確認状態は `source_review_status`、fixture limitation の確認状態は `fixture_limitation_status` に分けて記録します。
+`--report` は `fields_needing_review` に加えて、`source_review_status` / `fixture_limitation_status` の集計、非null `source_id` entry数、warning薬剤の`t_half_h` source解決率を出力します。`source_id: null` の項目は、値ごとの直接source mappingが未確認であることを明示するために残しています。sourceを確認できた場合だけ `source_id` を `sources[].id` に接続してください。
+source mapping の確認状態は `source_review_status`、fixture limitation の確認状態は `fixture_limitation_status` に分けて記録します。`reviewer_status` は後方互換の legacy summary であり、新しい監査ではこの2つの分離フィールドを優先します。
 
 ### Step 3: 臨床試験の採血ポイントに合わせる
 

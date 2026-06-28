@@ -8,6 +8,7 @@ from tools.check_value_provenance import (
     REQUIRED_VALUE_PROVENANCE_FIELDS,
     WARNING_DRUGS,
     build_value_provenance_summary,
+    value_provenance_report,
     validate_root,
 )
 
@@ -95,3 +96,25 @@ def test_value_provenance_report_lists_fields_needing_review() -> None:
     assert issues == []
     assert "fields_needing_review" in report
     assert "abciximab.CL_abs_L_per_h_at_70kg" in report["fields_needing_review"]
+
+
+def test_value_provenance_report_counts_review_statuses() -> None:
+    report = value_provenance_report(ROOT)
+
+    source_counts = report["source_review_status_counts"]
+    fixture_counts = report["fixture_limitation_status_counts"]
+
+    assert sum(source_counts.values()) == report["provenance_entries"]
+    assert sum(fixture_counts.values()) == report["provenance_entries"]
+    assert source_counts["checked"] == report["non_null_source_id_entries"]
+    assert fixture_counts["acknowledged"] == len(WARNING_DRUGS)
+
+
+def test_warning_half_life_source_resolution_rate_is_reported() -> None:
+    report = value_provenance_report(ROOT)
+
+    resolution = report["warning_t_half_source_id_resolution"]
+
+    assert resolution["total"] == len(WARNING_DRUGS)
+    assert resolution["resolved"] >= 6
+    assert 0 < resolution["rate"] <= 1

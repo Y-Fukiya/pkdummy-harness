@@ -245,6 +245,11 @@ def value_provenance_report(root: Path | str) -> dict[str, Any]:
     root_path = Path(root)
     fields_needing_review: list[str] = []
     source_ids: set[str] = set()
+    source_review_status_counts = {status: 0 for status in sorted(SOURCE_REVIEW_STATUSES)}
+    fixture_limitation_status_counts = {status: 0 for status in sorted(FIXTURE_LIMITATION_STATUSES)}
+    non_null_source_id_entries = 0
+    warning_t_half_total = 0
+    warning_t_half_resolved = 0
     entries = 0
     for slug in WARNING_DRUGS:
         drug_dir = root_path / "drugs" / slug
@@ -259,11 +264,43 @@ def value_provenance_report(root: Path | str) -> dict[str, Any]:
         source_ids.update(str(source_id) for source_id in summary.get("source_ids") or [])
         for field in summary.get("fields_needing_review") or []:
             fields_needing_review.append(f"{slug}.{field}")
+
+        provenance = pk.get("value_provenance") or {}
+        if not isinstance(provenance, dict):
+            continue
+        for field in REQUIRED_VALUE_PROVENANCE_FIELDS:
+            entry = provenance.get(field)
+            if not isinstance(entry, dict):
+                continue
+            source_review_status = entry.get("source_review_status")
+            if source_review_status in source_review_status_counts:
+                source_review_status_counts[source_review_status] += 1
+            fixture_limitation_status = entry.get("fixture_limitation_status")
+            if fixture_limitation_status in fixture_limitation_status_counts:
+                fixture_limitation_status_counts[fixture_limitation_status] += 1
+            if entry.get("source_id") is not None:
+                non_null_source_id_entries += 1
+
+        half_life = provenance.get("t_half_h")
+        if isinstance(half_life, dict):
+            warning_t_half_total += 1
+            if half_life.get("source_id") is not None:
+                warning_t_half_resolved += 1
+
+    t_half_rate = warning_t_half_resolved / warning_t_half_total if warning_t_half_total else 0.0
     return {
         "warning_drugs": list(WARNING_DRUGS),
         "provenance_entries": entries,
         "non_null_source_ids": sorted(source_ids),
+        "non_null_source_id_entries": non_null_source_id_entries,
         "fields_needing_review": fields_needing_review,
+        "source_review_status_counts": source_review_status_counts,
+        "fixture_limitation_status_counts": fixture_limitation_status_counts,
+        "warning_t_half_source_id_resolution": {
+            "resolved": warning_t_half_resolved,
+            "total": warning_t_half_total,
+            "rate": t_half_rate,
+        },
     }
 
 
@@ -312,6 +349,19 @@ def main(argv: list[str] | None = None) -> int:
         print("non_null_source_ids:")
         for source_id in report["non_null_source_ids"]:
             print(f"- {source_id}")
+        print("non_null_source_id_entries:")
+        print(f"- {report['non_null_source_id_entries']}")
+        print("source_review_status:")
+        for status, count in report["source_review_status_counts"].items():
+            print(f"- {status}: {count}")
+        print("fixture_limitation_status:")
+        for status, count in report["fixture_limitation_status_counts"].items():
+            print(f"- {status}: {count}")
+        resolution = report["warning_t_half_source_id_resolution"]
+        print("warning_t_half_source_id_resolution:")
+        print(f"- resolved: {resolution['resolved']}")
+        print(f"- total: {resolution['total']}")
+        print(f"- rate: {resolution['rate']:.3f}")
     return 0
 
 
