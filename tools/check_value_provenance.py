@@ -64,6 +64,22 @@ REVIEWER_STATUSES = {
 }
 SOURCE_REVIEW_STATUSES = {"checked", "needs_source_review", "needs_unit_review", "not_applicable"}
 FIXTURE_LIMITATION_STATUSES = {"acknowledged", "not_applicable"}
+SOURCE_VERIFICATION_STATUSES = {
+    "no_exact_public_source_match",
+    "candidate_source_text_unavailable",
+    "not_applicable",
+}
+SOURCE_REVIEW_BLOCKERS = {
+    "exact_value_not_found_in_public_primary_source",
+    "candidate_source_text_unavailable",
+    "not_applicable",
+}
+NEXT_SOURCE_REVIEW_ACTIONS = {
+    "add_primary_source_or_replace_fixture_value",
+    "inspect_unused_sources",
+    "recheck_used_sources",
+    "not_applicable",
+}
 SOURCE_KIND_RANKS = {
     "label": 0,
     "pubmed": 1,
@@ -100,6 +116,66 @@ def _source_ids(pk: dict[str, Any]) -> set[str]:
 
 def _source_id_list(pk: dict[str, Any]) -> list[str]:
     return sorted(_source_ids(pk))
+
+
+def _validate_source_verification(
+    slug: str,
+    field: str,
+    entry: dict[str, Any],
+    *,
+    known_source_ids: set[str],
+) -> list[str]:
+    source_verification = entry.get("source_verification")
+    if source_verification is None:
+        return []
+    if not isinstance(source_verification, dict):
+        return [f"{slug}: value_provenance.{field}.source_verification must be a mapping"]
+
+    issues: list[str] = []
+    status = source_verification.get("status")
+    if status not in SOURCE_VERIFICATION_STATUSES:
+        issues.append(
+            f"{slug}: value_provenance.{field}.source_verification.status has invalid enum"
+        )
+    blocker = source_verification.get("blocker")
+    if blocker not in SOURCE_REVIEW_BLOCKERS:
+        issues.append(
+            f"{slug}: value_provenance.{field}.source_verification.blocker has invalid enum"
+        )
+    next_action = source_verification.get("next_action")
+    if next_action not in NEXT_SOURCE_REVIEW_ACTIONS:
+        issues.append(
+            f"{slug}: value_provenance.{field}.source_verification.next_action has invalid enum"
+        )
+
+    reviewed_source_ids = source_verification.get("reviewed_source_ids", [])
+    if not isinstance(reviewed_source_ids, list):
+        issues.append(
+            f"{slug}: value_provenance.{field}.source_verification.reviewed_source_ids "
+            "must be a list"
+        )
+    else:
+        for source_id in reviewed_source_ids:
+            if str(source_id) not in known_source_ids:
+                issues.append(
+                    f"{slug}: value_provenance.{field}.source_verification.reviewed_source_ids "
+                    f"has unresolved id: {source_id}"
+                )
+
+    reviewed_external_queries = source_verification.get("reviewed_external_queries", [])
+    if not isinstance(reviewed_external_queries, list):
+        issues.append(
+            f"{slug}: value_provenance.{field}.source_verification.reviewed_external_queries "
+            "must be a list"
+        )
+
+    if status == "no_exact_public_source_match" and entry.get("source_id") is not None:
+        issues.append(
+            f"{slug}: value_provenance.{field}.source_id must stay null when "
+            "source_verification.status is no_exact_public_source_match"
+        )
+
+    return issues
 
 
 def _source_kind(url: str) -> str:
@@ -205,6 +281,24 @@ def validate_value_provenance(
             issues.append(f"{slug}: value_provenance.{field}.fixture_limitation_status has invalid enum")
         if entry.get("source_id") is not None and source_review_status != "checked":
             issues.append(f"{slug}: value_provenance.{field}.source_review_status must be checked when source_id is set")
+        if (
+            required
+            and field == "t_half_h"
+            and entry.get("source_id") is None
+            and entry.get("source_verification") is None
+        ):
+            issues.append(
+                f"{slug}: value_provenance.{field}.source_verification is required when "
+                "t_half_h source_id is missing"
+            )
+        issues.extend(
+            _validate_source_verification(
+                slug,
+                field,
+                entry,
+                known_source_ids=known_source_ids,
+            )
+        )
 
         conversion = entry.get("conversion")
         if not isinstance(conversion, dict):
@@ -301,6 +395,15 @@ def build_value_provenance_summary(pk: dict[str, Any], targets: dict[str, Any] |
 
 def _empty_coverage() -> dict[str, int | float]:
     return {"resolved": 0, "unresolved": 0, "total": 0, "rate": 0.0}
+
+
+def _empty_source_verification_coverage() -> dict[str, int | float]:
+    return {
+        "with_source_verification": 0,
+        "missing_source_verification": 0,
+        "total_unresolved": 0,
+        "rate": 0.0,
+    }
 
 
 def _review_priority(field: str) -> str:
@@ -436,6 +539,11 @@ def _apply_coverage_rates(
         drug_coverage["rate"] = drug_coverage["resolved"] / total if total else 0.0
 
 
+def _apply_source_verification_coverage_rate(coverage: dict[str, int | float]) -> None:
+    total = coverage["total_unresolved"]
+    coverage["rate"] = coverage["with_source_verification"] / total if total else 0.0
+
+
 def _next_review_items(
     unresolved_entries: list[str],
     unresolved_entry_details: list[dict[str, Any]],
@@ -488,6 +596,14 @@ def value_provenance_report(root: Path | str) -> dict[str, Any]:
     source_review_queue: list[dict[str, Any]] = []
     source_review_action_counts: dict[str, int] = {}
     suggested_source_kind_counts: dict[str, int] = {}
+    source_verification_status_counts: dict[str, int] = {"not_recorded": 0}
+    source_review_blocker_counts: dict[str, int] = {"not_recorded": 0}
+    unresolved_entries_missing_source_verification: list[str] = []
+    source_verification_coverage = _empty_source_verification_coverage()
+    source_verification_coverage_by_priority = {
+        priority: _empty_source_verification_coverage()
+        for priority in ("high", "medium", "low")
+    }
     source_review_status_counts = {status: 0 for status in sorted(SOURCE_REVIEW_STATUSES)}
     fixture_limitation_status_counts = {status: 0 for status in sorted(FIXTURE_LIMITATION_STATUSES)}
     non_null_source_id_entries = 0
@@ -555,16 +671,41 @@ def value_provenance_report(root: Path | str) -> dict[str, Any]:
                 reasons = _unresolved_reasons(entry)
                 for reason in reasons:
                     unresolved_reason_counts[reason] = unresolved_reason_counts.get(reason, 0) + 1
-                unresolved_entry_details.append(
-                    _unresolved_entry_detail(
-                        slug,
-                        field,
-                        entry,
-                        source_review_status=source_review_status,
-                        available_source_ids=available_source_ids,
-                        available_source_refs=available_source_refs,
-                    )
+                detail = _unresolved_entry_detail(
+                    slug,
+                    field,
+                    entry,
+                    source_review_status=source_review_status,
+                    available_source_ids=available_source_ids,
+                    available_source_refs=available_source_refs,
                 )
+                source_verification_status = detail.get("source_verification_status")
+                priority = str(detail["priority"])
+                priority_coverage = source_verification_coverage_by_priority[priority]
+                source_verification_coverage["total_unresolved"] += 1
+                priority_coverage["total_unresolved"] += 1
+                if source_verification_status:
+                    status_key = str(source_verification_status)
+                    source_verification_status_counts[status_key] = (
+                        source_verification_status_counts.get(status_key, 0) + 1
+                    )
+                    source_verification_coverage["with_source_verification"] += 1
+                    priority_coverage["with_source_verification"] += 1
+                else:
+                    source_verification_status_counts["not_recorded"] += 1
+                    source_verification_coverage["missing_source_verification"] += 1
+                    priority_coverage["missing_source_verification"] += 1
+                    unresolved_entries_missing_source_verification.append(entry_name)
+
+                source_review_blocker = detail.get("source_review_blocker")
+                if source_review_blocker:
+                    blocker_key = str(source_review_blocker)
+                    source_review_blocker_counts[blocker_key] = (
+                        source_review_blocker_counts.get(blocker_key, 0) + 1
+                    )
+                else:
+                    source_review_blocker_counts["not_recorded"] += 1
+                unresolved_entry_details.append(detail)
 
         half_life = provenance.get("t_half_h")
         if isinstance(half_life, dict):
@@ -598,6 +739,9 @@ def value_provenance_report(root: Path | str) -> dict[str, Any]:
     t_half_rate = warning_t_half_resolved / warning_t_half_total if warning_t_half_total else 0.0
     source_mapping_rate = non_null_source_id_entries / entries if entries else 0.0
     _apply_coverage_rates(coverage_by_field, coverage_by_drug)
+    _apply_source_verification_coverage_rate(source_verification_coverage)
+    for priority_coverage in source_verification_coverage_by_priority.values():
+        _apply_source_verification_coverage_rate(priority_coverage)
     next_review_entries, next_review_details = _next_review_items(
         unresolved_entries,
         unresolved_entry_details,
@@ -613,6 +757,15 @@ def value_provenance_report(root: Path | str) -> dict[str, Any]:
         "unresolved_entries": sorted(unresolved_entries),
         "unresolved_entry_details": sorted(unresolved_entry_details, key=lambda detail: detail["entry"]),
         "unresolved_reason_counts": dict(sorted(unresolved_reason_counts.items())),
+        "source_verification_status_counts": dict(
+            sorted(source_verification_status_counts.items())
+        ),
+        "source_review_blocker_counts": dict(sorted(source_review_blocker_counts.items())),
+        "unresolved_entries_missing_source_verification": sorted(
+            unresolved_entries_missing_source_verification
+        ),
+        "source_verification_coverage": source_verification_coverage,
+        "source_verification_coverage_by_priority": source_verification_coverage_by_priority,
         "source_mapping_coverage": {
             "resolved": non_null_source_id_entries,
             "unresolved": len(unresolved_entries),
@@ -714,6 +867,29 @@ def main(argv: list[str] | None = None) -> int:
         print("unresolved_reason_counts:")
         for reason, count in report["unresolved_reason_counts"].items():
             print(f"- {reason}: {count}")
+        print("source_verification_status_counts:")
+        for status, count in report["source_verification_status_counts"].items():
+            print(f"- {status}: {count}")
+        print("source_review_blocker_counts:")
+        for blocker, count in report["source_review_blocker_counts"].items():
+            print(f"- {blocker}: {count}")
+        print("unresolved_entries_missing_source_verification:")
+        for entry in report["unresolved_entries_missing_source_verification"]:
+            print(f"- {entry}")
+        source_verification_coverage = report["source_verification_coverage"]
+        print("source_verification_coverage:")
+        print(f"- with_source_verification: {source_verification_coverage['with_source_verification']}")
+        print(f"- missing_source_verification: {source_verification_coverage['missing_source_verification']}")
+        print(f"- total_unresolved: {source_verification_coverage['total_unresolved']}")
+        print(f"- rate: {source_verification_coverage['rate']:.3f}")
+        print("source_verification_coverage_by_priority:")
+        for priority, priority_coverage in report["source_verification_coverage_by_priority"].items():
+            print(
+                f"- {priority}: with_source_verification={priority_coverage['with_source_verification']} "
+                f"missing_source_verification={priority_coverage['missing_source_verification']} "
+                f"total_unresolved={priority_coverage['total_unresolved']} "
+                f"rate={priority_coverage['rate']:.3f}"
+            )
         coverage = report["source_mapping_coverage"]
         print("source_mapping_coverage:")
         print(f"- resolved: {coverage['resolved']}")

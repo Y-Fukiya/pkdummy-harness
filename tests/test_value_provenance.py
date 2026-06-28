@@ -10,6 +10,7 @@ from tools.check_value_provenance import (
     build_value_provenance_summary,
     value_provenance_report,
     validate_root,
+    validate_value_provenance,
 )
 
 
@@ -174,6 +175,93 @@ def test_value_provenance_report_surfaces_source_verification_blockers() -> None
     assert inulin_half_life["source_review_blocker"] == "exact_value_not_found_in_public_primary_source"
     assert inulin_half_life["reviewed_source_ids"] == ["source_1", "source_2"]
     assert inulin_half_life["next_source_review_action"] == "add_primary_source_or_replace_fixture_value"
+
+
+def test_value_provenance_validates_source_verification_contract() -> None:
+    pk = load_yaml(ROOT / "drugs" / "inulin" / "pk.yml")
+    targets = load_yaml(ROOT / "drugs" / "inulin" / "targets.yml")
+    half_life = pk["value_provenance"]["t_half_h"]
+
+    half_life["source_verification"]["status"] = "maybe"
+    half_life["source_verification"]["blocker"] = "maybe_missing"
+    half_life["source_verification"]["next_action"] = "guess_source_id"
+    half_life["source_verification"]["reviewed_source_ids"] = ["missing_source"]
+
+    issues = validate_value_provenance("inulin", pk, targets, required=True)
+
+    assert "inulin: value_provenance.t_half_h.source_verification.status has invalid enum" in issues
+    assert "inulin: value_provenance.t_half_h.source_verification.blocker has invalid enum" in issues
+    assert "inulin: value_provenance.t_half_h.source_verification.next_action has invalid enum" in issues
+    assert (
+        "inulin: value_provenance.t_half_h.source_verification.reviewed_source_ids "
+        "has unresolved id: missing_source"
+    ) in issues
+
+
+def test_value_provenance_rejects_no_match_verification_with_source_id() -> None:
+    pk = load_yaml(ROOT / "drugs" / "inulin" / "pk.yml")
+    targets = load_yaml(ROOT / "drugs" / "inulin" / "targets.yml")
+    half_life = pk["value_provenance"]["t_half_h"]
+
+    half_life["source_id"] = "source_1"
+    half_life["source_review_status"] = "checked"
+
+    issues = validate_value_provenance("inulin", pk, targets, required=True)
+
+    assert (
+        "inulin: value_provenance.t_half_h.source_id must stay null when "
+        "source_verification.status is no_exact_public_source_match"
+    ) in issues
+
+
+def test_value_provenance_requires_source_verification_for_unresolved_half_life() -> None:
+    pk = load_yaml(ROOT / "drugs" / "inulin" / "pk.yml")
+    targets = load_yaml(ROOT / "drugs" / "inulin" / "targets.yml")
+    half_life = pk["value_provenance"]["t_half_h"]
+
+    half_life.pop("source_verification")
+
+    issues = validate_value_provenance("inulin", pk, targets, required=True)
+
+    assert (
+        "inulin: value_provenance.t_half_h.source_verification is required when "
+        "t_half_h source_id is missing"
+    ) in issues
+
+
+def test_value_provenance_report_counts_source_verification_statuses() -> None:
+    report = value_provenance_report(ROOT)
+
+    assert report["source_verification_status_counts"]["no_exact_public_source_match"] == 1
+    assert report["source_verification_status_counts"]["not_recorded"] == (
+        len(report["unresolved_entries"]) - 1
+    )
+    assert (
+        report["source_review_blocker_counts"][
+            "exact_value_not_found_in_public_primary_source"
+        ]
+        == 1
+    )
+    assert "abciximab.CL_abs_L_per_h_at_70kg" in report[
+        "unresolved_entries_missing_source_verification"
+    ]
+    assert "inulin.t_half_h" not in report["unresolved_entries_missing_source_verification"]
+
+
+def test_value_provenance_report_counts_source_verification_coverage_by_priority() -> None:
+    report = value_provenance_report(ROOT)
+    coverage = report["source_verification_coverage"]
+    coverage_by_priority = report["source_verification_coverage_by_priority"]
+
+    assert coverage["total_unresolved"] == len(report["unresolved_entries"])
+    assert coverage["with_source_verification"] == 1
+    assert coverage["missing_source_verification"] == len(report["unresolved_entries"]) - 1
+    assert coverage_by_priority["high"]["total_unresolved"] == 1
+    assert coverage_by_priority["high"]["with_source_verification"] == 1
+    assert coverage_by_priority["high"]["missing_source_verification"] == 0
+    assert coverage_by_priority["medium"]["missing_source_verification"] == (
+        len(report["unresolved_entries"]) - 1
+    )
 
 
 def test_value_provenance_report_builds_source_review_queue() -> None:
