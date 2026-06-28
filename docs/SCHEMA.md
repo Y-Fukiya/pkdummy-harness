@@ -88,6 +88,41 @@ population:
 
 AUCがpassしても臨床妥当性の証拠にはなりません。文献AUCで検証したい場合は、`targets.auc.value/unit/summary` を文献値に差し替え、source/raw/parsed/derived の対応と単位変換式を notes に残してください。
 
+## workflow `MANIFEST.yml`
+
+`run_workflow.py` が出す run-level `MANIFEST.yml` は、入力・出力・件数に加えて、
+ターゲットの由来と1-compartment上の制約を機械可読に残します。
+
+```yaml
+target_metadata:
+  parameter_pair_policy: spec_theta_uses_pk_yml_derived_cl_v_abs
+  clearance_basis: systemic
+  volume_basis: systemic
+  auc:
+    basis: dose_over_cl
+    target_basis: dose_over_cl_not_literature_auc
+    independent_literature_target: false
+    value: 5096.83995922528
+    unit: ng*h/mL
+    summary: geometric_mean
+  t_half:
+    basis: literature_target_retained_as_check
+    value: 2.5
+    unit: h
+    summary: arithmetic_mean
+    pk_parsed_half_life_h: 2.5
+    target_half_life_h: 2.5
+    cl_v_implied_half_life_h: 1.4838
+    relative_error: 0.406
+    warning_threshold: 0.25
+    attainability_status: WARN
+    known_structural_mismatch: true
+```
+
+- `target_metadata.auc.basis: dose_over_cl` は、AUC target が積分整合性チェックであり、独立した文献AUC検証ではないことを示します。
+- `target_metadata.t_half.known_structural_mismatch: true` は、採用したCL/Vペアと `t_half` を1-compartmentで同時達成できない既知ケースを示します。
+- これらは実行artifactの監査情報であり、`pk.yml`、`targets.yml`、`spec_pk1_*.yml` を自動更新しません。
+
 ## ツール
 
 - `python tools/validate_library.py <root>`: 整合性チェック。`CL/V` から暗黙に決まる半減期と `pk_parsed.half_life_h` が大きく矛盾する場合は `1-compartment attainability warnings` を表示する。これは `pk.yml` の自動修正ではなく、1-compartment fixtureとして同時達成できないtargetを見える化する警告

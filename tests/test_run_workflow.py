@@ -107,6 +107,58 @@ def test_run_workflow_creates_trace_manifest_samples_and_sdtm_like_domains(tmp_p
     assert manifest["validation"]["status"] == "OK"
 
 
+def test_run_workflow_manifest_exposes_target_basis_and_structural_mismatch(tmp_path: Path) -> None:
+    sim_csv, pk_yml, targets_yml, spec_yml = write_inputs(tmp_path)
+    expected_auc = 131.25 + 12.5 / math.log(2)
+    write_yaml(
+        targets_yml,
+        {
+            "scenario": {"dose": {"value": 100.0, "unit": "mg"}},
+            "targets": {
+                "auc": {
+                    "value": expected_auc,
+                    "unit": "ng*h/mL",
+                    "summary": "geometric_mean",
+                },
+                "t_half": {"value": 1.0, "unit": "h", "summary": "arithmetic_mean"},
+            },
+            "notes": [
+                "AUC target provenance: computed as Dose/CL from the extracted CL used by this fixture.",
+                "Known 1-compartment attainability issue: CL/V-implied t_half differs from pk_parsed.half_life_h.",
+            ],
+        },
+    )
+    write_yaml(
+        pk_yml,
+        {
+            "pk_parsed": {"half_life_h": 1.0},
+            "derived": {
+                "CL_abs_L_per_h_at_70kg": 1.0,
+                "V_abs_L_at_70kg": 100.0,
+            },
+        },
+    )
+    out_dir = tmp_path / "workflow"
+
+    run_workflow(
+        sim_full_csv=sim_csv,
+        out_dir=out_dir,
+        pk_yml=pk_yml,
+        targets_yml=targets_yml,
+        spec_yml=spec_yml,
+        times_h=[0, 1, 2, 3],
+        allow_validation_failed=True,
+    )
+
+    manifest = yaml.safe_load((out_dir / "MANIFEST.yml").read_text(encoding="utf-8"))
+    metadata = manifest["target_metadata"]
+    assert metadata["auc"]["basis"] == "dose_over_cl"
+    assert metadata["auc"]["independent_literature_target"] is False
+    assert metadata["t_half"]["known_structural_mismatch"] is True
+    assert metadata["t_half"]["attainability_status"] == "WARN"
+    assert metadata["t_half"]["relative_error"] > 0.25
+
+
 def test_run_workflow_propagates_concentration_unit_and_poppk_cmt_convention(tmp_path: Path) -> None:
     sim_csv, pk_yml, targets_yml, spec_yml = write_inputs(tmp_path)
     out_dir = tmp_path / "workflow"

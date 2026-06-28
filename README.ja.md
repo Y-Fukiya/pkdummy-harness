@@ -130,6 +130,10 @@ OSP_cda1,OSP_cda1-001,CONC,1816.179249,ng/mL,2016,0,0,CDA1,100,INTRAVENOUS
 **status:** `OK`（標準チェック許容）/ `WARN`（使えるが原因をノート化）/
 `FAILED`（原則停止、必要なら `--allow-validation-failed`）。
 
+run-level `MANIFEST.yml` には、`target_metadata` として機械可読の注意情報も残ります。
+たとえば AUC target が独立した文献AUCではなく `dose_over_cl` 由来かどうか、
+1-compartment fixture として `t_half` と CL/V の既知の構造的不整合があるかを確認できます。
+
 ---
 
 ## 使うべきでない用途（重要）
@@ -142,6 +146,8 @@ OSP_cda1,OSP_cda1-001,CONC,1816.179249,ng/mL,2016,0,0,CDA1,100,INTRAVENOUS
 
 `targets.auc.value` は通常 `Dose/CL` 由来で、厳密な文献 AUC と同一視しないでください。
 モデルは意図的に 1-compartment 解析解で、NCA 再計算は sanity check であって NCA エンジンではありません。
+一部 fixture は、採用した CL/V ペアと完全には両立しない `t_half` target を意図的に保持しています。
+その場合は `targets.yml`、validation warning、workflow manifest の `target_metadata` にラベルが残ります。
 
 任意の `profiles/*_oral_systemic_basis.yml` は、systemic-basis の経口薬について
 systemic CL + bioavailability と整合した曝露を与えます（いずれも fixture テンプレート）。

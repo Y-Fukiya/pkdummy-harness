@@ -134,6 +134,11 @@ checked for drift by `python -m tools.check_examples`.
 **Status:** `OK` (within standard checks) / `WARN` (usable, cause noted) /
 `FAILED` (stop by default; override with `--allow-validation-failed`).
 
+The run-level `MANIFEST.yml` also records machine-readable target caveats under
+`target_metadata`, including whether the AUC target is `dose_over_cl` rather
+than an independent literature AUC, and whether `t_half` has a known CL/V
+structural mismatch for the 1-compartment fixture.
+
 ---
 
 ## Scope
@@ -147,7 +152,10 @@ separate analysis layer:
 
 `targets.auc.value` is typically `Dose/CL`-derived and should not be equated with
 a precise literature AUC. The model is intentionally a 1-compartment analytic
-solution; the NCA recalculation is a sanity check, not an NCA engine.
+solution; the NCA recalculation is a sanity check, not an NCA engine. Some
+fixtures intentionally keep a `t_half` target that cannot be exactly reconciled
+with the chosen CL/V pair; those cases are labeled in `targets.yml`, validation
+warnings, and workflow manifest `target_metadata`.
 
 Optional `profiles/*_oral_systemic_basis.yml` give exposure consistent with
 systemic CL + bioavailability for the systemic-basis oral drugs (still fixture

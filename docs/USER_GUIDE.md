@@ -129,6 +129,15 @@ python3 tools/validate_simulation.py \
 
 各薬剤の `targets.yml` と `spec_pk1_*.yml` には、どのパラメータ対を独立に採るかを notes として残しています。現在のdemo generatorでは `CL` と `V` を独立パラメータとして採用し、`t1/2` は下流検証targetとして扱います。AUC targetは多くの薬剤で `Dose/CL` 由来のため、AUC passは積分器・単位・後処理の整合性確認であり、独立した文献AUCとの一致や臨床妥当性の証拠ではありません。文献AUCで検証したい場合は、`targets.auc.value/unit/summary` を差し替え、source/raw/parsed/derived と単位変換式を notes に残してください。
 
+`run_workflow.py` の `MANIFEST.yml` には同じ情報を機械可読な `target_metadata` として残します。下流に渡す前に、少なくとも次を確認してください。
+
+| Field | Meaning |
+| --- | --- |
+| `target_metadata.auc.basis` | `dose_over_cl` の場合、AUCは独立文献AUCではなくDose/CL由来の積分整合性target |
+| `target_metadata.auc.independent_literature_target` | `false` の場合、AUC passを臨床妥当性の証拠として使わない |
+| `target_metadata.t_half.known_structural_mismatch` | `true` の場合、採用CL/Vと`t1/2`が1-compartmentで同時達成できない既知ケース |
+| `target_metadata.t_half.relative_error` | CL/Vから暗黙に決まる`t1/2`と`pk_parsed.half_life_h`の相対誤差 |
+
 ### Step 3: 臨床試験の採血ポイントに合わせる
 
 密な `sim_full.csv` を、名目採血時点だけの疎なデータにします。
