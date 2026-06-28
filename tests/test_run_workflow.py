@@ -143,7 +143,10 @@ def test_run_workflow_creates_trace_manifest_samples_and_sdtm_like_domains(tmp_p
     assert (out_dir / "analysis_inputs" / "POPPK_INPUT.csv").exists()
     assert "VALIDATE status=OK" in (out_dir / "trace.log").read_text(encoding="utf-8")
     assert "ANALYSIS_INPUTS status=OK" in (out_dir / "trace.log").read_text(encoding="utf-8")
-    manifest = yaml.safe_load((out_dir / "MANIFEST.yml").read_text(encoding="utf-8"))
+    manifest_text = (out_dir / "MANIFEST.yml").read_text(encoding="utf-8")
+    assert "&id" not in manifest_text
+    assert "*id" not in manifest_text
+    manifest = yaml.safe_load(manifest_text)
     assert manifest["purpose"] == "pk_fixture_post_simulation_workflow"
     assert manifest["status"] == "OK"
     assert manifest["validation"]["status"] == "OK"

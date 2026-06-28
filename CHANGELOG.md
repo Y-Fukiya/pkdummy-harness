@@ -28,6 +28,9 @@ drug library's derived semantics are called out explicitly.
 ### Fixed
 - Workflow manifest validation now ensures legacy `checked_fields` stays aligned
   with `metadata_present_fields`, avoiding ambiguous provenance summaries.
+- Workflow manifests no longer emit YAML anchors for the legacy `checked_fields`
+  alias when it mirrors `metadata_present_fields`, making generated manifests
+  easier to read and friendlier to simple downstream parsers.
 
 ## [0.11.0] - 2026-06-24
 
