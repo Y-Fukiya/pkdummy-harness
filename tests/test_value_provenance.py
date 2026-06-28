@@ -75,6 +75,8 @@ def test_value_provenance_summary_reports_checked_and_review_fields() -> None:
     summary = build_value_provenance_summary(pk, targets)
 
     assert summary["required_fields"] == REQUIRED_VALUE_PROVENANCE_FIELDS
+    assert set(summary["metadata_present_fields"]) >= set(REQUIRED_VALUE_PROVENANCE_FIELDS)
+    assert set(summary["source_checked_fields"]) < set(REQUIRED_VALUE_PROVENANCE_FIELDS)
     assert set(summary["checked_fields"]) >= set(REQUIRED_VALUE_PROVENANCE_FIELDS)
     assert "t_half_h" in summary["mismatch_acknowledged_fields"]
     assert isinstance(summary["source_ids"], list)
@@ -87,6 +89,8 @@ def test_value_provenance_summary_is_not_required_when_absent() -> None:
     assert summary["scope"] == "warning_drugs_only"
     assert summary["provenance_required"] is False
     assert summary["required_fields"] == []
+    assert summary["metadata_present_fields"] == []
+    assert summary["source_checked_fields"] == []
     assert summary["checked_fields"] == []
     assert summary["fields_needing_review"] == []
 
@@ -175,6 +179,14 @@ def test_value_provenance_report_surfaces_source_verification_blockers() -> None
     assert inulin_half_life["source_review_blocker"] == "exact_value_not_found_in_public_primary_source"
     assert inulin_half_life["reviewed_source_ids"] == ["source_1", "source_2"]
     assert inulin_half_life["next_source_review_action"] == "add_primary_source_or_replace_fixture_value"
+    assert (
+        inulin_half_life["fixture_value_decision"]
+        == "retain_current_fixture_value_pending_primary_source"
+    )
+    assert (
+        inulin_half_life["fixture_value_decision_reason"]
+        .startswith("Retain the current 2-4 h fixture half-life")
+    )
 
 
 def test_value_provenance_validates_source_verification_contract() -> None:
@@ -195,6 +207,26 @@ def test_value_provenance_validates_source_verification_contract() -> None:
     assert (
         "inulin: value_provenance.t_half_h.source_verification.reviewed_source_ids "
         "has unresolved id: missing_source"
+    ) in issues
+
+
+def test_value_provenance_validates_source_verification_decision_fields() -> None:
+    pk = load_yaml(ROOT / "drugs" / "inulin" / "pk.yml")
+    targets = load_yaml(ROOT / "drugs" / "inulin" / "targets.yml")
+    half_life = pk["value_provenance"]["t_half_h"]
+
+    half_life["source_verification"]["fixture_value_decision"] = "replace_by_guessing"
+    half_life["source_verification"]["decision_reason"] = ""
+
+    issues = validate_value_provenance("inulin", pk, targets, required=True)
+
+    assert (
+        "inulin: value_provenance.t_half_h.source_verification.fixture_value_decision "
+        "has invalid enum"
+    ) in issues
+    assert (
+        "inulin: value_provenance.t_half_h.source_verification.decision_reason "
+        "must be non-empty"
     ) in issues
 
 
@@ -246,6 +278,27 @@ def test_value_provenance_report_counts_source_verification_statuses() -> None:
         "unresolved_entries_missing_source_verification"
     ]
     assert "inulin.t_half_h" not in report["unresolved_entries_missing_source_verification"]
+
+
+def test_value_provenance_report_counts_fixture_value_decisions() -> None:
+    report = value_provenance_report(ROOT)
+
+    assert report["fixture_value_decision_counts"] == {
+        "retain_current_fixture_value_pending_primary_source": 1
+    }
+    assert report["fixture_value_decision_entries"] == [
+        {
+            "entry": "inulin.t_half_h",
+            "decision": "retain_current_fixture_value_pending_primary_source",
+            "reason": (
+                "Retain the current 2-4 h fixture half-life for deterministic "
+                "regression continuity while keeping source_id null. This value "
+                "must not be treated as source-verified until a primary source "
+                "exact match is added, or until the fixture value is deliberately "
+                "replaced with a source-verified value."
+            ),
+        }
+    ]
 
 
 def test_value_provenance_report_counts_source_verification_coverage_by_priority() -> None:

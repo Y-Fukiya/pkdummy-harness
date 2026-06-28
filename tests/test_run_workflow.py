@@ -152,6 +152,16 @@ def test_run_workflow_creates_trace_manifest_samples_and_sdtm_like_domains(tmp_p
         "V_abs_L_at_70kg",
         "t_half_h",
     ]
+    assert manifest["value_provenance_summary"]["metadata_present_fields"] == [
+        "CL_abs_L_per_h_at_70kg",
+        "V_abs_L_at_70kg",
+        "t_half_h",
+    ]
+    assert manifest["value_provenance_summary"]["source_checked_fields"] == [
+        "CL_abs_L_per_h_at_70kg",
+        "V_abs_L_at_70kg",
+        "t_half_h",
+    ]
     assert set(manifest["value_provenance_summary"]["checked_fields"]) >= set(
         manifest["value_provenance_summary"]["required_fields"]
     )

@@ -113,6 +113,12 @@ value_provenance:
       - PubMed exact search: inulin half-life 2-4 hours clearance 7.2 L/hr
       blocker: exact_value_not_found_in_public_primary_source
       next_action: add_primary_source_or_replace_fixture_value
+      fixture_value_decision: retain_current_fixture_value_pending_primary_source
+      decision_reason: >
+        Retain the current 2-4 h fixture half-life for deterministic regression
+        continuity while keeping source_id null. This value must not be treated
+        as source-verified until a primary source exact match is added, or until
+        the fixture value is deliberately replaced with a source-verified value.
       reviewer_note: Public unauthenticated DrugBank access did not expose exact
         source text for source_1. The fetched ScienceDirect topic page for source_2
         did not expose an exact inulin value. PubMed abstract searches did not identify

@@ -37,6 +37,8 @@ def test_validate_manifest_accepts_workflow_manifest_shape(tmp_path: Path) -> No
                 "scope": "value_provenance_present",
                 "provenance_required": True,
                 "required_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
+                "metadata_present_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
+                "source_checked_fields": [],
                 "checked_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
                 "fields_needing_review": [],
                 "source_ids": [],
@@ -150,6 +152,8 @@ def test_validate_manifest_rejects_bad_value_provenance_summary(tmp_path: Path) 
                 "scope": "value_provenance_present",
                 "provenance_required": True,
                 "required_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
+                "metadata_present_fields": ["CL_abs_L_per_h_at_70kg"],
+                "source_checked_fields": ["t_half_h"],
                 "checked_fields": ["CL_abs_L_per_h_at_70kg"],
                 "fields_needing_review": ["t_half_h"],
                 "source_ids": "label_1",
@@ -160,9 +164,51 @@ def test_validate_manifest_rejects_bad_value_provenance_summary(tmp_path: Path) 
 
     issues = validate_manifest_file(manifest)
 
+    assert "MANIFEST.yml: value_provenance_summary.metadata_present_fields must include required_fields" in issues
+    assert "MANIFEST.yml: value_provenance_summary.source_checked_fields must be a subset of metadata_present_fields" in issues
+    assert "MANIFEST.yml: value_provenance_summary.source_checked_fields must not overlap fields_needing_review" in issues
     assert "MANIFEST.yml: value_provenance_summary.checked_fields must include required_fields" in issues
     assert "MANIFEST.yml: value_provenance_summary.source_ids must be a list" in issues
     assert "MANIFEST.yml: status must be WARN when value_provenance_summary.fields_needing_review is non-empty" in issues
+
+
+def test_validate_manifest_requires_checked_fields_to_match_metadata_present_fields(tmp_path: Path) -> None:
+    manifest = tmp_path / "MANIFEST.yml"
+    write_yaml(
+        manifest,
+        {
+            "purpose": "pk_fixture_post_simulation_workflow",
+            "status": "OK",
+            "outputs": {},
+            "target_metadata": {
+                "auc": {"basis": "dose_over_cl", "independent_literature_target": False},
+                "t_half": {
+                    "attainability_status": "OK",
+                    "detected_structural_mismatch": False,
+                    "acknowledged_structural_mismatch": False,
+                    "relative_error": 0.0,
+                },
+            },
+            "value_provenance_summary": {
+                "scope": "value_provenance_present",
+                "provenance_required": True,
+                "required_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
+                "metadata_present_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
+                "source_checked_fields": ["CL_abs_L_per_h_at_70kg"],
+                "checked_fields": ["CL_abs_L_per_h_at_70kg", "t_half_h"],
+                "fields_needing_review": ["V_abs_L_at_70kg", "t_half_h"],
+                "source_ids": ["source_1"],
+                "mismatch_acknowledged_fields": [],
+            },
+        },
+    )
+
+    issues = validate_manifest_file(manifest)
+
+    assert (
+        "MANIFEST.yml: value_provenance_summary.checked_fields must match "
+        "metadata_present_fields"
+    ) in issues
 
 
 def test_validate_manifest_cli(tmp_path: Path) -> None:

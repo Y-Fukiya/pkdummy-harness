@@ -9,6 +9,26 @@ drug library's derived semantics are called out explicitly.
 
 ## [Unreleased]
 
+### Added
+- `value_provenance_summary.metadata_present_fields` and
+  `value_provenance_summary.source_checked_fields` now separate metadata
+  presence from value-to-source review completion; `checked_fields` remains as a
+  legacy alias for manifest compatibility.
+- `source_verification.fixture_value_decision` and `decision_reason` document
+  unresolved exact-source cases such as `inulin.t_half_h` without inferring a
+  `source_id`; `check_value_provenance.py --report` now summarizes those
+  decisions via fixture value decision counts and entries.
+
+### Changed
+- `alfentanil` canonical half-life was updated from the prior 3.25 h fixture
+  value to 1.675 h based on DailyMed `source_1` reporting a 90-111 minute
+  terminal elimination half-life range; the value provenance records the
+  midpoint conversion and keeps t_half as a check-only target.
+
+### Fixed
+- Workflow manifest validation now ensures legacy `checked_fields` stays aligned
+  with `metadata_present_fields`, avoiding ambiguous provenance summaries.
+
 ## [0.11.0] - 2026-06-24
 
 ### Added

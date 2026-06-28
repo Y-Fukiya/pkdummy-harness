@@ -79,6 +79,8 @@ def _validate_value_provenance_summary(obj: Any, *, status: Any, label: str) -> 
         "scope",
         "provenance_required",
         "required_fields",
+        "metadata_present_fields",
+        "source_checked_fields",
         "checked_fields",
         "fields_needing_review",
         "source_ids",
@@ -94,13 +96,47 @@ def _validate_value_provenance_summary(obj: Any, *, status: Any, label: str) -> 
             issues.append(f"{label}: value_provenance_summary.{field} must be a list")
 
     required = obj.get("required_fields")
+    metadata_present = obj.get("metadata_present_fields")
+    source_checked = obj.get("source_checked_fields")
     checked = obj.get("checked_fields")
+    fields_needing_review = obj.get("fields_needing_review")
     provenance_required = obj.get("provenance_required") is True
     if provenance_required and isinstance(required, list) and not required:
         issues.append(f"{label}: value_provenance_summary.required_fields must be non-empty")
+    if (
+        isinstance(required, list)
+        and isinstance(metadata_present, list)
+        and not set(required).issubset(set(metadata_present))
+    ):
+        issues.append(
+            f"{label}: value_provenance_summary.metadata_present_fields must include required_fields"
+        )
+    if (
+        isinstance(source_checked, list)
+        and isinstance(metadata_present, list)
+        and not set(source_checked).issubset(set(metadata_present))
+    ):
+        issues.append(
+            f"{label}: value_provenance_summary.source_checked_fields must be a subset of metadata_present_fields"
+        )
+    if (
+        isinstance(source_checked, list)
+        and isinstance(fields_needing_review, list)
+        and set(source_checked).intersection(fields_needing_review)
+    ):
+        issues.append(
+            f"{label}: value_provenance_summary.source_checked_fields must not overlap fields_needing_review"
+        )
     if isinstance(required, list) and isinstance(checked, list) and not set(required).issubset(set(checked)):
         issues.append(f"{label}: value_provenance_summary.checked_fields must include required_fields")
-    fields_needing_review = obj.get("fields_needing_review")
+    if (
+        isinstance(checked, list)
+        and isinstance(metadata_present, list)
+        and set(checked) != set(metadata_present)
+    ):
+        issues.append(
+            f"{label}: value_provenance_summary.checked_fields must match metadata_present_fields"
+        )
     if isinstance(fields_needing_review, list) and fields_needing_review and status == "OK":
         issues.append(f"{label}: status must be WARN when value_provenance_summary.fields_needing_review is non-empty")
     return issues

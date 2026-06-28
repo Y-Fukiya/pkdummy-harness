@@ -80,6 +80,11 @@ NEXT_SOURCE_REVIEW_ACTIONS = {
     "recheck_used_sources",
     "not_applicable",
 }
+FIXTURE_VALUE_DECISIONS = {
+    "retain_current_fixture_value_pending_primary_source",
+    "replace_fixture_value_after_source_review",
+    "not_applicable",
+}
 SOURCE_KIND_RANKS = {
     "label": 0,
     "pubmed": 1,
@@ -118,6 +123,10 @@ def _source_id_list(pk: dict[str, Any]) -> list[str]:
     return sorted(_source_ids(pk))
 
 
+def _single_line_text(value: Any) -> str:
+    return " ".join(str(value or "").split())
+
+
 def _validate_source_verification(
     slug: str,
     field: str,
@@ -146,6 +155,18 @@ def _validate_source_verification(
     if next_action not in NEXT_SOURCE_REVIEW_ACTIONS:
         issues.append(
             f"{slug}: value_provenance.{field}.source_verification.next_action has invalid enum"
+        )
+    fixture_value_decision = source_verification.get("fixture_value_decision")
+    if fixture_value_decision not in FIXTURE_VALUE_DECISIONS:
+        issues.append(
+            f"{slug}: value_provenance.{field}.source_verification.fixture_value_decision "
+            "has invalid enum"
+        )
+    decision_reason = source_verification.get("decision_reason")
+    if not str(decision_reason or "").strip():
+        issues.append(
+            f"{slug}: value_provenance.{field}.source_verification.decision_reason "
+            "must be non-empty"
         )
 
     reviewed_source_ids = source_verification.get("reviewed_source_ids", [])
@@ -343,6 +364,8 @@ def build_value_provenance_summary(pk: dict[str, Any], targets: dict[str, Any] |
             "scope": "warning_drugs_only",
             "provenance_required": False,
             "required_fields": [],
+            "metadata_present_fields": [],
+            "source_checked_fields": [],
             "checked_fields": [],
             "fields_needing_review": [],
             "source_ids": [],
@@ -350,7 +373,8 @@ def build_value_provenance_summary(pk: dict[str, Any], targets: dict[str, Any] |
         }
 
     provenance = pk.get("value_provenance") or {}
-    checked_fields: list[str] = []
+    metadata_present_fields: list[str] = []
+    source_checked_fields: list[str] = []
     fields_needing_review: list[str] = []
     source_ids: list[str] = []
     mismatch_acknowledged_fields: list[str] = []
@@ -360,11 +384,13 @@ def build_value_provenance_summary(pk: dict[str, Any], targets: dict[str, Any] |
         if not isinstance(entry, dict):
             fields_needing_review.append(field)
             continue
-        checked_fields.append(field)
+        metadata_present_fields.append(field)
         source_id = entry.get("source_id")
         if source_id:
             source_ids.append(str(source_id))
         source_review_status = entry.get("source_review_status", entry.get("reviewer_status"))
+        if source_id is not None and source_review_status == "checked":
+            source_checked_fields.append(field)
         if source_id is None or source_review_status in {"needs_source_review", "needs_unit_review"}:
             fields_needing_review.append(field)
 
@@ -386,7 +412,9 @@ def build_value_provenance_summary(pk: dict[str, Any], targets: dict[str, Any] |
         "scope": "value_provenance_present",
         "provenance_required": True,
         "required_fields": list(REQUIRED_VALUE_PROVENANCE_FIELDS),
-        "checked_fields": checked_fields,
+        "metadata_present_fields": metadata_present_fields,
+        "source_checked_fields": source_checked_fields,
+        "checked_fields": metadata_present_fields,
         "fields_needing_review": fields_needing_review,
         "source_ids": sorted(set(source_ids)),
         "mismatch_acknowledged_fields": mismatch_acknowledged_fields,
@@ -475,6 +503,8 @@ def _unresolved_entry_detail(
                     source_verification.get("reviewed_external_queries") or []
                 ),
                 "next_source_review_action": source_verification.get("next_action"),
+                "fixture_value_decision": source_verification.get("fixture_value_decision"),
+                "fixture_value_decision_reason": source_verification.get("decision_reason"),
                 "source_verification_note": source_verification.get("reviewer_note"),
             }
         )
@@ -596,6 +626,8 @@ def value_provenance_report(root: Path | str) -> dict[str, Any]:
     source_review_queue: list[dict[str, Any]] = []
     source_review_action_counts: dict[str, int] = {}
     suggested_source_kind_counts: dict[str, int] = {}
+    fixture_value_decision_counts: dict[str, int] = {}
+    fixture_value_decision_entries: list[dict[str, str]] = []
     source_verification_status_counts: dict[str, int] = {"not_recorded": 0}
     source_review_blocker_counts: dict[str, int] = {"not_recorded": 0}
     unresolved_entries_missing_source_verification: list[str] = []
@@ -705,6 +737,21 @@ def value_provenance_report(root: Path | str) -> dict[str, Any]:
                     )
                 else:
                     source_review_blocker_counts["not_recorded"] += 1
+                fixture_value_decision = detail.get("fixture_value_decision")
+                if fixture_value_decision:
+                    decision_key = str(fixture_value_decision)
+                    fixture_value_decision_counts[decision_key] = (
+                        fixture_value_decision_counts.get(decision_key, 0) + 1
+                    )
+                    fixture_value_decision_entries.append(
+                        {
+                            "entry": entry_name,
+                            "decision": decision_key,
+                            "reason": _single_line_text(
+                                detail.get("fixture_value_decision_reason")
+                            ),
+                        }
+                    )
                 unresolved_entry_details.append(detail)
 
         half_life = provenance.get("t_half_h")
@@ -763,6 +810,11 @@ def value_provenance_report(root: Path | str) -> dict[str, Any]:
         "source_review_blocker_counts": dict(sorted(source_review_blocker_counts.items())),
         "unresolved_entries_missing_source_verification": sorted(
             unresolved_entries_missing_source_verification
+        ),
+        "fixture_value_decision_counts": dict(sorted(fixture_value_decision_counts.items())),
+        "fixture_value_decision_entries": sorted(
+            fixture_value_decision_entries,
+            key=lambda item: item["entry"],
         ),
         "source_verification_coverage": source_verification_coverage,
         "source_verification_coverage_by_priority": source_verification_coverage_by_priority,
@@ -873,6 +925,12 @@ def main(argv: list[str] | None = None) -> int:
         print("source_review_blocker_counts:")
         for blocker, count in report["source_review_blocker_counts"].items():
             print(f"- {blocker}: {count}")
+        print("fixture_value_decision_counts:")
+        for decision, count in report["fixture_value_decision_counts"].items():
+            print(f"- {decision}: {count}")
+        print("fixture_value_decision_entries:")
+        for item in report["fixture_value_decision_entries"]:
+            print(f"- {item['entry']}: decision={item['decision']} reason={item['reason']}")
         print("unresolved_entries_missing_source_verification:")
         for entry in report["unresolved_entries_missing_source_verification"]:
             print(f"- {entry}")
