@@ -24,6 +24,22 @@ def test_validate_manifest_accepts_workflow_manifest_shape(tmp_path: Path) -> No
             "purpose": "pk_fixture_post_simulation_workflow",
             "status": "OK",
             "inputs": {"sim_full_csv": "raw/sim_full.csv"},
+            "target_metadata": {
+                "auc": {"basis": "dose_over_cl", "independent_literature_target": False},
+                "t_half": {
+                    "attainability_status": "OK",
+                    "detected_structural_mismatch": False,
+                    "acknowledged_structural_mismatch": False,
+                    "relative_error": 0.0,
+                },
+            },
+            "value_provenance_summary": {
+                "required_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
+                "checked_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
+                "fields_needing_review": [],
+                "source_ids": [],
+                "mismatch_acknowledged_fields": [],
+            },
             "outputs": {"adpc_csv": "analysis_inputs/ADPC.csv"},
             "counts": {"analysis_adpc_rows": 2},
             "warnings": [],
@@ -41,6 +57,8 @@ def test_validate_manifest_reports_missing_required_fields(tmp_path: Path) -> No
     issues = validate_manifest_file(manifest)
 
     assert "MANIFEST.yml: missing required field: status" in issues
+    assert "MANIFEST.yml: missing required field: target_metadata" in issues
+    assert "MANIFEST.yml: missing required field: value_provenance_summary" in issues
     assert "MANIFEST.yml: outputs must be a mapping" in issues
 
 
@@ -107,6 +125,40 @@ def test_validate_manifest_requires_target_metadata_shape_when_present(tmp_path:
     assert "MANIFEST.yml: target_metadata.t_half.acknowledged_structural_mismatch must be boolean" in issues
     assert "MANIFEST.yml: target_metadata.t_half.relative_error must be numeric or null" in issues
     assert "MANIFEST.yml: target_metadata.t_half.attainability_status must be one of ['NA', 'OK', 'WARN']" in issues
+
+
+def test_validate_manifest_rejects_bad_value_provenance_summary(tmp_path: Path) -> None:
+    manifest = tmp_path / "MANIFEST.yml"
+    write_yaml(
+        manifest,
+        {
+            "purpose": "pk_fixture_post_simulation_workflow",
+            "status": "OK",
+            "outputs": {},
+            "target_metadata": {
+                "auc": {"basis": "dose_over_cl", "independent_literature_target": False},
+                "t_half": {
+                    "attainability_status": "WARN",
+                    "detected_structural_mismatch": True,
+                    "acknowledged_structural_mismatch": True,
+                    "relative_error": 0.4,
+                },
+            },
+            "value_provenance_summary": {
+                "required_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
+                "checked_fields": ["CL_abs_L_per_h_at_70kg"],
+                "fields_needing_review": ["t_half_h"],
+                "source_ids": "label_1",
+                "mismatch_acknowledged_fields": [],
+            },
+        },
+    )
+
+    issues = validate_manifest_file(manifest)
+
+    assert "MANIFEST.yml: value_provenance_summary.checked_fields must include required_fields" in issues
+    assert "MANIFEST.yml: value_provenance_summary.source_ids must be a list" in issues
+    assert "MANIFEST.yml: status must be WARN when value_provenance_summary.fields_needing_review is non-empty" in issues
 
 
 def test_validate_manifest_cli(tmp_path: Path) -> None:

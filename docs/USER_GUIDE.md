@@ -139,6 +139,22 @@ python3 tools/validate_simulation.py \
 | `target_metadata.t_half.acknowledged_structural_mismatch` | `true` の場合、その不一致をfixture limitationとして確認済み |
 | `target_metadata.t_half.relative_error` | CL/Vから暗黙に決まる`t1/2`と`pk_parsed.half_life_h`の相対誤差 |
 
+warning薬剤では `pk.yml` に `value_provenance` も持たせています。これはPK値の臨床的正しさを保証するものではなく、fixture generator が使うCL/V/t1/2について、値のbasis、単位正規化、変換方法、reviewer statusを追跡するための監査情報です。
+
+```bash
+python tools/check_value_provenance.py .
+```
+
+run-level `MANIFEST.yml` には full provenance をコピーせず、`value_provenance_summary` だけを残します。
+
+| Field | Meaning |
+| --- | --- |
+| `value_provenance_summary.required_fields` | このrunで監査対象にする core PK field |
+| `value_provenance_summary.checked_fields` | schema と canonical value との整合を確認できた field |
+| `value_provenance_summary.fields_needing_review` | 値ごとの直接source mappingなど、追加レビューが残る field |
+| `value_provenance_summary.source_ids` | manifest summary上で参照された非null source id |
+| `value_provenance_summary.mismatch_acknowledged_fields` | fixture limitation として確認済みの mismatch field |
+
 ### Step 3: 臨床試験の採血ポイントに合わせる
 
 密な `sim_full.csv` を、名目採血時点だけの疎なデータにします。

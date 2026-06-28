@@ -20,8 +20,46 @@
   - `CL_abs_L_per_h_at_70kg`
   - `V_abs_L_at_70kg`
   - `CL_systemic_L_per_h_at_70kg` / `V_systemic_L_at_70kg`
+- `value_provenance`: warning薬剤の主要fixture値について、値の由来、正規化、変換、review状態を機械可読に記録します
 
 > oral の場合、ラベルにある CL/V は **CL/F, V/F** のことが多いので、`*_abs` は「見かけ値」として扱い、`*_systemic = *_abs * F` を別途持っています。
+
+### `value_provenance`
+
+`value_provenance` はPK真値を主張するものではなく、fixture generator が使う値を監査しやすくするためのメタデータです。まずは1-compartment attainability warningが出る13薬剤について、次の3フィールドを必須にしています。
+
+- `CL_abs_L_per_h_at_70kg`
+- `V_abs_L_at_70kg`
+- `t_half_h`
+
+```yaml
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: null
+    source_field: pk_parsed.clearance
+    value_basis: derived_from_reported
+    raw_value: 19.62
+    raw_unit: L/h
+    normalized_value: 19.62
+    normalized_unit: L/h
+    conversion:
+      method: direct
+      formula: pk_parsed.clearance.value
+      assumptions: {}
+    role: simulation_parameter
+    reviewer_status: needs_source_review
+    reviewer_note: >
+      Clearance is used as a deterministic fixture model parameter.
+```
+
+Enumは `tools/check_value_provenance.py` で検証します。
+
+- `value_basis`: `label_reported`, `literature_reported`, `derived_from_reported`, `fixture_policy`, `unknown_needs_review`
+- `conversion.method`: `direct`, `unit_conversion`, `body_weight_scaled`, `derived_formula`, `not_applicable`, `unknown_needs_review`
+- `role`: `simulation_parameter`, `check_only`, `consistency_check`, `derived_output`, `metadata_only`
+- `reviewer_status`: `checked`, `acknowledged_fixture_limitation`, `needs_source_review`, `needs_unit_review`, `not_applicable`
+
+`source_id` が `null` でない場合は `sources[].id` に解決できる必要があります。既存source URLから値ごとの直接出典を特定できない場合は、出典を推測せず `source_id: null` として `fields_needing_review` に残します。
 
 ## `drugs/<slug>/spec_pk1_oral.yml` / `spec_pk1_iv.yml`
 
@@ -133,6 +171,25 @@ target_metadata:
 - `target_metadata.t_half.detected_structural_mismatch: true` は、採用したCL/Vペアと `t_half` を1-compartmentで同時達成できないことを計算上検出した状態です。
 - `target_metadata.t_half.acknowledged_structural_mismatch: true` は、その不一致をfixture limitationとして人間が確認済みであることを示します。
 - これらは実行artifactの監査情報であり、`pk.yml`、`targets.yml`、`spec_pk1_*.yml` を自動更新しません。
+
+run-level manifestには full provenance ではなく summary だけを出します。
+
+```yaml
+value_provenance_summary:
+  required_fields:
+    - CL_abs_L_per_h_at_70kg
+    - V_abs_L_at_70kg
+    - t_half_h
+  checked_fields:
+    - CL_abs_L_per_h_at_70kg
+    - V_abs_L_at_70kg
+    - t_half_h
+  fields_needing_review:
+    - CL_abs_L_per_h_at_70kg
+  source_ids: []
+  mismatch_acknowledged_fields:
+    - t_half_h
+```
 
 ## ツール
 

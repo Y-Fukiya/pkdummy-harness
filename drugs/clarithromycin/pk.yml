@@ -2,9 +2,12 @@ id: osp::clarithromycin
 name: Clarithromycin
 route_inferred: po
 sources:
-- url: https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=b1bdf526-4f16-4130-b614-4cb678f060d7
-- url: https://pubmed.ncbi.nlm.nih.gov/10589373/
-- url: https://journals.asm.org/doi/10.1128/aac.01193-08
+- id: source_1
+  url: https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=b1bdf526-4f16-4130-b614-4cb678f060d7
+- id: source_2
+  url: https://pubmed.ncbi.nlm.nih.gov/10589373/
+- id: source_3
+  url: https://journals.asm.org/doi/10.1128/aac.01193-08
 pk_raw:
   half_life: 3-7 hours
   clearance: 29.2-58.1 L/h
@@ -40,3 +43,61 @@ derived:
     as apparent and set F1=1.'
   - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
     typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: null
+    source_field: pk_parsed.clearance
+    value_basis: derived_from_reported
+    raw_value: 58.1
+    raw_unit: L/h
+    normalized_value: 58.1
+    normalized_unit: L/h
+    conversion:
+      method: direct
+      formula: pk_parsed.clearance.value
+      assumptions: {}
+    role: simulation_parameter
+    reviewer_status: needs_source_review
+    reviewer_note: Clearance is used as a deterministic fixture model parameter and
+      is not recalibrated to force agreement with terminal half-life. Existing source
+      URLs do not identify the exact value-level source for this parameter. This provenance
+      records the canonical parsed/derived fixture value and intentionally marks source
+      mapping for future review.
+  V_abs_L_at_70kg:
+    source_id: null
+    source_field: pk_parsed.volume
+    value_basis: derived_from_reported
+    raw_value: 172.0
+    raw_unit: L
+    normalized_value: 172.0
+    normalized_unit: L
+    conversion:
+      method: direct
+      formula: pk_parsed.volume.value
+      assumptions: {}
+    role: simulation_parameter
+    reviewer_status: needs_source_review
+    reviewer_note: Volume is retained as the one-compartment fixture volume and is
+      not recalibrated to force agreement with terminal half-life. Existing source
+      URLs do not identify the exact value-level source for this parameter. This provenance
+      records the canonical parsed/derived fixture value and intentionally marks source
+      mapping for future review.
+  t_half_h:
+    source_id: null
+    source_field: pk_parsed.half_life_h
+    value_basis: derived_from_reported
+    raw_value: 5.0
+    raw_unit: h
+    normalized_value: 5.0
+    normalized_unit: h
+    conversion:
+      method: direct
+      formula: pk_parsed.half_life_h
+      assumptions: {}
+    role: check_only
+    reviewer_status: acknowledged_fixture_limitation
+    reviewer_note: Half-life is retained as a check target only. CL and V are not
+      jointly calibrated to match terminal half-life in this deterministic one-compartment
+      fixture. Existing source URLs do not identify the exact value-level source for
+      this parameter. This provenance records the canonical parsed/derived fixture
+      value and intentionally marks source mapping for future review.

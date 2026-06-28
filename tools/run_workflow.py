@@ -33,6 +33,7 @@ from tools.sample_clinical_timepoints import (
     parse_times,
     sample_clinical_timepoints,
 )
+from tools.check_value_provenance import build_value_provenance_summary
 from tools.target_metadata import build_target_metadata
 from tools.validate_simulation import (
     SimulationTolerances,
@@ -103,6 +104,7 @@ def _workflow_manifest(
     warnings: list[str],
     settings: dict[str, Any],
     target_metadata: dict[str, Any],
+    value_provenance_summary: dict[str, Any],
 ) -> dict[str, Any]:
     return {
         "purpose": "pk_fixture_post_simulation_workflow",
@@ -125,6 +127,7 @@ def _workflow_manifest(
             "attempts": validation_attempts,
         },
         "target_metadata": target_metadata,
+        "value_provenance_summary": value_provenance_summary,
         "outputs": {key: str(value) for key, value in files.items()},
         "counts": counts,
         "warnings": warnings,
@@ -196,7 +199,10 @@ def run_workflow(
     analysis_dir = out_path / "analysis_inputs"
     validation_md = reports_dir / "simulation_validation.md"
     clinical_samples = raw_dir / "clinical_samples.csv"
-    target_metadata = build_target_metadata(drug, _load_yaml(pk_path), _load_yaml(targets_path))
+    pk_data = _load_yaml(pk_path)
+    targets_data = _load_yaml(targets_path)
+    target_metadata = build_target_metadata(drug, pk_data, targets_data)
+    value_provenance_summary = build_value_provenance_summary(pk_data, targets_data)
 
     validation_run = validate_simulation_run(
         sim_path,
@@ -254,6 +260,7 @@ def run_workflow(
                     "allow_validation_failed": allow_validation_failed,
                 },
                 target_metadata=target_metadata,
+                value_provenance_summary=value_provenance_summary,
             ),
         )
         _write_trace(trace_path, trace_lines)
@@ -383,6 +390,7 @@ def run_workflow(
                 "allow_validation_failed": allow_validation_failed,
             },
             target_metadata=target_metadata,
+            value_provenance_summary=value_provenance_summary,
         ),
     )
     _write_trace(trace_path, trace_lines)

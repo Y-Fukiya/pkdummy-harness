@@ -2,10 +2,14 @@ id: osp::abciximab
 name: Abciximab
 route_inferred: iv
 sources:
-- url: https://go.drugbank.com/drugs/DB00054
-- url: https://pubmed.ncbi.nlm.nih.gov/11907493/
-- url: https://www.researchgate.net/publication/232754238_Pharmacokinetics_PK_pharmacodynamics_PD_and_GPIIBIIIA_receptor_blockade_of_ABCIXIMAB_in_stable_angina_pectoris_patients
-- url: https://www.sciencedirect.com/topics/biochemistry-genetics-and-molecular-biology/abciximab
+- id: source_1
+  url: https://go.drugbank.com/drugs/DB00054
+- id: source_2
+  url: https://pubmed.ncbi.nlm.nih.gov/11907493/
+- id: source_3
+  url: https://www.researchgate.net/publication/232754238_Pharmacokinetics_PK_pharmacodynamics_PD_and_GPIIBIIIA_receptor_blockade_of_ABCIXIMAB_in_stable_angina_pectoris_patients
+- id: source_4
+  url: https://www.sciencedirect.com/topics/biochemistry-genetics-and-molecular-biology/abciximab
 pk_raw:
   half_life: 10-30 minutes
   clearance: 183 +/- 72 mL/min
@@ -41,3 +45,62 @@ derived:
     with systemic CL/V.'
   - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
     typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: null
+    source_field: pk_parsed.clearance
+    value_basis: derived_from_reported
+    raw_value: 4.32
+    raw_unit: L/h
+    normalized_value: 4.32
+    normalized_unit: L/h
+    conversion:
+      method: direct
+      formula: pk_parsed.clearance.value
+      assumptions: {}
+    role: simulation_parameter
+    reviewer_status: needs_source_review
+    reviewer_note: Clearance is used as a deterministic fixture model parameter and
+      is not recalibrated to force agreement with terminal half-life. Existing source
+      URLs do not identify the exact value-level source for this parameter. This provenance
+      records the canonical parsed/derived fixture value and intentionally marks source
+      mapping for future review.
+  V_abs_L_at_70kg:
+    source_id: null
+    source_field: pk_parsed.volume
+    value_basis: derived_from_reported
+    raw_value: 1.44
+    raw_unit: L/kg
+    normalized_value: 100.8
+    normalized_unit: L
+    conversion:
+      method: body_weight_scaled
+      formula: pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs
+      assumptions:
+        weight_ref_kg_for_abs: 70.0
+    role: simulation_parameter
+    reviewer_status: needs_source_review
+    reviewer_note: Volume is retained as the one-compartment fixture volume and is
+      not recalibrated to force agreement with terminal half-life. Existing source
+      URLs do not identify the exact value-level source for this parameter. This provenance
+      records the canonical parsed/derived fixture value and intentionally marks source
+      mapping for future review.
+  t_half_h:
+    source_id: null
+    source_field: pk_parsed.half_life_h
+    value_basis: derived_from_reported
+    raw_value: 0.3333333333333333
+    raw_unit: h
+    normalized_value: 0.3333333333333333
+    normalized_unit: h
+    conversion:
+      method: direct
+      formula: pk_parsed.half_life_h
+      assumptions: {}
+    role: check_only
+    reviewer_status: acknowledged_fixture_limitation
+    reviewer_note: Half-life is retained as a check target only. CL and V are not
+      jointly calibrated to match terminal half-life in this deterministic one-compartment
+      fixture. Existing source URLs do not identify the exact value-level source for
+      this parameter. This provenance records the canonical parsed/derived fixture
+      value and intentionally marks source mapping for future review.

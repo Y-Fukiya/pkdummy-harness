@@ -20,6 +20,7 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from tools.validate_manifest import validate_manifest_file
+from tools.check_value_provenance import validate_root as validate_value_provenance_root
 
 
 JUNK_FILE_NAMES = {".DS_Store"}
@@ -101,6 +102,7 @@ REQUIRED_FILES = [
     "tools/render_manifest_viewer.py",
     "tools/check_examples.py",
     "tools/doctor.py",
+    "tools/check_value_provenance.py",
     "tools/validate_manifest.py",
     "tools/target_metadata.py",
     "tools/report_pk_fixture.R",
@@ -133,6 +135,7 @@ REQUIRED_FILES = [
     "tests/test_validate_manifest.py",
     "tests/test_target_metadata.py",
     "tests/test_targets_metadata.py",
+    "tests/test_value_provenance.py",
     "tests/test_report_pk_fixture_script.py",
     "tests/test_render_pk_fixture_quarto_script.py",
     "tests/test_run_demo_set.py",
@@ -297,6 +300,7 @@ def main(argv: list[str] | None = None) -> int:
     check_manifest_counts(root, issues)
     check_drug_files(root, issues)
     check_versioned_manifests(root, issues)
+    issues.extend(validate_value_provenance_root(root))
 
     if issues:
         print("Codex harness check: FAILED")

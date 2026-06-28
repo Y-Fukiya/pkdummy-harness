@@ -2,10 +2,14 @@ id: osp::omeprazole
 name: Omeprazole
 route_inferred: po
 sources:
-- url: https://en.wikipedia.org/wiki/Omeprazole
-- url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d8b466e0-a35e-4fba-9d43-4e6c0122e7ad
-- url: https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=a17e415e-a559-4a8d-a455-699184a01523
-- url: https://pubmed.ncbi.nlm.nih.gov/2315973/
+- id: source_1
+  url: https://en.wikipedia.org/wiki/Omeprazole
+- id: source_2
+  url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d8b466e0-a35e-4fba-9d43-4e6c0122e7ad
+- id: source_3
+  url: https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=a17e415e-a559-4a8d-a455-699184a01523
+- id: source_4
+  url: https://pubmed.ncbi.nlm.nih.gov/2315973/
 pk_raw:
   half_life: 0.5-1.2 hours
   clearance: 624 mL/min (range 59-828 mL/min)
@@ -48,3 +52,62 @@ derived:
     with systemic CL/V.'
   - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
     typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: null
+    source_field: pk_parsed.clearance
+    value_basis: derived_from_reported
+    raw_value: 43.56
+    raw_unit: L/h
+    normalized_value: 43.56
+    normalized_unit: L/h
+    conversion:
+      method: direct
+      formula: pk_parsed.clearance.value
+      assumptions: {}
+    role: simulation_parameter
+    reviewer_status: needs_source_review
+    reviewer_note: Clearance is used as a deterministic fixture model parameter and
+      is not recalibrated to force agreement with terminal half-life. Existing source
+      URLs do not identify the exact value-level source for this parameter. This provenance
+      records the canonical parsed/derived fixture value and intentionally marks source
+      mapping for future review.
+  V_abs_L_at_70kg:
+    source_id: null
+    source_field: pk_parsed.volume
+    value_basis: derived_from_reported
+    raw_value: 0.4
+    raw_unit: L/kg
+    normalized_value: 28.0
+    normalized_unit: L
+    conversion:
+      method: body_weight_scaled
+      formula: pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs
+      assumptions:
+        weight_ref_kg_for_abs: 70.0
+    role: simulation_parameter
+    reviewer_status: needs_source_review
+    reviewer_note: Volume is retained as the one-compartment fixture volume and is
+      not recalibrated to force agreement with terminal half-life. Existing source
+      URLs do not identify the exact value-level source for this parameter. This provenance
+      records the canonical parsed/derived fixture value and intentionally marks source
+      mapping for future review.
+  t_half_h:
+    source_id: null
+    source_field: pk_parsed.half_life_h
+    value_basis: derived_from_reported
+    raw_value: 0.85
+    raw_unit: h
+    normalized_value: 0.85
+    normalized_unit: h
+    conversion:
+      method: direct
+      formula: pk_parsed.half_life_h
+      assumptions: {}
+    role: check_only
+    reviewer_status: acknowledged_fixture_limitation
+    reviewer_note: Half-life is retained as a check target only. CL and V are not
+      jointly calibrated to match terminal half-life in this deterministic one-compartment
+      fixture. Existing source URLs do not identify the exact value-level source for
+      this parameter. This provenance records the canonical parsed/derived fixture
+      value and intentionally marks source mapping for future review.

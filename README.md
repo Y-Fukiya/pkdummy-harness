@@ -16,6 +16,12 @@ It produces structurally consistent SDTM/ADaM/NCA/PopPK *workflow fixtures* from
 a small 1-compartment model — for **building and testing downstream tooling**,
 not for clinical inference, dose selection, or regulatory model qualification.
 
+This repository includes value-level provenance metadata for core PK fixture
+parameters. The provenance records identify the source basis, unit
+normalization, conversion method, and reviewer status for values used by the
+fixture generator. This does not make the repository a clinical PK truth source.
+It only improves auditability for deterministic workflow fixtures.
+
 > **Safe by design:** no patient data, no IP, fully deterministic and
 > reproducible. That boundary is the point — see "Scope" below.
 
@@ -142,6 +148,9 @@ The run-level `MANIFEST.yml` also records machine-readable target caveats under
 `target_metadata`, including whether the AUC target is `dose_over_cl` rather
 than an independent literature AUC, whether a CL/V vs `t_half` mismatch was
 detected, and whether that mismatch is acknowledged as a fixture limitation.
+For core warning drugs, `value_provenance_summary` also records which
+CL/V/t_half provenance fields were checked, which still need source review, and
+which mismatch fields were acknowledged as fixture limitations.
 
 ## Validation Status
 

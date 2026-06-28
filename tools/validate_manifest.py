@@ -11,7 +11,9 @@ import yaml
 
 
 REQUIRED_FIELDS = ["purpose", "status", "outputs"]
+WORKFLOW_REQUIRED_FIELDS = ["purpose", "status", "outputs", "target_metadata", "value_provenance_summary"]
 SDTM_LIKE_REQUIRED_FIELDS = ["purpose", "domains", "inputs"]
+WORKFLOW_PURPOSE = "pk_fixture_post_simulation_workflow"
 SDTM_LIKE_PURPOSE = "workflow_fixture_not_submission_ready_sdtm"
 ALLOWED_STATUS = {"OK", "WARN", "FAILED"}
 ALLOWED_T_HALF_ATTAINABILITY_STATUS = {"NA", "OK", "WARN"}
@@ -68,10 +70,44 @@ def _validate_target_metadata(obj: Any, *, label: str) -> list[str]:
     return issues
 
 
+def _validate_value_provenance_summary(obj: Any, *, status: Any, label: str) -> list[str]:
+    issues: list[str] = []
+    if not isinstance(obj, dict):
+        return [f"{label}: value_provenance_summary must be a mapping"]
+
+    for field in (
+        "required_fields",
+        "checked_fields",
+        "fields_needing_review",
+        "source_ids",
+        "mismatch_acknowledged_fields",
+    ):
+        if field not in obj:
+            issues.append(f"{label}: value_provenance_summary.{field} is required")
+        elif not isinstance(obj.get(field), list):
+            issues.append(f"{label}: value_provenance_summary.{field} must be a list")
+
+    required = obj.get("required_fields")
+    checked = obj.get("checked_fields")
+    if isinstance(required, list) and not required:
+        issues.append(f"{label}: value_provenance_summary.required_fields must be non-empty")
+    if isinstance(required, list) and isinstance(checked, list) and not set(required).issubset(set(checked)):
+        issues.append(f"{label}: value_provenance_summary.checked_fields must include required_fields")
+    fields_needing_review = obj.get("fields_needing_review")
+    if isinstance(fields_needing_review, list) and fields_needing_review and status == "OK":
+        issues.append(f"{label}: status must be WARN when value_provenance_summary.fields_needing_review is non-empty")
+    return issues
+
+
 def validate_manifest_obj(obj: dict[str, Any], *, label: str = "MANIFEST.yml") -> list[str]:
     issues: list[str] = []
     purpose = str(obj.get("purpose") or "")
-    required_fields = SDTM_LIKE_REQUIRED_FIELDS if purpose == SDTM_LIKE_PURPOSE else REQUIRED_FIELDS
+    if purpose == WORKFLOW_PURPOSE:
+        required_fields = WORKFLOW_REQUIRED_FIELDS
+    elif purpose == SDTM_LIKE_PURPOSE:
+        required_fields = SDTM_LIKE_REQUIRED_FIELDS
+    else:
+        required_fields = REQUIRED_FIELDS
     for field in required_fields:
         if field not in obj:
             issues.append(f"{label}: missing required field: {field}")
@@ -96,6 +132,14 @@ def validate_manifest_obj(obj: dict[str, Any], *, label: str = "MANIFEST.yml") -
         issues.append(f"{label}: safeguards must be a list")
     if "target_metadata" in obj:
         issues.extend(_validate_target_metadata(obj.get("target_metadata"), label=label))
+    if "value_provenance_summary" in obj:
+        issues.extend(
+            _validate_value_provenance_summary(
+                obj.get("value_provenance_summary"),
+                status=status,
+                label=label,
+            )
+        )
     return issues
 
 

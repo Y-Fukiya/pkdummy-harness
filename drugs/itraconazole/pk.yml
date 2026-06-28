@@ -2,7 +2,8 @@ id: osp::itraconazole
 name: Itraconazole
 route_inferred: po
 sources:
-- url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b1274d78-1096-4ae3-8299-a2e94eaa0ea5
+- id: source_1
+  url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b1274d78-1096-4ae3-8299-a2e94eaa0ea5
 pk_raw:
   half_life: 16-28 hours (single dose), 34-42 hours (repeated dosing)
   clearance: 278 mL/min
@@ -45,3 +46,61 @@ derived:
     with systemic CL/V.'
   - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
     typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: null
+    source_field: pk_parsed.clearance
+    value_basis: derived_from_reported
+    raw_value: 16.68
+    raw_unit: L/h
+    normalized_value: 16.68
+    normalized_unit: L/h
+    conversion:
+      method: direct
+      formula: pk_parsed.clearance.value
+      assumptions: {}
+    role: simulation_parameter
+    reviewer_status: needs_source_review
+    reviewer_note: Clearance is used as a deterministic fixture model parameter and
+      is not recalibrated to force agreement with terminal half-life. Existing source
+      URLs do not identify the exact value-level source for this parameter. This provenance
+      records the canonical parsed/derived fixture value and intentionally marks source
+      mapping for future review.
+  V_abs_L_at_70kg:
+    source_id: null
+    source_field: pk_parsed.volume
+    value_basis: derived_from_reported
+    raw_value: 700.0
+    raw_unit: L
+    normalized_value: 700.0
+    normalized_unit: L
+    conversion:
+      method: direct
+      formula: pk_parsed.volume.value
+      assumptions: {}
+    role: simulation_parameter
+    reviewer_status: needs_source_review
+    reviewer_note: Volume is retained as the one-compartment fixture volume and is
+      not recalibrated to force agreement with terminal half-life. Existing source
+      URLs do not identify the exact value-level source for this parameter. This provenance
+      records the canonical parsed/derived fixture value and intentionally marks source
+      mapping for future review.
+  t_half_h:
+    source_id: null
+    source_field: pk_parsed.half_life_h
+    value_basis: derived_from_reported
+    raw_value: 22.0
+    raw_unit: h
+    normalized_value: 22.0
+    normalized_unit: h
+    conversion:
+      method: direct
+      formula: pk_parsed.half_life_h
+      assumptions: {}
+    role: check_only
+    reviewer_status: acknowledged_fixture_limitation
+    reviewer_note: Half-life is retained as a check target only. CL and V are not
+      jointly calibrated to match terminal half-life in this deterministic one-compartment
+      fixture. Existing source URLs do not identify the exact value-level source for
+      this parameter. This provenance records the canonical parsed/derived fixture
+      value and intentionally marks source mapping for future review.

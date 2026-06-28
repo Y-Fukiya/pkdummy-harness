@@ -6,6 +6,7 @@ all: harness-check
 
 validate:
 	$(PYTHON) tools/validate_library.py .
+	$(PYTHON) tools/check_value_provenance.py .
 	$(PYTHON) tools/codex_harness_check.py .
 
 test:

@@ -52,6 +52,47 @@ def write_inputs(tmp_path: Path) -> tuple[Path, Path, Path, Path]:
     write_yaml(
         pk_yml,
         {
+            "value_provenance": {
+                "CL_abs_L_per_h_at_70kg": {
+                    "source_id": None,
+                    "source_field": "pk_parsed.clearance",
+                    "value_basis": "derived_from_reported",
+                    "raw_value": 100.0 * 1000.0 / expected_auc,
+                    "raw_unit": "L/h",
+                    "normalized_value": 100.0 * 1000.0 / expected_auc,
+                    "normalized_unit": "L/h",
+                    "conversion": {"method": "direct", "formula": "pk_parsed.clearance.value", "assumptions": {}},
+                    "role": "simulation_parameter",
+                    "reviewer_status": "needs_source_review",
+                    "reviewer_note": "Synthetic test fixture provenance.",
+                },
+                "V_abs_L_at_70kg": {
+                    "source_id": None,
+                    "source_field": "pk_parsed.volume",
+                    "value_basis": "derived_from_reported",
+                    "raw_value": 1.0,
+                    "raw_unit": "L",
+                    "normalized_value": 1.0,
+                    "normalized_unit": "L",
+                    "conversion": {"method": "direct", "formula": "pk_parsed.volume.value", "assumptions": {}},
+                    "role": "simulation_parameter",
+                    "reviewer_status": "needs_source_review",
+                    "reviewer_note": "Synthetic test fixture provenance.",
+                },
+                "t_half_h": {
+                    "source_id": None,
+                    "source_field": "pk_parsed.half_life_h",
+                    "value_basis": "derived_from_reported",
+                    "raw_value": 1.0,
+                    "raw_unit": "h",
+                    "normalized_value": 1.0,
+                    "normalized_unit": "h",
+                    "conversion": {"method": "direct", "formula": "pk_parsed.half_life_h", "assumptions": {}},
+                    "role": "check_only",
+                    "reviewer_status": "acknowledged_fixture_limitation",
+                    "reviewer_note": "Synthetic test fixture provenance.",
+                },
+            },
             "pk_parsed": {"half_life_h": 1.0},
             "derived": {
                 "CL_abs_L_per_h_at_70kg": 100.0 * 1000.0 / expected_auc,
@@ -105,6 +146,14 @@ def test_run_workflow_creates_trace_manifest_samples_and_sdtm_like_domains(tmp_p
     assert manifest["purpose"] == "pk_fixture_post_simulation_workflow"
     assert manifest["status"] == "OK"
     assert manifest["validation"]["status"] == "OK"
+    assert manifest["value_provenance_summary"]["required_fields"] == [
+        "CL_abs_L_per_h_at_70kg",
+        "V_abs_L_at_70kg",
+        "t_half_h",
+    ]
+    assert set(manifest["value_provenance_summary"]["checked_fields"]) >= set(
+        manifest["value_provenance_summary"]["required_fields"]
+    )
 
 
 def test_run_workflow_manifest_exposes_target_basis_and_structural_mismatch(tmp_path: Path) -> None:
