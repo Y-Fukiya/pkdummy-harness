@@ -12,8 +12,8 @@
 | Review item | Status | Current evidence | Remaining action |
 | --- | --- | --- | --- |
 | IV infusion handling | Done | `tools/run_demo_set.py` uses `infusion_h` for IV infusion equations; `tools/make_analysis_inputs.py` emits PopPK `RATE`; tests cover both paths | Keep regression tests when changing regimen logic |
-| t1/2 vs CL/V structural mismatch labeling | Done, now machine-readable in workflow manifests | `targets.yml` notes label known stress fixtures; run-level `MANIFEST.yml` now includes `target_metadata.t_half.known_structural_mismatch`, `relative_error`, and `attainability_status` | Do not auto-fix PK values; use source review before changing canonical data |
-| AUC target circularity | Done, now machine-readable in workflow manifests | `targets.yml` notes document Dose/CL provenance; run-level `MANIFEST.yml` now includes `target_metadata.auc.basis` and `target_basis` | Replace `targets.auc` only when a literature AUC has source/raw text/unit conversion evidence |
+| t1/2 vs CL/V structural mismatch labeling | Done, now machine-readable in `targets.yml` and workflow manifests | `targets.yml` carries `structural_mismatch.acknowledged`; run-level `MANIFEST.yml` includes `detected_structural_mismatch`, `acknowledged_structural_mismatch`, `relative_error`, and `attainability_status` | Do not auto-fix PK values; use source review before changing canonical data |
+| AUC target circularity | Done, now machine-readable in `targets.yml` and workflow manifests | `targets.yml` carries `basis`, `target_basis`, `independent_literature_target`, `source_value`, and `role`; run-level `MANIFEST.yml` mirrors these under `target_metadata.auc` | Replace `targets.auc` only when a literature AUC has source/raw text/unit conversion evidence |
 | BLQ / LLOQ fixture support | Done for fixture contract | `assay.lloq` creates SDTM-like BLQ flags and PopPK `BLQ/CENS/LIMIT`; tests cover SDTM-like and analysis inputs | External M3 likelihood execution remains tool/environment-specific |
 | Demo IIV/residual meaning | Done | `docs/SCHEMA.md` and `docs/USER_GUIDE.md` distinguish demo-only variability from model-specific external runner behavior | Revisit only if full stochastic model execution is added |
 | Predose convention | Done | Default predose remains `DV=0/MDV=0`; `--predose-mdv1` is available and tested | Site-specific PopPK adapters may still choose another convention |
@@ -38,7 +38,8 @@ target_metadata:
     independent_literature_target: false
   t_half:
     basis: literature_target_retained_as_check
-    known_structural_mismatch: true
+    detected_structural_mismatch: true
+    acknowledged_structural_mismatch: true
     attainability_status: WARN
     relative_error: 0.406
 ```
@@ -49,5 +50,6 @@ These fields are run metadata. They do not rewrite `pk.yml`, `targets.yml`, or `
 
 - Do not change PK numeric values without source text, conversion formula, units, and reviewer rationale.
 - Treat `Dose/CL` AUC as an integration consistency target, not as independent literature validation.
-- Treat `known_structural_mismatch: true` as a fixture limitation or stress-test label, not as permission to silently recalibrate CL, V, or t1/2.
+- Treat `detected_structural_mismatch: true` as a computed fixture limitation, not as permission to silently recalibrate CL, V, or t1/2.
+- Treat `acknowledged_structural_mismatch: true` as a human-reviewed fixture policy label, not as clinical validation.
 - Keep external tool execution claims separate from parser/probe smoke checks.

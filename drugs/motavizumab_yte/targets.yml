@@ -17,6 +17,11 @@ targets:
     variability:
       type: gcv_percent
       value: 35
+    basis: dose_over_cl
+    target_basis: dose_over_cl_not_literature_auc
+    independent_literature_target: false
+    source_value: CL_abs_L_per_h_at_70kg
+    role: consistency_check
   t_half:
     phase: terminal
     value: 2040.0
@@ -25,6 +30,11 @@ targets:
     variability:
       type: sd
       value: 1.0
+    role: check_only
+    used_to_calibrate_cl_v: false
+    structural_mismatch:
+      acknowledged: false
+      reason: null
 notes:
 - AUC is computed as Dose/CL using the extracted CL. For oral, this is often apparent
   CL/F unless you explicitly choose systemic parameters.

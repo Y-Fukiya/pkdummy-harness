@@ -7,10 +7,14 @@
 [![Python](https://img.shields.io/badge/python-3.10%E2%80%933.13-blue.svg)](pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A safe, deterministic **fixture generator** for CDISC PK pipelines. It produces
-structurally consistent SDTM/ADaM/NCA/PopPK *workflow fixtures* from a small
-1-compartment model — for **building and testing downstream tooling**, not for
-clinical inference, dose selection, or regulatory model qualification.
+This repository is a deterministic PK workflow fixture harness. It is intended
+to test data-shaping, workflow integration, manifest generation, and downstream
+adapter behavior. It is not a PK truth source, clinical model library,
+dose-selection tool, or regulatory validation package.
+
+It produces structurally consistent SDTM/ADaM/NCA/PopPK *workflow fixtures* from
+a small 1-compartment model — for **building and testing downstream tooling**,
+not for clinical inference, dose selection, or regulatory model qualification.
 
 > **Safe by design:** no patient data, no IP, fully deterministic and
 > reproducible. That boundary is the point — see "Scope" below.
@@ -136,8 +140,20 @@ checked for drift by `python -m tools.check_examples`.
 
 The run-level `MANIFEST.yml` also records machine-readable target caveats under
 `target_metadata`, including whether the AUC target is `dose_over_cl` rather
-than an independent literature AUC, and whether `t_half` has a known CL/V
-structural mismatch for the 1-compartment fixture.
+than an independent literature AUC, whether a CL/V vs `t_half` mismatch was
+detected, and whether that mismatch is acknowledged as a fixture limitation.
+
+## Validation Status
+
+| Area | Status |
+| --- | --- |
+| Internal fixture generation | Tested in CI |
+| Manifest / drift checks | Tested in CI |
+| SDTM-like output checks | Tested in CI |
+| NONMEM adapter file generation | Smoke-tested |
+| Phoenix adapter file generation | Smoke-tested |
+| nlmixr2 execution | Optional, not CI-qualified |
+| Clinical PK validation | Out of scope |
 
 ---
 
@@ -155,7 +171,8 @@ a precise literature AUC. The model is intentionally a 1-compartment analytic
 solution; the NCA recalculation is a sanity check, not an NCA engine. Some
 fixtures intentionally keep a `t_half` target that cannot be exactly reconciled
 with the chosen CL/V pair; those cases are labeled in `targets.yml`, validation
-warnings, and workflow manifest `target_metadata`.
+warnings, and workflow manifest `target_metadata` as both detected and, where
+reviewed, acknowledged.
 
 Optional `profiles/*_oral_systemic_basis.yml` give exposure consistent with
 systemic CL + bioavailability for the systemic-basis oral drugs (still fixture

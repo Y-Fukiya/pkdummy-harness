@@ -14,7 +14,6 @@ It does not run mrgsolve and does not modify pk.yml, targets.yml, or specs.
 from __future__ import annotations
 
 import argparse
-import math
 import sys
 from dataclasses import dataclass
 from datetime import datetime
@@ -34,6 +33,7 @@ from tools.sample_clinical_timepoints import (
     parse_times,
     sample_clinical_timepoints,
 )
+from tools.target_metadata import build_target_metadata
 from tools.validate_simulation import (
     SimulationTolerances,
     render_markdown,
@@ -65,103 +65,6 @@ def _write_yaml(path: Path, obj: dict[str, Any]) -> None:
 def _write_trace(path: Path, lines: list[str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
-
-
-def _to_float(value: Any) -> float | None:
-    if isinstance(value, bool):
-        return None
-    if isinstance(value, (int, float)):
-        return float(value)
-    if isinstance(value, str):
-        try:
-            return float(value)
-        except ValueError:
-            return None
-    return None
-
-
-def _notes_text(*blocks: Any) -> str:
-    parts: list[str] = []
-    for block in blocks:
-        if isinstance(block, list):
-            parts.extend(str(item) for item in block)
-        elif block:
-            parts.append(str(block))
-    return "\n".join(parts).lower()
-
-
-def _auc_basis(targets: dict[str, Any], notes_text: str) -> dict[str, Any]:
-    auc = ((targets.get("targets") or {}).get("auc") or {})
-    has_auc = bool(auc)
-    is_dose_over_cl = has_auc and ("dose/cl" in notes_text or "computed as dose/cl" in notes_text)
-    if is_dose_over_cl:
-        basis = "dose_over_cl"
-        target_basis = "dose_over_cl_not_literature_auc"
-        independent = False
-    elif has_auc:
-        basis = "unspecified"
-        target_basis = "unspecified_auc_target"
-        independent = None
-    else:
-        basis = "not_provided"
-        target_basis = "not_provided"
-        independent = None
-    return {
-        "basis": basis,
-        "target_basis": target_basis,
-        "independent_literature_target": independent,
-        "value": auc.get("value"),
-        "unit": auc.get("unit"),
-        "summary": auc.get("summary"),
-    }
-
-
-def _t_half_metadata(pk: dict[str, Any], targets: dict[str, Any], notes_text: str) -> dict[str, Any]:
-    parsed = pk.get("pk_parsed") or {}
-    derived = pk.get("derived") or {}
-    target = ((targets.get("targets") or {}).get("t_half") or {})
-    t_half = _to_float(parsed.get("half_life_h"))
-    target_t_half = _to_float(target.get("value"))
-    cl_abs = _to_float(derived.get("CL_abs_L_per_h_at_70kg"))
-    v_abs = _to_float(derived.get("V_abs_L_at_70kg"))
-    warning_threshold = 0.25
-    implied_t_half = None
-    rel_error = None
-    status = "NA"
-    if t_half and cl_abs and v_abs and cl_abs > 0:
-        implied_t_half = math.log(2.0) * v_abs / cl_abs
-        rel_error = abs(implied_t_half - t_half) / abs(t_half)
-        status = "WARN" if rel_error > warning_threshold else "OK"
-    note_marks_known = "known 1-compartment attainability issue" in notes_text
-    return {
-        "basis": "literature_target_retained_as_check" if "not used to recalibrate" in notes_text else "target_check",
-        "value": target.get("value"),
-        "unit": target.get("unit"),
-        "summary": target.get("summary"),
-        "pk_parsed_half_life_h": t_half,
-        "target_half_life_h": target_t_half,
-        "cl_v_implied_half_life_h": implied_t_half,
-        "relative_error": rel_error,
-        "warning_threshold": warning_threshold,
-        "attainability_status": status,
-        "known_structural_mismatch": bool(note_marks_known or status == "WARN"),
-    }
-
-
-def _target_metadata(pk: dict[str, Any], targets: dict[str, Any]) -> dict[str, Any]:
-    notes = _notes_text(targets.get("notes"))
-    parsed = pk.get("pk_parsed") or {}
-    return {
-        "parameter_pair_policy": "spec_theta_uses_pk_yml_derived_cl_v_abs",
-        "clearance_basis": parsed.get("clearance_basis"),
-        "volume_basis": parsed.get("volume_basis"),
-        "auc": _auc_basis(targets, notes),
-        "t_half": _t_half_metadata(pk, targets, notes),
-        "limitations": [
-            "AUC targets marked dose_over_cl are integration consistency checks, not independent literature AUC validation.",
-            "Known structural mismatches mean CL/V and t_half cannot both be exactly attained by this 1-compartment fixture.",
-        ],
-    }
 
 
 def _resolve_drug_paths(drug: str, *, drugs_dir: Path) -> tuple[Path, Path, Path]:
@@ -293,7 +196,7 @@ def run_workflow(
     analysis_dir = out_path / "analysis_inputs"
     validation_md = reports_dir / "simulation_validation.md"
     clinical_samples = raw_dir / "clinical_samples.csv"
-    target_metadata = _target_metadata(_load_yaml(pk_path), _load_yaml(targets_path))
+    target_metadata = build_target_metadata(drug, _load_yaml(pk_path), _load_yaml(targets_path))
 
     validation_run = validate_simulation_run(
         sim_path,

@@ -84,7 +84,15 @@ population:
 `pk-targets`（想定）に渡すためのターゲット定義。
 
 - `targets.auc.value` は v0.1 では **Dose/CL から自動計算**（暫定）
-- `notes` には、AUCが `Dose/CL` 由来で独立文献AUCではないこと、spec側で採用する独立パラメータ対、1-compartment attainability labelを残します
+- `targets.auc.basis`: `dose_over_cl` など、AUC targetの由来を機械可読に示します
+- `targets.auc.independent_literature_target`: `false` の場合、AUC targetは独立文献AUCではなくfixture整合性チェックです
+- `targets.auc.source_value`: `CL_abs_L_per_h_at_70kg` など、Dose/CL計算に使う入力値の識別子です
+- `targets.auc.role`: `consistency_check` など、targetの用途を示します
+- `targets.t_half.role`: `check_only` など、t_half targetの用途を示します
+- `targets.t_half.used_to_calibrate_cl_v`: `false` の場合、t_halfはCL/Vを自動再較正しません
+- `targets.t_half.structural_mismatch.acknowledged`: `true` の場合、CL/Vとt_halfの不一致をfixture limitationとして確認済みです
+- `provenance_review`: warning薬剤では、CL/V/t_halfをjoint calibrationしない理由を短く記録します
+- `notes` には、人間向けの補足として、AUCが `Dose/CL` 由来で独立文献AUCではないこと、spec側で採用する独立パラメータ対、1-compartment attainability labelを残します
 
 AUCがpassしても臨床妥当性の証拠にはなりません。文献AUCで検証したい場合は、`targets.auc.value/unit/summary` を文献値に差し替え、source/raw/parsed/derived の対応と単位変換式を notes に残してください。
 
@@ -116,11 +124,14 @@ target_metadata:
     relative_error: 0.406
     warning_threshold: 0.25
     attainability_status: WARN
-    known_structural_mismatch: true
+    detected_structural_mismatch: true
+    acknowledged_structural_mismatch: true
+    structural_mismatch_reason: one_compartment_fixture_approximation
 ```
 
 - `target_metadata.auc.basis: dose_over_cl` は、AUC target が積分整合性チェックであり、独立した文献AUC検証ではないことを示します。
-- `target_metadata.t_half.known_structural_mismatch: true` は、採用したCL/Vペアと `t_half` を1-compartmentで同時達成できない既知ケースを示します。
+- `target_metadata.t_half.detected_structural_mismatch: true` は、採用したCL/Vペアと `t_half` を1-compartmentで同時達成できないことを計算上検出した状態です。
+- `target_metadata.t_half.acknowledged_structural_mismatch: true` は、その不一致をfixture limitationとして人間が確認済みであることを示します。
 - これらは実行artifactの監査情報であり、`pk.yml`、`targets.yml`、`spec_pk1_*.yml` を自動更新しません。
 
 ## ツール

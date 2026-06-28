@@ -17,6 +17,11 @@ targets:
     variability:
       type: gcv_percent
       value: 35
+    basis: dose_over_cl
+    target_basis: dose_over_cl_not_literature_auc
+    independent_literature_target: false
+    source_value: CL_abs_L_per_h_at_70kg
+    role: consistency_check
   t_half:
     phase: terminal
     value: 1.5
@@ -25,6 +30,11 @@ targets:
     variability:
       type: sd
       value: 1.0
+    role: check_only
+    used_to_calibrate_cl_v: false
+    structural_mismatch:
+      acknowledged: true
+      reason: one_compartment_fixture_approximation
 notes:
 - AUC is computed as Dose/CL (assuming CL is apparent CL/F for oral, and systemic
   CL for IV).
@@ -40,3 +50,12 @@ notes:
 - 'Known 1-compartment attainability issue: CL/V-implied t_half differs from pk_parsed.half_life_h
   beyond the library warning threshold. t_half WARN/FAILED in demo validation may
   be expected and this drug can be used as a stress-test fixture.'
+provenance_review:
+  status: acknowledged_fixture_limitation
+  reviewer_note: t_half is retained as a check target only. CL/V are used for one-compartment
+    fixture generation and are not jointly calibrated to match literature terminal
+    half-life.
+  reviewed_fields:
+  - CL
+  - V
+  - t_half

@@ -11,7 +11,10 @@ import yaml
 
 
 REQUIRED_FIELDS = ["purpose", "status", "outputs"]
+SDTM_LIKE_REQUIRED_FIELDS = ["purpose", "domains", "inputs"]
+SDTM_LIKE_PURPOSE = "workflow_fixture_not_submission_ready_sdtm"
 ALLOWED_STATUS = {"OK", "WARN", "FAILED"}
+ALLOWED_T_HALF_ATTAINABILITY_STATUS = {"NA", "OK", "WARN"}
 
 
 def _load_yaml(path: Path) -> dict[str, Any]:
@@ -22,9 +25,54 @@ def _load_yaml(path: Path) -> dict[str, Any]:
     return obj
 
 
+def _is_number_or_none(value: Any) -> bool:
+    if value is None or isinstance(value, bool):
+        return value is None
+    return isinstance(value, (int, float))
+
+
+def _validate_target_metadata(obj: Any, *, label: str) -> list[str]:
+    issues: list[str] = []
+    if not isinstance(obj, dict):
+        return [f"{label}: target_metadata must be a mapping"]
+
+    auc = obj.get("auc")
+    if not isinstance(auc, dict):
+        issues.append(f"{label}: target_metadata.auc must be a mapping")
+    else:
+        basis = auc.get("basis")
+        if basis is None or not str(basis).strip():
+            issues.append(f"{label}: target_metadata.auc.basis must be non-empty")
+        independent = auc.get("independent_literature_target")
+        if independent is not None and not isinstance(independent, bool):
+            issues.append(f"{label}: target_metadata.auc.independent_literature_target must be boolean or null")
+        if basis == "dose_over_cl" and independent is True:
+            issues.append(f"{label}: target_metadata.auc dose_over_cl cannot be an independent literature target")
+
+    t_half = obj.get("t_half")
+    if not isinstance(t_half, dict):
+        issues.append(f"{label}: target_metadata.t_half must be a mapping")
+    else:
+        status = t_half.get("attainability_status")
+        if status not in ALLOWED_T_HALF_ATTAINABILITY_STATUS:
+            issues.append(
+                f"{label}: target_metadata.t_half.attainability_status must be one of {sorted(ALLOWED_T_HALF_ATTAINABILITY_STATUS)}"
+            )
+        for field in ("detected_structural_mismatch", "acknowledged_structural_mismatch"):
+            if not isinstance(t_half.get(field), bool):
+                issues.append(f"{label}: target_metadata.t_half.{field} must be boolean")
+        if "relative_error" not in t_half:
+            issues.append(f"{label}: target_metadata.t_half.relative_error must be numeric or null")
+        elif not _is_number_or_none(t_half.get("relative_error")):
+            issues.append(f"{label}: target_metadata.t_half.relative_error must be numeric or null")
+    return issues
+
+
 def validate_manifest_obj(obj: dict[str, Any], *, label: str = "MANIFEST.yml") -> list[str]:
     issues: list[str] = []
-    for field in REQUIRED_FIELDS:
+    purpose = str(obj.get("purpose") or "")
+    required_fields = SDTM_LIKE_REQUIRED_FIELDS if purpose == SDTM_LIKE_PURPOSE else REQUIRED_FIELDS
+    for field in required_fields:
         if field not in obj:
             issues.append(f"{label}: missing required field: {field}")
     status = obj.get("status")
@@ -35,10 +83,19 @@ def validate_manifest_obj(obj: dict[str, Any], *, label: str = "MANIFEST.yml") -
     for field in ("inputs", "outputs", "counts", "render"):
         if field in obj and not isinstance(obj.get(field), dict):
             issues.append(f"{label}: {field} must be a mapping")
+    if "domains" in obj:
+        domains = obj.get("domains")
+        if purpose == SDTM_LIKE_PURPOSE:
+            if not isinstance(domains, (dict, list)):
+                issues.append(f"{label}: domains must be a mapping or list")
+        elif not isinstance(domains, dict):
+            issues.append(f"{label}: domains must be a mapping")
     if "warnings" in obj and not isinstance(obj.get("warnings"), list):
         issues.append(f"{label}: warnings must be a list")
     if "safeguards" in obj and not isinstance(obj.get("safeguards"), list):
         issues.append(f"{label}: safeguards must be a list")
+    if "target_metadata" in obj:
+        issues.extend(_validate_target_metadata(obj.get("target_metadata"), label=label))
     return issues
 
 

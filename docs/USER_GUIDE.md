@@ -135,7 +135,8 @@ python3 tools/validate_simulation.py \
 | --- | --- |
 | `target_metadata.auc.basis` | `dose_over_cl` の場合、AUCは独立文献AUCではなくDose/CL由来の積分整合性target |
 | `target_metadata.auc.independent_literature_target` | `false` の場合、AUC passを臨床妥当性の証拠として使わない |
-| `target_metadata.t_half.known_structural_mismatch` | `true` の場合、採用CL/Vと`t1/2`が1-compartmentで同時達成できない既知ケース |
+| `target_metadata.t_half.detected_structural_mismatch` | `true` の場合、採用CL/Vと`t1/2`が1-compartmentで同時達成できないことを計算上検出 |
+| `target_metadata.t_half.acknowledged_structural_mismatch` | `true` の場合、その不一致をfixture limitationとして確認済み |
 | `target_metadata.t_half.relative_error` | CL/Vから暗黙に決まる`t1/2`と`pk_parsed.half_life_h`の相対誤差 |
 
 ### Step 3: 臨床試験の採血ポイントに合わせる

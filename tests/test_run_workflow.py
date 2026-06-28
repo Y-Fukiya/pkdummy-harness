@@ -119,12 +119,26 @@ def test_run_workflow_manifest_exposes_target_basis_and_structural_mismatch(tmp_
                     "value": expected_auc,
                     "unit": "ng*h/mL",
                     "summary": "geometric_mean",
+                    "basis": "dose_over_cl",
+                    "target_basis": "dose_over_cl_not_literature_auc",
+                    "independent_literature_target": False,
+                    "source_value": "CL_abs_L_per_h_at_70kg",
+                    "role": "consistency_check",
                 },
-                "t_half": {"value": 1.0, "unit": "h", "summary": "arithmetic_mean"},
+                "t_half": {
+                    "value": 1.0,
+                    "unit": "h",
+                    "summary": "arithmetic_mean",
+                    "role": "check_only",
+                    "used_to_calibrate_cl_v": False,
+                    "structural_mismatch": {
+                        "acknowledged": True,
+                        "reason": "one_compartment_fixture_approximation",
+                    },
+                },
             },
             "notes": [
-                "AUC target provenance: computed as Dose/CL from the extracted CL used by this fixture.",
-                "Known 1-compartment attainability issue: CL/V-implied t_half differs from pk_parsed.half_life_h.",
+                "Structured fields above are authoritative for fixture target interpretation.",
             ],
         },
     )
@@ -154,9 +168,13 @@ def test_run_workflow_manifest_exposes_target_basis_and_structural_mismatch(tmp_
     metadata = manifest["target_metadata"]
     assert metadata["auc"]["basis"] == "dose_over_cl"
     assert metadata["auc"]["independent_literature_target"] is False
-    assert metadata["t_half"]["known_structural_mismatch"] is True
+    assert metadata["auc"]["source_value"] == "CL_abs_L_per_h_at_70kg"
+    assert metadata["auc"]["role"] == "consistency_check"
+    assert metadata["t_half"]["detected_structural_mismatch"] is True
+    assert metadata["t_half"]["acknowledged_structural_mismatch"] is True
     assert metadata["t_half"]["attainability_status"] == "WARN"
     assert metadata["t_half"]["relative_error"] > 0.25
+    assert metadata["t_half"]["structural_mismatch_reason"] == "one_compartment_fixture_approximation"
 
 
 def test_run_workflow_propagates_concentration_unit_and_poppk_cmt_convention(tmp_path: Path) -> None:
