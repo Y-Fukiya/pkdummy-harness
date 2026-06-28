@@ -176,6 +176,8 @@ run-level manifestには full provenance ではなく summary だけを出しま
 
 ```yaml
 value_provenance_summary:
+  scope: value_provenance_present
+  provenance_required: true
   required_fields:
     - CL_abs_L_per_h_at_70kg
     - V_abs_L_at_70kg
@@ -189,6 +191,19 @@ value_provenance_summary:
   source_ids: []
   mismatch_acknowledged_fields:
     - t_half_h
+```
+
+非warning薬剤など、現段階で value-level provenance を必須対象にしていない薬剤では、summary は次のように空の対象範囲を明示します。
+
+```yaml
+value_provenance_summary:
+  scope: warning_drugs_only
+  provenance_required: false
+  required_fields: []
+  checked_fields: []
+  fields_needing_review: []
+  source_ids: []
+  mismatch_acknowledged_fields: []
 ```
 
 ## ツール

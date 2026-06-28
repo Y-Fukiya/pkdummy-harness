@@ -146,6 +146,35 @@ def test_run_demo_set_cli(tmp_path: Path) -> None:
     assert (out_dir / "oral_demo" / "workflow" / "analysis_inputs" / "POPPK_INPUT.csv").exists()
 
 
+def test_run_demo_set_outputs_validate_recursively(tmp_path: Path) -> None:
+    drugs_dir = tmp_path / "drugs"
+    write_demo_drug(drugs_dir, "oral_demo", route="oral", template="pk1_oral_ode")
+    out_dir = tmp_path / "demo_set"
+
+    run_demo_set(
+        drugs=["oral_demo"],
+        drugs_dir=drugs_dir,
+        out_dir=out_dir,
+        sample_times_h=[0, 1, 2, 4, 8, 12, 24],
+    )
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "tools/validate_manifest.py",
+            "--recursive",
+            str(out_dir),
+        ],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+
+    assert completed.returncode == 0, completed.stdout
+
+
 def test_run_demo_set_can_add_lightweight_iiv_and_residual_variability(tmp_path: Path) -> None:
     drugs_dir = tmp_path / "drugs"
     write_demo_drug(drugs_dir, "iv_demo", route="iv_bolus", template="pk1_iv_ode")

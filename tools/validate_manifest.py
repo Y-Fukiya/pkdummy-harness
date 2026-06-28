@@ -76,6 +76,8 @@ def _validate_value_provenance_summary(obj: Any, *, status: Any, label: str) -> 
         return [f"{label}: value_provenance_summary must be a mapping"]
 
     for field in (
+        "scope",
+        "provenance_required",
         "required_fields",
         "checked_fields",
         "fields_needing_review",
@@ -84,12 +86,17 @@ def _validate_value_provenance_summary(obj: Any, *, status: Any, label: str) -> 
     ):
         if field not in obj:
             issues.append(f"{label}: value_provenance_summary.{field} is required")
-        elif not isinstance(obj.get(field), list):
+        elif field == "scope" and not str(obj.get(field) or "").strip():
+            issues.append(f"{label}: value_provenance_summary.scope must be non-empty")
+        elif field == "provenance_required" and not isinstance(obj.get(field), bool):
+            issues.append(f"{label}: value_provenance_summary.provenance_required must be boolean")
+        elif field not in {"scope", "provenance_required"} and not isinstance(obj.get(field), list):
             issues.append(f"{label}: value_provenance_summary.{field} must be a list")
 
     required = obj.get("required_fields")
     checked = obj.get("checked_fields")
-    if isinstance(required, list) and not required:
+    provenance_required = obj.get("provenance_required") is True
+    if provenance_required and isinstance(required, list) and not required:
         issues.append(f"{label}: value_provenance_summary.required_fields must be non-empty")
     if isinstance(required, list) and isinstance(checked, list) and not set(required).issubset(set(checked)):
         issues.append(f"{label}: value_provenance_summary.checked_fields must include required_fields")

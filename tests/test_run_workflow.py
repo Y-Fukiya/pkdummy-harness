@@ -52,9 +52,10 @@ def write_inputs(tmp_path: Path) -> tuple[Path, Path, Path, Path]:
     write_yaml(
         pk_yml,
         {
+            "sources": [{"id": "fixture_source", "url": "fixture://synthetic"}],
             "value_provenance": {
                 "CL_abs_L_per_h_at_70kg": {
-                    "source_id": None,
+                    "source_id": "fixture_source",
                     "source_field": "pk_parsed.clearance",
                     "value_basis": "derived_from_reported",
                     "raw_value": 100.0 * 1000.0 / expected_auc,
@@ -63,11 +64,11 @@ def write_inputs(tmp_path: Path) -> tuple[Path, Path, Path, Path]:
                     "normalized_unit": "L/h",
                     "conversion": {"method": "direct", "formula": "pk_parsed.clearance.value", "assumptions": {}},
                     "role": "simulation_parameter",
-                    "reviewer_status": "needs_source_review",
+                    "reviewer_status": "checked",
                     "reviewer_note": "Synthetic test fixture provenance.",
                 },
                 "V_abs_L_at_70kg": {
-                    "source_id": None,
+                    "source_id": "fixture_source",
                     "source_field": "pk_parsed.volume",
                     "value_basis": "derived_from_reported",
                     "raw_value": 1.0,
@@ -76,11 +77,11 @@ def write_inputs(tmp_path: Path) -> tuple[Path, Path, Path, Path]:
                     "normalized_unit": "L",
                     "conversion": {"method": "direct", "formula": "pk_parsed.volume.value", "assumptions": {}},
                     "role": "simulation_parameter",
-                    "reviewer_status": "needs_source_review",
+                    "reviewer_status": "checked",
                     "reviewer_note": "Synthetic test fixture provenance.",
                 },
                 "t_half_h": {
-                    "source_id": None,
+                    "source_id": "fixture_source",
                     "source_field": "pk_parsed.half_life_h",
                     "value_basis": "derived_from_reported",
                     "raw_value": 1.0,
@@ -89,7 +90,7 @@ def write_inputs(tmp_path: Path) -> tuple[Path, Path, Path, Path]:
                     "normalized_unit": "h",
                     "conversion": {"method": "direct", "formula": "pk_parsed.half_life_h", "assumptions": {}},
                     "role": "check_only",
-                    "reviewer_status": "acknowledged_fixture_limitation",
+                    "reviewer_status": "checked",
                     "reviewer_note": "Synthetic test fixture provenance.",
                 },
             },
@@ -224,6 +225,29 @@ def test_run_workflow_manifest_exposes_target_basis_and_structural_mismatch(tmp_
     assert metadata["t_half"]["attainability_status"] == "WARN"
     assert metadata["t_half"]["relative_error"] > 0.25
     assert metadata["t_half"]["structural_mismatch_reason"] == "one_compartment_fixture_approximation"
+
+
+def test_run_workflow_marks_provenance_review_gap_as_warn(tmp_path: Path) -> None:
+    sim_csv, pk_yml, targets_yml, spec_yml = write_inputs(tmp_path)
+    pk = yaml.safe_load(pk_yml.read_text(encoding="utf-8"))
+    pk["value_provenance"]["CL_abs_L_per_h_at_70kg"]["source_id"] = None
+    pk["value_provenance"]["CL_abs_L_per_h_at_70kg"]["reviewer_status"] = "needs_source_review"
+    write_yaml(pk_yml, pk)
+    out_dir = tmp_path / "workflow"
+
+    result = run_workflow(
+        sim_full_csv=sim_csv,
+        out_dir=out_dir,
+        pk_yml=pk_yml,
+        targets_yml=targets_yml,
+        spec_yml=spec_yml,
+        times_h=[0, 1, 2, 3],
+    )
+
+    manifest = yaml.safe_load((out_dir / "MANIFEST.yml").read_text(encoding="utf-8"))
+    assert result.status == "WARN"
+    assert manifest["status"] == "WARN"
+    assert manifest["value_provenance_summary"]["fields_needing_review"] == ["CL_abs_L_per_h_at_70kg"]
 
 
 def test_run_workflow_propagates_concentration_unit_and_poppk_cmt_convention(tmp_path: Path) -> None:

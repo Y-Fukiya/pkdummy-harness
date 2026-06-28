@@ -13,7 +13,7 @@ Generated data are workflow fixtures only. They are not for clinical inference, 
 | Phoenix execute validation | Needs licensed Phoenix environment | The repository intentionally does not bundle external tools or licenses | Configure `external_validation/tool_profiles.yml` and run `tools/run_external_tool_validation.py --execute` |
 | NONMEM execute validation | Needs licensed NONMEM environment | Probe-only checks cannot confirm a production `nmfe` run | Configure the NONMEM command and run the external validation profile with `--execute` |
 | nlmixr2 execute validation | Needs R/nlmixr2 environment suitable for package compilation and execution | Repository smoke checks can verify parser fixtures, not full estimation workflows | Run external validation with `--tools nlmixr2 --execute` |
-| Value-level source review | Machine-readable provenance exists, exact value-to-source mapping still needs human review | Existing source URL lists do not always identify which source supplied each CL/V/t_half value | Review warning-drug `value_provenance.*.source_id: null` entries and replace only when the exact source can be verified |
+| Value-level source review | Machine-readable provenance exists, exact value-to-source mapping still needs human review | Existing source URL lists do not always identify which source supplied each CL/V/t_half value; a small number of t_half fields now resolve to source IDs | Run `python tools/check_value_provenance.py . --report`, review warning-drug `source_id: null` entries, and replace only when the exact source can be verified |
 
 ## Local Evidence Already Available
 

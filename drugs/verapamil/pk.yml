@@ -88,21 +88,23 @@ value_provenance:
       records the canonical parsed/derived fixture value and intentionally marks source
       mapping for future review.
   t_half_h:
-    source_id: null
-    source_field: pk_parsed.half_life_h
+    source_id: source_1
+    source_field: terminal_half_life_range_single_dose
     value_basis: derived_from_reported
-    raw_value: 5.1
+    raw_value: 2.8-7.4
     raw_unit: h
     normalized_value: 5.1
     normalized_unit: h
     conversion:
-      method: direct
-      formula: pk_parsed.half_life_h
-      assumptions: {}
+      method: derived_formula
+      formula: midpoint of reported single-dose terminal half-life range (2.8 to 7.4
+        h)
+      assumptions:
+        range_summary: midpoint
     role: check_only
     reviewer_status: acknowledged_fixture_limitation
-    reviewer_note: Half-life is retained as a check target only. CL and V are not
-      jointly calibrated to match terminal half-life in this deterministic one-compartment
-      fixture. Existing source URLs do not identify the exact value-level source for
-      this parameter. This provenance records the canonical parsed/derived fixture
-      value and intentionally marks source mapping for future review.
+    reviewer_note: DailyMed source_1 reports mean elimination half-life in single-dose
+      studies ranging from 2.8 to 7.4 h. Canonical t_half_h retains the fixture midpoint
+      of that source range and remains a check target only. CL and V are not jointly
+      calibrated to match terminal half-life in this deterministic one-compartment
+      fixture.

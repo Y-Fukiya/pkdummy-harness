@@ -64,3 +64,21 @@ def test_value_provenance_summary_reports_checked_and_review_fields() -> None:
     assert "t_half_h" in summary["mismatch_acknowledged_fields"]
     assert isinstance(summary["source_ids"], list)
     assert summary["fields_needing_review"]
+
+
+def test_value_provenance_summary_is_not_required_when_absent() -> None:
+    summary = build_value_provenance_summary({}, {})
+
+    assert summary["scope"] == "warning_drugs_only"
+    assert summary["provenance_required"] is False
+    assert summary["required_fields"] == []
+    assert summary["checked_fields"] == []
+    assert summary["fields_needing_review"] == []
+
+
+def test_value_provenance_report_lists_fields_needing_review() -> None:
+    issues, report = validate_root(ROOT, include_report=True)
+
+    assert issues == []
+    assert "fields_needing_review" in report
+    assert "abciximab.CL_abs_L_per_h_at_70kg" in report["fields_needing_review"]

@@ -34,6 +34,8 @@ def test_validate_manifest_accepts_workflow_manifest_shape(tmp_path: Path) -> No
                 },
             },
             "value_provenance_summary": {
+                "scope": "value_provenance_present",
+                "provenance_required": True,
                 "required_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
                 "checked_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
                 "fields_needing_review": [],
@@ -145,6 +147,8 @@ def test_validate_manifest_rejects_bad_value_provenance_summary(tmp_path: Path) 
                 },
             },
             "value_provenance_summary": {
+                "scope": "value_provenance_present",
+                "provenance_required": True,
                 "required_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
                 "checked_fields": ["CL_abs_L_per_h_at_70kg"],
                 "fields_needing_review": ["t_half_h"],

@@ -176,7 +176,18 @@ def validate_value_provenance(
 
 
 def build_value_provenance_summary(pk: dict[str, Any], targets: dict[str, Any] | None = None) -> dict[str, Any]:
-    provenance = pk.get("value_provenance") if isinstance(pk.get("value_provenance"), dict) else {}
+    if not isinstance(pk.get("value_provenance"), dict):
+        return {
+            "scope": "warning_drugs_only",
+            "provenance_required": False,
+            "required_fields": [],
+            "checked_fields": [],
+            "fields_needing_review": [],
+            "source_ids": [],
+            "mismatch_acknowledged_fields": [],
+        }
+
+    provenance = pk.get("value_provenance") or {}
     checked_fields: list[str] = []
     fields_needing_review: list[str] = []
     source_ids: list[str] = []
@@ -206,6 +217,8 @@ def build_value_provenance_summary(pk: dict[str, Any], targets: dict[str, Any] |
         mismatch_acknowledged_fields.append("t_half_h")
 
     return {
+        "scope": "value_provenance_present",
+        "provenance_required": True,
         "required_fields": list(REQUIRED_VALUE_PROVENANCE_FIELDS),
         "checked_fields": checked_fields,
         "fields_needing_review": fields_needing_review,
@@ -214,7 +227,33 @@ def build_value_provenance_summary(pk: dict[str, Any], targets: dict[str, Any] |
     }
 
 
-def validate_root(root: Path | str) -> list[str]:
+def value_provenance_report(root: Path | str) -> dict[str, Any]:
+    root_path = Path(root)
+    fields_needing_review: list[str] = []
+    source_ids: set[str] = set()
+    entries = 0
+    for slug in WARNING_DRUGS:
+        drug_dir = root_path / "drugs" / slug
+        pk_path = drug_dir / "pk.yml"
+        targets_path = drug_dir / "targets.yml"
+        if not pk_path.exists():
+            continue
+        pk = load_yaml(pk_path)
+        targets = load_yaml(targets_path) if targets_path.exists() else {}
+        summary = build_value_provenance_summary(pk, targets)
+        entries += len(summary.get("checked_fields") or [])
+        source_ids.update(str(source_id) for source_id in summary.get("source_ids") or [])
+        for field in summary.get("fields_needing_review") or []:
+            fields_needing_review.append(f"{slug}.{field}")
+    return {
+        "warning_drugs": list(WARNING_DRUGS),
+        "provenance_entries": entries,
+        "non_null_source_ids": sorted(source_ids),
+        "fields_needing_review": fields_needing_review,
+    }
+
+
+def validate_root(root: Path | str, *, include_report: bool = False) -> list[str] | tuple[list[str], dict[str, Any]]:
     root_path = Path(root)
     issues: list[str] = []
     for slug in WARNING_DRUGS:
@@ -227,24 +266,38 @@ def validate_root(root: Path | str) -> list[str]:
         pk = load_yaml(pk_path)
         targets = load_yaml(targets_path) if targets_path.exists() else {}
         issues.extend(validate_value_provenance(slug, pk, targets, required=True))
+    if include_report:
+        return issues, value_provenance_report(root_path)
     return issues
 
 
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("root", nargs="?", default=".", type=Path)
+    parser.add_argument("--report", action="store_true", help="Print fields still needing source/unit review")
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_arg_parser().parse_args(argv)
-    issues = validate_root(args.root)
+    if args.report:
+        issues, report = validate_root(args.root, include_report=True)
+    else:
+        issues = validate_root(args.root)
+        report = None
     if issues:
         print("Value provenance check: FAILED")
         for issue in issues:
             print(f"- {issue}")
         return 1
     print("Value provenance check: OK")
+    if report is not None:
+        print("fields_needing_review:")
+        for field in report["fields_needing_review"]:
+            print(f"- {field}")
+        print("non_null_source_ids:")
+        for source_id in report["non_null_source_ids"]:
+            print(f"- {source_id}")
     return 0
 
 

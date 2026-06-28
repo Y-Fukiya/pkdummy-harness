@@ -331,7 +331,17 @@ def run_workflow(
         "nca_input_csv": analysis_result.files["NCA_INPUT"],
         "poppk_input_csv": analysis_result.files["POPPK_INPUT"],
     }
-    status = "WARN" if validation_result.status != "OK" or sdtm_result.warnings or analysis_result.status != "OK" else "OK"
+    has_provenance_review_gap = bool(value_provenance_summary.get("fields_needing_review"))
+    status = (
+        "WARN"
+        if (
+            validation_result.status != "OK"
+            or sdtm_result.warnings
+            or analysis_result.status != "OK"
+            or has_provenance_review_gap
+        )
+        else "OK"
+    )
     warnings.extend(sdtm_result.warnings)
     warnings.extend(analysis_result.warnings)
     counts = {
