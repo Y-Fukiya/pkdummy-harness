@@ -139,7 +139,7 @@ python3 tools/validate_simulation.py \
 | `target_metadata.t_half.acknowledged_structural_mismatch` | `true` の場合、その不一致をfixture limitationとして確認済み |
 | `target_metadata.t_half.relative_error` | CL/Vから暗黙に決まる`t1/2`と`pk_parsed.half_life_h`の相対誤差 |
 
-warning薬剤では `pk.yml` に `value_provenance` も持たせています。これはPK値の臨床的正しさを保証するものではなく、fixture generator が使うCL/V/t1/2について、値のbasis、単位正規化、変換方法、reviewer statusを追跡するための監査情報です。
+warning薬剤では `pk.yml` に `value_provenance` も持たせています。これはPK値の臨床的正しさを保証するものではなく、fixture generator が使うCL/V/t1/2について、値のbasis、単位正規化、変換方法、review statusを追跡するための監査情報です。Phase 1 scope は、1-compartment attainability warning が出る13薬剤です。
 
 ```bash
 python tools/check_value_provenance.py .
@@ -157,6 +157,7 @@ run-level `MANIFEST.yml` には full provenance をコピーせず、`value_prov
 | `value_provenance_summary.mismatch_acknowledged_fields` | fixture limitation として確認済みの mismatch field |
 
 `--report` は `fields_needing_review` を一覧化します。`source_id: null` の項目は、値ごとの直接source mappingが未確認であることを明示するために残しています。sourceを確認できた場合だけ `source_id` を `sources[].id` に接続してください。
+source mapping の確認状態は `source_review_status`、fixture limitation の確認状態は `fixture_limitation_status` に分けて記録します。
 
 ### Step 3: 臨床試験の採血ポイントに合わせる
 

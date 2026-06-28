@@ -26,7 +26,7 @@
 
 ### `value_provenance`
 
-`value_provenance` はPK真値を主張するものではなく、fixture generator が使う値を監査しやすくするためのメタデータです。まずは1-compartment attainability warningが出る13薬剤について、次の3フィールドを必須にしています。
+`value_provenance` はPK真値を主張するものではなく、fixture generator が使う値を監査しやすくするためのメタデータです。Phase 1 scope は、1-compartment attainability warningが出る13薬剤です。まずは次の3フィールドを必須にしています。
 
 - `CL_abs_L_per_h_at_70kg`
 - `V_abs_L_at_70kg`
@@ -47,6 +47,8 @@ value_provenance:
       formula: pk_parsed.clearance.value
       assumptions: {}
     role: simulation_parameter
+    source_review_status: needs_source_review
+    fixture_limitation_status: not_applicable
     reviewer_status: needs_source_review
     reviewer_note: >
       Clearance is used as a deterministic fixture model parameter.
@@ -57,9 +59,12 @@ Enumは `tools/check_value_provenance.py` で検証します。
 - `value_basis`: `label_reported`, `literature_reported`, `derived_from_reported`, `fixture_policy`, `unknown_needs_review`
 - `conversion.method`: `direct`, `unit_conversion`, `body_weight_scaled`, `derived_formula`, `not_applicable`, `unknown_needs_review`
 - `role`: `simulation_parameter`, `check_only`, `consistency_check`, `derived_output`, `metadata_only`
+- `source_review_status`: `checked`, `needs_source_review`, `needs_unit_review`, `not_applicable`
+- `fixture_limitation_status`: `acknowledged`, `not_applicable`
 - `reviewer_status`: `checked`, `acknowledged_fixture_limitation`, `needs_source_review`, `needs_unit_review`, `not_applicable`
 
 `source_id` が `null` でない場合は `sources[].id` に解決できる必要があります。既存source URLから値ごとの直接出典を特定できない場合は、出典を推測せず `source_id: null` として `fields_needing_review` に残します。
+`reviewer_status` は後方互換の要約フィールドです。新しいチェックでは、値ごとのsource確認は `source_review_status`、1-compartment fixture limitation の確認は `fixture_limitation_status` を優先します。
 
 ## `drugs/<slug>/spec_pk1_oral.yml` / `spec_pk1_iv.yml`
 

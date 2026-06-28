@@ -60,6 +60,8 @@ value_provenance:
       URLs do not identify the exact value-level source for this parameter. This provenance
       records the canonical parsed/derived fixture value and intentionally marks source
       mapping for future review.
+    source_review_status: needs_source_review
+    fixture_limitation_status: not_applicable
   V_abs_L_at_70kg:
     source_id: null
     source_field: pk_parsed.volume
@@ -80,6 +82,8 @@ value_provenance:
       URLs do not identify the exact value-level source for this parameter. This provenance
       records the canonical parsed/derived fixture value and intentionally marks source
       mapping for future review.
+    source_review_status: needs_source_review
+    fixture_limitation_status: not_applicable
   t_half_h:
     source_id: null
     source_field: pk_parsed.half_life_h
@@ -99,3 +103,5 @@ value_provenance:
       fixture. Existing source URLs do not identify the exact value-level source for
       this parameter. This provenance records the canonical parsed/derived fixture
       value and intentionally marks source mapping for future review.
+    source_review_status: needs_source_review
+    fixture_limitation_status: acknowledged

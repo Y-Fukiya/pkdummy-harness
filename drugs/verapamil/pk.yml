@@ -68,6 +68,8 @@ value_provenance:
       URLs do not identify the exact value-level source for this parameter. This provenance
       records the canonical parsed/derived fixture value and intentionally marks source
       mapping for future review.
+    source_review_status: needs_source_review
+    fixture_limitation_status: not_applicable
   V_abs_L_at_70kg:
     source_id: null
     source_field: pk_parsed.volume
@@ -87,6 +89,8 @@ value_provenance:
       URLs do not identify the exact value-level source for this parameter. This provenance
       records the canonical parsed/derived fixture value and intentionally marks source
       mapping for future review.
+    source_review_status: needs_source_review
+    fixture_limitation_status: not_applicable
   t_half_h:
     source_id: source_1
     source_field: terminal_half_life_range_single_dose
@@ -102,9 +106,11 @@ value_provenance:
       assumptions:
         range_summary: midpoint
     role: check_only
-    reviewer_status: acknowledged_fixture_limitation
+    reviewer_status: checked
     reviewer_note: DailyMed source_1 reports mean elimination half-life in single-dose
       studies ranging from 2.8 to 7.4 h. Canonical t_half_h retains the fixture midpoint
       of that source range and remains a check target only. CL and V are not jointly
       calibrated to match terminal half-life in this deterministic one-compartment
       fixture.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged

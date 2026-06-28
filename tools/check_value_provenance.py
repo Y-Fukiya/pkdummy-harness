@@ -62,6 +62,8 @@ REVIEWER_STATUSES = {
     "needs_unit_review",
     "not_applicable",
 }
+SOURCE_REVIEW_STATUSES = {"checked", "needs_source_review", "needs_unit_review", "not_applicable"}
+FIXTURE_LIMITATION_STATUSES = {"acknowledged", "not_applicable"}
 
 
 def load_yaml(path: Path) -> dict[str, Any]:
@@ -137,6 +139,14 @@ def validate_value_provenance(
             issues.append(f"{slug}: value_provenance.{field}.role has invalid enum")
         if entry.get("reviewer_status") not in REVIEWER_STATUSES:
             issues.append(f"{slug}: value_provenance.{field}.reviewer_status has invalid enum")
+        source_review_status = entry.get("source_review_status")
+        if source_review_status not in SOURCE_REVIEW_STATUSES:
+            issues.append(f"{slug}: value_provenance.{field}.source_review_status has invalid enum")
+        fixture_limitation_status = entry.get("fixture_limitation_status")
+        if fixture_limitation_status not in FIXTURE_LIMITATION_STATUSES:
+            issues.append(f"{slug}: value_provenance.{field}.fixture_limitation_status has invalid enum")
+        if entry.get("source_id") is not None and source_review_status != "checked":
+            issues.append(f"{slug}: value_provenance.{field}.source_review_status must be checked when source_id is set")
 
         conversion = entry.get("conversion")
         if not isinstance(conversion, dict):
@@ -168,9 +178,9 @@ def validate_value_provenance(
         else:
             if half_life.get("role") != "check_only":
                 issues.append(f"{slug}: value_provenance.t_half_h.role must be check_only for acknowledged mismatch")
-            if half_life.get("reviewer_status") != "acknowledged_fixture_limitation":
+            if half_life.get("fixture_limitation_status") != "acknowledged":
                 issues.append(
-                    f"{slug}: value_provenance.t_half_h.reviewer_status must be acknowledged_fixture_limitation"
+                    f"{slug}: value_provenance.t_half_h.fixture_limitation_status must be acknowledged"
                 )
     return issues
 
@@ -202,7 +212,8 @@ def build_value_provenance_summary(pk: dict[str, Any], targets: dict[str, Any] |
         source_id = entry.get("source_id")
         if source_id:
             source_ids.append(str(source_id))
-        if source_id is None or entry.get("reviewer_status") in {"needs_source_review", "needs_unit_review"}:
+        source_review_status = entry.get("source_review_status", entry.get("reviewer_status"))
+        if source_id is None or source_review_status in {"needs_source_review", "needs_unit_review"}:
             fields_needing_review.append(field)
 
     target_half_life = (((targets or {}).get("targets") or {}).get("t_half") or {})
@@ -212,7 +223,10 @@ def build_value_provenance_summary(pk: dict[str, Any], targets: dict[str, Any] |
         isinstance(structural_mismatch, dict)
         and structural_mismatch.get("acknowledged") is True
         and isinstance(half_life, dict)
-        and half_life.get("reviewer_status") == "acknowledged_fixture_limitation"
+        and half_life.get("fixture_limitation_status", half_life.get("reviewer_status")) in {
+            "acknowledged",
+            "acknowledged_fixture_limitation",
+        }
     ):
         mismatch_acknowledged_fields.append("t_half_h")
 

@@ -49,8 +49,21 @@ def test_mismatch_half_life_is_check_only_and_acknowledged() -> None:
         structural_mismatch = target_half_life.get("structural_mismatch") or {}
 
         assert half_life.get("role") == "check_only", slug
-        assert half_life.get("reviewer_status") == "acknowledged_fixture_limitation", slug
+        assert half_life.get("source_review_status") in {"checked", "needs_source_review"}, slug
+        assert half_life.get("fixture_limitation_status") == "acknowledged", slug
         assert structural_mismatch.get("acknowledged") is True, slug
+
+
+def test_value_provenance_separates_source_review_from_fixture_limitation() -> None:
+    for slug in WARNING_DRUGS:
+        pk = load_yaml(ROOT / "drugs" / slug / "pk.yml")
+        provenance = pk.get("value_provenance") or {}
+
+        for field in REQUIRED_VALUE_PROVENANCE_FIELDS:
+            entry = provenance[field]
+            assert entry.get("source_review_status") in {"checked", "needs_source_review"}, f"{slug}.{field}"
+            assert entry.get("fixture_limitation_status") in {"acknowledged", "not_applicable"}, f"{slug}.{field}"
+        assert provenance["t_half_h"]["fixture_limitation_status"] == "acknowledged", slug
 
 
 def test_value_provenance_summary_reports_checked_and_review_fields() -> None:
