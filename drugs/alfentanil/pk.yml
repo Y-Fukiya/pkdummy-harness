@@ -41,48 +41,45 @@ derived:
     typically report systemic parameters.'
 value_provenance:
   CL_abs_L_per_h_at_70kg:
-    source_id: null
-    source_field: pk_parsed.clearance
+    source_id: source_1
+    source_field: average_plasma_clearance
     value_basis: derived_from_reported
-    raw_value: 0.3
-    raw_unit: L/h/kg
+    raw_value: 5.0
+    raw_unit: mL/kg/min
     normalized_value: 21.0
     normalized_unit: L/h
     conversion:
       method: body_weight_scaled
-      formula: pk_parsed.clearance.value * pk_parsed.weight_ref_kg_for_abs
+      formula: 5 mL/kg/min * 70 kg * 60 min/h / 1000 mL/L
       assumptions:
         weight_ref_kg_for_abs: 70.0
     role: simulation_parameter
-    reviewer_status: needs_source_review
-    reviewer_note: Clearance is used as a deterministic fixture model parameter and
-      is not recalibrated to force agreement with terminal half-life. Existing source
-      URLs do not identify the exact value-level source for this parameter. This provenance
-      records the canonical parsed/derived fixture value and intentionally marks source
-      mapping for future review.
-    source_review_status: needs_source_review
+    reviewer_status: checked
+    reviewer_note: DailyMed source_1 reports average plasma clearance of 5 mL/kg/min.
+      Clearance is used as a deterministic fixture model parameter and is not recalibrated
+      to force agreement with terminal half-life.
+    source_review_status: checked
     fixture_limitation_status: not_applicable
   V_abs_L_at_70kg:
-    source_id: null
-    source_field: pk_parsed.volume
+    source_id: source_1
+    source_field: apparent_volume_of_distribution_range
     value_basis: derived_from_reported
-    raw_value: 1.0
+    raw_value: 0.4-1.0
     raw_unit: L/kg
     normalized_value: 70.0
     normalized_unit: L
     conversion:
       method: body_weight_scaled
-      formula: pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs
+      formula: upper bound of reported apparent volume range (1 L/kg) * 70 kg
       assumptions:
+        range_summary: upper_bound
         weight_ref_kg_for_abs: 70.0
     role: simulation_parameter
-    reviewer_status: needs_source_review
-    reviewer_note: Volume is retained as the one-compartment fixture volume and is
-      not recalibrated to force agreement with terminal half-life. Existing source
-      URLs do not identify the exact value-level source for this parameter. This provenance
-      records the canonical parsed/derived fixture value and intentionally marks source
-      mapping for future review.
-    source_review_status: needs_source_review
+    reviewer_status: checked
+    reviewer_note: DailyMed source_1 reports apparent volume of distribution of 0.4
+      to 1 L/kg. Canonical V_abs_L_at_70kg retains the upper-bound fixture value and
+      is not recalibrated to force agreement with terminal half-life.
+    source_review_status: checked
     fixture_limitation_status: not_applicable
   t_half_h:
     source_id: null

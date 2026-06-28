@@ -24,7 +24,7 @@ Itraconazole,itraconazole,po,22.0,16.68,700.0,0.55,drugs/itraconazole/spec_pk1_o
 Mefenamic acid,mefenamic_acid,po,3.0,21.13,74.2,,drugs/mefenamic_acid/spec_pk1_oral.yml,drugs/mefenamic_acid/pk.yml,2,drugs/mefenamic_acid/targets.yml
 Metoprolol,metoprolol,po,5.0,48.0,346.2468098133512,0.5,drugs/metoprolol/spec_pk1_oral.yml,drugs/metoprolol/pk.yml,2,drugs/metoprolol/targets.yml
 Mexiletine,mexiletine,po,11.0,30.87655622494302,490.0,0.9,drugs/mexiletine/spec_pk1_oral.yml,drugs/mexiletine/pk.yml,2,drugs/mexiletine/targets.yml
-Moclobemide,moclobemide,po,1.5,78.0,105.0,0.73,drugs/moclobemide/spec_pk1_oral.yml,drugs/moclobemide/pk.yml,3,drugs/moclobemide/targets.yml
+Moclobemide,moclobemide,po,1.5,78.0,105.0,0.73,drugs/moclobemide/spec_pk1_oral.yml,drugs/moclobemide/pk.yml,4,drugs/moclobemide/targets.yml
 Montelukast,montelukast,po,6.7,1.8479999999999999,9.7,0.615,drugs/montelukast/spec_pk1_oral.yml,drugs/montelukast/pk.yml,1,drugs/montelukast/targets.yml
 Motavizumab (MEDI-524),motavizumab_medi_524,iv,636.0,0.010229166666666666,7.35,1.0,drugs/motavizumab_medi_524/spec_pk1_iv.yml,drugs/motavizumab_medi_524/pk.yml,1,drugs/motavizumab_medi_524/targets.yml
 Motavizumab-YTE,motavizumab_yte,iv,2040,0.0022916666666666667,6.744599316155904,1.0,drugs/motavizumab_yte/spec_pk1_iv.yml,drugs/motavizumab_yte/pk.yml,1,drugs/motavizumab_yte/targets.yml

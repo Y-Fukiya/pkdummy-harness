@@ -65,6 +65,7 @@ Enumは `tools/check_value_provenance.py` で検証します。
 
 `source_id` が `null` でない場合は `sources[].id` に解決できる必要があります。既存source URLから値ごとの直接出典を特定できない場合は、出典を推測せず `source_id: null` として `fields_needing_review` に残します。
 `reviewer_status` は後方互換の legacy summary です。新規レビューでは、値ごとのsource確認は `source_review_status`、1-compartment fixture limitation の確認は `fixture_limitation_status` に分けて記録します。validator や `--report` の集計も、この2つの分離フィールドを優先します。
+CLI report の `resolved_entries` は `drug.field -> source_id`、`resolved_source_refs` は `drug.source_id` の一覧です。`unresolved_entries`、`unresolved_entry_details`、`unresolved_reason_counts`、`source_mapping_coverage`、`source_mapping_coverage_by_field`、`source_mapping_coverage_by_drug`、`next_review_entries`、`next_review_details`、`source_review_queue`、`source_review_action_counts`、`suggested_source_kind_counts`、`fully_mapped_warning_drugs` / `partially_mapped_warning_drugs` / `unmapped_warning_drugs` も併せて出力し、local source id だけでは区別しにくい cross-drug の source mapping と残レビューを監査しやすくします。`source_review_queue` は、薬剤ごとの未解決field、available/used/unused source id、source URL refs、coverage、highest priority、review action をまとめたレビュー作業用のqueueです。source refs には `source_kind` / `source_rank` を付け、`suggested_source_refs` は label, PubMed, journal, DrugBank, PubChem, Wikipedia, secondary の順で確認候補を並べます。
 
 ## `drugs/<slug>/spec_pk1_oral.yml` / `spec_pk1_iv.yml`
 

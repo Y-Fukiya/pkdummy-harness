@@ -50,29 +50,28 @@ derived:
     typically report systemic parameters.'
 value_provenance:
   CL_abs_L_per_h_at_70kg:
-    source_id: null
-    source_field: pk_parsed.clearance
+    source_id: source_2
+    source_field: mean_total_clearance_from_blood
     value_basis: derived_from_reported
-    raw_value: 90.0
-    raw_unit: L/h
+    raw_value: 1-1.5
+    raw_unit: L/min
     normalized_value: 90.0
     normalized_unit: L/h
     conversion:
-      method: direct
-      formula: pk_parsed.clearance.value
-      assumptions: {}
+      method: unit_conversion
+      formula: upper bound of reported clearance range (1.5 L/min) * 60 min/h
+      assumptions:
+        range_summary: upper_bound
     role: simulation_parameter
-    reviewer_status: needs_source_review
-    reviewer_note: Clearance is used as a deterministic fixture model parameter and
-      is not recalibrated to force agreement with terminal half-life. Existing source
-      URLs do not identify the exact value-level source for this parameter. This provenance
-      records the canonical parsed/derived fixture value and intentionally marks source
-      mapping for future review.
-    source_review_status: needs_source_review
+    reviewer_status: checked
+    reviewer_note: PubMed source_2 reports mean total clearance from blood of 1 to
+      1.5 L/min. Clearance is used as a deterministic fixture model parameter and
+      is not recalibrated to force agreement with terminal half-life.
+    source_review_status: checked
     fixture_limitation_status: not_applicable
   V_abs_L_at_70kg:
-    source_id: null
-    source_field: pk_parsed.volume
+    source_id: source_2
+    source_field: volume_of_distribution
     value_basis: derived_from_reported
     raw_value: 10.0
     raw_unit: L/kg
@@ -84,32 +83,32 @@ value_provenance:
       assumptions:
         weight_ref_kg_for_abs: 70.0
     role: simulation_parameter
-    reviewer_status: needs_source_review
-    reviewer_note: Volume is retained as the one-compartment fixture volume and is
-      not recalibrated to force agreement with terminal half-life. Existing source
-      URLs do not identify the exact value-level source for this parameter. This provenance
-      records the canonical parsed/derived fixture value and intentionally marks source
-      mapping for future review.
-    source_review_status: needs_source_review
+    reviewer_status: checked
+    reviewer_note: PubMed source_2 reports felodipine volume of distribution of about
+      10 L/kg. Volume is retained as the one-compartment fixture volume and is not
+      recalibrated to force agreement with terminal half-life.
+    source_review_status: checked
     fixture_limitation_status: not_applicable
   t_half_h:
-    source_id: null
-    source_field: pk_parsed.half_life_h
+    source_id: source_2
+    source_field: mean_elimination_half_life
     value_basis: derived_from_reported
-    raw_value: 24.5
+    raw_value: approximately 25
     raw_unit: h
     normalized_value: 24.5
     normalized_unit: h
     conversion:
-      method: direct
-      formula: pk_parsed.half_life_h
-      assumptions: {}
+      method: derived_formula
+      formula: fixture midpoint of local 24-25 h range, source-confirmed as approximately
+        25 h
+      assumptions:
+        source_precision: approximate
+        range_summary: midpoint
     role: check_only
-    reviewer_status: acknowledged_fixture_limitation
-    reviewer_note: Half-life is retained as a check target only. CL and V are not
-      jointly calibrated to match terminal half-life in this deterministic one-compartment
-      fixture. Existing source URLs do not identify the exact value-level source for
-      this parameter. This provenance records the canonical parsed/derived fixture
-      value and intentionally marks source mapping for future review.
-    source_review_status: needs_source_review
+    reviewer_status: checked
+    reviewer_note: PubMed source_2 reports felodipine mean elimination half-life of
+      approximately 25 h. Canonical t_half_h retains the fixture midpoint of the local
+      24-25 h range and remains a check target only. CL and V are not jointly calibrated
+      to match terminal half-life in this deterministic one-compartment fixture.
+    source_review_status: checked
     fixture_limitation_status: acknowledged

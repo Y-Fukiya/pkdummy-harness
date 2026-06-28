@@ -64,6 +64,16 @@ REVIEWER_STATUSES = {
 }
 SOURCE_REVIEW_STATUSES = {"checked", "needs_source_review", "needs_unit_review", "not_applicable"}
 FIXTURE_LIMITATION_STATUSES = {"acknowledged", "not_applicable"}
+SOURCE_KIND_RANKS = {
+    "label": 0,
+    "pubmed": 1,
+    "journal": 2,
+    "drugbank": 3,
+    "pubchem": 4,
+    "wikipedia": 5,
+    "secondary": 6,
+    "other": 9,
+}
 
 
 def load_yaml(path: Path) -> dict[str, Any]:
@@ -86,6 +96,54 @@ def _source_ids(pk: dict[str, Any]) -> set[str]:
         if isinstance(source, dict) and source.get("id"):
             ids.add(str(source["id"]))
     return ids
+
+
+def _source_id_list(pk: dict[str, Any]) -> list[str]:
+    return sorted(_source_ids(pk))
+
+
+def _source_kind(url: str) -> str:
+    url_lower = url.lower()
+    if "dailymed.nlm.nih.gov" in url_lower:
+        return "label"
+    if "pubmed.ncbi.nlm.nih.gov" in url_lower:
+        return "pubmed"
+    if "journals.asm.org" in url_lower or "sciencedirect.com/science/article" in url_lower:
+        return "journal"
+    if "go.drugbank.com" in url_lower:
+        return "drugbank"
+    if "pubchem.ncbi.nlm.nih.gov" in url_lower:
+        return "pubchem"
+    if "wikipedia.org" in url_lower:
+        return "wikipedia"
+    if "researchgate.net" in url_lower or "sciencedirect.com/topics" in url_lower:
+        return "secondary"
+    return "other"
+
+
+def _source_refs(pk: dict[str, Any]) -> list[dict[str, Any]]:
+    refs: list[dict[str, Any]] = []
+    for source in pk.get("sources") or []:
+        if isinstance(source, dict) and source.get("id"):
+            url = str(source.get("url") or "")
+            source_kind = _source_kind(url)
+            refs.append(
+                {
+                    "id": str(source["id"]),
+                    "source_kind": source_kind,
+                    "source_rank": SOURCE_KIND_RANKS[source_kind],
+                    "url": url,
+                }
+            )
+    return sorted(refs, key=lambda ref: ref["id"])
+
+
+def _filter_source_refs(source_refs: list[dict[str, Any]], source_ids: set[str]) -> list[dict[str, Any]]:
+    return [ref for ref in source_refs if ref["id"] in source_ids]
+
+
+def _sort_source_refs_for_review(source_refs: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return sorted(source_refs, key=lambda ref: (ref["source_rank"], ref["id"]))
 
 
 def canonical_value(pk: dict[str, Any], field: str) -> float | None:
@@ -241,10 +299,61 @@ def build_value_provenance_summary(pk: dict[str, Any], targets: dict[str, Any] |
     }
 
 
+def _empty_coverage() -> dict[str, int | float]:
+    return {"resolved": 0, "unresolved": 0, "total": 0, "rate": 0.0}
+
+
+def _review_priority(field: str) -> str:
+    if field == "t_half_h":
+        return "high"
+    return "medium"
+
+
+def _priority_rank(priority: str) -> int:
+    return {"high": 0, "medium": 1, "low": 2}.get(priority, 99)
+
+
+def _review_action(available_source_ids: list[str], used_source_ids: set[str]) -> str:
+    unused_source_ids = set(available_source_ids) - used_source_ids
+    if unused_source_ids:
+        return "inspect_unused_sources"
+    if available_source_ids:
+        return "recheck_used_sources"
+    return "add_source_before_mapping"
+
+
+def _unresolved_reasons(entry: dict[str, Any]) -> list[str]:
+    reasons: list[str] = []
+    if entry.get("source_id") is None:
+        reasons.append("source_id_missing")
+    source_review_status = entry.get("source_review_status")
+    if source_review_status in {"needs_source_review", "needs_unit_review"}:
+        reasons.append(str(source_review_status))
+    elif source_review_status != "checked":
+        reasons.append("source_review_status_not_checked")
+    return reasons
+
+
 def value_provenance_report(root: Path | str) -> dict[str, Any]:
     root_path = Path(root)
     fields_needing_review: list[str] = []
     source_ids: set[str] = set()
+    resolved_entries: list[str] = []
+    resolved_source_refs: set[str] = set()
+    unresolved_entries: list[str] = []
+    unresolved_entry_details: list[dict[str, Any]] = []
+    unresolved_reason_counts: dict[str, int] = {}
+    coverage_by_field = {
+        field: _empty_coverage()
+        for field in REQUIRED_VALUE_PROVENANCE_FIELDS
+    }
+    coverage_by_drug: dict[str, dict[str, int | float]] = {}
+    fully_mapped_warning_drugs: list[str] = []
+    partially_mapped_warning_drugs: list[str] = []
+    unmapped_warning_drugs: list[str] = []
+    source_review_queue: list[dict[str, Any]] = []
+    source_review_action_counts: dict[str, int] = {}
+    suggested_source_kind_counts: dict[str, int] = {}
     source_review_status_counts = {status: 0 for status in sorted(SOURCE_REVIEW_STATUSES)}
     fixture_limitation_status_counts = {status: 0 for status in sorted(FIXTURE_LIMITATION_STATUSES)}
     non_null_source_id_entries = 0
@@ -260,18 +369,36 @@ def value_provenance_report(root: Path | str) -> dict[str, Any]:
         pk = load_yaml(pk_path)
         targets = load_yaml(targets_path) if targets_path.exists() else {}
         summary = build_value_provenance_summary(pk, targets)
+        available_source_ids = _source_id_list(pk)
+        available_source_refs = _source_refs(pk)
+        used_source_ids_for_drug: set[str] = set()
+        unresolved_for_drug = {
+            f"{slug}.{field}" for field in summary.get("fields_needing_review") or []
+        }
+        unresolved_fields_for_drug = [
+            field
+            for field in REQUIRED_VALUE_PROVENANCE_FIELDS
+            if f"{slug}.{field}" in unresolved_for_drug
+        ]
         entries += len(summary.get("checked_fields") or [])
         source_ids.update(str(source_id) for source_id in summary.get("source_ids") or [])
         for field in summary.get("fields_needing_review") or []:
-            fields_needing_review.append(f"{slug}.{field}")
+            unresolved_entry = f"{slug}.{field}"
+            fields_needing_review.append(unresolved_entry)
+            unresolved_entries.append(unresolved_entry)
 
         provenance = pk.get("value_provenance") or {}
         if not isinstance(provenance, dict):
             continue
+        mapped_fields_for_drug = 0
+        coverage_by_drug[slug] = _empty_coverage()
         for field in REQUIRED_VALUE_PROVENANCE_FIELDS:
             entry = provenance.get(field)
             if not isinstance(entry, dict):
                 continue
+            entry_name = f"{slug}.{field}"
+            coverage_by_drug[slug]["total"] += 1
+            coverage_by_field[field]["total"] += 1
             source_review_status = entry.get("source_review_status")
             if source_review_status in source_review_status_counts:
                 source_review_status_counts[source_review_status] += 1
@@ -280,6 +407,40 @@ def value_provenance_report(root: Path | str) -> dict[str, Any]:
                 fixture_limitation_status_counts[fixture_limitation_status] += 1
             if entry.get("source_id") is not None:
                 non_null_source_id_entries += 1
+                source_id = str(entry["source_id"])
+                resolved_entries.append(f"{slug}.{field} -> {source_id}")
+                resolved_source_refs.add(f"{slug}.{source_id}")
+                used_source_ids_for_drug.add(source_id)
+                mapped_fields_for_drug += 1
+                coverage_by_field[field]["resolved"] += 1
+                coverage_by_drug[slug]["resolved"] += 1
+            else:
+                coverage_by_field[field]["unresolved"] += 1
+                coverage_by_drug[slug]["unresolved"] += 1
+            if entry_name in unresolved_for_drug:
+                reasons = _unresolved_reasons(entry)
+                for reason in reasons:
+                    unresolved_reason_counts[reason] = unresolved_reason_counts.get(reason, 0) + 1
+                unresolved_entry_details.append(
+                    {
+                        "entry": entry_name,
+                        "drug": slug,
+                        "field": field,
+                        "priority": _review_priority(field),
+                        "reasons": reasons,
+                        "role": entry.get("role"),
+                        "value_basis": entry.get("value_basis"),
+                        "source_review_status": source_review_status,
+                        "fixture_limitation_status": entry.get("fixture_limitation_status"),
+                        "source_field": entry.get("source_field"),
+                        "raw_value": entry.get("raw_value"),
+                        "raw_unit": entry.get("raw_unit"),
+                        "normalized_value": entry.get("normalized_value"),
+                        "normalized_unit": entry.get("normalized_unit"),
+                        "available_source_ids": available_source_ids,
+                        "available_source_refs": available_source_refs,
+                    }
+                )
 
         half_life = provenance.get("t_half_h")
         if isinstance(half_life, dict):
@@ -287,12 +448,100 @@ def value_provenance_report(root: Path | str) -> dict[str, Any]:
             if half_life.get("source_id") is not None:
                 warning_t_half_resolved += 1
 
+        if mapped_fields_for_drug == len(REQUIRED_VALUE_PROVENANCE_FIELDS):
+            fully_mapped_warning_drugs.append(slug)
+        elif mapped_fields_for_drug:
+            partially_mapped_warning_drugs.append(slug)
+        else:
+            unmapped_warning_drugs.append(slug)
+
+        if unresolved_fields_for_drug:
+            unresolved_priorities = [_review_priority(field) for field in unresolved_fields_for_drug]
+            highest_priority = sorted(unresolved_priorities, key=_priority_rank)[0]
+            unused_source_ids = set(available_source_ids) - used_source_ids_for_drug
+            action = _review_action(available_source_ids, used_source_ids_for_drug)
+            source_review_action_counts[action] = source_review_action_counts.get(action, 0) + 1
+            used_source_refs = _filter_source_refs(available_source_refs, used_source_ids_for_drug)
+            unused_source_refs = _filter_source_refs(available_source_refs, unused_source_ids)
+            suggested_source_refs = _sort_source_refs_for_review(unused_source_refs or used_source_refs)
+            for source_ref in suggested_source_refs:
+                source_kind = source_ref["source_kind"]
+                suggested_source_kind_counts[source_kind] = suggested_source_kind_counts.get(source_kind, 0) + 1
+            source_review_queue.append(
+                {
+                    "drug": slug,
+                    "highest_priority": highest_priority,
+                    "review_action": action,
+                    "unresolved_fields": unresolved_fields_for_drug,
+                    "unresolved_entries": [
+                        f"{slug}.{field}" for field in unresolved_fields_for_drug
+                    ],
+                    "coverage": dict(coverage_by_drug[slug]),
+                    "available_source_ids": available_source_ids,
+                    "used_source_ids": sorted(used_source_ids_for_drug),
+                    "unused_source_ids": sorted(unused_source_ids),
+                    "available_source_refs": available_source_refs,
+                    "used_source_refs": used_source_refs,
+                    "unused_source_refs": unused_source_refs,
+                    "suggested_source_refs": suggested_source_refs,
+                }
+            )
+
     t_half_rate = warning_t_half_resolved / warning_t_half_total if warning_t_half_total else 0.0
+    source_mapping_rate = non_null_source_id_entries / entries if entries else 0.0
+    for field, field_coverage in coverage_by_field.items():
+        total = field_coverage["total"]
+        field_coverage["rate"] = field_coverage["resolved"] / total if total else 0.0
+    for drug_coverage in coverage_by_drug.values():
+        total = drug_coverage["total"]
+        drug_coverage["rate"] = drug_coverage["resolved"] / total if total else 0.0
+
+    field_priority = {
+        "t_half_h": 0,
+        "CL_abs_L_per_h_at_70kg": 1,
+        "V_abs_L_at_70kg": 2,
+    }
+    detail_by_entry = {detail["entry"]: detail for detail in unresolved_entry_details}
+    next_review_entries = sorted(
+        unresolved_entries,
+        key=lambda entry: (field_priority.get(entry.split(".", 1)[1], 99), entry),
+    )
+    next_review_details = [detail_by_entry[entry] for entry in next_review_entries if entry in detail_by_entry]
+    source_review_queue = sorted(
+        source_review_queue,
+        key=lambda item: (
+            _priority_rank(str(item["highest_priority"])),
+            item["coverage"]["resolved"],
+            -item["coverage"]["unresolved"],
+            item["drug"],
+        ),
+    )
     return {
         "warning_drugs": list(WARNING_DRUGS),
         "provenance_entries": entries,
         "non_null_source_ids": sorted(source_ids),
         "non_null_source_id_entries": non_null_source_id_entries,
+        "resolved_entries": sorted(resolved_entries),
+        "resolved_source_refs": sorted(resolved_source_refs),
+        "unresolved_entries": sorted(unresolved_entries),
+        "unresolved_entry_details": sorted(unresolved_entry_details, key=lambda detail: detail["entry"]),
+        "unresolved_reason_counts": dict(sorted(unresolved_reason_counts.items())),
+        "source_mapping_coverage": {
+            "resolved": non_null_source_id_entries,
+            "unresolved": len(unresolved_entries),
+            "total": entries,
+            "rate": source_mapping_rate,
+        },
+        "source_mapping_coverage_by_field": coverage_by_field,
+        "source_mapping_coverage_by_drug": dict(sorted(coverage_by_drug.items())),
+        "next_review_entries": next_review_entries,
+        "next_review_details": next_review_details,
+        "source_review_queue": source_review_queue,
+        "source_review_action_counts": dict(sorted(source_review_action_counts.items())),
+        "suggested_source_kind_counts": dict(sorted(suggested_source_kind_counts.items())),
+        "fully_mapped_warning_drugs": sorted(fully_mapped_warning_drugs),
+        "partially_mapped_warning_drugs": sorted(partially_mapped_warning_drugs),
+        "unmapped_warning_drugs": sorted(unmapped_warning_drugs),
         "fields_needing_review": fields_needing_review,
         "source_review_status_counts": source_review_status_counts,
         "fixture_limitation_status_counts": fixture_limitation_status_counts,
@@ -351,6 +600,92 @@ def main(argv: list[str] | None = None) -> int:
             print(f"- {source_id}")
         print("non_null_source_id_entries:")
         print(f"- {report['non_null_source_id_entries']}")
+        print("resolved_source_refs:")
+        for source_ref in report["resolved_source_refs"]:
+            print(f"- {source_ref}")
+        print("resolved_entries:")
+        for entry in report["resolved_entries"]:
+            print(f"- {entry}")
+        print("unresolved_entries:")
+        for entry in report["unresolved_entries"]:
+            print(f"- {entry}")
+        print("unresolved_entry_details:")
+        for detail in report["unresolved_entry_details"]:
+            reasons = ",".join(detail["reasons"])
+            print(
+                f"- {detail['entry']}: priority={detail['priority']} "
+                f"reasons={reasons} normalized={detail['normalized_value']} {detail['normalized_unit']} "
+                f"role={detail['role']}"
+            )
+        print("unresolved_reason_counts:")
+        for reason, count in report["unresolved_reason_counts"].items():
+            print(f"- {reason}: {count}")
+        coverage = report["source_mapping_coverage"]
+        print("source_mapping_coverage:")
+        print(f"- resolved: {coverage['resolved']}")
+        print(f"- unresolved: {coverage['unresolved']}")
+        print(f"- total: {coverage['total']}")
+        print(f"- rate: {coverage['rate']:.3f}")
+        print("source_mapping_coverage_by_field:")
+        for field, field_coverage in report["source_mapping_coverage_by_field"].items():
+            print(
+                f"- {field}: resolved={field_coverage['resolved']} "
+                f"unresolved={field_coverage['unresolved']} "
+                f"total={field_coverage['total']} rate={field_coverage['rate']:.3f}"
+            )
+        print("source_mapping_coverage_by_drug:")
+        for slug, drug_coverage in report["source_mapping_coverage_by_drug"].items():
+            print(
+                f"- {slug}: resolved={drug_coverage['resolved']} "
+                f"unresolved={drug_coverage['unresolved']} "
+                f"total={drug_coverage['total']} rate={drug_coverage['rate']:.3f}"
+            )
+        print("next_review_entries:")
+        for entry in report["next_review_entries"]:
+            print(f"- {entry}")
+        print("next_review_details:")
+        for detail in report["next_review_details"]:
+            reasons = ",".join(detail["reasons"])
+            print(f"- {detail['entry']}: priority={detail['priority']} reasons={reasons}")
+        print("source_review_queue:")
+        for item in report["source_review_queue"]:
+            fields = ",".join(item["unresolved_fields"])
+            available = ",".join(item["available_source_ids"])
+            used = ",".join(item["used_source_ids"])
+            unused = ",".join(item["unused_source_ids"])
+            available_refs = ";".join(f"{ref['id']}={ref['url']}" for ref in item["available_source_refs"])
+            used_refs = ";".join(f"{ref['id']}={ref['url']}" for ref in item["used_source_refs"])
+            unused_refs = ";".join(f"{ref['id']}={ref['url']}" for ref in item["unused_source_refs"])
+            suggested_refs = ";".join(
+                f"{ref['id']}:{ref['source_kind']}={ref['url']}"
+                for ref in item["suggested_source_refs"]
+            )
+            coverage = item["coverage"]
+            print(
+                f"- {item['drug']}: priority={item['highest_priority']} "
+                f"action={item['review_action']} "
+                f"resolved={coverage['resolved']} unresolved={coverage['unresolved']} "
+                f"fields={fields} available_sources={available} "
+                f"used_sources={used} unused_sources={unused} "
+                f"available_source_refs={available_refs} "
+                f"used_source_refs={used_refs} unused_source_refs={unused_refs} "
+                f"suggested_source_refs={suggested_refs}"
+            )
+        print("source_review_action_counts:")
+        for action, count in report["source_review_action_counts"].items():
+            print(f"- {action}: {count}")
+        print("suggested_source_kind_counts:")
+        for source_kind, count in report["suggested_source_kind_counts"].items():
+            print(f"- {source_kind}: {count}")
+        print("fully_mapped_warning_drugs:")
+        for slug in report["fully_mapped_warning_drugs"]:
+            print(f"- {slug}")
+        print("partially_mapped_warning_drugs:")
+        for slug in report["partially_mapped_warning_drugs"]:
+            print(f"- {slug}")
+        print("unmapped_warning_drugs:")
+        for slug in report["unmapped_warning_drugs"]:
+            print(f"- {slug}")
         print("source_review_status:")
         for status, count in report["source_review_status_counts"].items():
             print(f"- {status}: {count}")

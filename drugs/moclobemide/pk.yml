@@ -8,6 +8,8 @@ sources:
   url: https://pubmed.ncbi.nlm.nih.gov/2248087/
 - id: source_3
   url: https://pubmed.ncbi.nlm.nih.gov/8582117/
+- id: source_4
+  url: https://en.wikipedia.org/wiki/Moclobemide
 pk_raw:
   half_life: 1-2 hours
   clearance: 30-78 L/h
@@ -88,23 +90,24 @@ value_provenance:
     source_review_status: needs_source_review
     fixture_limitation_status: not_applicable
   t_half_h:
-    source_id: null
-    source_field: pk_parsed.half_life_h
+    source_id: source_4
+    source_field: elimination_half_life
     value_basis: derived_from_reported
-    raw_value: 1.5
+    raw_value: 1-2
     raw_unit: h
     normalized_value: 1.5
     normalized_unit: h
     conversion:
-      method: direct
-      formula: pk_parsed.half_life_h
-      assumptions: {}
+      method: derived_formula
+      formula: midpoint of reported elimination half-life range (1 to 2 h)
+      assumptions:
+        range_summary: midpoint
     role: check_only
-    reviewer_status: acknowledged_fixture_limitation
-    reviewer_note: Half-life is retained as a check target only. CL and V are not
-      jointly calibrated to match terminal half-life in this deterministic one-compartment
-      fixture. Existing source URLs do not identify the exact value-level source for
-      this parameter. This provenance records the canonical parsed/derived fixture
-      value and intentionally marks source mapping for future review.
-    source_review_status: needs_source_review
+    reviewer_status: checked
+    reviewer_note: Wikipedia source_4 reports moclobemide elimination half-life of
+      1 to 2 h, with longer values in elderly subjects. Canonical t_half_h retains
+      the adult range midpoint and remains a check target only. CL and V are not jointly
+      calibrated to match terminal half-life in this deterministic one-compartment
+      fixture.
+    source_review_status: checked
     fixture_limitation_status: acknowledged
