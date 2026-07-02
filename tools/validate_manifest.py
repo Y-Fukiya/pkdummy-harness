@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
+import re
 from pathlib import Path
 from typing import Any
 
@@ -11,12 +13,20 @@ import yaml
 
 
 REQUIRED_FIELDS = ["purpose", "status", "outputs"]
-WORKFLOW_REQUIRED_FIELDS = ["purpose", "status", "outputs", "target_metadata", "value_provenance_summary"]
+WORKFLOW_REQUIRED_FIELDS = [
+    "purpose",
+    "status",
+    "outputs",
+    "output_checksums",
+    "target_metadata",
+    "value_provenance_summary",
+]
 SDTM_LIKE_REQUIRED_FIELDS = ["purpose", "domains", "inputs"]
 WORKFLOW_PURPOSE = "pk_fixture_post_simulation_workflow"
 SDTM_LIKE_PURPOSE = "workflow_fixture_not_submission_ready_sdtm"
 ALLOWED_STATUS = {"OK", "WARN", "FAILED"}
 ALLOWED_T_HALF_ATTAINABILITY_STATUS = {"NA", "OK", "WARN"}
+SHA256_HEX_RE = re.compile(r"^[0-9a-f]{64}$")
 
 
 def _load_yaml(path: Path) -> dict[str, Any]:
@@ -142,6 +152,64 @@ def _validate_value_provenance_summary(obj: Any, *, status: Any, label: str) -> 
     return issues
 
 
+def _validate_output_checksums(obj: Any, *, outputs: Any, label: str) -> list[str]:
+    issues: list[str] = []
+    if not isinstance(obj, dict):
+        return [f"{label}: output_checksums must be a mapping"]
+
+    output_keys = set(outputs) if isinstance(outputs, dict) else set()
+    for key, value in obj.items():
+        if key not in output_keys:
+            issues.append(f"{label}: output_checksums.{key} does not correspond to outputs")
+        if not isinstance(value, str) or not SHA256_HEX_RE.fullmatch(value):
+            issues.append(f"{label}: output_checksums.{key} must be a 64-character sha256 hex digest")
+    return issues
+
+
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _resolve_manifest_output_path(manifest_path: Path, value: Any) -> Path | None:
+    if not isinstance(value, str) or not value:
+        return None
+    output_path = Path(value)
+    if output_path.is_absolute():
+        return output_path
+    manifest_relative = manifest_path.parent / output_path
+    if manifest_relative.exists():
+        return manifest_relative
+    return output_path
+
+
+def _validate_output_checksum_files(obj: dict[str, Any], *, manifest_path: Path) -> list[str]:
+    outputs = obj.get("outputs")
+    checksums = obj.get("output_checksums")
+    if not isinstance(outputs, dict) or not isinstance(checksums, dict):
+        return []
+
+    issues: list[str] = []
+    for key, expected in checksums.items():
+        if key not in outputs:
+            continue
+        if not isinstance(expected, str) or not SHA256_HEX_RE.fullmatch(expected):
+            continue
+        output_path = _resolve_manifest_output_path(manifest_path, outputs.get(key))
+        if output_path is None:
+            continue
+        if not output_path.is_file():
+            issues.append(f"{manifest_path.name}: output_checksums.{key} file not found: {outputs.get(key)}")
+            continue
+        actual = _sha256_file(output_path)
+        if actual != expected:
+            issues.append(f"{manifest_path.name}: output_checksums.{key} does not match {outputs.get(key)}")
+    return issues
+
+
 def validate_manifest_obj(obj: dict[str, Any], *, label: str = "MANIFEST.yml") -> list[str]:
     issues: list[str] = []
     purpose = str(obj.get("purpose") or "")
@@ -173,6 +241,14 @@ def validate_manifest_obj(obj: dict[str, Any], *, label: str = "MANIFEST.yml") -
         issues.append(f"{label}: warnings must be a list")
     if "safeguards" in obj and not isinstance(obj.get("safeguards"), list):
         issues.append(f"{label}: safeguards must be a list")
+    if "output_checksums" in obj:
+        issues.extend(
+            _validate_output_checksums(
+                obj.get("output_checksums"),
+                outputs=obj.get("outputs"),
+                label=label,
+            )
+        )
     if "target_metadata" in obj:
         issues.extend(_validate_target_metadata(obj.get("target_metadata"), label=label))
     if "value_provenance_summary" in obj:
@@ -192,7 +268,10 @@ def validate_manifest_file(path: Path | str) -> list[str]:
         obj = _load_yaml(manifest_path)
     except Exception as exc:
         return [f"{manifest_path.name}: {exc}"]
-    return validate_manifest_obj(obj, label=manifest_path.name)
+    return validate_manifest_obj(obj, label=manifest_path.name) + _validate_output_checksum_files(
+        obj,
+        manifest_path=manifest_path,
+    )
 
 
 def _collect_paths(paths: list[Path], *, recursive: bool) -> list[Path]:

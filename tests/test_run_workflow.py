@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import math
 import subprocess
 import sys
@@ -30,6 +31,10 @@ def write_sim_csv(path: Path) -> None:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def write_inputs(tmp_path: Path) -> tuple[Path, Path, Path, Path]:
@@ -168,6 +173,66 @@ def test_run_workflow_creates_trace_manifest_samples_and_sdtm_like_domains(tmp_p
     assert set(manifest["value_provenance_summary"]["checked_fields"]) >= set(
         manifest["value_provenance_summary"]["required_fields"]
     )
+
+
+def test_run_workflow_manifest_records_output_checksums(tmp_path: Path) -> None:
+    sim_csv, pk_yml, targets_yml, spec_yml = write_inputs(tmp_path)
+    out_dir = tmp_path / "workflow"
+
+    run_workflow(
+        sim_full_csv=sim_csv,
+        out_dir=out_dir,
+        pk_yml=pk_yml,
+        targets_yml=targets_yml,
+        spec_yml=spec_yml,
+        times_h=[0, 1, 2, 3],
+    )
+
+    manifest = yaml.safe_load((out_dir / "MANIFEST.yml").read_text(encoding="utf-8"))
+    checksums = manifest["output_checksums"]
+    assert checksums["clinical_samples_csv"] == sha256_file(out_dir / "raw" / "clinical_samples.csv")
+    assert checksums["adpc_csv"] == sha256_file(out_dir / "analysis_inputs" / "ADPC.csv")
+    assert checksums["nca_input_csv"] == sha256_file(out_dir / "analysis_inputs" / "NCA_INPUT.csv")
+    assert checksums["poppk_input_csv"] == sha256_file(out_dir / "analysis_inputs" / "POPPK_INPUT.csv")
+    assert "manifest" not in checksums
+    assert "trace_log" not in checksums
+
+
+def test_run_workflow_reproducible_mode_stabilizes_manifest_and_trace(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    sim_csv, pk_yml, targets_yml, spec_yml = write_inputs(tmp_path)
+    out_dir = tmp_path / "workflow"
+    monkeypatch.setenv("SOURCE_DATE_EPOCH", "946684800")
+
+    run_workflow(
+        sim_full_csv=sim_csv,
+        out_dir=out_dir,
+        pk_yml=pk_yml,
+        targets_yml=targets_yml,
+        spec_yml=spec_yml,
+        times_h=[0, 1, 2, 3],
+        reproducible=True,
+    )
+    manifest_first = (out_dir / "MANIFEST.yml").read_text(encoding="utf-8")
+    trace_first = (out_dir / "trace.log").read_text(encoding="utf-8")
+
+    run_workflow(
+        sim_full_csv=sim_csv,
+        out_dir=out_dir,
+        pk_yml=pk_yml,
+        targets_yml=targets_yml,
+        spec_yml=spec_yml,
+        times_h=[0, 1, 2, 3],
+        reproducible=True,
+    )
+
+    assert (out_dir / "MANIFEST.yml").read_text(encoding="utf-8") == manifest_first
+    assert (out_dir / "trace.log").read_text(encoding="utf-8") == trace_first
+    manifest = yaml.safe_load(manifest_first)
+    assert manifest["created_at"] == "2000-01-01T00:00:00Z"
+    assert trace_first.startswith("2000-01-01T00:00:00Z START workflow")
 
 
 def test_run_workflow_manifest_exposes_target_basis_and_structural_mismatch(tmp_path: Path) -> None:

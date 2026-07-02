@@ -180,6 +180,23 @@ target_metadata:
 - `target_metadata.t_half.acknowledged_structural_mismatch: true` は、その不一致をfixture limitationとして人間が確認済みであることを示します。
 - これらは実行artifactの監査情報であり、`pk.yml`、`targets.yml`、`spec_pk1_*.yml` を自動更新しません。
 
+生成物の監査用に、run-level manifest は出力CSV/レポートartifactごとの SHA-256 も持ちます。
+manifest自身、trace log、下位tool manifestは自己参照やtimestamp差分を避けるため対象外です。
+
+```yaml
+output_checksums:
+  clinical_samples_csv: 75b0...
+  simulation_validation_md: f319...
+  dm_csv: 9c2e...
+  pc_csv: 5d44...
+  adpc_csv: 8805...
+  nca_input_csv: 03aa...
+  poppk_input_csv: c75c...
+```
+
+`run_workflow.py --reproducible` を使うと、`created_at` と `trace.log` のtimestampは
+`SOURCE_DATE_EPOCH` 由来の固定UTC時刻になります。`SOURCE_DATE_EPOCH` が未設定の場合はUnix epochを使います。
+
 run-level manifestには full provenance ではなく summary だけを出します。
 
 ```yaml
@@ -229,7 +246,7 @@ value_provenance_summary:
 - `python tools/validate_subjects_csv.py subjects.csv`: 外部被験者CSVの列・行数・基本値を検証
 - `python -m tools.pk_fixture_cli --help`: standalone CLI入口。`doctor`, `run`, `workflow` などから既存ツールへdispatchする
 - `python tools/run_harness.py harness_examples/demo_set.yml`: YAML configから複数薬剤デモまたはpost-simulation workflowを起動する共通入口。Shiny Cloud/Tauri/CLIから同じconfigを使うための薄いdispatcher
-- `python tools/run_workflow.py --sim-full outputs/<run>/raw/sim_full.csv --drug <slug> --times 0,0.5,1,2,4,8,12,24 --out-dir outputs/<run>/workflow`: 生成済み `sim_full.csv` から検証、採血時点抽出、SDTM-like CSV生成、ADPC-like/NCA/PopPK入力生成、run-level manifest/trace作成を一括実行する。必要に応じて `--pc-conc-unit`, `--dose-cmt`, `--observation-cmt` で濃度単位とPopPK CMT conventionを明示できる
+- `python tools/run_workflow.py --sim-full outputs/<run>/raw/sim_full.csv --drug <slug> --times 0,0.5,1,2,4,8,12,24 --out-dir outputs/<run>/workflow`: 生成済み `sim_full.csv` から検証、採血時点抽出、SDTM-like CSV生成、ADPC-like/NCA/PopPK入力生成、run-level manifest/trace作成を一括実行する。必要に応じて `--pc-conc-unit`, `--dose-cmt`, `--observation-cmt` で濃度単位とPopPK CMT conventionを明示できる。監査用に timestamp を固定したい場合は `--reproducible` と `SOURCE_DATE_EPOCH` を使う
 - `python tools/run_demo_set.py --drugs albuterol,alprazolam,aciclovir,abciximab,felodipine --out-dir outputs/demo_set_milestone7`: 複数薬剤のデモ用 `sim_full.csv` を既存spec thetaから解析式で作成し、各薬剤に `run_workflow.py` を適用する。これはworkflow smoke demo用で、mrgsolve runnerの代替ではない
 - `python tools/validate_simulation.py outputs/<run>/raw/sim_full.csv --pk drugs/<slug>/pk.yml --targets drugs/<slug>/targets.yml`: 生成済み濃度データから AUC/Cmax/Tmax/t1/2 を単回で再計算して比較する。入力CSVに単位列があればレポートとCL由来AUC換算に使う。検証は決定論的な1回の計算であり、最適化やcalibrationは行わない
 - `python tools/sample_clinical_timepoints.py outputs/<run>/raw/sim_full.csv --times 0,0.5,1,2,4,8,12,24 --out outputs/<run>/raw/clinical_samples.csv`: 密なシミュレーション出力を臨床試験の名目採血時点に合わせて疎化する

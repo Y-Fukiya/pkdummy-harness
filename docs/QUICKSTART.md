@@ -281,6 +281,9 @@ outputs/<run>/workflow/analysis_inputs/MANIFEST.yml
 ```
 
 複数薬剤デモでは、まず `outputs/demo_set_config/summary.md` を見せると全体像が伝わります。
+run-level `MANIFEST.yml` には生成CSV/レポートartifactごとの `output_checksums`
+（SHA-256）も残ります。timestampを固定した監査runでは `run_workflow.py --reproducible`
+と `SOURCE_DATE_EPOCH` を使います。
 
 ## 11. Completion Checklist
 

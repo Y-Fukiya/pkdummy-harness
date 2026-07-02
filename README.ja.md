@@ -93,6 +93,9 @@ python3 tools/run_workflow.py \
 
 `run_workflow.py` は既存採血時点用の `--schedule-csv`、既存 DM/LB/VS/PC skeleton 用の
 `--dm-csv/--vs-csv/--lb-csv/--pc-csv` も受け付けます。
+content-addressed な監査実行では `--reproducible` を付け、必要に応じて
+`SOURCE_DATE_EPOCH` を設定してください。run-level `MANIFEST.yml` は固定timestampを使い、
+生成CSV/レポートartifactの `output_checksums`（SHA-256）を記録します。
 
 ---
 
@@ -146,6 +149,9 @@ run-level `MANIFEST.yml` には、`target_metadata` として機械可読の注�
 warning薬剤では `value_provenance_summary` にも、CL/V/t_half の provenance
 確認状況、source review が残る項目、fixture limitation として確認済みの
 mismatch field が記録されます。
+`output_checksums` は、`clinical_samples_csv`、`adpc_csv`、`nca_input_csv`、
+`poppk_input_csv` などの生成CSV/レポートartifactを manifest に束ねます。
+自己参照hashを避けるため、manifest自身やtimestamp付きtrace logは対象外です。
 
 ## 検証ステータス
 

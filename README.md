@@ -97,6 +97,9 @@ python3 tools/run_workflow.py \
 
 `run_workflow.py` also accepts `--schedule-csv` for existing sampling times and
 `--dm-csv/--vs-csv/--lb-csv/--pc-csv` to reuse existing DM/LB/VS/PC skeletons.
+For content-addressable audit runs, add `--reproducible` and optionally set
+`SOURCE_DATE_EPOCH`. The run-level `MANIFEST.yml` then uses a fixed timestamp
+and records `output_checksums` (SHA-256) for generated CSV/report artifacts.
 
 ---
 
@@ -151,6 +154,9 @@ detected, and whether that mismatch is acknowledged as a fixture limitation.
 For core warning drugs, `value_provenance_summary` also records which
 CL/V/t_half provenance fields were checked, which still need source review, and
 which mismatch fields were acknowledged as fixture limitations.
+`output_checksums` binds generated CSV/report artifacts such as
+`clinical_samples_csv`, `adpc_csv`, `nca_input_csv`, and `poppk_input_csv` to the
+manifest without self-hashing the manifest or timestamped trace log.
 
 ## Validation Status
 

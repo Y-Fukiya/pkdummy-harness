@@ -14,9 +14,11 @@ It does not run mrgsolve and does not modify pk.yml, targets.yml, or specs.
 from __future__ import annotations
 
 import argparse
+import hashlib
+import os
 import sys
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -39,6 +41,16 @@ from tools.validate_simulation import (
     SimulationTolerances,
     render_markdown,
     validate_simulation_run,
+)
+
+
+CHECKSUM_EXCLUDED_OUTPUT_KEYS = frozenset(
+    {
+        "manifest",
+        "trace_log",
+        "sdtm_like_manifest",
+        "analysis_inputs_manifest",
+    }
 )
 
 
@@ -66,6 +78,35 @@ def _write_yaml(path: Path, obj: dict[str, Any]) -> None:
 def _write_trace(path: Path, lines: list[str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def _workflow_timestamp(*, reproducible: bool) -> str:
+    if not reproducible:
+        return datetime.now().isoformat(timespec="seconds")
+    raw_epoch = os.environ.get("SOURCE_DATE_EPOCH", "0")
+    try:
+        epoch = int(raw_epoch)
+    except ValueError as exc:
+        raise ValueError("SOURCE_DATE_EPOCH must be an integer number of seconds") from exc
+    return datetime.fromtimestamp(epoch, tz=timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+
+
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _output_checksums(files: dict[str, Path]) -> dict[str, str]:
+    checksums: dict[str, str] = {}
+    for key, path in sorted(files.items()):
+        if key in CHECKSUM_EXCLUDED_OUTPUT_KEYS:
+            continue
+        if path.is_file():
+            checksums[key] = _sha256_file(path)
+    return checksums
 
 
 def _resolve_drug_paths(drug: str, *, drugs_dir: Path) -> tuple[Path, Path, Path]:
@@ -105,11 +146,13 @@ def _workflow_manifest(
     settings: dict[str, Any],
     target_metadata: dict[str, Any],
     value_provenance_summary: dict[str, Any],
+    created_at: str,
+    output_checksums: dict[str, str],
 ) -> dict[str, Any]:
     return {
         "purpose": "pk_fixture_post_simulation_workflow",
         "status": status,
-        "created_at": datetime.now().isoformat(timespec="seconds"),
+        "created_at": created_at,
         "inputs": {
             "sim_full_csv": str(sim_full),
             "pk_yml": str(pk_yml),
@@ -129,6 +172,7 @@ def _workflow_manifest(
         "target_metadata": target_metadata,
         "value_provenance_summary": value_provenance_summary,
         "outputs": {key: str(value) for key, value in files.items()},
+        "output_checksums": output_checksums,
         "counts": counts,
         "warnings": warnings,
         "settings": settings,
@@ -173,12 +217,13 @@ def run_workflow(
     warn_rel: float = 0.25,
     fail_rel: float = 0.50,
     allow_validation_failed: bool = False,
+    reproducible: bool = False,
 ) -> WorkflowResult:
     sim_path = Path(sim_full_csv)
     out_path = Path(out_dir)
     trace_path = out_path / "trace.log"
     manifest_path = out_path / "MANIFEST.yml"
-    trace_lines = [f"{datetime.now().isoformat(timespec='seconds')} START workflow"]
+    trace_lines = [f"{_workflow_timestamp(reproducible=reproducible)} START workflow"]
 
     if drug and not (pk_yml and targets_yml and spec_yml):
         resolved_pk, resolved_targets, resolved_spec = _resolve_drug_paths(drug, drugs_dir=Path(drugs_dir))
@@ -214,7 +259,7 @@ def run_workflow(
     reports_dir.mkdir(parents=True, exist_ok=True)
     validation_md.write_text(render_markdown(validation_result, sim_path, pk_path, targets_path, run=validation_run), encoding="utf-8")
     trace_lines.append(
-        f"{datetime.now().isoformat(timespec='seconds')} VALIDATE status={validation_result.status} attempts={len(validation_run.attempts)}/1"
+        f"{_workflow_timestamp(reproducible=reproducible)} VALIDATE status={validation_result.status} attempts={len(validation_run.attempts)}/1"
     )
 
     base_files = {
@@ -225,7 +270,7 @@ def run_workflow(
     warnings = list(validation_result.warnings)
     if validation_result.status == "FAILED" and not allow_validation_failed:
         warnings.extend(validation_result.failures)
-        trace_lines.append(f"{datetime.now().isoformat(timespec='seconds')} STOP validation_failed")
+        trace_lines.append(f"{_workflow_timestamp(reproducible=reproducible)} STOP validation_failed")
         result = WorkflowResult(
             out_dir=out_path,
             status="FAILED",
@@ -234,6 +279,7 @@ def run_workflow(
             counts={},
             warnings=warnings,
         )
+        _write_trace(trace_path, trace_lines)
         _write_yaml(
             manifest_path,
             _workflow_manifest(
@@ -258,12 +304,14 @@ def run_workflow(
                     "warn_rel": warn_rel,
                     "fail_rel": fail_rel,
                     "allow_validation_failed": allow_validation_failed,
+                    "reproducible": reproducible,
                 },
                 target_metadata=target_metadata,
                 value_provenance_summary=value_provenance_summary,
+                created_at=_workflow_timestamp(reproducible=reproducible),
+                output_checksums=_output_checksums(result.files),
             ),
         )
-        _write_trace(trace_path, trace_lines)
         return result
     if validation_result.status == "FAILED":
         warnings.extend(f"validation failure allowed: {failure}" for failure in validation_result.failures)
@@ -283,7 +331,7 @@ def run_workflow(
         predose_mdv1=predose_mdv1,
     )
     trace_lines.append(
-        f"{datetime.now().isoformat(timespec='seconds')} SAMPLE rows={sampling_result.n_rows} method={sampling_result.method}"
+        f"{_workflow_timestamp(reproducible=reproducible)} SAMPLE rows={sampling_result.n_rows} method={sampling_result.method}"
     )
 
     sdtm_result = make_sdtm_like_domains(
@@ -304,7 +352,7 @@ def run_workflow(
         overwrite_existing_pc_conc=overwrite_existing_pc_conc,
     )
     trace_lines.append(
-        f"{datetime.now().isoformat(timespec='seconds')} SDTM_LIKE counts={sdtm_result.counts}"
+        f"{_workflow_timestamp(reproducible=reproducible)} SDTM_LIKE counts={sdtm_result.counts}"
     )
 
     analysis_result = make_analysis_inputs(
@@ -314,7 +362,7 @@ def run_workflow(
         observation_cmt=observation_cmt,
     )
     trace_lines.append(
-        f"{datetime.now().isoformat(timespec='seconds')} ANALYSIS_INPUTS status={analysis_result.status} counts={analysis_result.counts}"
+        f"{_workflow_timestamp(reproducible=reproducible)} ANALYSIS_INPUTS status={analysis_result.status} counts={analysis_result.counts}"
     )
 
     files = {
@@ -359,7 +407,8 @@ def run_workflow(
         counts=counts,
         warnings=warnings,
     )
-    trace_lines.append(f"{datetime.now().isoformat(timespec='seconds')} END status={result.status}")
+    trace_lines.append(f"{_workflow_timestamp(reproducible=reproducible)} END status={result.status}")
+    _write_trace(trace_path, trace_lines)
     _write_yaml(
         manifest_path,
         _workflow_manifest(
@@ -398,12 +447,14 @@ def run_workflow(
                 "warn_rel": warn_rel,
                 "fail_rel": fail_rel,
                 "allow_validation_failed": allow_validation_failed,
+                "reproducible": reproducible,
             },
             target_metadata=target_metadata,
             value_provenance_summary=value_provenance_summary,
+            created_at=_workflow_timestamp(reproducible=reproducible),
+            output_checksums=_output_checksums(result.files),
         ),
     )
-    _write_trace(trace_path, trace_lines)
     return result
 
 
@@ -440,6 +491,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--warn-rel", type=float, default=0.25)
     parser.add_argument("--fail-rel", type=float, default=0.50)
     parser.add_argument("--allow-validation-failed", action="store_true")
+    parser.add_argument(
+        "--reproducible",
+        action="store_true",
+        help="Use SOURCE_DATE_EPOCH, or Unix epoch if unset, for stable manifest and trace timestamps.",
+    )
     return parser
 
 
@@ -478,6 +534,7 @@ def main(argv: list[str] | None = None) -> int:
             warn_rel=args.warn_rel,
             fail_rel=args.fail_rel,
             allow_validation_failed=args.allow_validation_failed,
+            reproducible=args.reproducible,
         )
     except Exception as exc:
         print(f"ERROR: {exc}")

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import subprocess
 import sys
 from pathlib import Path
@@ -16,8 +17,15 @@ def write_yaml(path: Path, obj: dict) -> None:
     path.write_text(yaml.safe_dump(obj, sort_keys=False), encoding="utf-8")
 
 
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
 def test_validate_manifest_accepts_workflow_manifest_shape(tmp_path: Path) -> None:
     manifest = tmp_path / "MANIFEST.yml"
+    adpc = tmp_path / "analysis_inputs" / "ADPC.csv"
+    adpc.parent.mkdir()
+    adpc.write_text("USUBJID,AVAL\nSUBJ-001,1\n", encoding="utf-8")
     write_yaml(
         manifest,
         {
@@ -45,6 +53,7 @@ def test_validate_manifest_accepts_workflow_manifest_shape(tmp_path: Path) -> No
                 "mismatch_acknowledged_fields": [],
             },
             "outputs": {"adpc_csv": "analysis_inputs/ADPC.csv"},
+            "output_checksums": {"adpc_csv": sha256_file(adpc)},
             "counts": {"analysis_adpc_rows": 2},
             "warnings": [],
             "safeguards": ["does not modify pk.yml"],
@@ -63,6 +72,7 @@ def test_validate_manifest_reports_missing_required_fields(tmp_path: Path) -> No
     assert "MANIFEST.yml: missing required field: status" in issues
     assert "MANIFEST.yml: missing required field: target_metadata" in issues
     assert "MANIFEST.yml: missing required field: value_provenance_summary" in issues
+    assert "MANIFEST.yml: missing required field: output_checksums" in issues
     assert "MANIFEST.yml: outputs must be a mapping" in issues
 
 
@@ -209,6 +219,130 @@ def test_validate_manifest_requires_checked_fields_to_match_metadata_present_fie
         "MANIFEST.yml: value_provenance_summary.checked_fields must match "
         "metadata_present_fields"
     ) in issues
+
+
+def test_validate_manifest_rejects_bad_output_checksums(tmp_path: Path) -> None:
+    manifest = tmp_path / "MANIFEST.yml"
+    write_yaml(
+        manifest,
+        {
+            "purpose": "pk_fixture_post_simulation_workflow",
+            "status": "OK",
+            "outputs": {"adpc_csv": "analysis_inputs/ADPC.csv"},
+            "output_checksums": {
+                "adpc_csv": "not-a-sha",
+                "missing_csv": "b" * 64,
+            },
+            "target_metadata": {
+                "auc": {"basis": "dose_over_cl", "independent_literature_target": False},
+                "t_half": {
+                    "attainability_status": "OK",
+                    "detected_structural_mismatch": False,
+                    "acknowledged_structural_mismatch": False,
+                    "relative_error": 0.0,
+                },
+            },
+            "value_provenance_summary": {
+                "scope": "value_provenance_present",
+                "provenance_required": True,
+                "required_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
+                "metadata_present_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
+                "source_checked_fields": [],
+                "checked_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
+                "fields_needing_review": [],
+                "source_ids": [],
+                "mismatch_acknowledged_fields": [],
+            },
+        },
+    )
+
+    issues = validate_manifest_file(manifest)
+
+    assert "MANIFEST.yml: output_checksums.adpc_csv must be a 64-character sha256 hex digest" in issues
+    assert "MANIFEST.yml: output_checksums.missing_csv does not correspond to outputs" in issues
+
+
+def test_validate_manifest_rejects_output_checksum_mismatch(tmp_path: Path) -> None:
+    manifest = tmp_path / "MANIFEST.yml"
+    adpc = tmp_path / "analysis_inputs" / "ADPC.csv"
+    adpc.parent.mkdir()
+    adpc.write_text("USUBJID,AVAL\nSUBJ-001,1\n", encoding="utf-8")
+    write_yaml(
+        manifest,
+        {
+            "purpose": "pk_fixture_post_simulation_workflow",
+            "status": "OK",
+            "outputs": {"adpc_csv": "analysis_inputs/ADPC.csv"},
+            "output_checksums": {"adpc_csv": "0" * 64},
+            "target_metadata": {
+                "auc": {"basis": "dose_over_cl", "independent_literature_target": False},
+                "t_half": {
+                    "attainability_status": "OK",
+                    "detected_structural_mismatch": False,
+                    "acknowledged_structural_mismatch": False,
+                    "relative_error": 0.0,
+                },
+            },
+            "value_provenance_summary": {
+                "scope": "value_provenance_present",
+                "provenance_required": True,
+                "required_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
+                "metadata_present_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
+                "source_checked_fields": [],
+                "checked_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
+                "fields_needing_review": [],
+                "source_ids": [],
+                "mismatch_acknowledged_fields": [],
+            },
+        },
+    )
+
+    issues = validate_manifest_file(manifest)
+
+    assert "MANIFEST.yml: output_checksums.adpc_csv does not match analysis_inputs/ADPC.csv" in issues
+
+
+def test_validate_manifest_resolves_cwd_relative_output_paths(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    run_dir = tmp_path / "outputs" / "run" / "workflow"
+    manifest = run_dir / "MANIFEST.yml"
+    adpc = run_dir / "analysis_inputs" / "ADPC.csv"
+    adpc.parent.mkdir(parents=True)
+    adpc.write_text("USUBJID,AVAL\nSUBJ-001,1\n", encoding="utf-8")
+    write_yaml(
+        manifest,
+        {
+            "purpose": "pk_fixture_post_simulation_workflow",
+            "status": "OK",
+            "outputs": {"adpc_csv": "outputs/run/workflow/analysis_inputs/ADPC.csv"},
+            "output_checksums": {"adpc_csv": sha256_file(adpc)},
+            "target_metadata": {
+                "auc": {"basis": "dose_over_cl", "independent_literature_target": False},
+                "t_half": {
+                    "attainability_status": "OK",
+                    "detected_structural_mismatch": False,
+                    "acknowledged_structural_mismatch": False,
+                    "relative_error": 0.0,
+                },
+            },
+            "value_provenance_summary": {
+                "scope": "value_provenance_present",
+                "provenance_required": True,
+                "required_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
+                "metadata_present_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
+                "source_checked_fields": [],
+                "checked_fields": ["CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h"],
+                "fields_needing_review": [],
+                "source_ids": [],
+                "mismatch_acknowledged_fields": [],
+            },
+        },
+    )
+    monkeypatch.chdir(tmp_path)
+
+    assert validate_manifest_file(manifest) == []
 
 
 def test_validate_manifest_cli(tmp_path: Path) -> None:

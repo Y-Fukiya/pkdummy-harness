@@ -109,6 +109,18 @@ python3 tools/run_workflow.py \
   --out-dir outputs/<run>/workflow
 ```
 
+監査用に manifest と trace の timestamp を固定したい場合は、`--reproducible` を付けます。
+`SOURCE_DATE_EPOCH` が設定されていればそのUTC時刻を使い、未設定ならUnix epochを使います。
+
+```bash
+SOURCE_DATE_EPOCH=946684800 python3 tools/run_workflow.py \
+  --sim-full outputs/<run>/raw/sim_full.csv \
+  --drug <slug> \
+  --times 0,0.5,1,2,4,8,12,24 \
+  --out-dir outputs/<run>/workflow \
+  --reproducible
+```
+
 `validate_simulation.py` が `FAILED` の場合、既定では下流の `clinical_samples.csv` / SDTM-like CSV生成に進みません。stress testとして進めたい場合だけ `--allow-validation-failed` を付けてください。
 
 個別に検証だけ行う場合:
@@ -147,6 +159,8 @@ python tools/check_value_provenance.py . --report
 ```
 
 run-level `MANIFEST.yml` には full provenance をコピーせず、`value_provenance_summary` だけを残します。
+同じ manifest の `output_checksums` は、生成CSV/レポートartifactごとの SHA-256 です。
+manifest自身、trace log、下位tool manifestは自己参照やtimestamp差分を避けるため checksum 対象外です。
 
 | Field | Meaning |
 | --- | --- |
