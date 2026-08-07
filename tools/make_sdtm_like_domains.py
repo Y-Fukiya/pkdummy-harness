@@ -500,38 +500,47 @@ def _make_pc(
     conc_unit: str | None,
     lloq: float | None = None,
 ) -> list[dict[str, Any]]:
+    helper_fields = [
+        field
+        for field in ("TROUGHFL", "SSNCAFL", "TAD_H", "DOSESEQ_REF")
+        if any(field in row for row in clinical_rows)
+    ]
+    repeated_pc = any(field in helper_fields for field in ("TROUGHFL", "SSNCAFL"))
+    subject_pc_seq: dict[str, int] = {}
     rows: list[dict[str, Any]] = []
     for seq, row in enumerate(clinical_rows, start=1):
         usubjid = str(row.get("USUBJID") or _subject_key(study_id, row.get("ID"), fallback=seq))
+        subject_pc_seq[usubjid] = subject_pc_seq.get(usubjid, 0) + 1
         time_h = _to_float(row.get("TIME_H") or row.get("time") or row.get("TIME"))
         conc = _to_float(row.get(conc_col))
         if conc is None:
             conc = _to_float(row.get("DV") or row.get("CP") or row.get("IPRED"))
         unit = _pc_conc_unit_from_row(row, conc_col=conc_col, conc_unit=conc_unit)
         blq = conc is not None and lloq is not None and conc < lloq
-        rows.append(
-            {
-                "STUDYID": str(row.get("STUDYID") or study_id),
-                "DOMAIN": "PC",
-                "USUBJID": usubjid,
-                "PCSEQ": seq,
-                "PCTESTCD": "DRUGCONC",
-                "PCTEST": "Drug Concentration",
-                "PCORRES": conc if conc is not None else "",
-                "PCORRESU": unit,
-                "PCSTRESN": conc if conc is not None else "",
-                "PCSTRESU": unit,
-                "PCLLOQ": lloq if lloq is not None else "",
-                "PCSTAT": "BLQ" if blq else "",
-                "PCREASND": "Below lower limit of quantification" if blq else "",
-                "PCBLFL": "Y" if blq else "",
-                "PCMDV": row.get("MDV") or row.get("mdv") or "",
-                "PCDTC": _iso_from_hours(study_start, time_h),
-                "PCTPT": row.get("TPT") or "",
-                "PCTPTNUM": row.get("TPTNUM") or "",
-                "PCELTM": f"PT{_format_number(time_h or 0.0)}H",
-            }
-        )
+        pc_row = {
+            "STUDYID": str(row.get("STUDYID") or study_id),
+            "DOMAIN": "PC",
+            "USUBJID": usubjid,
+            "PCSEQ": subject_pc_seq[usubjid] if repeated_pc else seq,
+            "PCTESTCD": "DRUGCONC",
+            "PCTEST": "Drug Concentration",
+            "PCORRES": conc if conc is not None else "",
+            "PCORRESU": unit,
+            "PCSTRESN": conc if conc is not None else "",
+            "PCSTRESU": unit,
+            "PCLLOQ": lloq if lloq is not None else "",
+            "PCSTAT": "BLQ" if blq else "",
+            "PCREASND": "Below lower limit of quantification" if blq else "",
+            "PCBLFL": "Y" if blq else "",
+            "PCMDV": row.get("MDV") or row.get("mdv") or "",
+            "PCDTC": _iso_from_hours(study_start, time_h),
+            "PCTPT": row.get("TPT") or "",
+            "PCTPTNUM": row.get("TPTNUM") or "",
+            "PCELTM": f"PT{_format_number(time_h or 0.0)}H",
+        }
+        for field in helper_fields:
+            pc_row[field] = row.get(field) or ""
+        rows.append(pc_row)
     return rows
 
 
@@ -820,6 +829,11 @@ def make_sdtm_like_domains(
             "PCTPTNUM",
             "PCELTM",
         ]
+        pc_fields.extend(
+            field
+            for field in ("TROUGHFL", "SSNCAFL", "TAD_H", "DOSESEQ_REF")
+            if any(field in row for row in clinical_rows)
+        )
 
     counts = {
         "DM": len(dm_rows),

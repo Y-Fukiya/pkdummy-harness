@@ -70,7 +70,18 @@ make harness-check
 ```bash
 python3 -m tools.pk_fixture_cli doctor
 python3 -m tools.pk_fixture_cli run harness_examples/demo_set.yml
+python3 -m tools.pk_fixture_cli run harness_examples/demo_repeated_oral_trough_ss_50.yml
 ```
+
+単回・反復のADNCA-likeレコードと濃度プロットは、Rscriptで生成できます（`ggplot2`が必要です）。
+
+```bash
+Rscript tools/make_adnca.R \
+  --analysis-dir outputs/demo_dm_ex_pc_50/apixaban/workflow/analysis_inputs \
+  --out-dir outputs/demo_dm_ex_pc_50/apixaban/workflow/adnca
+```
+
+反復投与デモも同じコマンドで、`NCA_SS_SUMMARY.csv` / `TROUGH_SUMMARY.csv` を自動検出します。詳細は [docs/QUICKSTART.md](docs/QUICKSTART.md) を参照してください。
 
 コアのランタイム依存は PyYAML のみ。一部ツールは extras で追加します:
 `pip install .[harvest]`（Web採取: DailyMed/PubMed）、
@@ -89,6 +100,18 @@ python3 tools/run_workflow.py \
   --drug <slug> \
   --times 0,0.5,1,2,4,8,12,24 \
   --out-dir outputs/<run>/workflow
+```
+
+リポジトリ内の独立mrgsolve runnerも利用できます。`tools/mrgsolve_runner.R` は
+`spec_pk1_*.yml` を読み、経口・IVボーラス・IV点滴・IIV/residualを含む
+`sim_full.csv` を作ります。詳細は [`docs/MRGSOLVE_RUNNER.md`](docs/MRGSOLVE_RUNNER.md) を参照してください。
+
+反復経口投与では、ハーネス設定の `simulation.engine` を `mrgsolve` にすると、
+投与イベント抽出からEX/PC、トラフ、定常状態NCAまでを一括実行できます。
+
+```bash
+python3 tools/run_harness.py \
+  --config harness_examples/demo_repeated_oral_trough_ss_50_mrgsolve.yml
 ```
 
 `run_workflow.py` は既存採血時点用の `--schedule-csv`、既存 DM/LB/VS/PC skeleton 用の
@@ -206,6 +229,9 @@ systemic CL + bioavailability と整合した曝露を与えます（いずれ�
 - [docs/EXTERNAL_TOOL_VALIDATION_GUIDE.md](docs/EXTERNAL_TOOL_VALIDATION_GUIDE.md): Phoenix/NONMEM/nlmixr2 での実行検証
 - [docs/SITE_ADAPTER_GUIDE.md](docs/SITE_ADAPTER_GUIDE.md): 施設別 CSV adapter の作り方
 - [docs/CALIBRATED_PROFILES.md](docs/CALIBRATED_PROFILES.md): F補正の経口プロファイル
+- [docs/DEMO_DM_EX_PC_50_SPEC.md](docs/DEMO_DM_EX_PC_50_SPEC.md): 50例 DM/EX/PC デモ仕様
+- [docs/DEMO_REPEATED_ORAL_TROUGH_SS_50_SPEC.md](docs/DEMO_REPEATED_ORAL_TROUGH_SS_50_SPEC.md): 50例 反復投与トラフ・定常状態NCAデモ仕様
+- [docs/CDISC_API_SUPPLEMENT.md](docs/CDISC_API_SUPPLEMENT.md): CDISC Dataset Generatorの補助利用
 - [docs/USER_TEST_REPORT_TEMPLATE.md](docs/USER_TEST_REPORT_TEMPLATE.md): 利用者テスト報告テンプレート
 - [docs/VALIDATION_AND_RELEASE_CHECKLIST.md](docs/VALIDATION_AND_RELEASE_CHECKLIST.md): リリース前チェック
 - [docs/RELEASE_NOTES_TEMPLATE.md](docs/RELEASE_NOTES_TEMPLATE.md): リリースノート雛形

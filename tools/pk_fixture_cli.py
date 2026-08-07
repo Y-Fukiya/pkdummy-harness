@@ -34,6 +34,7 @@ COMMANDS: dict[str, CommandSpec] = {
     "manifest-viewer": CommandSpec("tools.render_manifest_viewer", "Render a MANIFEST.yml to a static HTML viewer."),
     "examples-check": CommandSpec("tools.check_examples", "Regenerate versioned examples in a temp dir and compare."),
     "audit-library": CommandSpec("tools.audit_library_priorities", "Read-only internal-first library priority audit."),
+    "cdisc-reference": CommandSpec("tools.fetch_cdisc_reference", "Fetch optional CDISC DM/EX reference fixtures."),
 }
 
 

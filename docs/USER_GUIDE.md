@@ -28,7 +28,7 @@ flowchart LR
     O --> R[descriptive report / ggplot]
 ```
 
-このリポジトリが直接管理するものは、薬剤テンプレート、検証ツール、文献パラメータ更新ツール、手順書です。mrgsolveなどの実行runnerは、利用環境側のスクリプトに合わせて使います。
+このリポジトリが直接管理するものは、薬剤テンプレート、検証ツール、文献パラメータ更新ツール、手順書です。mrgsolveの比較runnerも同梱していますが、施設固有のモデルや外部runnerを使う場合は同じspec/`sim_full.csv`契約に合わせて接続します。
 
 ## 2. まず確認する
 
@@ -87,6 +87,10 @@ Rscript <mrgsolve-runner> drugs/<slug>/spec_pk1_iv.yml
 ```
 
 `<mrgsolve-runner>` には、利用環境で使っているmrgsolve runnerを指定してください。このリポジトリのspecは、runnerに `spec_pk1_*.yml` を渡す前提の入力テンプレートです。
+
+標準の比較runnerとして、リポジトリ内の `tools/mrgsolve_runner.R` も利用できます。
+依存関係と、単回・IV点滴・反復投与から `run_workflow.py`、ADNCA-like出力へ接続する
+手順は [`docs/MRGSOLVE_RUNNER.md`](MRGSOLVE_RUNNER.md) を参照してください。
 
 典型的な出力:
 
@@ -420,6 +424,38 @@ Rscript tools/report_pk_fixture.R \
 
 このレポートはfixture確認用です。submission-ready ADaMレポート、VPC/GOF、臨床薬理モデル妥当化の代替ではありません。
 
+### ADNCA-likeデータと濃度プロットを作る場合
+
+`tools/make_adnca.R` は、単回投与と反復投与で入力経路を分けた軽量のADNCA-like出力を作ります。単回投与は `ADPC.csv` を再計算し、反復投与は既存の `NCA_SS_SUMMARY.csv` / `TROUGH_SUMMARY.csv` を取り込みます。いずれも同じ `ADPC.csv` から被験者別濃度プロット（linear/log）を作り、反復投与では `NCA_SS_INPUT.csv` の定常状態区間プロットも作ります。
+
+```bash
+# 単回投与
+Rscript tools/make_adnca.R \
+  --analysis-dir outputs/<single-run>/workflow/analysis_inputs \
+  --out-dir outputs/<single-run>/workflow/adnca \
+  --mode single \
+  --title "single-dose ADNCA fixture"
+
+# 反復経口投与（--mode autoでもsummary CSVから判定可能）
+Rscript tools/make_adnca.R \
+  --analysis-dir outputs/<repeated-run>/workflow/analysis_inputs \
+  --out-dir outputs/<repeated-run>/workflow/adnca \
+  --mode repeated \
+  --title "repeated-dose ADNCA fixture"
+```
+
+出力:
+
+| File | Content |
+| --- | --- |
+| `ADNCA.csv` | `USUBJID` × `PARAMCD` のlong形式 NCA-like records |
+| `ADNCA_WIDE.csv` | 被験者1行の確認用wide形式 |
+| `concentration_profile_linear.png` / `_log.png` | 単回・反復の全採血点を使った濃度プロット |
+| `steady_state_profile_linear.png` / `_log.png` | 反復投与の定常状態区間プロット |
+| `ADNCA_REPORT.md` / `ADNCA_MANIFEST.yml` | 入力、件数、制約、出力の記録 |
+
+単回の `AUC0TL`, `CMAX`, `TMAX`, `CLAST`, `AUC0INF`, `LAMZ`, `HL_LAMZ` などと、反復の `AUC0_4SS`, `AUC4_12SS`, `AUCTAUSS`, `CMAXSS`, `TMAXSS`, `CPREDOSES`, `CTROUGHS`, `CAVGSS`, `FLUCTSS`、`TRG*` を出力します。反復の0時間baselineトラフは `ANL01FL=N` として残し、NCA集計から除外します。値の出典と計算方法は `NCA_METHOD` に残します。AUC単位は濃度単位から `ng*h/mL` 形式へ正規化します。これはfixture確認用であり、正式なCDISC ADaM定義、各ベンダーのNCA設定、臨床薬理妥当化を保証しません。
+
 Word共有用のdocxが必要な場合は、Quarto wrapperを使います。これは上記の軽量レポートを置き換えるものではなく、同じ内容をWordで配布しやすくする任意ステップです。
 
 ```bash
@@ -696,6 +732,7 @@ make harness-check
 | adapter contract確認 | `python3 tools/validate_downstream_adapters.py outputs/<run>/workflow/downstream_smoke/adapters` |
 | manifest viewer生成 | `python3 tools/render_manifest_viewer.py outputs/<run>/workflow/MANIFEST.yml --out-html outputs/<run>/workflow/manifest_viewer.html` |
 | 記述統計レポート生成 | `Rscript tools/report_pk_fixture.R --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/reports/pk_fixture_report --title "<slug> PK fixture report"` |
+| ADNCA-like + 濃度プロット生成 | `Rscript tools/make_adnca.R --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/adnca --mode auto --title "<slug> ADNCA fixture"` |
 | Quarto docxレポート生成 | `Rscript tools/render_pk_fixture_quarto.R --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/reports/pk_fixture_quarto --title "<slug> PK fixture report"` |
 | 被験者CSV検証 | `python3 tools/validate_subjects_csv.py subjects/subjects.csv --expected-n 100 --allowed-arm A` |
 

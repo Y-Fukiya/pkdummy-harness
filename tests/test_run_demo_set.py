@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import math
 import subprocess
 import sys
@@ -198,6 +199,88 @@ def test_run_demo_set_can_add_lightweight_iiv_and_residual_variability(tmp_path:
     assert manifest["settings"]["variability"] == {"iiv_cv": 0.2, "residual_cv": 0.1, "seed": 123}
 
 
+def test_run_demo_set_overrides_single_arm_subject_count_and_sampling_options(tmp_path: Path) -> None:
+    drugs_dir = tmp_path / "drugs"
+    write_demo_drug(drugs_dir, "oral_demo", route="oral", template="pk1_oral_ode")
+    out_dir = tmp_path / "demo_set"
+
+    result = run_demo_set(
+        drugs=["oral_demo"],
+        drugs_dir=drugs_dir,
+        out_dir=out_dir,
+        sample_times_h=[0, 1, 2, 4],
+        sampling_method="exact",
+        predose_mdv1=True,
+        n_subjects_override=5,
+    )
+
+    assert result.status == "OK"
+    assert result.counts["requested_subjects"] == 5
+    assert result.counts["generated_subjects"] == 5
+    assert result.counts["sdtm_like_dm_rows"] == 5
+    assert result.counts["sdtm_like_ex_rows"] == 5
+    assert result.counts["sdtm_like_pc_rows"] == 20
+    dm = read_csv(out_dir / "oral_demo" / "workflow" / "sdtm_like" / "DM.csv")
+    pc = read_csv(out_dir / "oral_demo" / "workflow" / "sdtm_like" / "PC.csv")
+    assert len(dm) == 5
+    assert len(pc) == 20
+    assert sum(row["PCMDV"] == "1" for row in pc) == 5
+    assert sum(row["PCMDV"] == "0" for row in pc) == 15
+    manifest = yaml.safe_load((out_dir / "DEMO_MANIFEST.yml").read_text(encoding="utf-8"))
+    assert manifest["settings"]["n_subjects_override"] == 5
+    assert manifest["settings"]["sampling_method"] == "exact"
+    assert manifest["settings"]["predose_mdv1"] is True
+
+
+def test_make_demo_sim_full_rejects_subject_override_for_multi_arm_spec(tmp_path: Path) -> None:
+    spec = tmp_path / "spec.yml"
+    write_yaml(
+        spec,
+        {
+            "study": {"id": "OSP_multi", "title": "Multi demo"},
+            "regimen": {
+                "route": "iv_bolus",
+                "arms": {
+                    "A": {"n": 1, "dose_mg": 100},
+                    "B": {"n": 1, "dose_mg": 200},
+                },
+            },
+            "sampling": {"t_end_h": 1, "dt_h": 1, "include_t0": True},
+            "model": {"theta": {"CL": 10, "V": 20}, "units": {"mult": 1000}},
+        },
+    )
+
+    with pytest.raises(ValueError, match="ambiguous for multi-arm"):
+        make_demo_sim_full(spec_yml=spec, out_csv=tmp_path / "sim.csv", n_subjects_override=50)
+
+
+def test_run_demo_set_is_reproducible_for_domain_csvs(tmp_path: Path) -> None:
+    drugs_dir = tmp_path / "drugs"
+    write_demo_drug(drugs_dir, "oral_demo", route="oral", template="pk1_oral_ode")
+    first = tmp_path / "first"
+    second = tmp_path / "second"
+    kwargs = {
+        "drugs": ["oral_demo"],
+        "drugs_dir": drugs_dir,
+        "sample_times_h": [0, 1, 2],
+        "sampling_method": "exact",
+        "predose_mdv1": True,
+        "n_subjects_override": 5,
+        "variability": {"iiv_cv": 0.1, "residual_cv": 0.05, "seed": 20260217},
+    }
+    run_demo_set(out_dir=first, **kwargs)
+    run_demo_set(out_dir=second, **kwargs)
+
+    for relative in (
+        "oral_demo/workflow/sdtm_like/DM.csv",
+        "oral_demo/workflow/sdtm_like/EX.csv",
+        "oral_demo/workflow/sdtm_like/PC.csv",
+    ):
+        first_hash = hashlib.sha256((first / relative).read_bytes()).hexdigest()
+        second_hash = hashlib.sha256((second / relative).read_bytes()).hexdigest()
+        assert first_hash == second_hash
+
+
 def test_make_demo_sim_full_uses_iv_infusion_when_infusion_h_is_set(tmp_path: Path) -> None:
     drugs_dir = tmp_path / "drugs"
     write_demo_drug(drugs_dir, "iv_infusion_demo", route="iv", template="pk1_iv_ode", infusion_h=1.0)
@@ -241,3 +324,21 @@ def test_make_demo_sim_full_rejects_unknown_route_instead_of_bolus_fallback(tmp_
             spec_yml=drugs_dir / "unknown_demo" / "spec_pk1_iv.yml",
             out_csv=tmp_path / "sim_full.csv",
         )
+
+
+def test_make_demo_sim_full_rejects_partial_iv_infusion_schedule(tmp_path: Path) -> None:
+    spec = tmp_path / "spec.yml"
+    write_yaml(
+        spec,
+        {
+            "study": {"id": "OSP_partial_infusion"},
+            "regimen": {
+                "route": "iv_infusion",
+                "arms": {"A": {"n": 1, "dose_mg": 10, "infusion_h": 1}, "B": {"n": 1, "dose_mg": 10}},
+            },
+            "sampling": {"t_end_h": 2, "dt_h": 1, "include_t0": True},
+            "model": {"theta": {"CL": 1, "V": 10}, "units": {"conc": "ng/mL", "mult": 1000}},
+        },
+    )
+    with pytest.raises(ValueError, match="positive infusion_h on every arm"):
+        make_demo_sim_full(spec_yml=spec, out_csv=tmp_path / "sim.csv")

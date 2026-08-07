@@ -368,9 +368,92 @@ def _make_poppk(
     adpc_rows: list[dict[str, Any]],
     *,
     ex_by_subject: dict[str, dict[str, str]],
+    ex_rows_by_subject: dict[str, list[dict[str, str]]] | None = None,
     dose_cmt: str = "1",
     observation_cmt: str = "2",
+    repeated_dosing: bool = False,
 ) -> list[dict[str, Any]]:
+    def ex_time_h(ex_row: dict[str, str]) -> float:
+        for key in ("EXTIME_H", "TIME_H", "EXELTM"):
+            parsed = _to_float(ex_row.get(key))
+            if parsed is not None:
+                return parsed
+        return 0.0
+
+    def dose_row(
+        *,
+        subject_id: int,
+        usubjid: str,
+        first: dict[str, Any],
+        ex: dict[str, str],
+        row_order: int,
+    ) -> dict[str, Any]:
+        dose = _norm(ex.get("EXDOSE") or first["DOSE_MG"])
+        route = _norm(ex.get("EXROUTE") or first["ROUTE"])
+        # Preserve the historical single-dose fixture convention (TPTNUM=0)
+        # while numbering repeated-dose events by their EXSEQ.
+        exseq = _norm(ex.get("EXSEQ")) if repeated_dosing else "0"
+        exseq = exseq or "0"
+        return {
+            "ID": subject_id,
+            "USUBJID": usubjid,
+            "TIME": _format_number(ex_time_h(ex)),
+            "EVID": "1",
+            "MDV": "1",
+            "AMT": dose,
+            "DV": "",
+            "CMT": dose_cmt,
+            "RATE": _poppk_rate(ex, dose, route),
+            "BLQ": "0",
+            "CENS": "0",
+            "LLOQ": "",
+            "LIMIT": "",
+            "DOSE_MG": dose,
+            "ROUTE": route,
+            "TPT": "Dose",
+            "TPTNUM": exseq,
+            "AGE": first["AGE"],
+            "SEX": first["SEX"],
+            "WT": first["WT"],
+            "BSA": first["BSA"],
+            "CREAT_MG_DL": first["CREAT_MG_DL"],
+            "STUDYID": first["STUDYID"],
+            "ARM": first["ARM"],
+            "ROW_ORDER": row_order,
+        }
+
+    def observation_row(*, subject_id: int, usubjid: str, obs: dict[str, Any], row_order: int) -> dict[str, Any]:
+        has_dv = _norm(obs["AVAL"]) != ""
+        is_blq = _norm(obs["BLQ"]) == "1"
+        is_mdv = _norm(obs["MDV"]) == "1"
+        return {
+            "ID": subject_id,
+            "USUBJID": usubjid,
+            "TIME": obs["TIME_H"],
+            "EVID": "0",
+            "MDV": "0" if has_dv and not is_blq and not is_mdv else "1",
+            "AMT": "0",
+            "DV": obs["AVAL"],
+            "CMT": observation_cmt,
+            "RATE": "0",
+            "BLQ": obs["BLQ"],
+            "CENS": "1" if is_blq else "0",
+            "LLOQ": obs["LLOQ"],
+            "LIMIT": obs["LLOQ"],
+            "DOSE_MG": obs["DOSE_MG"],
+            "ROUTE": obs["ROUTE"],
+            "TPT": obs["TPT"],
+            "TPTNUM": obs["TPTNUM"],
+            "AGE": obs["AGE"],
+            "SEX": obs["SEX"],
+            "WT": obs["WT"],
+            "BSA": obs["BSA"],
+            "CREAT_MG_DL": obs["CREAT_MG_DL"],
+            "STUDYID": obs["STUDYID"],
+            "ARM": obs["ARM"],
+            "ROW_ORDER": row_order,
+        }
+
     subject_order = {
         usubjid: idx
         for idx, usubjid in enumerate(sorted({str(row["USUBJID"]) for row in adpc_rows if row["USUBJID"]}), start=1)
@@ -379,69 +462,38 @@ def _make_poppk(
     for usubjid in sorted(subject_order, key=lambda key: subject_order[key]):
         subject_rows = [row for row in adpc_rows if row["USUBJID"] == usubjid]
         first = subject_rows[0]
-        ex = ex_by_subject.get(usubjid, {})
-        dose = _norm(ex.get("EXDOSE") or first["DOSE_MG"])
-        route = _norm(ex.get("EXROUTE") or first["ROUTE"])
-        rows.append(
-            {
-                "ID": subject_order[usubjid],
-                "USUBJID": usubjid,
-                "TIME": "0",
-                "EVID": "1",
-                "MDV": "1",
-                "AMT": dose,
-                "DV": "",
-                "CMT": dose_cmt,
-                "RATE": _poppk_rate(ex, dose, route),
-                "BLQ": "0",
-                "CENS": "0",
-                "LLOQ": "",
-                "LIMIT": "",
-                "DOSE_MG": dose,
-                "ROUTE": route,
-                "TPT": "Dose",
-                "TPTNUM": "0",
-                "AGE": first["AGE"],
-                "SEX": first["SEX"],
-                "WT": first["WT"],
-                "BSA": first["BSA"],
-                "CREAT_MG_DL": first["CREAT_MG_DL"],
-                "STUDYID": first["STUDYID"],
-                "ARM": first["ARM"],
-            }
-        )
-        for obs in sorted(subject_rows, key=lambda row: _to_float(row["TIME_H"]) or 0.0):
-            has_dv = _norm(obs["AVAL"]) != ""
-            is_blq = _norm(obs["BLQ"]) == "1"
-            is_mdv = _norm(obs["MDV"]) == "1"
-            rows.append(
-                {
-                    "ID": subject_order[usubjid],
-                    "USUBJID": usubjid,
-                    "TIME": obs["TIME_H"],
-                    "EVID": "0",
-                    "MDV": "0" if has_dv and not is_blq and not is_mdv else "1",
-                    "AMT": "0",
-                    "DV": obs["AVAL"],
-                    "CMT": observation_cmt,
-                    "RATE": "0",
-                    "BLQ": obs["BLQ"],
-                    "CENS": "1" if is_blq else "0",
-                    "LLOQ": obs["LLOQ"],
-                    "LIMIT": obs["LLOQ"],
-                    "DOSE_MG": obs["DOSE_MG"],
-                    "ROUTE": obs["ROUTE"],
-                    "TPT": obs["TPT"],
-                    "TPTNUM": obs["TPTNUM"],
-                    "AGE": obs["AGE"],
-                    "SEX": obs["SEX"],
-                    "WT": obs["WT"],
-                    "BSA": obs["BSA"],
-                    "CREAT_MG_DL": obs["CREAT_MG_DL"],
-                    "STUDYID": obs["STUDYID"],
-                    "ARM": obs["ARM"],
-                }
+        ex_rows = (ex_rows_by_subject or {}).get(usubjid) or [ex_by_subject.get(usubjid, {})]
+        ex_rows = [row for row in ex_rows if row]
+        dose_events = [
+            dose_row(
+                subject_id=subject_order[usubjid],
+                usubjid=usubjid,
+                first=first,
+                ex=ex,
+                row_order=0,
             )
+            for ex in sorted(ex_rows, key=ex_time_h)
+        ]
+        observations = [
+            observation_row(
+                subject_id=subject_order[usubjid],
+                usubjid=usubjid,
+                obs=obs,
+                row_order=0,
+            )
+            for obs in sorted(subject_rows, key=lambda row: _to_float(row["TIME_H"]) or 0.0)
+        ]
+        if repeated_dosing:
+            event_rows = [(float(row["TIME"]), 0, row) for row in observations] + [
+                (float(row["TIME"]), 1, row) for row in dose_events
+            ]
+            event_rows.sort(key=lambda item: (item[0], item[1]))
+            for row_order, (_, _, row) in enumerate(event_rows, start=1):
+                row["ROW_ORDER"] = row_order
+                rows.append(row)
+        else:
+            rows.extend(dose_events[:1] or [])
+            rows.extend(observations)
     return rows
 
 
@@ -506,6 +558,12 @@ def make_analysis_inputs(
 
     dm_by_subject = _first_by_subject(dm_rows)
     ex_by_subject = _first_by_subject(ex_rows)
+    ex_rows_by_subject: dict[str, list[dict[str, str]]] = {}
+    for row in ex_rows:
+        usubjid = _norm(row.get("USUBJID"))
+        if usubjid:
+            ex_rows_by_subject.setdefault(usubjid, []).append(row)
+    repeated_dosing = any(len(rows) > 1 for rows in ex_rows_by_subject.values())
     vs_by_subject = _pivot_vs(vs_rows)
     lb_by_subject = _pivot_lb(lb_rows)
 
@@ -527,8 +585,10 @@ def make_analysis_inputs(
     poppk_rows = _make_poppk(
         adpc_rows,
         ex_by_subject=ex_by_subject,
+        ex_rows_by_subject=ex_rows_by_subject,
         dose_cmt=str(dose_cmt),
         observation_cmt=str(observation_cmt),
+        repeated_dosing=repeated_dosing,
     )
 
     files = {
@@ -545,11 +605,14 @@ def make_analysis_inputs(
         "nca_rows": len(nca_rows),
         "poppk_rows": len(poppk_rows),
     }
+    if repeated_dosing:
+        counts["ex_rows"] = len(ex_rows)
+    poppk_fields = POPPK_FIELDS + (["ROW_ORDER"] if repeated_dosing else [])
     status = "WARN" if warnings else "OK"
 
     _write_csv(files["ADPC"], adpc_rows, ADPC_FIELDS)
     _write_csv(files["NCA_INPUT"], nca_rows, NCA_FIELDS)
-    _write_csv(files["POPPK_INPUT"], poppk_rows, POPPK_FIELDS)
+    _write_csv(files["POPPK_INPUT"], poppk_rows, poppk_fields)
     _write_yaml(
         files["MANIFEST"],
         {
@@ -562,6 +625,7 @@ def make_analysis_inputs(
             "settings": {
                 "dose_cmt": str(dose_cmt),
                 "observation_cmt": str(observation_cmt),
+                "repeated_dosing": repeated_dosing,
             },
             "warnings": warnings,
             "notes": [

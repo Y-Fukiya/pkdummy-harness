@@ -98,6 +98,20 @@ def run_doctor(
             missing_message="ggplot2 is missing; report_pk_fixture.R cannot make ggplot figures.",
         ),
         _check(
+            "R_package:yaml",
+            ok=r_package_exists("yaml"),
+            level="recommended",
+            ok_message="yaml is available for the mrgsolve runner.",
+            missing_message="yaml is missing; tools/mrgsolve_runner.R cannot read spec_pk1_*.yml.",
+        ),
+        _check(
+            "R_package:mrgsolve",
+            ok=r_package_exists("mrgsolve"),
+            level="recommended",
+            ok_message="mrgsolve is available for ODE PopPK simulation.",
+            missing_message="mrgsolve is missing; the Python analytical_demo path remains available.",
+        ),
+        _check(
             "quarto",
             ok=command_exists("quarto"),
             level="recommended",

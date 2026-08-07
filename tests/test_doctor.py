@@ -24,6 +24,8 @@ def test_doctor_separates_required_recommended_and_optional_checks() -> None:
     assert by_name["python_package:yaml"].status == "OK"
     assert by_name["Rscript"].status == "OK"
     assert by_name["R_package:ggplot2"].status == "OK"
+    assert by_name["R_package:yaml"].status == "WARN"
+    assert by_name["R_package:mrgsolve"].status == "WARN"
     assert by_name["quarto"].status == "WARN"
     assert by_name["R_package:simpop"].status == "WARN"
 
