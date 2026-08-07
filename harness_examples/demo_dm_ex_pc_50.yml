@@ -1,0 +1,19 @@
+version: "0.1"
+mode: demo_set
+drugs_dir: drugs
+out_dir: outputs/demo_dm_ex_pc_50
+drugs:
+  - apixaban
+simulation:
+  engine: analytical_demo
+  n_subjects: 50
+  variability:
+    iiv_cv: 0.1
+    residual_cv: 0.05
+    seed: 20260217
+sampling:
+  times_h: [0, 1, 2, 3, 4, 8, 12, 24]
+  method: exact
+  predose_mdv1: true
+validation:
+  allow_failed: false

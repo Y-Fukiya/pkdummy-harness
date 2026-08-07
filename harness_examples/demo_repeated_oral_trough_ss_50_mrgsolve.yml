@@ -1,0 +1,34 @@
+version: "0.1"
+mode: repeated_oral_demo
+drugs_dir: drugs
+out_dir: outputs/demo_repeated_oral_trough_ss_50_mrgsolve
+drugs:
+  - apixaban
+study:
+  id_override: OSP_apixaban_repeat
+  start_datetime: "2026-01-01T08:00:00"
+simulation:
+  engine: mrgsolve
+  n_subjects: 50
+  t_end_h: 156
+  dt_h: 0.5
+  repeated_dosing:
+    interval_h: 12
+    dose_count: 13
+    analysis_dose_number: 13
+  variability:
+    # mrgsolve uses spec.iiv.eta and spec.residual; this seed controls draws.
+    seed: 20260217
+sampling:
+  trough_times_h: [0, 24, 48, 72, 96, 120, 144, 156]
+  ss_times_after_dose_h: [0, 0.5, 1, 2, 3, 4, 6, 8, 12]
+  method: exact
+nca:
+  concentration: DV
+  integration: linear-up-log-down
+  interval_h: [0, 12]
+  partial_intervals_h:
+    - [0, 4]
+    - [4, 12]
+validation:
+  allow_failed: false

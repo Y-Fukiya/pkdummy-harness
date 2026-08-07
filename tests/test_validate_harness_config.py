@@ -78,6 +78,166 @@ def test_validate_harness_config_rejects_bad_variability_values() -> None:
     assert "simulation.variability.residual_cv must be a non-negative number" in issues
 
 
+def test_validate_harness_config_accepts_subject_override() -> None:
+    issues = validate_harness_config(
+        {
+            "version": "0.1",
+            "mode": "demo_set",
+            "out_dir": "outputs/demo",
+            "drugs": ["apixaban"],
+            "simulation": {"engine": "analytical_demo", "n_subjects": 50},
+            "sampling": {"times_h": [0, 1, 2], "method": "exact", "predose_mdv1": True},
+        }
+    )
+
+    assert issues == []
+
+
+def test_validate_harness_config_accepts_repeated_oral_demo() -> None:
+    issues = validate_harness_config(
+        {
+            "version": "0.1",
+            "mode": "repeated_oral_demo",
+            "out_dir": "outputs/repeated",
+            "drugs": ["apixaban"],
+            "simulation": {
+                "engine": "analytical_demo",
+                "n_subjects": 50,
+                "t_end_h": 156,
+                "dt_h": 0.5,
+                "repeated_dosing": {"interval_h": 12, "dose_count": 13, "analysis_dose_number": 13},
+            },
+            "sampling": {
+                "trough_times_h": [0, 24, 48, 72, 96, 120, 144, 156],
+                "ss_times_after_dose_h": [0, 0.5, 1, 2, 3, 4, 6, 8, 12],
+                "method": "exact",
+            },
+            "nca": {"integration": "linear-up-log-down", "interval_h": [0, 12]},
+        }
+    )
+
+    assert issues == []
+
+
+def test_validate_harness_config_accepts_repeated_oral_mrgsolve_engine() -> None:
+    issues = validate_harness_config(
+        {
+            "version": "0.1",
+            "mode": "repeated_oral_demo",
+            "out_dir": "outputs/repeated_mrgsolve",
+            "drugs": ["apixaban"],
+            "simulation": {
+                "engine": "mrgsolve",
+                "n_subjects": 50,
+                "t_end_h": 156,
+                "dt_h": 0.5,
+                "repeated_dosing": {"interval_h": 12, "dose_count": 13, "analysis_dose_number": 13},
+            },
+            "sampling": {
+                "trough_times_h": [0, 24, 48, 72, 96, 120, 144, 156],
+                "ss_times_after_dose_h": [0, 0.5, 1, 2, 3, 4, 6, 8, 12],
+                "method": "exact",
+            },
+            "nca": {"integration": "linear-up-log-down", "interval_h": [0, 12]},
+        }
+    )
+
+    assert issues == []
+
+
+def test_validate_harness_config_rejects_unsampled_partial_auc_boundary() -> None:
+    issues = validate_harness_config(
+        {
+            "version": "0.1",
+            "mode": "repeated_oral_demo",
+            "out_dir": "outputs/repeated",
+            "drugs": ["apixaban"],
+            "simulation": {
+                "engine": "analytical_demo",
+                "n_subjects": 50,
+                "t_end_h": 156,
+                "dt_h": 0.5,
+                "repeated_dosing": {"interval_h": 12, "dose_count": 13, "analysis_dose_number": 13},
+            },
+            "sampling": {
+                "trough_times_h": [0, 24, 48, 72, 96, 120, 144, 156],
+                "ss_times_after_dose_h": [0, 0.5, 1, 2, 3, 6, 8, 12],
+                "method": "exact",
+            },
+            "nca": {"integration": "linear-up-log-down", "interval_h": [0, 12], "partial_intervals_h": [[0, 4], [4, 12]]},
+        }
+    )
+
+    assert "nca.partial_intervals_h boundaries must be present in sampling.ss_times_after_dose_h" in issues
+
+
+def test_validate_harness_config_rejects_duplicate_or_negative_sampling_times() -> None:
+    issues = validate_harness_config(
+        {
+            "version": "0.1",
+            "mode": "demo_set",
+            "out_dir": "outputs/demo",
+            "drugs": ["apixaban"],
+            "simulation": {"engine": "analytical_demo"},
+            "sampling": {"times_h": [-1, 1, 1], "method": "exact"},
+        }
+    )
+
+    assert "sampling.times_h must contain finite non-negative numeric values" in issues
+    duplicate_issues = validate_harness_config(
+        {
+            "version": "0.1",
+            "mode": "demo_set",
+            "out_dir": "outputs/demo",
+            "drugs": ["apixaban"],
+            "simulation": {"engine": "analytical_demo"},
+            "sampling": {"times_h": [0, 1, 1], "method": "exact"},
+        }
+    )
+    assert "sampling.times_h must not contain duplicate times" in duplicate_issues
+
+
+def test_validate_harness_config_rejects_repeated_run_that_ends_before_final_interval() -> None:
+    config = {
+        "version": "0.1",
+        "mode": "repeated_oral_demo",
+        "out_dir": "outputs/repeated",
+        "drugs": ["apixaban"],
+        "simulation": {
+            "engine": "analytical_demo",
+            "n_subjects": 50,
+            "t_end_h": 12,
+            "dt_h": 0.5,
+            "repeated_dosing": {"interval_h": 12, "dose_count": 13, "analysis_dose_number": 13},
+        },
+        "sampling": {
+            "trough_times_h": [0, 120, 144],
+            "ss_times_after_dose_h": [0, 12],
+            "method": "exact",
+        },
+        "nca": {"integration": "linear-up-log-down", "interval_h": [0, 12]},
+    }
+    issues = validate_harness_config(config)
+    assert "simulation.t_end_h must cover the final dose time" in issues
+    assert "simulation.t_end_h must cover the full final analysis interval" in issues
+
+
+@pytest.mark.parametrize("value", [0, -1, 1.5, "not-a-number", float("nan"), float("inf"), True])
+def test_validate_harness_config_rejects_invalid_subject_override(value: object) -> None:
+    issues = validate_harness_config(
+        {
+            "version": "0.1",
+            "mode": "demo_set",
+            "out_dir": "outputs/demo",
+            "drugs": ["apixaban"],
+            "simulation": {"engine": "analytical_demo", "n_subjects": value},
+            "sampling": {"times_h": [0, 1]},
+        }
+    )
+
+    assert "simulation.n_subjects must be a positive integer" in issues
+
+
 def test_validate_harness_config_cli(tmp_path: Path) -> None:
     config = tmp_path / "harness.yml"
     write_yaml(

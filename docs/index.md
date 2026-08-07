@@ -10,6 +10,11 @@ Generated data are not for clinical inference, dose selection, or regulatory mod
 - [User Guide](USER_GUIDE.md)
 - [README](https://github.com/Y-Fukiya/pkdummy-harness#readme)
 - [Process Flow](PROCESS_FLOW.md)
+- [DM/EX/PC 50例デモ仕様](DEMO_DM_EX_PC_50_SPEC.md)
+- [反復経口投与・トラフ・定常状態NCA 50例デモ仕様](DEMO_REPEATED_ORAL_TROUGH_SS_50_SPEC.md)
+- [mrgsolve runner](MRGSOLVE_RUNNER.md)
+- [CDISC API補助利用](CDISC_API_SUPPLEMENT.md)
+- [PK dummy workflow draw.io](assets/pkdummy-workflow.drawio) / [PNG preview](assets/pkdummy-workflow.png)
 
 ## Validation And Release
 

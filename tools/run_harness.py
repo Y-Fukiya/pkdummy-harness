@@ -4,6 +4,7 @@
 This is the cloud/local friendly entrypoint. It dispatches to existing tools:
 - demo_set: generate demo sim_full.csv files and run each workflow
 - post_simulation: run the deterministic workflow for an existing sim_full.csv
+- repeated_oral_demo: generate repeated oral dosing, trough, and steady-state NCA fixtures
 
 It does not modify pk.yml, targets.yml, or spec files.
 """
@@ -24,6 +25,7 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from tools.run_demo_set import run_demo_set
+from tools.run_repeated_oral_demo import run_repeated_oral_demo
 from tools.validate_harness_config import validate_harness_config
 from tools.run_workflow import run_workflow
 
@@ -144,8 +146,13 @@ def _run_demo_set_mode(config: dict[str, Any], *, config_path: Path) -> HarnessR
         drugs_dir=_as_path(config.get("drugs_dir", "drugs"), label="drugs_dir"),
         out_dir=out_dir,
         sample_times_h=_times(config),
+        sampling_method=str((config.get("sampling") or {}).get("method", "linear")),
+        predose_mdv1=bool((config.get("sampling") or {}).get("predose_mdv1", False)),
         allow_validation_failed=bool((config.get("validation") or {}).get("allow_failed", True)),
         variability=simulation.get("variability"),
+        n_subjects_override=(
+            int(simulation["n_subjects"]) if simulation.get("n_subjects") is not None else None
+        ),
     )
     files = {
         "manifest": manifest,
@@ -165,6 +172,8 @@ def _run_demo_set_mode(config: dict[str, Any], *, config_path: Path) -> HarnessR
             extra={
                 "simulation_engine": engine,
                 "drugs": [str(drug) for drug in drugs],
+                "n_subjects": simulation.get("n_subjects"),
+                "sampling": config.get("sampling") or {},
                 "counts": result.counts,
             },
         ),
@@ -181,6 +190,8 @@ def _run_demo_set_mode(config: dict[str, Any], *, config_path: Path) -> HarnessR
             extra={
                 "simulation_engine": engine,
                 "drugs": [str(drug) for drug in drugs],
+                "n_subjects": simulation.get("n_subjects"),
+                "sampling": config.get("sampling") or {},
             },
         ),
     )
@@ -275,6 +286,86 @@ def _run_post_simulation_mode(config: dict[str, Any], *, config_path: Path) -> H
     )
 
 
+def _run_repeated_oral_demo_mode(config: dict[str, Any], *, config_path: Path) -> HarnessResult:
+    out_dir = _as_path(config.get("out_dir"), label="out_dir")
+    manifest = out_dir / "HARNESS_MANIFEST.yml"
+    status_json = out_dir / "HARNESS_STATUS.json"
+    simulation = config.get("simulation") or {}
+    engine = str(simulation.get("engine") or "analytical_demo").strip().lower()
+    if engine not in {"analytical_demo", "mrgsolve"}:
+        raise ValueError("repeated_oral_demo supports simulation.engine: analytical_demo or mrgsolve")
+    result = run_repeated_oral_demo(
+        config=config,
+        out_dir=out_dir,
+        drugs_dir=_as_path(config.get("drugs_dir", "drugs"), label="drugs_dir"),
+    )
+    allow_failed = bool((config.get("validation") or {}).get("allow_failed", False))
+    if result.status == "FAILED" and not allow_failed:
+        raise ValueError("repeated_oral_demo failed validation; set validation.allow_failed=true only for fixture continuation.")
+    repeated_workflow_manifest = result.files.get("workflow_manifest")
+    validation_status = "NOT_RUN"
+    if repeated_workflow_manifest and repeated_workflow_manifest.exists():
+        validation_status = str((_load_yaml(repeated_workflow_manifest)).get("validation_status") or "NOT_RUN")
+    # Keep the harness-level manifest distinct from the repeated generator's
+    # DEMO_MANIFEST.yml.  Both are useful, but callers expect ``files["manifest"]``
+    # to point to HARNESS_MANIFEST.yml consistently across modes.
+    files = {
+        "manifest": manifest,
+        "status_json": status_json,
+        "demo_manifest": result.files.get("manifest", out_dir / "DEMO_MANIFEST.yml"),
+        **{key: value for key, value in result.files.items() if key != "manifest"},
+    }
+    _write_yaml(
+        manifest,
+        _manifest_common(
+            config_path=config_path,
+            mode="repeated_oral_demo",
+            status=result.status,
+            warnings=result.warnings,
+            outputs=files,
+            extra={
+                "simulation_engine": engine,
+                "drugs": [str(drug) for drug in config.get("drugs", [])],
+                "study": config.get("study") or {},
+                "simulation": simulation,
+                "sampling": config.get("sampling") or {},
+                "nca": config.get("nca") or {},
+                "validation_allow_failed": allow_failed,
+                "validation_status": validation_status,
+                "counts": result.counts,
+            },
+        ),
+    )
+    _write_json(
+        status_json,
+        _status_payload(
+            mode="repeated_oral_demo",
+            status=result.status,
+            out_dir=out_dir,
+            warnings=result.warnings,
+            outputs=files,
+            counts=result.counts,
+            extra={
+                "simulation_engine": engine,
+                "drugs": [str(drug) for drug in config.get("drugs", [])],
+                "study": config.get("study") or {},
+                "simulation": simulation,
+                "sampling": config.get("sampling") or {},
+                "nca": config.get("nca") or {},
+                "validation_allow_failed": allow_failed,
+                "validation_status": validation_status,
+            },
+        ),
+    )
+    return HarnessResult(
+        out_dir=out_dir,
+        mode="repeated_oral_demo",
+        status=result.status,
+        files=files,
+        warnings=result.warnings,
+    )
+
+
 def run_harness(config_yml: Path | str) -> HarnessResult:
     config_path = Path(config_yml)
     config = _load_yaml(config_path)
@@ -286,7 +377,9 @@ def run_harness(config_yml: Path | str) -> HarnessResult:
         return _run_demo_set_mode(config, config_path=config_path)
     if mode == "post_simulation":
         return _run_post_simulation_mode(config, config_path=config_path)
-    raise ValueError("config.mode must be one of: demo_set, post_simulation")
+    if mode == "repeated_oral_demo":
+        return _run_repeated_oral_demo_mode(config, config_path=config_path)
+    raise ValueError("config.mode must be one of: demo_set, post_simulation, repeated_oral_demo")
 
 
 def build_arg_parser() -> argparse.ArgumentParser:

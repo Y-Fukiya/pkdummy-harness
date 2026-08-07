@@ -161,6 +161,37 @@ def test_run_harness_executes_demo_set_from_config(tmp_path: Path) -> None:
     assert status["counts"]["drugs"] == 1
 
 
+def test_run_harness_passes_subject_count_and_sampling_settings(tmp_path: Path) -> None:
+    drugs_dir = tmp_path / "drugs"
+    write_demo_drug(drugs_dir, "iv_demo")
+    config = tmp_path / "harness.yml"
+    out_dir = tmp_path / "harness_out"
+    write_yaml(
+        config,
+        {
+            "version": "0.1",
+            "mode": "demo_set",
+            "drugs_dir": str(drugs_dir),
+            "out_dir": str(out_dir),
+            "drugs": ["iv_demo"],
+            "simulation": {"engine": "analytical_demo", "n_subjects": 5},
+            "sampling": {"times_h": [0, 1, 2], "method": "exact", "predose_mdv1": True},
+            "validation": {"allow_failed": False},
+        },
+    )
+
+    result = run_harness(config)
+
+    assert result.status == "OK"
+    assert json.loads(result.files["status_json"].read_text(encoding="utf-8"))["counts"]["generated_subjects"] == 5
+    manifest = yaml.safe_load(result.files["manifest"].read_text(encoding="utf-8"))
+    assert manifest["n_subjects"] == 5
+    assert manifest["sampling"]["method"] == "exact"
+    pc = read_csv(out_dir / "iv_demo" / "workflow" / "sdtm_like" / "PC.csv")
+    assert len(pc) == 15
+    assert sum(row["PCMDV"] == "1" for row in pc) == 5
+
+
 def test_run_harness_executes_post_simulation_workflow_from_config(tmp_path: Path) -> None:
     sim_csv, pk_yml, targets_yml, spec_yml = write_workflow_inputs(tmp_path)
     config = tmp_path / "harness.yml"
@@ -196,6 +227,30 @@ def test_run_harness_executes_post_simulation_workflow_from_config(tmp_path: Pat
     assert status["status"] == "OK"
     assert status["outputs"]["adpc_csv"].endswith("ADPC.csv")
     assert status["counts"]["analysis_adpc_rows"] == 4
+
+
+def test_run_harness_executes_repeated_oral_demo_from_config(tmp_path: Path) -> None:
+    config = yaml.safe_load(
+        (ROOT / "harness_examples" / "demo_repeated_oral_trough_ss_50.yml").read_text(encoding="utf-8")
+    )
+    config["out_dir"] = str(tmp_path / "repeated")
+    config["simulation"]["n_subjects"] = 2
+    config_path = tmp_path / "repeated.yml"
+    write_yaml(config_path, config)
+
+    result = run_harness(config_path)
+
+    assert result.status == "OK"
+    assert result.mode == "repeated_oral_demo"
+    status = json.loads(result.files["status_json"].read_text(encoding="utf-8"))
+    assert status["mode"] == "repeated_oral_demo"
+    assert status["validation_status"] == "OK"
+    assert status["counts"]["trough_rows"] == 16
+    assert result.files["nca_ss_summary_csv"].exists()
+    assert result.files["manifest"].name == "HARNESS_MANIFEST.yml"
+    assert result.files["demo_manifest"].name == "DEMO_MANIFEST.yml"
+    harness_manifest = yaml.safe_load(result.files["manifest"].read_text(encoding="utf-8"))
+    assert harness_manifest["validation_status"] == "OK"
 
 
 def test_run_harness_cli(tmp_path: Path) -> None:

@@ -89,7 +89,7 @@ assay:
     unit: ng/mL
 ```
 
-`iiv` と `residual` は外部mrgsolve等のrunner向けのspec情報です。組み込みdemo generator単体では `model.theta` を主に消費し、薬剤固有のIIV/residual modelとしては消費しません。demo-only variabilityはCLI/config側の軽量オプションで別管理します。
+`iiv` と `residual` はmrgsolve等のPopPK runner向けのspec情報です。同梱の `tools/mrgsolve_runner.R` もこの契約を読み込みます。組み込みdemo generator単体では `model.theta` を主に消費し、薬剤固有のIIV/residual modelとしては消費しません。demo-only variabilityはCLI/config側の軽量オプションで別管理します。
 
 demo generatorの対応経路は `oral`, `po`, `sc`, `im`, `iv`, `iv_bolus`, `iv_infusion`, `intravenous` です。SC/IMは一次吸収式の軽量fixtureとして扱います。その他の未対応経路は吸収相の黙示的bolus化を避けるためエラーにします。
 
@@ -264,5 +264,6 @@ value_provenance_summary:
 - `python tools/validate_manifest.py outputs/<run>/workflow/MANIFEST.yml`: run-levelまたはtool-level `MANIFEST.yml` の必須field、status、mapping/list型を確認する
 - `python tools/render_manifest_viewer.py outputs/<run>/workflow/MANIFEST.yml --out-html outputs/<run>/workflow/manifest_viewer.html`: `MANIFEST.yml` を薄い静的HTML viewerに変換する。UI/cloud runnerの代替ではなく、manifest閲覧用
 - `Rscript tools/report_pk_fixture.R --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/reports/pk_fixture_report --title "<slug> PK fixture report"`: `ADPC.csv` から被験者背景の要約統計、時点別濃度統計、ggplot2のlinear/log濃度プロット、Markdownレポートを生成する。これはfixture確認用の記述統計で、臨床薬理モデル妥当化ではない
+- `Rscript tools/make_adnca.R --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/adnca --mode auto --title "<slug> ADNCA fixture"`: 単回は `ADPC.csv` からNCA-likeパラメータを再計算し、反復は `NCA_SS_SUMMARY.csv` / `TROUGH_SUMMARY.csv` を取り込む。`ADNCA.csv` / `ADNCA_WIDE.csv`、linear/log濃度プロット、反復時の定常状態区間プロット、report/manifestを生成する。submission-ready ADaMや実NCAエンジンの代替ではない
 - `Rscript tools/render_pk_fixture_quarto.R --analysis-dir outputs/<run>/workflow/analysis_inputs --out-dir outputs/<run>/workflow/reports/pk_fixture_quarto --title "<slug> PK fixture report"`: `templates/pk_fixture_report.qmd` を使って、軽量レポートの内容をQuarto docxへ変換する任意ステップ。Word style referenceを使う場合は `--reference-doc reference.docx` を指定する
 - `Rscript tools/make_simpop_subjects.R --out subjects.csv --n 100 --dose-mg 100`: 任意の `simPop` ベース被験者CSV生成

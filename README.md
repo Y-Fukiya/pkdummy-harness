@@ -74,7 +74,22 @@ make harness-check
 ```bash
 python3 -m tools.pk_fixture_cli doctor
 python3 -m tools.pk_fixture_cli run harness_examples/demo_set.yml
+python3 -m tools.pk_fixture_cli run harness_examples/demo_repeated_oral_trough_ss_50.yml
 ```
+
+Generate ADNCA-like records and concentration plots as a separate R post-step
+(`ggplot2` is required):
+
+```bash
+Rscript tools/make_adnca.R \
+  --analysis-dir outputs/demo_dm_ex_pc_50/apixaban/workflow/analysis_inputs \
+  --out-dir outputs/demo_dm_ex_pc_50/apixaban/workflow/adnca
+```
+
+The same command detects the repeated-dose summaries when run against the
+repeated demo's `analysis_inputs/` directory. The R outputs are intentionally
+separate from the Python run-level manifest and are documented in
+[`docs/QUICKSTART.md`](docs/QUICKSTART.md).
 
 The core runtime is PyYAML only. Optional tool groups install via extras:
 `pip install .[harvest]` (web harvesting: DailyMed/PubMed) and
@@ -93,6 +108,19 @@ python3 tools/run_workflow.py \
   --drug <slug> \
   --times 0,0.5,1,2,4,8,12,24 \
   --out-dir outputs/<run>/workflow
+```
+
+The repository also includes an independent mrgsolve runner:
+[`docs/MRGSOLVE_RUNNER.md`](docs/MRGSOLVE_RUNNER.md). It reads `spec_pk1_*.yml`,
+supports oral, IV bolus, IV infusion, IIV/residual error, and repeated doses, and
+writes an event-aware `sim_full.csv`. Single-dose output can be passed to the
+standard post-processing workflow. For repeated oral dosing, use the dedicated
+engine-aware harness so the `EVID=1` dose rows are separated into the EX/PopPK
+event contract and are not interpreted by the single-dose validator:
+
+```bash
+python3 tools/run_harness.py \
+  --config harness_examples/demo_repeated_oral_trough_ss_50_mrgsolve.yml
 ```
 
 `run_workflow.py` also accepts `--schedule-csv` for existing sampling times and
@@ -217,6 +245,9 @@ templates) — see [docs/CALIBRATED_PROFILES.md](docs/CALIBRATED_PROFILES.md).
 - [docs/EXTERNAL_TOOL_VALIDATION_GUIDE.md](docs/EXTERNAL_TOOL_VALIDATION_GUIDE.md): Phoenix/NONMEM/nlmixr2 runs
 - [docs/SITE_ADAPTER_GUIDE.md](docs/SITE_ADAPTER_GUIDE.md): per-site CSV adapters
 - [docs/CALIBRATED_PROFILES.md](docs/CALIBRATED_PROFILES.md): F-corrected oral profiles
+- [docs/DEMO_DM_EX_PC_50_SPEC.md](docs/DEMO_DM_EX_PC_50_SPEC.md): 50-subject DM/EX/PC demo specification
+- [docs/DEMO_REPEATED_ORAL_TROUGH_SS_50_SPEC.md](docs/DEMO_REPEATED_ORAL_TROUGH_SS_50_SPEC.md): 50-subject repeated-dose trough and steady-state NCA demo specification
+- [docs/CDISC_API_SUPPLEMENT.md](docs/CDISC_API_SUPPLEMENT.md): optional CDISC Dataset Generator reference fixtures
 - [docs/USER_TEST_REPORT_TEMPLATE.md](docs/USER_TEST_REPORT_TEMPLATE.md): user test report template
 - [docs/VALIDATION_AND_RELEASE_CHECKLIST.md](docs/VALIDATION_AND_RELEASE_CHECKLIST.md): pre-release checks
 - [docs/RELEASE_NOTES_TEMPLATE.md](docs/RELEASE_NOTES_TEMPLATE.md): release-notes template

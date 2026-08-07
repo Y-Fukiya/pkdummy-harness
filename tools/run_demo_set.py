@@ -118,33 +118,59 @@ def _time_grid(spec: dict[str, Any]) -> list[float]:
     return times
 
 
-def _arms(spec: dict[str, Any]) -> list[tuple[str, int, float, float]]:
+def _arms(
+    spec: dict[str, Any],
+    *,
+    n_subjects_override: int | None = None,
+) -> list[tuple[str, int, float, float]]:
     regimen = spec.get("regimen") or {}
+    route = str(regimen.get("route") or "").strip().lower()
+    template = str(((spec.get("model") or {}).get("template")) or "").strip().lower()
+    if route in {"oral", "po"} and template and "oral" not in template:
+        raise ValueError("regimen.route is oral/po but model.template does not describe an oral model.")
+    if route in {"iv", "iv_bolus", "iv_infusion", "intravenous"} and "oral" in template:
+        raise ValueError("intravenous regimen.route conflicts with an oral model.template.")
+    arm_blocks = list((regimen.get("arms") or {}).values())
+    if route == "iv_infusion" and (not arm_blocks or not all((_to_float((block or {}).get("infusion_h"), 0.0) or 0.0) > 0 for block in arm_blocks)):
+        raise ValueError("regimen.route=iv_infusion requires a positive infusion_h on every arm.")
     arms = regimen.get("arms") or {"A": {"n": (spec.get("population") or {}).get("n", 1), "dose_mg": 100.0}}
+    if n_subjects_override is not None:
+        if isinstance(n_subjects_override, bool) or not isinstance(n_subjects_override, int) or n_subjects_override < 1:
+            raise ValueError("n_subjects_override must be a positive integer.")
+        if len(arms) != 1:
+            raise ValueError(
+                "n_subjects_override is ambiguous for multi-arm specs; "
+                "provide arm-specific counts instead."
+            )
     out: list[tuple[str, int, float, float]] = []
     for arm, block in arms.items():
-        n = int(_to_float((block or {}).get("n"), (spec.get("population") or {}).get("n", 1)) or 1)
-        dose = _to_float((block or {}).get("dose_mg"), 100.0) or 100.0
+        default_n = int(_to_float((block or {}).get("n"), (spec.get("population") or {}).get("n", 1)) or 1)
+        n = n_subjects_override if n_subjects_override is not None else default_n
+        if n < 1:
+            raise ValueError(f"Arm {arm} must have a positive subject count.")
+        dose = _to_float((block or {}).get("dose_mg"), 100.0)
+        if dose is None:
+            dose = 100.0
+        if dose <= 0:
+            raise ValueError(f"Arm {arm} dose_mg must be positive.")
         infusion_h = _to_float((block or {}).get("infusion_h"), 0.0) or 0.0
         if infusion_h < 0:
-            infusion_h = 0.0
+            raise ValueError(f"Arm {arm} infusion_h must be non-negative.")
         out.append((str(arm), n, dose, infusion_h))
     return out
 
 
 def _is_oral(spec: dict[str, Any]) -> bool:
     route = str(((spec.get("regimen") or {}).get("route")) or "").strip().lower()
-    template = str(((spec.get("model") or {}).get("template")) or "").strip().lower()
-    return route in {"oral", "po"} or "oral" in template
+    return route in {"oral", "po"}
 
 
 def _has_first_order_absorption(spec: dict[str, Any], route: str) -> bool:
-    template = str(((spec.get("model") or {}).get("template")) or "").strip().lower()
-    return route in {"oral", "po", "sc", "im", "subcutaneous", "intramuscular"} or "oral" in template
+    return route in {"oral", "po", "sc", "im", "subcutaneous", "intramuscular"}
 
 
 def _is_iv_infusion(route: str, *, infusion_h: float) -> bool:
-    return route in {"iv", "iv_infusion"} and infusion_h > 0
+    return route in {"iv", "iv_infusion", "intravenous"} and infusion_h > 0
 
 
 def _is_supported_demo_route(route: str) -> bool:
@@ -166,7 +192,9 @@ def _concentration_ng_ml(
     units = model.get("units") or {}
     cl = (_to_float(theta.get("CL")) or 0.0) * cl_factor
     v = (_to_float(theta.get("V")) or 0.0) * v_factor
-    mult = _to_float(units.get("mult"), 1000.0) or 1000.0
+    mult = _to_float(units.get("mult"), 1000.0)
+    if mult is None:
+        mult = 1000.0
     if cl <= 0 or v <= 0:
         raise ValueError("model.theta.CL and model.theta.V must be positive for demo simulation.")
     ke = cl / v
@@ -183,9 +211,22 @@ def _concentration_ng_ml(
             conc_mg_l = dose_mg / (cl * t_inf) * (1.0 - math.exp(-ke * t_inf)) * math.exp(-ke * (time_h - t_inf))
         return max(0.0, conc_mg_l * mult)
     if _has_first_order_absorption(spec, route):
-        ka = (_to_float(theta.get("KA"), 1.0) or 1.0) * ka_factor
-        f1 = _to_float(theta.get("F1"), 1.0) or 1.0
-        alag = _to_float(theta.get("ALAG1"), 0.0) or 0.0
+        ka = _to_float(theta.get("KA"), 1.0)
+        if ka is None:
+            ka = 1.0
+        ka *= ka_factor
+        if ka <= 0:
+            raise ValueError("model.theta.KA must be positive for first-order absorption.")
+        f1 = _to_float(theta.get("F1"), 1.0)
+        if f1 is None:
+            f1 = 1.0
+        alag = _to_float(theta.get("ALAG1"), 0.0)
+        if alag is None:
+            alag = 0.0
+        if f1 < 0 or f1 > 1:
+            raise ValueError("model.theta.F1 must be between 0 and 1 for demo simulation.")
+        if alag < 0:
+            raise ValueError("model.theta.ALAG1 must be non-negative for demo simulation.")
         tau = time_h - alag
         if tau <= 0:
             return 0.0
@@ -240,6 +281,7 @@ def make_demo_sim_full(
     spec_yml: Path | str,
     out_csv: Path | str,
     variability: dict[str, Any] | None = None,
+    n_subjects_override: int | None = None,
 ) -> Path:
     spec_path = Path(spec_yml)
     out_path = Path(out_csv)
@@ -249,7 +291,7 @@ def make_demo_sim_full(
     rng = random.Random(int(var["seed"]))
     rows: list[dict[str, Any]] = []
     subject_index = 1
-    for arm, n_subjects, dose_mg, infusion_h in _arms(spec):
+    for arm, n_subjects, dose_mg, infusion_h in _arms(spec, n_subjects_override=n_subjects_override):
         for _ in range(n_subjects):
             subject = _subject_row_values(study_id, subject_index, arm, dose_mg)
             cl_factor = _lognormal_factor(rng, float(var["iiv_cv"]))
@@ -344,8 +386,11 @@ def run_demo_set(
     out_dir: Path | str,
     drugs_dir: Path | str = "drugs",
     sample_times_h: list[float] | None = None,
+    sampling_method: str = "linear",
+    predose_mdv1: bool = False,
     allow_validation_failed: bool = True,
     variability: dict[str, Any] | None = None,
+    n_subjects_override: int | None = None,
 ) -> DemoSetResult:
     if not drugs:
         raise ValueError("At least one drug slug is required.")
@@ -360,13 +405,20 @@ def run_demo_set(
         _, _, spec_yml = _resolve_drug_files(drugs_path, slug)
         drug_out = out_path / slug
         sim_full = drug_out / "raw" / "sim_full.csv"
-        make_demo_sim_full(spec_yml=spec_yml, out_csv=sim_full, variability=variability)
+        make_demo_sim_full(
+            spec_yml=spec_yml,
+            out_csv=sim_full,
+            variability=variability,
+            n_subjects_override=n_subjects_override,
+        )
         workflow = run_workflow(
             sim_full_csv=sim_full,
             out_dir=drug_out / "workflow",
             drug=slug,
             drugs_dir=drugs_path,
             times_h=times,
+            method=sampling_method,
+            predose_mdv1=predose_mdv1,
             allow_validation_failed=allow_validation_failed,
         )
         workflows[slug] = workflow
@@ -410,6 +462,27 @@ def run_demo_set(
         "warn_workflows": sum(1 for workflow in workflows.values() if workflow.status == "WARN"),
         "failed_workflows": sum(1 for workflow in workflows.values() if workflow.status == "FAILED"),
     }
+    if n_subjects_override is not None:
+        counts.update(
+            {
+                "requested_subjects": n_subjects_override * len(drugs),
+                "generated_subjects": sum(
+                    int(workflow.counts.get("clinical_sample_subjects", 0)) for workflow in workflows.values()
+                ),
+                "clinical_sample_rows": sum(
+                    int(workflow.counts.get("clinical_sample_rows", 0)) for workflow in workflows.values()
+                ),
+                "sdtm_like_dm_rows": sum(
+                    int(workflow.counts.get("sdtm_like_dm_rows", 0)) for workflow in workflows.values()
+                ),
+                "sdtm_like_ex_rows": sum(
+                    int(workflow.counts.get("sdtm_like_ex_rows", 0)) for workflow in workflows.values()
+                ),
+                "sdtm_like_pc_rows": sum(
+                    int(workflow.counts.get("sdtm_like_pc_rows", 0)) for workflow in workflows.values()
+                ),
+            }
+        )
     _write_yaml(
         manifest,
         {
@@ -420,6 +493,9 @@ def run_demo_set(
             "settings": {
                 "drugs_dir": str(drugs_path),
                 "sample_times_h": times,
+                "sampling_method": sampling_method,
+                "predose_mdv1": predose_mdv1,
+                "n_subjects_override": n_subjects_override,
                 "allow_validation_failed": allow_validation_failed,
                 "demo_simulator": "analytical_1comp_fixture_generator_not_mrgsolve",
                 "variability": _variability_settings(variability),
@@ -454,6 +530,9 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--drugs-dir", type=Path, default=Path("drugs"))
     parser.add_argument("--out-dir", type=Path, default=Path("outputs/demo_set_milestone7"))
     parser.add_argument("--times", default=",".join(_format_number(t) for t in DEFAULT_SAMPLE_TIMES_H))
+    parser.add_argument("--method", choices=["exact", "nearest", "linear", "log-linear"], default="linear")
+    parser.add_argument("--predose-mdv1", action="store_true", help="Mark nominal predose samples as MDV=1")
+    parser.add_argument("--n-subjects", type=int, default=None, help="Override subject count for a single-arm spec")
     parser.add_argument(
         "--stop-on-validation-failed",
         action="store_true",
@@ -474,8 +553,11 @@ def main(argv: list[str] | None = None) -> int:
             drugs_dir=args.drugs_dir,
             out_dir=args.out_dir,
             sample_times_h=parse_times(args.times),
+            sampling_method=args.method,
+            predose_mdv1=args.predose_mdv1,
             allow_validation_failed=not args.stop_on_validation_failed,
             variability={"iiv_cv": args.iiv_cv, "residual_cv": args.residual_cv, "seed": args.variability_seed},
+            n_subjects_override=args.n_subjects,
         )
     except Exception as exc:
         print(f"ERROR: {exc}")

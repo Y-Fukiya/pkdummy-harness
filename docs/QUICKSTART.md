@@ -26,7 +26,7 @@ flowchart LR
 
 UI/launcherから呼ぶ場合の契約は [LAUNCHER_CONTRACT.md](LAUNCHER_CONTRACT.md) を参照してください。
 
-説明資料用のdraw.io図は [assets/pk-harness-process.drawio](assets/pk-harness-process.drawio) にあります。図の読み方は [PROCESS_FLOW.md](PROCESS_FLOW.md) を参照してください。
+説明資料用のdraw.io図は [assets/pk-harness-process.drawio](assets/pk-harness-process.drawio) にあります。今回の単回・反復・mrgsolve・ADNCAの簡易図は [assets/pkdummy-workflow.drawio](assets/pkdummy-workflow.drawio)（[PNG](assets/pkdummy-workflow.png)）です。図の読み方は [PROCESS_FLOW.md](PROCESS_FLOW.md) を参照してください。
 
 成果物の形だけ先に確認したい場合は、Git管理された最小例 [../examples/minimal_aciclovir](../examples/minimal_aciclovir) と [../examples/minimal_albuterol_iv](../examples/minimal_albuterol_iv) を見てください。
 
@@ -169,6 +169,26 @@ Rscript tools/report_pk_fixture.R \
 
 これはfixture確認用の記述統計レポートです。臨床薬理モデルの妥当性確認やsubmission-ready ADaM reportではありません。
 
+## 6.1 Generate ADNCA-like Records and Concentration Plots
+
+単回投与では `ADPC.csv` から線形上昇／log-linear下降の台形則、`Cmax/Tmax`、terminal `lambda-z`（保守的な減少尾部がある場合のみ）を計算します。反復投与では、既存の `NCA_SS_SUMMARY.csv`、`TROUGH_SUMMARY.csv`、`NCA_SS_INPUT.csv` を読み、定常状態NCA、トラフ、定常状態区間の濃度プロットを作ります。
+
+```bash
+# 単回投与
+Rscript tools/make_adnca.R \
+  --analysis-dir outputs/demo_dm_ex_pc_50/apixaban/workflow/analysis_inputs \
+  --out-dir outputs/demo_dm_ex_pc_50/apixaban/workflow/adnca \
+  --title "Apixaban single-dose ADNCA fixture"
+
+# 反復経口投与（--mode auto は summary CSV を検出して repeated を選択）
+Rscript tools/make_adnca.R \
+  --analysis-dir outputs/demo_repeated_oral_trough_ss_50/apixaban/workflow/analysis_inputs \
+  --out-dir outputs/demo_repeated_oral_trough_ss_50/apixaban/workflow/adnca \
+  --title "Apixaban repeated-dose ADNCA fixture"
+```
+
+主な出力は `ADNCA.csv`（long形式）、`ADNCA_WIDE.csv`（被験者1行）、`ADNCA_REPORT.md`、`ADNCA_MANIFEST.yml`、線形／log濃度プロットです。反復投与では `steady_state_profile_linear.png` と `steady_state_profile_log.png` も作成します。0時間baselineトラフは `ANL01FL=N` として残し、解析対象から除外します。これは解析配管用のADNCA-like fixtureであり、submission-ready ADaMや実NCAエンジンの代替ではありません。
+
 Word共有用のdocxが必要な場合は、同じ入力からQuarto版を作成します。
 
 ```bash
@@ -252,6 +272,27 @@ python3 tools/run_workflow.py \
 ## 9. External Runner Pattern
 
 実運用に近いシミュレーションでは、利用環境側のmrgsolve runnerで `sim_full.csv` を作ってから、後処理だけをこのハーネスで行います。
+
+このリポジトリには、比較検証用のrunnerも含まれます。
+
+```bash
+Rscript tools/mrgsolve_runner.R \
+  --spec drugs/apixaban/spec_pk1_oral.yml \
+  --out outputs/mrgsolve_demo/apixaban/raw/sim_full.csv \
+  --n-subjects 50 --seed 20260217
+```
+
+`tools/mrgsolve_runner.R` の詳細、IV点滴、反復投与、`mrgsolve` と
+`analytical_demo` の比較手順は [`MRGSOLVE_RUNNER.md`](MRGSOLVE_RUNNER.md) にまとめています。
+これはmrgsolveを使わない既存のPython経路を置き換えず、独立した二重検証経路として追加するものです。
+
+反復経口投与をmrgsolveで生成する場合は、単回投与用の `run_workflow.py` に
+event-aware raw CSVを直接渡さず、専用設定から実行します。
+
+```bash
+python3 tools/run_harness.py \
+  --config harness_examples/demo_repeated_oral_trough_ss_50_mrgsolve.yml
+```
 
 ```bash
 Rscript <mrgsolve-runner> drugs/<slug>/spec_pk1_oral.yml
