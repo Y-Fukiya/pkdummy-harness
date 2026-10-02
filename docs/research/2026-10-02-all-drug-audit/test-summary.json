@@ -1,0 +1,28 @@
+{
+  "python": "3.12.2",
+  "harness_check_exit_code": 0,
+  "tests": 1002,
+  "passed": 701,
+  "failed": 0,
+  "errors": 0,
+  "skipped": 301,
+  "skip_reasons": {
+    "SAS executable is unavailable; DATA/PROC SAS runtime validation was not performed": 89,
+    "SAS executable is unavailable; SAS runtime validation was not performed": 23,
+    "SAS executable is unavailable; standard SAS runtime validation was not performed": 187,
+    "PKNCA differential comparison requires R + PKNCA via rpy2 (not bundled).": 1,
+    "Quarto docx rendering is not available in this environment:\nError: Quarto DOCX render failed:\nsysctl: sysctl fmt -1 1024 1: Operation not permitted\nquarto script failed: unrecognized architecture \nIn addition: Warning message:\nIn system2(cmd, quoted_args, stdout = TRUE, stderr = TRUE) :\n  running command ''/usr/local/bin/quarto' 'render' 'pk_fixture_report.qmd' '--to' 'docx' '--output' 'pk_fixture_report.docx' 2>&1' had status 1\nExecution halted": 1
+  },
+  "external_probe": {
+    "execute": false,
+    "nlmixr2": "probe only passed",
+    "NONMEM": "executable not found",
+    "Phoenix": "executable not found"
+  },
+  "python310_initial_failures": [
+    "Japan background floating-point byte comparison",
+    "USA background floating-point byte comparison",
+    "fractional-second ISO datetime rejection message differs"
+  ],
+  "python310_compatibility": "Unresolved; declared minimum 3.10 cannot be treated as fully passing."
+}

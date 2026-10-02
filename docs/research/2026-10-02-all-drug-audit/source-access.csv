@@ -1,0 +1,81 @@
+slug,url,status,note
+abciximab,https://pubmed.ncbi.nlm.nih.gov/11907493/,failed,web openはcaptcha。下記Europe PMC公式抄録APIで補完。
+abciximab,https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:11907493&format=json&resultType=core,retrieved,原著抄録JSONをcurlで取得。
+abciximab,https://ascpt.onlinelibrary.wiley.com/doi/abs/10.1016/j.clpt.2003.11.342,failed,web/curlとも403。
+abciximab,https://pubmed.ncbi.nlm.nih.gov/14618072/,retrieved,総説抄録。原著研究ではない。
+abciximab,https://www.accessdata.fda.gov/drugsatfda_docs/label/2013/103575s5126lbl.pdf,retrieved,2013 FDA label全文。最新製品承認状況の確認ではない。
+aciclovir,https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=e8a0f9f8-294f-4dd6-bd55-10a6253f1aa8,retrieved,経口錠label全文、2026-04-29更新。
+aciclovir,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=69a98000-adef-4323-89a7-09e035a257d4,retrieved,注射label全文。
+aciclovir,https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:7048912&format=json&resultType=core,retrieved,総説抄録API取得、一次原著ではない。
+aciclovir,https://pubmed.ncbi.nlm.nih.gov/7048912/,failed,web open本文空。公式APIで抄録を補完。
+albuterol,https://pubmed.ncbi.nlm.nih.gov/3790406/,retrieved,原著抄録取得。本文の投与手順は未検証。
+alfentanil,https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=c965d63f-933b-4a83-88f6-c8c74159530b,retrieved,DailyMed PDF15ページ全文のClinical Pharmacology確認。
+alprazolam,https://pubmed.ncbi.nlm.nih.gov/8513649/,failed,web open空。Europe PMC抄録APIで補完。
+alprazolam,https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:8513649&format=json&resultType=core,retrieved,前者は総説、後者は1mg IV/経口6男性の原著抄録。
+alprazolam,https://pubmed.ncbi.nlm.nih.gov/6152055/,failed,web open空。Europe PMC抄録APIで補完。
+alprazolam,https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:6152055&format=json&resultType=core,retrieved,前者は総説、後者は1mg IV/経口6男性の原著抄録。
+alprazolam,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=29477df1-68aa-44b3-bf9e-80ecff6ce879,retrieved,ER label全文確認。別製剤の比較根拠。
+amikacin,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0b56f6df-a05d-4520-8bf0-d7cefe20f6ad,retrieved,DailyMed注射label全文。
+apixaban,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=095a08ac-cf0e-497e-a682-ddef38d6b29c,retrieved,DailyMed全文、2021-06-15更新。
+apixaban,https://pubmed.ncbi.nlm.nih.gov/34342172/,failed,web open空。公式APIで補完。
+apixaban,https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:34342172&format=json&resultType=core,retrieved,原著IV0.5–5mg/経口5mg抄録。
+atazanavir,https://pmc.ncbi.nlm.nih.gov/articles/PMC1635184/,retrieved,web openはcaptcha、curlでNCBI PMC全文HTML取得しTable3確認。
+atazanavir,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC1635184/fullTextXML,failed,API500。PMC HTMLで補完。
+buprenorphine,https://pmc.ncbi.nlm.nih.gov/articles/PMC3663890/,retrieved,web openはcaptcha、curlでNCBI PMC全文HTML取得。
+buprenorphine,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC3663890/fullTextXML,failed,API500。PMC HTMLで補完。
+carbamazepine,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=52f0f753-a70c-4572-a85c-97ea7a2601a9,failed,web toolで元URL inaccessible。
+carbamazepine,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c1876184-0323-4b06-b459-603b40c0c002,retrieved,別ANDAのER capsules label全文、2026版。元製品との同一性を主張しない。
+cda1,https://pmc.ncbi.nlm.nih.gov/articles/PMC2628753/,retrieved,web openはcaptcha、curlでNCBI PMC全文HTMLとTable2確認。
+cda1,https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:18502001&format=json&resultType=core,retrieved,原著抄録API取得。
+cda1,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC2628753/fullTextXML,failed,API500。PMC HTMLで補完。
+cimetidine,https://pubmed.ncbi.nlm.nih.gov/7363531/,retrieved,原著抄録取得。本文は未取得。
+cimetidine,https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=496e258d-a5fd-42da-9a86-73afc8be359b,retrieved,経口label全文のPharmacokinetics確認。
+clarithromycin,https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=b1bdf526-4f16-4130-b614-4cb678f060d7,retrieved,即放錠label全文、2021版。
+clarithromycin,https://pubmed.ncbi.nlm.nih.gov/10589373/,failed,web open空、公式APIで総説抄録補完。
+clarithromycin,https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:10589373&format=json&resultType=core,retrieved,総説抄録JSON。一次試験でない。
+clarithromycin,https://journals.asm.org/doi/10.1128/aac.01193-08,retrieved,ASM原著全文・Table1取得。
+dapagliflozin,https://www.accessdata.fda.gov/drugsatfda_docs/nda/2014/202293Orig1s000ClinPharmR.pdf,retrieved,FDA審査資料128頁の本文とTable 1/24を取得。access_level full_labelは便宜上、実体は規制審査資料。
+efavirenz,https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=13ca3456-e5bf-4bb1-af95-b1378658a358,retrieved,DailyMed現行ラベル本文取得。
+efavirenz,https://pubmed.ncbi.nlm.nih.gov/40851704/,retrieved,PubMed抄録取得。
+efavirenz,https://pmc.ncbi.nlm.nih.gov/articles/PMC12370162/,retrieved,webはCAPTCHA。curl HTTPSで原著HTML全文取得しMethods/Results/Discussionを照合。
+erythromycin,https://pmc.ncbi.nlm.nih.gov/articles/PMC3581054/,retrieved,webはCAPTCHA、curl HTTPSで同一PMC本文全体を取得。Table 2とMethodsを確認。
+ethinylestradiol,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=142c4b90-c9ab-45ce-9172-f1ea7d366686,retrieved,DailyMed配合錠kitラベル全文取得。
+ethinylestradiol,https://pmc.ncbi.nlm.nih.gov/articles/PMC4285808/,retrieved,PMC原著全文取得。ただし絶対F範囲の主張は当該研究で実測せず二次引用。
+felodipine,https://pubmed.ncbi.nlm.nih.gov/1782737/,failed,PubMed本文はCAPTCHAで未取得。検索結果に抄録はあるが単独検証には使用しない。
+felodipine,https://pubmed.ncbi.nlm.nih.gov/3327676/,retrieved,PubMedレビュー抄録を取得。原著ではない。
+felodipine,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=2e4298cf-02e9-49c7-9803-887161e1989a,retrieved,公式ERラベル全文取得。
+felodipine,https://pubmed.ncbi.nlm.nih.gov/3593901/,failed,一次試験候補を同定したが本文/抄録ページ取得は失敗。
+fluconazole,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f6e44764-c652-4926-b081-9111c82c7957,failed,web取得エラー。curl取得はDailyMedホーム画面で対象ラベル本文ではなかった。
+fluconazole,https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=4d7cf836-d115-456c-a636-6f05eae043cd,retrieved,別製造販売者の公式錠剤ラベル全文取得。IV/PO PK要約を含む。
+fluvoxamine,https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=35b377d9-5b7a-4d8e-b6c1-4291d02f5dae,retrieved,DailyMed公式錠剤ラベル全文取得。その他の二次サイトは数値確定の根拠に使わない。
+inulin,https://pmc.ncbi.nlm.nih.gov/articles/PMC1873801/,retrieved,webはCAPTCHA、curl HTTPSで同一原論文全文取得。Abstract/Methods/Discussionを直接照合。
+itraconazole,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b1274d78-1096-4ae3-8299-a2e94eaa0ea5,retrieved,DailyMed100 mgカプセルラベル全文取得。
+mefenamic_acid,https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=d0291319-ab3e-20c8-e053-2a95a90afabb,retrieved,DailyMed本文取得、oral CL21.23を直接確認。
+mefenamic_acid,https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/015034s046lbl.pdf,retrieved,FDA2024ラベルPDF全文取得、Table1の21.13を確認。
+metoprolol,https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=cbc32a80-717b-4cf2-b76a-6d03a3720419,retrieved,DailyMed ERラベル本文取得。
+metoprolol,https://pubmed.ncbi.nlm.nih.gov/6102500/,failed,PubMedページの本文取得は失敗。
+metoprolol,https://link.springer.com/article/10.2165/00003088-198005020-00004,retrieved,同一原著の出版社Summaryを取得。本文は購読が必要で未確認。
+mexiletine,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab73778b-6794-441c-b127-610a6d0733ea,retrieved,DailyMedカプセルラベル全文取得。
+mexiletine,https://pubmed.ncbi.nlm.nih.gov/10589372/,retrieved,レビュー抄録取得、一次試験本文ではない。
+mexiletine,https://www.medicines.org.uk/emc/product/13305/smpc,retrieved,Clinigen100 mgカプセルSmPC全文取得、改訂2024-09-30。
+moclobemide,https://pubmed.ncbi.nlm.nih.gov/3665338/,retrieved,PubMed通常HTMLはchallenge。NCBI公式efetch XMLから同一PMIDの抄録を実取得。本文未取得。
+montelukast,https://pubmed.ncbi.nlm.nih.gov/9429741/,retrieved,PubMed通常HTMLはchallenge。NCBI公式efetch XMLでAbstractを取得。
+motavizumab_medi_524,https://pmc.ncbi.nlm.nih.gov/articles/PMC3837853/,retrieved,Web openはchallenge。curlでPMC HTML本文159038 bytesを取得しMethods/Results/Table 2を確認。
+motavizumab_yte,https://pmc.ncbi.nlm.nih.gov/articles/PMC3837853/,retrieved,curlでPMC本文を取得。31名の健常成人、YTE16名/親抗体15名、0.3/3/15/30 mg/kg単回IV。
+omeprazole,https://pubmed.ncbi.nlm.nih.gov/2315973/,retrieved,PubMed抄録本文をWeb openで取得。全文未取得。
+omeprazole,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d8b466e0-a35e-4fba-9d43-4e6c0122e7ad,retrieved,DailyMed全ラベルを取得。repackaged label、2011-01-12更新、遅延放出カプセル。
+raltegravir,https://pmc.ncbi.nlm.nih.gov/articles/PMC3370715/,retrieved,Web openはchallengeだったがcurlでPMC全HTML取得。Methods/Results/Tableを直接確認。
+raltegravir,https://pmc.ncbi.nlm.nih.gov/articles/PMC3165315/,retrieved,Web openはchallengeだったがcurlでPMC全HTML取得。Methods/Results/Tableを直接確認。
+sildenafil,https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=7086e222-0f2b-4c02-84c0-4f8635c90993,retrieved,DailyMedラベルおよび2007 FDA添付文書PDF本文をWeb取得。FDA文書はclinical reviewではなくlabel。
+sildenafil,https://www.accessdata.fda.gov/drugsatfda_docs/label/2007/020895s027lbl.pdf,retrieved,DailyMedラベルおよび2007 FDA添付文書PDF本文をWeb取得。FDA文書はclinical reviewではなくlabel。
+sildenafil,https://pmc.ncbi.nlm.nih.gov/articles/PMC1874258/,retrieved,curlでPMC全HTML取得。追加一次PMC1874258は健常男性50 mg IV/経口クロスオーバーN=12; 100 mg食事試験N=34も報告。
+sildenafil,https://pmc.ncbi.nlm.nih.gov/articles/PMC1874251/,retrieved,curlでPMC全HTML取得。追加一次PMC1874258は健常男性50 mg IV/経口クロスオーバーN=12; 100 mg食事試験N=34も報告。
+sildenafil,https://labeling.pfizer.com/ShowLabeling.aspx?id=14610,failed,Pfizer Error.htmへリダイレクト。採用根拠に未使用。
+sufentanil,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8b580f3d-e3b5-4086-b093-87a980631147,retrieved,DailyMed全ラベルをWeb取得。改訂12/2025、§12.3を確認。
+tefibazumab,https://pmc.ncbi.nlm.nih.gov/articles/PMC1610062/,retrieved,curlでPMC本文119044 bytes取得。Methods/Abstract/Table 1を確認。
+tizanidine,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=043d9e51-bfa2-4add-9058-5ece332f7e99,retrieved,DailyMed全ラベル取得、updated2025-05-05/revised12-2020。
+triazolam,https://pubmed.ncbi.nlm.nih.gov/3567010/,retrieved,PubMed抄録およびDailyMed本文をWeb取得。PMC source_3の通常Web openはchallenge。
+triazolam,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ce6ddb53-89ca-4edf-a519-553d34ce7938,retrieved,PubMed抄録およびDailyMed本文をWeb取得。PMC source_3の通常Web openはchallenge。
+triazolam,https://pubmed.ncbi.nlm.nih.gov/7593708/,retrieved,NCBI公式efetch XMLで追加原著抄録を取得。
+verapamil,https://pubmed.ncbi.nlm.nih.gov/432439/,retrieved,PubMed通常HTMLはchallenge。NCBI公式efetch XMLでAbstractを取得。
+verapamil,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c9d71191-b32a-44f9-bc5a-283a06884c82,retrieved,DailyMed全ラベルをWeb取得。

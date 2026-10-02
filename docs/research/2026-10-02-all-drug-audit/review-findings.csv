@@ -1,0 +1,72 @@
+slug,severity,finding,action
+abciximab,P1,健康成人定常状態CLと出典未再取得Vssの合成。CL/Vからの1-comp半減期は約6.36hで短い血漿相とは異なる。,数値を調整して一致させず、同研究・同対象・同相を選び直す。
+abciximab,P1,100mg IV bolus fixtureはFDAの0.25mg/kg bolus＋infusionという収集資料の条件に対応しない。,デモ投与と臨床条件の適用範囲を明示し、臨床モデルへ採用しない。
+aciclovir,P1,CLは1.73m²基準、Vは70kg基準、Fは経口範囲下限で同一成人の推定セットではない。,同研究・同集団に揃え、BSAと体重の扱いを明示。
+aciclovir,P2,Vssを1-comp Vにしたため半減期は約1.65h。半減期2.5hとの差だけで原文数値を誤りとは判定できない。,構造上の限界を保ち、2-comp原著を選定する。
+albuterol,P1,Vを半減期で逆算しながらhalf-life targetを独立チェック風に扱いused_to_calibrate_cl_v=falseとする。,半減期整合は設計上の恒等式であることを明示。臨床妥当性の証拠にしない。
+alfentanil,P1,100mg IV bolus/healthy adult fixtureはlabelで述べる麻酔下・μg/kg単位の条件と対応せず、1-compのCL/Vは半減期約2.31hを生む。,デモ条件を臨床値セットと扱わない。原著集団とregimenを揃える。
+alprazolam,P1,100mg経口fixtureは今回根拠の1mg試験およびER labelのPK直線性確認範囲≤10mgから外れる。,単回製剤・用量・母集団をソースと一致させるまで臨床モデル採用保留。
+amikacin,P1,labelは成人IVを30–60分で投与する条件を記載するがspecはiv_bolus。血中初期濃度は同じ条件ではない。,投与時間・採血計画と根拠を揃え、bolus fixtureでCmaxの臨床妥当性を主張しない。
+amikacin,P2,CL/Vの半減期約2.77hは「少し2h超」の原文と比較すべきで、2.0hとの機械閾値だけでは転記誤りと決められない。,原文の精度・V定義を残して構造差を評価。
+apixaban,P1,pk_parsed.clearance_basis=apparentとderived.systemic=1.65L/hがtotal systemic CL資料と不整合。,CL/Fの誤分類を最優先で修正審査し、AUC3030.30ng*h/mLの妥当性も再評価。
+apixaban,P1,Vをhalf-lifeから逆算するので半減期の検証が循環する。,文献独立AUC/濃度系列で検証する。
+atazanavir,P1,scenario adult_healthy/100mg単回はHIV患者定常状態300mg+RTVまたは400mg単独を含む原研究と不一致。,対象・regimen・boosting条件を固定して採用範囲を再設定。
+atazanavir,P1,原著KA=.405/h・lag=.88hに対しspec KA1.2/h・lag.5h。CL/Vだけ転記しても原著モデルの濃度推移は再現しない。,absorptionと変動モデルの出典またはfixture仮定を明示。
+buprenorphine,P1,原著terminal25hとfixture10.35hの差は単なる転記修正で解決できず、原著V定義/表記差も残る。,原著確認を伴うモデル採用判断を行い、機械的half-life一致を臨床妥当性としない。
+buprenorphine,P2,原著2–16mg/1分、塩酸塩として用量表示、男性opioid使用者を現0.3mg/1hへ外挿。,低用量・使用歴・dose moietyに適合した資料を追加。
+carbamazepine,P1,反復ERパラメータをsingle200mg/KA1.2/lag.5に流用。単回と反復で自己誘導によるCL/half-life差をlabelが明示。,投与履歴・製剤・吸収をsourceと整合させる。
+carbamazepine,P1,V逆算にhalf-lifeを使いながらused_to_calibrate_cl_v=false。,導出依存を記録し、独立検証としない。
+cda1,P1,CL1mg/kg群とV.3mg/kg群を合成し、異なる幾何平均範囲中点をhalf-lifeにする。モデル警告が出ないことは同一性の根拠でない。,群・投与・統計を揃えた採用表を作る。
+cda1,P2,原著はinfusion、fixtureは100mg bolus。現specの観測終点は3938.4hであり、72hではない。投与形態と初期濃度の条件は原著と異なる。,infusion時間と用量群をsourceに合わせ、モデル生成値と独立した実測値で検証する。
+cimetidine,P1,潰瘍患者由来CL/V/Fをscenario adult_healthyへ流用。,populationと用量をsourceに結び付けるか健康成人の一次根拠を追加。
+cimetidine,P2,Vss/CLからは約1.31h、label約2hと違うがV定義・分布相の差と数値転記を分ける必要。,単純な半減期整合を理由にCL/Vを改変しない。
+clarithromycin,P1,apparent CL basis未確定と異研究CL/V合成によりderived systemic CL30.5025/V90.3も未検証。,一次CL定義とFの出典を確定するまでsystemic値を採用しない。
+clarithromycin,P1,原著の自己阻害による時間依存CLを定数化し、用量依存半減期を平均化している。,相互作用・反復条件を含む原モデルか、限定用途fixtureかを明示。
+dapagliflozin,P2,CL/Vの1-compartment半減期は約6.59 h。保存12.9 hと構造的に異なる。,既知のfixture制約を維持。
+dapagliflozin,P2,Fの換算式に丸め工程がなく、target SD1 hは原資料SD5.54 hとは異なる。,丸めと合成変動の由来を分離。
+efavirenz,P1,HIV反復600 mg/dayモデル由来CL/Fを、健常者100 mg単回・独自V/kaへ移植。,臨床用採用保留。対象モデル単位で再選定。
+efavirenz,P2,58 hをarithmetic_mean、SD1 hとするtargetは実測統計ではない。,fixtureの決定値と合成SDと表示。
+erythromycin,P1,原著は125 mgを30分静注、spec_pk1_iv.ymlはinfusion_h=1.0。,元研究を再現するなら投与時間の出典対応を修正。fixtureなら変更した条件を明記。
+erythromycin,P2,導出Vから同じ半減期へ戻るためCL/V整合性は独立妥当性ではない。,Vssとの差を維持し、モデル検証対象を別に用意。
+ethinylestradiol,P1,spec/targetsの100 mgは、CL/Fの由来EE0.02 mgの5000倍。,通常薬剤と同じ100 mg既定値を臨床シナリオとして扱わず、用量・製剤を根拠付き再設定。
+ethinylestradiol,P1,checked済みの半減期範囲が引用ラベルにない。,原典から再抽出し派生Vも再審査。
+felodipine,P1,血液CLを血漿CL/Vと同じ値として扱う根拠がない。100 mgも引用範囲5–40 mgを超える。,matrixと用量範囲を確定するまで臨床採用保留。
+felodipine,P2,CL/V由来t1/2≈5.39 hと24.5 hとの差は多相性・定義差を含む。,半減期に合わせた黙示のCL/V補正をしない。
+fluconazole,P2,checkedの元URLは対象本文が得られず、今回の支持は代替公式ラベルによる。,代替資料と製剤差を出典記録に保存。
+fluconazole,P2,半減期から導いたVなので半減期の再一致は自己整合性に限る。,臨床予測の検証と区別。
+fluvoxamine,P1,apparent volumeを無条件にV/Fと読み替え、CL/Fとsystemic値を派生している。,原著のparameter definition確定まで採用保留。
+fluvoxamine,P1,異なる年齢/反復投与の半減期要約から単回fixtureのCLを導出。ラベルは非線形性も記載。,同一条件パラメータセットを選び直す。
+inulin,P1,過去文献の一般的inulin space13 Lを当該試験Vssとして帰属。,原典の研究値と引用背景値を分離。
+inulin,P2,spec metaに旧CL7.2/V16/t1/2 2–4 hの要約が残る。現theta/targetsとは異なる。,監査後の同期修正時に旧metaを明示的整理。
+inulin,P2,原著5 g/1分静注から100 mg bolusへ変更している。,fixture条件の変更として明記。
+itraconazole,P2,>700 Lをexact700 L、範囲16–28を平均22 hとして読み出せる。,不等号/代表値フラグを下流にも保持。
+itraconazole,P2,線形1compは飽和代謝、反復曝露、活性代謝物を再現しない。,workflow用途に限定し薬剤ごとの臨床予測と区別。
+mefenamic_acid,P1,数値を支持する資料とprovenance source_idがずれている。,FDA版を特定して帰属修正するか元DailyMed版を回収。
+mefenamic_acid,P2,500 mg由来Vz/Fを100 mgへ用いる適合性は未検証。,同一用量モデルという表示を避ける。
+metoprolol,P1,Cmax比を絶対Fとする出典対応は成立していない。,AUCに基づく絶対F根拠を確定。
+metoprolol,P2,現行source_1にないVd範囲と別の半減期文言をchecked記録が引用する。,版固定とsource_id整理。
+mexiletine,P1,Vdという記述をV/F confirmedとし、×Fでsystemic V/CLを生成する根拠がない。,原著定義が確認できるまでbasis変換を保留。
+mexiletine,P1,source_1=DailyMedにsource_2=PubMedの5–9 L/kg文をexact_quoteとして保存。,引用とsource_idを同時に修復。
+mexiletine,P2,100 mgが塩酸塩量か遊離塩基量かscenarioにない。SmPCは100 mg HCl=83.10 mg base。,dose moietyを明示して濃度単位と整合させる。
+moclobemide,P2,spec.meta.sourcesにcanonical採用source_5がなく、旧PK要約が残る。,meta出典・要約とcanonical provenanceを対応させる。
+montelukast,P2,F provenanceの「10 mg経口、7日投与後」は抄録からは確定できない。若年者反復PKと高齢者F比較を混同する余地がある。,原著の試験別条件を分離して記録する。
+montelukast,P2,1区画fixtureの100 mg経口シナリオは引用研究10 mg経口/7 mg IVと異なる。,100 mgを臨床検証済み条件としない。
+motavizumab_medi_524,P2,原著は健常成人31名中親抗体15名、開発中の抗体比較。100 mg固定用量や小児・IM投与のパラメータとは一致しない。,候補抗体・成人・単回IV・用量群を必須メタデータにする。
+motavizumab_yte,P1,CL式の厳密中点55.5と採用55が食い違う。,数式provenanceを修復して下流CL/V/AUCへの影響を再評価。
+motavizumab_yte,P2,Vは半減期から導出しているのに、t_halfはCL/V再調整に使っていないと記載。,校正に使った半減期と独立検証ターゲットを区別する。
+omeprazole,P1,CLの単位換算が原値・式と一致せず、下流theta/AUCにも影響する。,43.56がどこから来たかを追跡して修復する。
+omeprazole,P1,100 mg経口へ30–40% Fを適用しているが、ラベルは40 mg超で非線形性を記載。,濃度やAUCを臨床予測値としない。対象条件に合った入力が必要。
+raltegravir,P1,相対F=1をabsolute Fと解釈したsystemic値は根拠がない。,systemic派生値を採用保留にし、relative/model Fとabsolute Fを別項目にする。
+raltegravir,P2,半減期GMをarithmetic_meanにしている。CL exact_quoteも誤対応。,統計型とsource locator/quoteを訂正する。
+sildenafil,P1,systemic IV Vss105 Lをapparent V/Fと誤解釈し、さらにFを乗じてsystemic V46.2 Lを生成している。,V basis/CL導出/theta/F適用を一括再評価する。
+sildenafil,P1,原資料平均F=.41に対し保存.44で、provenanceがない。,平均と範囲中点を混同しない入力へ修復する。
+sildenafil,P2,source_3の種類をFDA clinical reviewと記載し、存在しないexact_quoteを付けている。,文書種別labelと正確なlocatorへ訂正する。
+sufentanil,P2,targets.aucはラベル値なのに後段notesがDose/CLから計算した非独立targetと説明している。,source記載とnotesを統一する。
+sufentanil,P2,ファイル名spec_pk1_oralとtemplate名はgeneric外血管モデルで、現regimenはsublingual。吸収KA/ALAGはDSUVIA検証済み値ではない。,舌下というrouteを出力でも維持し、吸収fixture仮定を明記。
+tefibazumab,P1,原著はESRD血液透析患者なのにtargetsはadult_healthy。healthyの別研究との類似性の論述は同一条件の証明ではない。,対象集団を正しくラベル付けし、健常者モデルなら別の原著から完全なパラメータ組を採用する。
+tefibazumab,P2,100 mg固定量は原著10/20 mg/kg、30分点滴に一致せず、抗体一般の典型値と扱えない。,開発品名、研究集団、投与量・点滴時間を明示する。
+tizanidine,P2,CLと半減期の一致はVssと半減期からCLを作ったためで、モデル妥当性の独立根拠ではない。,CLをfixture_derivedに限定し臨床推定から隔離する。
+tizanidine,P2,100 mgはラベルのPK線形性検証1–20 mgの範囲外。,用量妥当性を未確認と明示し臨床用途から除外する。
+triazolam,P2,F44%のsource mappingがなく、systemic値は別研究Fを掛けて作っている。,Fの新規一次出典をレビューし、交差研究によるsystemic換算を限定する。
+triazolam,P2,100 mg fixtureはCL研究0.5 mgの200倍。原著による裏付けはない。,合成用テスト条件とし、用量の臨床適合は別途是正する。
+verapamil,P2,F provenanceのimmediate_release_oralは取得した抄録に製剤明記がなく未確認。spec.meta.sourcesから原著source_3も欠落。,製剤根拠を全文で確定しmeta出典に採用原著を反映する。

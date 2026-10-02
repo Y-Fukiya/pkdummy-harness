@@ -1,0 +1,4363 @@
+{
+  "audit_date": "2026-10-02",
+  "drug_count": 37,
+  "core_parameter_count": 148,
+  "verdict_counts": {
+    "VERIFIED_VALUE_ONLY": 24,
+    "UNVERIFIED": 5,
+    "CONTRADICTION": 14,
+    "FIXTURE_ASSUMPTION": 42,
+    "QUALIFIED": 46,
+    "DERIVED": 17
+  },
+  "access_counts": {
+    "abstract": 28,
+    "unavailable": 1,
+    "mixed": 27,
+    "full_label": 54,
+    "full_paper": 38
+  },
+  "clinical_accepted_count": 0,
+  "clinical_hold_count": 37,
+  "note": "All drugs reviewed, not all values verified. Derived/qualified/fixture labels do not constitute clinical model validation.",
+  "drugs": [
+    {
+      "slug": "abciximab",
+      "overall": "hold",
+      "summary": "CLの転記・換算は確認。Vssの一次学会抄録を再取得できず、短い血漿相をterminal targetに用いる点と異研究CL/Vの組合せは採用保留。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 10.98,
+              "unit": "L/h"
+            },
+            "basis": "systemic",
+            "absolute_L_h": 10.98
+          },
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "一次研究抄録の健康成人30例の定常状態CL 183±72 mL/min（平均±SD）と一致。183×60/1000=10.98 L/h。血管形成患者32例の単回CL 405±240とは区別が必要。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/11907493/",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:11907493&format=json&resultType=core"
+          ],
+          "locator": "原著Abstract Methods/Results",
+          "access_level": "abstract",
+          "required_action": "投与条件・分析対象を原著本文で固定し、同条件のVと組み合わせる。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 1.44,
+              "unit": "L/kg"
+            },
+            "basis": "systemic",
+            "absolute_L": 100.8
+          },
+          "verdict": "UNVERIFIED",
+          "reason": "保存1.44 L/kg×70=100.8 Lは算術上正しい。source_6は403で一次学会抄録を再読できず、Vssの数値・対象・測定法を今回確認済みにはできない。二次検索転載は採用しない。",
+          "source_urls": [
+            "https://ascpt.onlinelibrary.wiley.com/doi/abs/10.1016/j.clpt.2003.11.342"
+          ],
+          "locator": "source_6 conference abstract Results（未取得）",
+          "access_level": "unavailable",
+          "required_action": "学会抄録原本を取得し、Vss/Vz/Vc、安定狭心症患者と健康成人CLの適合を再審査。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value_h": 0.4166666666666667,
+            "range_h": [
+              0.3333333333333333,
+              0.5
+            ]
+          },
+          "verdict": "CONTRADICTION",
+          "reason": "総説抄録の血漿20–30分は確認できるが、25分という中点は観測平均ではない。FDA原文はfree plasmaの初期<10分・第2相約30分と、その後の遅い減衰を区別するため、targets.phase=terminal/summary=arithmetic_meanは支持されない。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/14618072/",
+            "https://www.accessdata.fda.gov/drugsatfda_docs/label/2013/103575s5126lbl.pdf"
+          ],
+          "locator": "FDA 2013 label Pharmacokinetics p2; review Abstract",
+          "access_level": "mixed",
+          "required_action": "分析対象と相を保持し、中点をfixture由来とする。長い終末相・血小板結合持続と混同しない。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "fraction": 1.0,
+            "model_F1": null
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "IVのF=1は全投与量を全身入力とする経路定義。実測経口バイオアベイラビリティではない。",
+          "source_urls": [
+            "https://www.accessdata.fda.gov/drugsatfda_docs/label/2013/103575s5126lbl.pdf"
+          ],
+          "locator": "FDA Pharmacokinetics",
+          "access_level": "full_label",
+          "required_action": "route_definitionとして明示し、経口・皮下・吸入製剤へ転用しない。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/11907493/",
+          "status": "failed",
+          "note": "web openはcaptcha。下記Europe PMC公式抄録APIで補完。"
+        },
+        {
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:11907493&format=json&resultType=core",
+          "status": "retrieved",
+          "note": "原著抄録JSONをcurlで取得。"
+        },
+        {
+          "url": "https://ascpt.onlinelibrary.wiley.com/doi/abs/10.1016/j.clpt.2003.11.342",
+          "status": "failed",
+          "note": "web/curlとも403。"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/14618072/",
+          "status": "retrieved",
+          "note": "総説抄録。原著研究ではない。"
+        },
+        {
+          "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2013/103575s5126lbl.pdf",
+          "status": "retrieved",
+          "note": "2013 FDA label全文。最新製品承認状況の確認ではない。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "健康成人定常状態CLと出典未再取得Vssの合成。CL/Vからの1-comp半減期は約6.36hで短い血漿相とは異なる。",
+          "action": "数値を調整して一致させず、同研究・同対象・同相を選び直す。"
+        },
+        {
+          "severity": "P1",
+          "finding": "100mg IV bolus fixtureはFDAの0.25mg/kg bolus＋infusionという収集資料の条件に対応しない。",
+          "action": "デモ投与と臨床条件の適用範囲を明示し、臨床モデルへ採用しない。"
+        }
+      ],
+      "audited_files": [
+        "drugs/abciximab/pk.yml",
+        "drugs/abciximab/targets.yml",
+        "drugs/abciximab/spec_pk1_iv.yml"
+      ],
+      "fixture_context": {
+        "theta": {
+          "CL": 10.98,
+          "V": 100.8
+        },
+        "regimen": {
+          "route": "iv_bolus",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        },
+        "sampling": {
+          "t_end_h": 72.0,
+          "dt_h": 0.5,
+          "include_t0": true
+        },
+        "implied_half_life_h": 6.363318378910972
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "aciclovir",
+      "overall": "hold",
+      "summary": "CL/Fの二重補正はないが、BSA基準CL、別総説Vss、経口F下限の混成。数値出典の存在と単回100mgモデル妥当性は別。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 19.62,
+              "unit": "L/h"
+            },
+            "basis": "systemic",
+            "absolute_L_h": 19.62
+          },
+          "verdict": "QUALIFIED",
+          "reason": "注射label Table2のCrCl>80mL/min/1.73m²でCL327mL/min/1.73m²を確認。19.62L/h/1.73m²への単位換算は正しいが、70kgの個人CLに換算した値ではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=69a98000-adef-4323-89a7-09e035a257d4"
+          ],
+          "locator": "Clinical Pharmacology Table2",
+          "access_level": "full_label",
+          "required_action": "単位にBSA基準を保持し、個人BSAとの写像がないことを機械可読にする。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 0.6666666666666666,
+              "unit": "L/kg"
+            },
+            "basis": "systemic",
+            "absolute_L": 46.666666666666664
+          },
+          "verdict": "QUALIFIED",
+          "reason": "総説抄録はVssが体重のおよそ2/3と記載し、2-comp動態も明記。46.666…Lは近似2/3L/kg×70kgであり、測定精度や1-comp Vzを意味しない。原著試験は未特定。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/7048912/",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:7048912&format=json&resultType=core"
+          ],
+          "locator": "review Abstract",
+          "access_level": "abstract",
+          "required_action": "Vssとして保持し、同条件原著でVの定義と集団を確認。spec.metaの旧0.6L/kgも追跡可能にする。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value_h": 2.5,
+            "range_h": [
+              2.5,
+              3.3
+            ]
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "経口labelは2.5–3.3hの範囲。2.5hはその下限で観測算術平均ではない。注射Table2の正常腎機能2.5hとも数値は一致するが、出典条件を置換しない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=e8a0f9f8-294f-4dd6-bd55-10a6253f1aa8",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=69a98000-adef-4323-89a7-09e035a257d4"
+          ],
+          "locator": "oral Table1; injection Table2",
+          "access_level": "full_label",
+          "required_action": "range/lower_boundとして記録し、targets.summary=arithmetic_meanを再評価。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "fraction": 0.1,
+            "model_F1": 0.1
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "経口labelの平均経口F範囲10–20%、用量増加とともに低下を確認。保存F=.1は範囲下限の選択で単回100mgの実測値ではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=e8a0f9f8-294f-4dd6-bd55-10a6253f1aa8"
+          ],
+          "locator": "Clinical Pharmacology Table1 footnote and Table2",
+          "access_level": "full_label",
+          "required_action": "100mg・製剤・食事条件に対応するFを特定するまで固定臨床値として採用しない。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=e8a0f9f8-294f-4dd6-bd55-10a6253f1aa8",
+          "status": "retrieved",
+          "note": "経口錠label全文、2026-04-29更新。"
+        },
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=69a98000-adef-4323-89a7-09e035a257d4",
+          "status": "retrieved",
+          "note": "注射label全文。"
+        },
+        {
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:7048912&format=json&resultType=core",
+          "status": "retrieved",
+          "note": "総説抄録API取得、一次原著ではない。"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/7048912/",
+          "status": "failed",
+          "note": "web open本文空。公式APIで抄録を補完。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "CLは1.73m²基準、Vは70kg基準、Fは経口範囲下限で同一成人の推定セットではない。",
+          "action": "同研究・同集団に揃え、BSAと体重の扱いを明示。"
+        },
+        {
+          "severity": "P2",
+          "finding": "Vssを1-comp Vにしたため半減期は約1.65h。半減期2.5hとの差だけで原文数値を誤りとは判定できない。",
+          "action": "構造上の限界を保ち、2-comp原著を選定する。"
+        }
+      ],
+      "audited_files": [
+        "drugs/aciclovir/pk.yml",
+        "drugs/aciclovir/targets.yml",
+        "drugs/aciclovir/spec_pk1_oral.yml"
+      ],
+      "fixture_context": {
+        "theta": {
+          "CL": 19.62,
+          "V": 46.666666666666664,
+          "KA": 1.2,
+          "F1": 0.1,
+          "ALAG1": 0.5
+        },
+        "regimen": {
+          "route": "oral",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        },
+        "sampling": {
+          "t_end_h": 72.0,
+          "dt_h": 0.5,
+          "include_t0": true
+        },
+        "implied_half_life_h": 1.6486681155010587
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "albuterol",
+      "overall": "hold",
+      "summary": "健康成人IV研究のCLと半減期を再確認。Vは観測値ではなく逆算であり、半減期チェックの独立性を否定するメタデータ修正が必要。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 28.8,
+              "unit": "L/h"
+            },
+            "basis": "systemic",
+            "absolute_L_h": 28.8
+          },
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "健康被験者10例IVでtotal plasma CL480±123mL/minを原著抄録で確認。×60/1000=28.8L/hは正しい。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/3790406/"
+          ],
+          "locator": "原著Abstract",
+          "access_level": "abstract",
+          "required_action": "投与量・infusion時間、分析方法は本文で確認し、現1mg/1hへの適用性を判定。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 160.38152230554428,
+              "unit": "L"
+            },
+            "basis": "systemic",
+            "absolute_L": 160.38152230554428
+          },
+          "verdict": "DERIVED",
+          "reason": "28.8×3.86/ln2=160.3815Lという1-comp逆算。直接報告Vではない。抄録のV表示には単位の文字連結があり、それを生の定量値として再解釈しない。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/3790406/"
+          ],
+          "locator": "保存conversion formula; Abstract",
+          "access_level": "abstract",
+          "required_action": "derived_volumeと表示し、原著のV定義・数値をPDFで確認。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value_h": 3.86,
+            "range_h": null
+          },
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "原著抄録のIV半減期3.86±0.83hと保存3.86hは一致。保存targetsのSD1.0hは原著SDではない。Vの導出入力でもあり独立検証用ではない。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/3790406/"
+          ],
+          "locator": "原著Abstract",
+          "access_level": "abstract",
+          "required_action": "文献SDとfixture SDを区別し、used_to_calibrate_cl_v=falseを訂正候補にする。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "fraction": 1.0,
+            "model_F1": null
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "IVのF=1は全投与量を全身入力とする経路定義。実測経口バイオアベイラビリティではない。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/3790406/"
+          ],
+          "locator": "IV cohort in original Abstract",
+          "access_level": "abstract",
+          "required_action": "route_definitionとして明示し、経口・皮下・吸入製剤へ転用しない。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/3790406/",
+          "status": "retrieved",
+          "note": "原著抄録取得。本文の投与手順は未検証。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "Vを半減期で逆算しながらhalf-life targetを独立チェック風に扱いused_to_calibrate_cl_v=falseとする。",
+          "action": "半減期整合は設計上の恒等式であることを明示。臨床妥当性の証拠にしない。"
+        }
+      ],
+      "audited_files": [
+        "drugs/albuterol/pk.yml",
+        "drugs/albuterol/targets.yml",
+        "drugs/albuterol/spec_pk1_iv.yml"
+      ],
+      "fixture_context": {
+        "theta": {
+          "CL": 28.8,
+          "V": 160.38152230554428
+        },
+        "regimen": {
+          "route": "iv",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 1.0,
+              "infusion_h": 1.0
+            }
+          }
+        },
+        "sampling": {
+          "t_end_h": 72.0,
+          "dt_h": 0.5,
+          "include_t0": true
+        },
+        "implied_half_life_h": 3.8599999999999994
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "alfentanil",
+      "overall": "hold",
+      "summary": "注射labelのCL・V範囲・半減期範囲は再確認。3-comp由来の代表値を1-compへまとめ、V上限と半減期中点を組むため臨床採用は保留。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 0.3,
+              "unit": "L/h/kg"
+            },
+            "basis": "systemic",
+            "absolute_L_h": 21.0
+          },
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "label平均血漿CL5mL/kg/minを確認。×70×60/1000=21L/h。成人/肝機能/併用麻酔薬等を条件として保持する必要。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=c965d63f-933b-4a83-88f6-c8c74159530b"
+          ],
+          "locator": "Clinical Pharmacology pp1–2",
+          "access_level": "full_label",
+          "required_action": "対象集団・投与条件を特定し、70kgは明示的fixture基準とする。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 1.0,
+              "unit": "L/kg"
+            },
+            "basis": "systemic",
+            "absolute_L": 70.0
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "labelのapparent V0.4–1L/kgはIVなのでV/Fを意味しない。保存70Lは上限1×70kgで、測定された平均VではなくVss/Vzの別もlabelだけでは確定できない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=c965d63f-933b-4a83-88f6-c8c74159530b"
+          ],
+          "locator": "Clinical Pharmacology p2",
+          "access_level": "full_label",
+          "required_action": "範囲と上限選択を保持し、Vの定義は原著で確定。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value_h": 1.675,
+            "range_h": [
+              1.5,
+              1.85
+            ]
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "labelは3-compで分布相1分/14分、終末90–111分。1.675hは(90+111)/2/60の中点で観測平均でない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=c965d63f-933b-4a83-88f6-c8c74159530b"
+          ],
+          "locator": "Clinical Pharmacology pp1–2",
+          "access_level": "full_label",
+          "required_action": "targetsのarithmetic_meanを中点由来に区別し、3-comp情報を落とさない。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "fraction": 1.0,
+            "model_F1": null
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "IVのF=1は全投与量を全身入力とする経路定義。実測経口バイオアベイラビリティではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=c965d63f-933b-4a83-88f6-c8c74159530b"
+          ],
+          "locator": "Description and Clinical Pharmacology",
+          "access_level": "full_label",
+          "required_action": "route_definitionとして明示し、経口・皮下・吸入製剤へ転用しない。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/downloadpdffile.cfm?setId=c965d63f-933b-4a83-88f6-c8c74159530b",
+          "status": "retrieved",
+          "note": "DailyMed PDF15ページ全文のClinical Pharmacology確認。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "100mg IV bolus/healthy adult fixtureはlabelで述べる麻酔下・μg/kg単位の条件と対応せず、1-compのCL/Vは半減期約2.31hを生む。",
+          "action": "デモ条件を臨床値セットと扱わない。原著集団とregimenを揃える。"
+        }
+      ],
+      "audited_files": [
+        "drugs/alfentanil/pk.yml",
+        "drugs/alfentanil/targets.yml",
+        "drugs/alfentanil/spec_pk1_iv.yml"
+      ],
+      "fixture_context": {
+        "theta": {
+          "CL": 21.0,
+          "V": 70.0
+        },
+        "regimen": {
+          "route": "iv_bolus",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        },
+        "sampling": {
+          "t_end_h": 72.0,
+          "dt_h": 0.5,
+          "include_t0": true
+        },
+        "implied_half_life_h": 2.3104906018664844
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "alprazolam",
+      "overall": "hold",
+      "summary": "総説の範囲は再取得できたがCL/V上限と半減期中点は一組の被験者推定値ではない。一次1mg試験と100mg fixtureは対応しない。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 0.09,
+              "unit": "L/h/kg"
+            },
+            "basis": "apparent",
+            "absolute_L_h": 6.3
+          },
+          "verdict": "QUALIFIED",
+          "reason": "総説抄録は1mg経口後CL0.7–1.5mL/min/kg。上限×70×60/1000=6.3L/hは算術上正しいが、CL/Fの定義と上限の研究集団は抄録だけで未確定。別の一次IV/経口試験は経口0.89を報告。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/8513649/",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:8513649&format=json&resultType=core",
+            "https://pubmed.ncbi.nlm.nih.gov/6152055/",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:6152055&format=json&resultType=core"
+          ],
+          "locator": "review Abstract; primary crossover trial Abstract",
+          "access_level": "abstract",
+          "required_action": "総説の元研究まで辿り、F補正済みか確定するまでbasis=confirmedを撤回候補とする。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 1.3,
+              "unit": "L/kg"
+            },
+            "basis": "apparent",
+            "absolute_L": 91.0
+          },
+          "verdict": "QUALIFIED",
+          "reason": "総説の0.8–1.3L/kgの上限1.3×70=91L。抄録のみでV/F、Vss/Vzを確認できない。一次1mg crossoverでは経口0.84L/kgであり、異試験の上限を一律成人に置けない。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/8513649/",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:8513649&format=json&resultType=core",
+            "https://pubmed.ncbi.nlm.nih.gov/6152055/",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:6152055&format=json&resultType=core"
+          ],
+          "locator": "review/primary Abstract",
+          "access_level": "abstract",
+          "required_action": "値の定義・F補正と同じCLの研究を確認。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value_h": 12.5,
+            "range_h": [
+              9.0,
+              16.0
+            ]
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "総説9–16hから12.5hを中点化。一次crossoverの経口11.8hという実測平均とは異なり、保存値を観測平均と扱わない。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/8513649/",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:8513649&format=json&resultType=core",
+            "https://pubmed.ncbi.nlm.nih.gov/6152055/",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:6152055&format=json&resultType=core"
+          ],
+          "locator": "review/primary Abstract",
+          "access_level": "abstract",
+          "required_action": "範囲中点とtargets arithmetic_meanを区別する。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "fraction": 0.9,
+            "model_F1": 1.0
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "総説の80–100%から0.9を選んだもの。一次1mg crossoverは平均0.92、ER labelは約0.9を記載するが、ERと現specの製剤未指定・KA1.2の同一性はない。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/8513649/",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:8513649&format=json&resultType=core",
+            "https://pubmed.ncbi.nlm.nih.gov/6152055/",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:6152055&format=json&resultType=core",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=29477df1-68aa-44b3-bf9e-80ecff6ce879"
+          ],
+          "locator": "review Abstract; primary Abstract; ER label12.3",
+          "access_level": "mixed",
+          "required_action": "製剤・食事・用量別Fを固定し、apparentモデルF1=1と実測Fを区別。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/8513649/",
+          "status": "failed",
+          "note": "web open空。Europe PMC抄録APIで補完。"
+        },
+        {
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:8513649&format=json&resultType=core",
+          "status": "retrieved",
+          "note": "前者は総説、後者は1mg IV/経口6男性の原著抄録。"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/6152055/",
+          "status": "failed",
+          "note": "web open空。Europe PMC抄録APIで補完。"
+        },
+        {
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:6152055&format=json&resultType=core",
+          "status": "retrieved",
+          "note": "前者は総説、後者は1mg IV/経口6男性の原著抄録。"
+        },
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=29477df1-68aa-44b3-bf9e-80ecff6ce879",
+          "status": "retrieved",
+          "note": "ER label全文確認。別製剤の比較根拠。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "100mg経口fixtureは今回根拠の1mg試験およびER labelのPK直線性確認範囲≤10mgから外れる。",
+          "action": "単回製剤・用量・母集団をソースと一致させるまで臨床モデル採用保留。"
+        }
+      ],
+      "audited_files": [
+        "drugs/alprazolam/pk.yml",
+        "drugs/alprazolam/targets.yml",
+        "drugs/alprazolam/spec_pk1_oral.yml"
+      ],
+      "fixture_context": {
+        "theta": {
+          "CL": 6.3,
+          "V": 91.0,
+          "KA": 1.2,
+          "F1": 1.0,
+          "ALAG1": 0.5
+        },
+        "regimen": {
+          "route": "oral",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        },
+        "sampling": {
+          "t_end_h": 75.0,
+          "dt_h": 0.5,
+          "include_t0": true
+        },
+        "implied_half_life_h": 10.012125941421433
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "amikacin",
+      "overall": "hold",
+      "summary": "CL約100mL/min・V24Lはlabelどおり。半減期の「2時間をやや超える」を厳密な2.0hへ変えた点、IV bolus条件は修正審査が必要。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 6.0,
+              "unit": "L/h"
+            },
+            "basis": "systemic",
+            "absolute_L_h": 6.0
+          },
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "正常腎機能成人の平均血清CL約100mL/minと一致。×60/1000=6L/h。約値であり腎CL94mL/minとは区別。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0b56f6df-a05d-4520-8bf0-d7cefe20f6ad"
+          ],
+          "locator": "Clinical Pharmacology General",
+          "access_level": "full_label",
+          "required_action": "約値・正常腎機能・血清matrixを保持。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 24.0,
+              "unit": "L"
+            },
+            "basis": "systemic",
+            "absolute_L": 24.0
+          },
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "正常成人のmean total apparent V24Lは一致。IV文脈のapparentはV/Fではない。併記28%体重を70kgへ換算した値ではなく、24Lは原文絶対値。Vss/Vzの定義は未確定。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0b56f6df-a05d-4520-8bf0-d7cefe20f6ad"
+          ],
+          "locator": "Clinical Pharmacology General",
+          "access_level": "full_label",
+          "required_action": "24L=70kgの28%と誤解させず、元試験のV定義を確認。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value_h": 2.0,
+            "range_h": [
+              2.0,
+              2.0
+            ]
+          },
+          "verdict": "CONTRADICTION",
+          "reason": "原文は2時間をやや超えると記述する。保存2.0hおよび範囲[2,2]は厳密な原文転記ではなく、定性的な近似を確定値へ変えている。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0b56f6df-a05d-4520-8bf0-d7cefe20f6ad"
+          ],
+          "locator": "Clinical Pharmacology General",
+          "access_level": "full_label",
+          "required_action": "原文修飾を構造化し、exact observed meanとして扱わない。推測で2.xを補わない。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "fraction": 1.0,
+            "model_F1": null
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "IVのF=1は全投与量を全身入力とする経路定義。実測経口バイオアベイラビリティではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0b56f6df-a05d-4520-8bf0-d7cefe20f6ad"
+          ],
+          "locator": "Clinical Pharmacology Intravenous Administration",
+          "access_level": "full_label",
+          "required_action": "route_definitionとして明示し、経口・皮下・吸入製剤へ転用しない。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0b56f6df-a05d-4520-8bf0-d7cefe20f6ad",
+          "status": "retrieved",
+          "note": "DailyMed注射label全文。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "labelは成人IVを30–60分で投与する条件を記載するがspecはiv_bolus。血中初期濃度は同じ条件ではない。",
+          "action": "投与時間・採血計画と根拠を揃え、bolus fixtureでCmaxの臨床妥当性を主張しない。"
+        },
+        {
+          "severity": "P2",
+          "finding": "CL/Vの半減期約2.77hは「少し2h超」の原文と比較すべきで、2.0hとの機械閾値だけでは転記誤りと決められない。",
+          "action": "原文の精度・V定義を残して構造差を評価。"
+        }
+      ],
+      "audited_files": [
+        "drugs/amikacin/pk.yml",
+        "drugs/amikacin/targets.yml",
+        "drugs/amikacin/spec_pk1_iv.yml"
+      ],
+      "fixture_context": {
+        "theta": {
+          "CL": 6.0,
+          "V": 24.0
+        },
+        "regimen": {
+          "route": "iv_bolus",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        },
+        "sampling": {
+          "t_end_h": 72.0,
+          "dt_h": 0.5,
+          "include_t0": true
+        },
+        "implied_half_life_h": 2.772588722239781
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "apixaban",
+      "overall": "hold",
+      "summary": "total CLをCL/Fと解釈したbasisが一次IV研究と不整合。現10mg経口fixtureはFを二重に誤解し得るため優先修正審査。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 3.3,
+              "unit": "L/h"
+            },
+            "basis": "apparent",
+            "absolute_L_h": 3.3
+          },
+          "verdict": "CONTRADICTION",
+          "reason": "label3.3L/hの数値は一致するがtotal CLをCL/Fへ読み替える根拠はない。一次IV研究はtotal plasma CL3.2–3.5L/hを報告。保存systemic=3.3×.5=1.65L/hはこのbasisと不整合。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=095a08ac-cf0e-497e-a682-ddef38d6b29c",
+            "https://pubmed.ncbi.nlm.nih.gov/34342172/",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:34342172&format=json&resultType=core"
+          ],
+          "locator": "label12.3 Elimination; IV trial Abstract",
+          "access_level": "mixed",
+          "required_action": "systemic/apparentを原著で固定し、spec/derived/AUCを一貫して再パラメータ化。監査では推測修正しない。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 57.130723619202946,
+              "unit": "L"
+            },
+            "basis": "apparent",
+            "absolute_L": 57.130723619202946
+          },
+          "verdict": "DERIVED",
+          "reason": "57.1307Lは3.3×12/ln2からの1-comp逆算でlabelの実測Vではない。labelはVss約21L、IV原著はVss17–26L。Vssと逆算Vz相当を混同しないが、保存V/FというbasisはCL誤分類を継承。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=095a08ac-cf0e-497e-a682-ddef38d6b29c",
+            "https://pubmed.ncbi.nlm.nih.gov/34342172/",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:34342172&format=json&resultType=core"
+          ],
+          "locator": "label12.3 Distribution; stored conversion",
+          "access_level": "mixed",
+          "required_action": "CL basis解決後、Vの定義と導出を再審査。21Lへ単純置換して半減期を合わせない。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value_h": 12.0,
+            "range_h": null
+          },
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "labelの経口後apparent半減期約12hと一致。Vの導出入力なのでhalf-life一致は独立した臨床検証ではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=095a08ac-cf0e-497e-a682-ddef38d6b29c"
+          ],
+          "locator": "label12.3 Elimination",
+          "access_level": "full_label",
+          "required_action": "約値と導出への依存関係を記録。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "fraction": 0.5,
+            "model_F1": 1.0
+          },
+          "verdict": "QUALIFIED",
+          "reason": "label F約50%は≤10mg条件で確認。現spec10mgはその範囲内。ただしCL3.3をsystemicと見ると、F1=1/CL3.3によるAUCはF=.5/CL3.3の約2倍となる。IV原著F66.2%は別試験値で自動置換しない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=095a08ac-cf0e-497e-a682-ddef38d6b29c",
+            "https://pubmed.ncbi.nlm.nih.gov/34342172/",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:34342172&format=json&resultType=core"
+          ],
+          "locator": "label12.3 Absorption; IV/oral trial Abstract",
+          "access_level": "mixed",
+          "required_action": "Fの分母とモデルbasisを同じ研究・条件に統一。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=095a08ac-cf0e-497e-a682-ddef38d6b29c",
+          "status": "retrieved",
+          "note": "DailyMed全文、2021-06-15更新。"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/34342172/",
+          "status": "failed",
+          "note": "web open空。公式APIで補完。"
+        },
+        {
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:34342172&format=json&resultType=core",
+          "status": "retrieved",
+          "note": "原著IV0.5–5mg/経口5mg抄録。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "pk_parsed.clearance_basis=apparentとderived.systemic=1.65L/hがtotal systemic CL資料と不整合。",
+          "action": "CL/Fの誤分類を最優先で修正審査し、AUC3030.30ng*h/mLの妥当性も再評価。"
+        },
+        {
+          "severity": "P1",
+          "finding": "Vをhalf-lifeから逆算するので半減期の検証が循環する。",
+          "action": "文献独立AUC/濃度系列で検証する。"
+        }
+      ],
+      "audited_files": [
+        "drugs/apixaban/pk.yml",
+        "drugs/apixaban/targets.yml",
+        "drugs/apixaban/spec_pk1_oral.yml"
+      ],
+      "fixture_context": {
+        "theta": {
+          "CL": 3.3,
+          "V": 57.130723619202946,
+          "KA": 1.2,
+          "F1": 1.0,
+          "ALAG1": 0.5
+        },
+        "regimen": {
+          "route": "oral",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 10.0
+            }
+          }
+        },
+        "sampling": {
+          "t_end_h": 72.0,
+          "dt_h": 0.5,
+          "include_t0": true
+        },
+        "implied_half_life_h": 11.999999999999998
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "atazanavir",
+      "overall": "hold",
+      "summary": "CL/FとV/Fの数値・定義は原著Table3と一致するが、HIV定常状態・RTV条件をhealthy単回100mgへ流用。吸収パラメータも原モデルと異なる。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 12.9,
+              "unit": "L/h"
+            },
+            "basis": "apparent",
+            "absolute_L_h": 12.9
+          },
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "原著Table3 CL/F12.9L/hを確認。HIV患者214例・定常状態・RTV非併用を基準とし、RTVはCLを46%減らすモデル。無条件健康成人のCLではない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1635184/"
+          ],
+          "locator": "Table3; Materials and Methods; covariate Results",
+          "access_level": "full_paper",
+          "required_action": "HIV/定常状態/RTVをscenarioに結び、基準条件を明示。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 88.3,
+              "unit": "L"
+            },
+            "basis": "apparent",
+            "absolute_L": 88.3
+          },
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "Table3 V/F88.3Lと一致。原著は1-comp oral population modelであり、絶対Vへの換算には未知Fが必要。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1635184/"
+          ],
+          "locator": "Table3; Structural model",
+          "access_level": "full_paper",
+          "required_action": "同じモデルのKA、lag、relative F・変動モデルも含めた適用性を確認。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value_h": 4.6,
+            "range_h": [
+              4.6,
+              4.6
+            ]
+          },
+          "verdict": "QUALIFIED",
+          "reason": "原著はRTVなし4.6h、あり8.8h。4.6hを保持したことは確認できるがunboosted条件を落とせない。CL/Vの丸められた点推定からは約4.74hとなり、転記矛盾とは限らない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1635184/"
+          ],
+          "locator": "Abstract and Results ritonavir covariate",
+          "access_level": "full_paper",
+          "required_action": "unboostedか明記し、臨床平均やSDの根拠を補う。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "fraction": null,
+            "model_F1": 1.0
+          },
+          "verdict": "UNVERIFIED",
+          "reason": "絶対Fはnullで、これは未測定・未特定として妥当。原著F_sparse=.81とF_rich=1は相対F/服薬状況のモデルで絶対吸収率ではない。spec F1=1はCL/F表現上の規約。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1635184/"
+          ],
+          "locator": "Table3 footnotes; Structural model",
+          "access_level": "full_paper",
+          "required_action": "絶対Fを埋めず、relative F、normalization F1を分離する。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1635184/",
+          "status": "retrieved",
+          "note": "web openはcaptcha、curlでNCBI PMC全文HTML取得しTable3確認。"
+        },
+        {
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC1635184/fullTextXML",
+          "status": "failed",
+          "note": "API500。PMC HTMLで補完。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "scenario adult_healthy/100mg単回はHIV患者定常状態300mg+RTVまたは400mg単独を含む原研究と不一致。",
+          "action": "対象・regimen・boosting条件を固定して採用範囲を再設定。"
+        },
+        {
+          "severity": "P1",
+          "finding": "原著KA=.405/h・lag=.88hに対しspec KA1.2/h・lag.5h。CL/Vだけ転記しても原著モデルの濃度推移は再現しない。",
+          "action": "absorptionと変動モデルの出典またはfixture仮定を明示。"
+        }
+      ],
+      "audited_files": [
+        "drugs/atazanavir/pk.yml",
+        "drugs/atazanavir/targets.yml",
+        "drugs/atazanavir/spec_pk1_oral.yml"
+      ],
+      "fixture_context": {
+        "theta": {
+          "CL": 12.9,
+          "V": 88.3,
+          "KA": 1.2,
+          "F1": 1.0,
+          "ALAG1": 0.5
+        },
+        "regimen": {
+          "route": "oral",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        },
+        "sampling": {
+          "t_end_h": 72.0,
+          "dt_h": 0.5,
+          "include_t0": true
+        },
+        "implied_half_life_h": 4.744565584763036
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "buprenorphine",
+      "overall": "hold",
+      "summary": "CLは原著と一致。V806は原著806.4の丸めで、terminal半減期25hの代わりに10.35hを逆算したfixture。原著Table1のV単位も内部確認が必要。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 54.0,
+              "unit": "L/h"
+            },
+            "basis": "systemic",
+            "absolute_L_h": 54.0
+          },
+          "verdict": "QUALIFIED",
+          "reason": "原著5名の健康男性・非依存IV opioid使用者、2–16mg IV（1分）で全用量平均±SE54.0±1.7L/hを確認。現0.3mg/1h・healthy一般成人とは異なる。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3663890/"
+          ],
+          "locator": "Results; Table1; Methods2.1–2.3",
+          "access_level": "full_paper",
+          "required_action": "集団・塩酸塩dose basis・投与時間・外挿範囲を固定。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 806.0,
+              "unit": "L"
+            },
+            "basis": "systemic",
+            "absolute_L": 806.0
+          },
+          "verdict": "CONTRADICTION",
+          "reason": "本文/表は806.4±38.2L、保存raw_value806は丸めでexact source値でない。表はVz(predicted)/Fかつ単位欄L/hとあり、本文Lとの原著内部表記差もある。Vss/Vcとはみなせない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3663890/"
+          ],
+          "locator": "Results and Table1 Vz(predicted)/F row and footnote",
+          "access_level": "full_paper",
+          "required_action": "806.4→806の変更理由を保存し、原著著者/補足でV定義・単位・CL/half-lifeとの関係を確認。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value_h": 10.345863472802147,
+            "range_h": null
+          },
+          "verdict": "DERIVED",
+          "reason": "10.3459h=ln2×806/54は計算上正しいが原著terminal平均±SE25.0±1.3hではない。保存provenanceは導出と記載する一方、targets.phase=terminal/summary=arithmetic_meanは実測との誤認を招く。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3663890/"
+          ],
+          "locator": "Results; Table1 t1/2 Lambda z",
+          "access_level": "full_paper",
+          "required_action": "observed terminal25hとfixture calculated10.35hを別項目に分け、独立チェックとしない。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "fraction": 1.0,
+            "model_F1": null
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "IVのF=1は全投与量を全身入力とする経路定義。実測経口バイオアベイラビリティではない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3663890/"
+          ],
+          "locator": "Methods IV administration",
+          "access_level": "full_paper",
+          "required_action": "route_definitionとして明示し、経口・皮下・吸入製剤へ転用しない。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3663890/",
+          "status": "retrieved",
+          "note": "web openはcaptcha、curlでNCBI PMC全文HTML取得。"
+        },
+        {
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC3663890/fullTextXML",
+          "status": "failed",
+          "note": "API500。PMC HTMLで補完。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "原著terminal25hとfixture10.35hの差は単なる転記修正で解決できず、原著V定義/表記差も残る。",
+          "action": "原著確認を伴うモデル採用判断を行い、機械的half-life一致を臨床妥当性としない。"
+        },
+        {
+          "severity": "P2",
+          "finding": "原著2–16mg/1分、塩酸塩として用量表示、男性opioid使用者を現0.3mg/1hへ外挿。",
+          "action": "低用量・使用歴・dose moietyに適合した資料を追加。"
+        }
+      ],
+      "audited_files": [
+        "drugs/buprenorphine/pk.yml",
+        "drugs/buprenorphine/targets.yml",
+        "drugs/buprenorphine/spec_pk1_iv.yml"
+      ],
+      "fixture_context": {
+        "theta": {
+          "CL": 54.0,
+          "V": 806.0
+        },
+        "regimen": {
+          "route": "iv",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 0.3,
+              "infusion_h": 1.0
+            }
+          }
+        },
+        "sampling": {
+          "t_end_h": 72.0,
+          "dt_h": 0.5,
+          "include_t0": true
+        },
+        "implied_half_life_h": 10.345863472802147
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "carbamazepine",
+      "overall": "hold",
+      "summary": "元label URLは再取得失敗。別公式ER labelが反復投与CL80mL/minと12–17hを支持するが、現200mg単回への適用は未支持。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 4.8,
+              "unit": "L/h"
+            },
+            "basis": "apparent",
+            "absolute_L_h": 4.8
+          },
+          "verdict": "QUALIFIED",
+          "reason": "別公式ER labelは単回CL/F25±5、反復80±30mL/minを明示。保存4.8L/h=80×60/1000は反復値として正しいが、現single scenarioへは自動適用できない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=52f0f753-a70c-4572-a85c-97ea7a2601a9",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c1876184-0323-4b06-b459-603b40c0c002"
+          ],
+          "locator": "Alternative ER label Clinical Pharmacology Pharmacokinetics",
+          "access_level": "full_label",
+          "required_action": "自己誘導の定常状態と単回を区別し、元sourceの版・製剤も確定。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 100.41157484587185,
+              "unit": "L"
+            },
+            "basis": "apparent",
+            "absolute_L": 100.41157484587185
+          },
+          "verdict": "DERIVED",
+          "reason": "4.8×14.5/ln2=100.4116Lは1-comp V/F逆算で観測Vでない。反復CLと半減期中点を入力としているため独立に検証されたVではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c1876184-0323-4b06-b459-603b40c0c002"
+          ],
+          "locator": "stored formula; alternative label Pharmacokinetics",
+          "access_level": "full_label",
+          "required_action": "derived と記載し、単回/反復条件を合わせて導出の必要性を再評価。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value_h": 14.5,
+            "range_h": null
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "別ER labelは単回35–40h、反復12–17h。保存14.5hは後者の中点。単回初回200mgの観測平均としては支持されない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c1876184-0323-4b06-b459-603b40c0c002"
+          ],
+          "locator": "Alternative ER label Pharmacokinetics",
+          "access_level": "full_label",
+          "required_action": "autoinduced steady-state fixtureか初回投与か明示し、target summaryを修正審査。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "fraction": 1.0,
+            "model_F1": 1.0
+          },
+          "verdict": "UNVERIFIED",
+          "reason": "pk_parsed F=1の絶対バイオアベイラビリティ根拠がない。モデルF1=1はCL/FとV/Fを使用するための正規化値で、完全吸収の証拠ではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c1876184-0323-4b06-b459-603b40c0c002"
+          ],
+          "locator": "alternative label and stored apparent basis",
+          "access_level": "full_label",
+          "required_action": "実測Fは未確認とし、normalization F1と別フィールドに分離。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=52f0f753-a70c-4572-a85c-97ea7a2601a9",
+          "status": "failed",
+          "note": "web toolで元URL inaccessible。"
+        },
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c1876184-0323-4b06-b459-603b40c0c002",
+          "status": "retrieved",
+          "note": "別ANDAのER capsules label全文、2026版。元製品との同一性を主張しない。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "反復ERパラメータをsingle200mg/KA1.2/lag.5に流用。単回と反復で自己誘導によるCL/half-life差をlabelが明示。",
+          "action": "投与履歴・製剤・吸収をsourceと整合させる。"
+        },
+        {
+          "severity": "P1",
+          "finding": "V逆算にhalf-lifeを使いながらused_to_calibrate_cl_v=false。",
+          "action": "導出依存を記録し、独立検証としない。"
+        }
+      ],
+      "audited_files": [
+        "drugs/carbamazepine/pk.yml",
+        "drugs/carbamazepine/targets.yml",
+        "drugs/carbamazepine/spec_pk1_oral.yml"
+      ],
+      "fixture_context": {
+        "theta": {
+          "CL": 4.8,
+          "V": 100.41157484587185,
+          "KA": 1.2,
+          "F1": 1.0,
+          "ALAG1": 0.5
+        },
+        "regimen": {
+          "route": "oral",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 200.0
+            }
+          }
+        },
+        "sampling": {
+          "t_end_h": 72.0,
+          "dt_h": 0.5,
+          "include_t0": true
+        },
+        "implied_half_life_h": 14.5
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "cda1",
+      "overall": "hold",
+      "summary": "原著本文まで取得し数値所在を確認したが、CLとVは異なる用量群、半減期は幾何平均範囲の中点。単一集団のパラメータセットとして採用不可。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 8.4e-05,
+              "unit": "L/h/kg"
+            },
+            "basis": "systemic",
+            "absolute_L_h": 0.00588
+          },
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "Table2の1mg/kg群median CL.0014mL/min/kgを確認（他群にも同値あり）。.0014×60/1000×70=.00588L/hは正しい。群中央値でpopulation arithmetic meanではない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC2628753/"
+          ],
+          "locator": "Table2 CL,1.0mg/kg row; footnote median(range)",
+          "access_level": "full_paper",
+          "required_action": "Vと同じ群・要約統計で選定し、体重換算仮定を保持。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 0.07,
+              "unit": "L/kg"
+            },
+            "basis": "systemic",
+            "absolute_L": 4.9
+          },
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "Table2 Vd.070L/kgは0.3mg/kg群中央値、×70=4.9L。CL選択1mg/kg群のVdは.081L/kgであり、現CL/Vは同群ではない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC2628753/"
+          ],
+          "locator": "Table2 Vd,0.3mg/kg row",
+          "access_level": "full_paper",
+          "required_action": "同群のCL/V/terminal half-lifeを一組として検討。Vss/Vzの定義はMethodsから追加確認。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value_h": 685.2,
+            "range_h": [
+              607.2,
+              763.2
+            ]
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "抄録の群別geometric mean25.3–31.8日を確認。保存685.2h=(25.3+31.8)/2×24は群間範囲の中点。Table2中央値550–728hとは要約統計が異なる。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC2628753/",
+            "https://pubmed.ncbi.nlm.nih.gov/18502001/",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:18502001&format=json&resultType=core"
+          ],
+          "locator": "Abstract; Table2 median(range)",
+          "access_level": "mixed",
+          "required_action": "targets arithmetic_meanを撤回候補とし、同群同統計量を選ぶ。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "fraction": 1.0,
+            "model_F1": null
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "IVのF=1は全投与量を全身入力とする経路定義。実測経口バイオアベイラビリティではない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC2628753/"
+          ],
+          "locator": "Methods intravenous infusion",
+          "access_level": "full_paper",
+          "required_action": "route_definitionとして明示し、経口・皮下・吸入製剤へ転用しない。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2628753/",
+          "status": "retrieved",
+          "note": "web openはcaptcha、curlでNCBI PMC全文HTMLとTable2確認。"
+        },
+        {
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:18502001&format=json&resultType=core",
+          "status": "retrieved",
+          "note": "原著抄録API取得。"
+        },
+        {
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC2628753/fullTextXML",
+          "status": "failed",
+          "note": "API500。PMC HTMLで補完。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "CL1mg/kg群とV.3mg/kg群を合成し、異なる幾何平均範囲中点をhalf-lifeにする。モデル警告が出ないことは同一性の根拠でない。",
+          "action": "群・投与・統計を揃えた採用表を作る。"
+        },
+        {
+          "severity": "P2",
+          "finding": "原著はinfusion、fixtureは100mg bolus。現specの観測終点は3938.4hであり、72hではない。投与形態と初期濃度の条件は原著と異なる。",
+          "action": "infusion時間と用量群をsourceに合わせ、モデル生成値と独立した実測値で検証する。"
+        }
+      ],
+      "audited_files": [
+        "drugs/cda1/pk.yml",
+        "drugs/cda1/targets.yml",
+        "drugs/cda1/spec_pk1_iv.yml"
+      ],
+      "fixture_context": {
+        "theta": {
+          "CL": 0.00588,
+          "V": 4.9
+        },
+        "regimen": {
+          "route": "iv_bolus",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        },
+        "sampling": {
+          "t_end_h": 3938.4000000000005,
+          "dt_h": 0.5,
+          "include_t0": true
+        },
+        "implied_half_life_h": 577.622650466621
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "cimetidine",
+      "overall": "hold",
+      "summary": "200mg IV/経口の潰瘍患者研究でCL495、Vss.8、F約.6を確認。healthy100mgへの適用とVssを1-comp Vへ置く妥当性は別途必要。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 29.7,
+              "unit": "L/h"
+            },
+            "basis": "systemic",
+            "absolute_L_h": 29.7
+          },
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "胃潰瘍6名/十二指腸潰瘍6名、28–64歳の200mg IV/経口試験でplasma CL495mL/minを確認。×60/1000=29.7L/h。pk_raw500は旧丸め値で解析値と異なる。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/7363531/"
+          ],
+          "locator": "原著Abstract",
+          "access_level": "abstract",
+          "required_action": "原文495とlegacy500を分離し、年齢・腎機能の条件を確認。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 0.8,
+              "unit": "L/kg"
+            },
+            "basis": "systemic",
+            "absolute_L": 56.0
+          },
+          "verdict": "QUALIFIED",
+          "reason": "原著抄録はVssが体重約80%。.8L/kg×70=56Lの近似は追跡可能だが、terminal VzでもV/Fでもない。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/7363531/"
+          ],
+          "locator": "原著Abstract",
+          "access_level": "abstract",
+          "required_action": "Vss→1-comp Vの限界を保持し、同研究のモデル定義を全文で確認。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value_h": 2.0,
+            "range_h": [
+              2.0,
+              2.0
+            ]
+          },
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "原著抄録と経口labelが約2hを支持。高齢ほど延長という原著条件があり、固定SD1hは文献値ではない。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/7363531/",
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=496e258d-a5fd-42da-9a86-73afc8be359b"
+          ],
+          "locator": "Abstract; label Pharmacokinetics",
+          "access_level": "mixed",
+          "required_action": "約値・年齢依存とfixture variabilityを分離。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "fraction": 0.6,
+            "model_F1": 0.6
+          },
+          "verdict": "QUALIFIED",
+          "reason": "原著200mg IV/経口の潰瘍患者12名でF約60%を確認。健康成人100mgの固定Fとしては未検証。systemic CL/VとF1=.6の代数的組合せは整合する。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/7363531/"
+          ],
+          "locator": "原著Abstract",
+          "access_level": "abstract",
+          "required_action": "対象・用量・食事条件を一致させて採用。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/7363531/",
+          "status": "retrieved",
+          "note": "原著抄録取得。本文は未取得。"
+        },
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=496e258d-a5fd-42da-9a86-73afc8be359b",
+          "status": "retrieved",
+          "note": "経口label全文のPharmacokinetics確認。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "潰瘍患者由来CL/V/Fをscenario adult_healthyへ流用。",
+          "action": "populationと用量をsourceに結び付けるか健康成人の一次根拠を追加。"
+        },
+        {
+          "severity": "P2",
+          "finding": "Vss/CLからは約1.31h、label約2hと違うがV定義・分布相の差と数値転記を分ける必要。",
+          "action": "単純な半減期整合を理由にCL/Vを改変しない。"
+        }
+      ],
+      "audited_files": [
+        "drugs/cimetidine/pk.yml",
+        "drugs/cimetidine/targets.yml",
+        "drugs/cimetidine/spec_pk1_oral.yml"
+      ],
+      "fixture_context": {
+        "theta": {
+          "CL": 29.7,
+          "V": 56.0,
+          "KA": 1.2,
+          "F1": 0.6,
+          "ALAG1": 0.5
+        },
+        "regimen": {
+          "route": "oral",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        },
+        "sampling": {
+          "t_end_h": 72.0,
+          "dt_h": 0.5,
+          "include_t0": true
+        },
+        "implied_half_life_h": 1.306944178833567
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "clarithromycin",
+      "overall": "hold",
+      "summary": "CL範囲の総説と自己阻害モデルのV/Fを混成。58.1のCL/F分類は総説抄録から確定できず、用量依存半減期とFの中点化も未承認。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 58.1,
+              "unit": "L/h"
+            },
+            "basis": "apparent",
+            "absolute_L_h": 58.1
+          },
+          "verdict": "UNVERIFIED",
+          "reason": "総説抄録にadult total body CL29.2–58.1L/hは存在するが、上限58.1をCL/Fとする一次研究・定義は未特定。V出典の原著Table1はapparent base CL60L/hで自己阻害により時間変化する。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/10589373/",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:10589373&format=json&resultType=core",
+            "https://journals.asm.org/doi/10.1128/aac.01193-08"
+          ],
+          "locator": "review Abstract; original Table1/Results",
+          "access_level": "mixed",
+          "required_action": "58.1の元研究とsystemic/apparent basisを確認し、同モデルVと対にする。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 172.0,
+              "unit": "L"
+            },
+            "basis": "apparent",
+            "absolute_L": 172.0
+          },
+          "verdict": "QUALIFIED",
+          "reason": "健康成人12例・絶食・懸濁液500mg q12h計7回の自己阻害モデルTable1でapparent V172L（95%CI145–198）を確認。これは同モデルの時間依存CLと組み合わせた推定で、別総説CL上限との互換性は示されていない。",
+          "source_urls": [
+            "https://journals.asm.org/doi/10.1128/aac.01193-08"
+          ],
+          "locator": "Table1; Results final model",
+          "access_level": "full_paper",
+          "required_action": "同原著の吸収・阻害モデル、対象・用量を保持して採用審査。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value_h": 5.0,
+            "range_h": [
+              3.0,
+              7.0
+            ]
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "即放錠labelは250mg q12hで3–4h、500mg q8–12hで5–7h。保存5hは異なる投与条件を合わせた3–7hの中点で、単回100mgの平均ではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=b1bdf526-4f16-4130-b614-4cb678f060d7"
+          ],
+          "locator": "Clinical Pharmacology Pharmacokinetics",
+          "access_level": "full_label",
+          "required_action": "用量・反復条件ごとに別レコード化し、arithmetic_meanを撤回候補に。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "fraction": 0.525,
+            "model_F1": 1.0
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "labelは250mg錠absolute F約.50、総説は52–55%。保存.525は混成範囲50–55%の中点で、特定試験の実測値・平均ではなくvalue_provenanceも未記載。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=b1bdf526-4f16-4130-b614-4cb678f060d7",
+            "https://pubmed.ncbi.nlm.nih.gov/10589373/",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:10589373&format=json&resultType=core"
+          ],
+          "locator": "label Pharmacokinetics; review Abstract",
+          "access_level": "mixed",
+          "required_action": "製剤・用量別原著と変換根拠を追加し、systemic派生値への採用保留。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=b1bdf526-4f16-4130-b614-4cb678f060d7",
+          "status": "retrieved",
+          "note": "即放錠label全文、2021版。"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/10589373/",
+          "status": "failed",
+          "note": "web open空、公式APIで総説抄録補完。"
+        },
+        {
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:10589373&format=json&resultType=core",
+          "status": "retrieved",
+          "note": "総説抄録JSON。一次試験でない。"
+        },
+        {
+          "url": "https://journals.asm.org/doi/10.1128/aac.01193-08",
+          "status": "retrieved",
+          "note": "ASM原著全文・Table1取得。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "apparent CL basis未確定と異研究CL/V合成によりderived systemic CL30.5025/V90.3も未検証。",
+          "action": "一次CL定義とFの出典を確定するまでsystemic値を採用しない。"
+        },
+        {
+          "severity": "P1",
+          "finding": "原著の自己阻害による時間依存CLを定数化し、用量依存半減期を平均化している。",
+          "action": "相互作用・反復条件を含む原モデルか、限定用途fixtureかを明示。"
+        }
+      ],
+      "audited_files": [
+        "drugs/clarithromycin/pk.yml",
+        "drugs/clarithromycin/targets.yml",
+        "drugs/clarithromycin/spec_pk1_oral.yml"
+      ],
+      "fixture_context": {
+        "theta": {
+          "CL": 58.1,
+          "V": 172.0,
+          "KA": 1.2,
+          "F1": 1.0,
+          "ALAG1": 0.5
+        },
+        "regimen": {
+          "route": "oral",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        },
+        "sampling": {
+          "t_end_h": 72.0,
+          "dt_h": 0.5,
+          "include_t0": true
+        },
+        "implied_half_life_h": 2.0520019803151563
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "dapagliflozin",
+      "overall": "qualified_fixture",
+      "summary": "静注CLとVssの数値はFDA審査資料で一致。経口終末半減期を再現する一組ではなく、Fの丸め説明が不足。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": "12.42 L/h (systemic)",
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "source_1 Table 24、絶食健常者n=7、経口10 mg後に静注80 μg。CL幾何平均207 mL/minの換算207×60/1000=12.42は正しい。CL/Fではない。",
+          "source_urls": [
+            "https://www.accessdata.fda.gov/drugsatfda_docs/nda/2014/202293Orig1s000ClinPharmR.pdf"
+          ],
+          "locator": "FDA clinical pharmacology review PDF p.75 (printed p.64), Table 24",
+          "access_level": "full_label",
+          "required_action": "幾何平均・CV23%・静注microdoseの条件を保持。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": "118 L (systemic Vss)",
+          "verdict": "QUALIFIED",
+          "reason": "Table 24の静注Vss算術平均118 L(SD31.6)は一致。Vc/Vzではなく、1-compartmentの単一Vに置くと終末相再現の根拠にならない。",
+          "source_urls": [
+            "https://www.accessdata.fda.gov/drugsatfda_docs/nda/2014/202293Orig1s000ClinPharmR.pdf"
+          ],
+          "locator": "Table 24, Vss row",
+          "access_level": "full_label",
+          "required_action": "Vssの定義をモデル外でも明示し、終末相を臨床再現すると主張しない。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": "12.9 h",
+          "verdict": "QUALIFIED",
+          "reason": "Table 1に平均12.9 h(SD5.54)がある。ただしCL/V/Fを取ったTable 24の半減期は経口13.7 h、静注12.2 hであり同一表の推定値ではない。",
+          "source_urls": [
+            "https://www.accessdata.fda.gov/drugsatfda_docs/nda/2014/202293Orig1s000ClinPharmR.pdf"
+          ],
+          "locator": "PDF p.19 (printed p.8), Table 1; PDF p.75, Table 24",
+          "access_level": "full_label",
+          "required_action": "別集計との組合せを明示。ln(2)×118/12.42≈6.59 hとの差を転記ミスと扱わない。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": "0.78",
+          "verdict": "QUALIFIED",
+          "reason": "Table 24の絶対経口Fは77.8%(幾何平均)なので厳密換算は0.778。本文には78%ともあり0.78は丸め値として支持されるが、現formula=77.8/100だけでは再現しない。",
+          "source_urls": [
+            "https://www.accessdata.fda.gov/drugsatfda_docs/nda/2014/202293Orig1s000ClinPharmR.pdf"
+          ],
+          "locator": "Section 2.8.5 and Table 24",
+          "access_level": "full_label",
+          "required_action": "元77.8%、換算0.778、丸め0.78を分離して記録。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://www.accessdata.fda.gov/drugsatfda_docs/nda/2014/202293Orig1s000ClinPharmR.pdf",
+          "status": "retrieved",
+          "note": "FDA審査資料128頁の本文とTable 1/24を取得。access_level full_labelは便宜上、実体は規制審査資料。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P2",
+          "finding": "CL/Vの1-compartment半減期は約6.59 h。保存12.9 hと構造的に異なる。",
+          "action": "既知のfixture制約を維持。"
+        },
+        {
+          "severity": "P2",
+          "finding": "Fの換算式に丸め工程がなく、target SD1 hは原資料SD5.54 hとは異なる。",
+          "action": "丸めと合成変動の由来を分離。"
+        }
+      ],
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "efavirenz",
+      "overall": "hold",
+      "summary": "CL/Fの数値は原著で確認したが、HIV反復投与モデルのCLを健常者単回fixtureへ移植し、V/Fとkaも原著と異なる。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": "13.9 L/h (CL/F)",
+          "verdict": "QUALIFIED",
+          "reason": "source_2原著は白人HIV患者89名、600 mg/dayのPopPK。13.9は基準遺伝子型のCL/Fで、V/F237 L/70kgとka0.3/hを固定して推定。成人健常者100 mg単回のCLとして未検証。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/40851704/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC12370162/"
+          ],
+          "locator": "Abstract; Methods, Population pharmacokinetic modelling; Discussion",
+          "access_level": "full_paper",
+          "required_action": "対象、定常状態、CYP2B6基準遺伝子型、固定パラメータを保持。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": "1163.1007419646824 L (V/F)",
+          "verdict": "DERIVED",
+          "reason": "13.9×58/ln(2)の算術は一致する。原著の固定V/F237 L/70kgとは別の値で、単回半減期を反復投与CLに結合している。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=13ca3456-e5bf-4bb1-af95-b1378658a358",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC12370162/"
+          ],
+          "locator": "pk.yml conversion; original Methods fixed V/F",
+          "access_level": "mixed",
+          "required_action": "原著モデルの再現とfixture派生を分離し、相互適合性を再評価。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": "58 h (stored range 52–76 h)",
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "DailyMedは単回52–76 h、反復40–55 hと自己誘導を区別。58 hは単回範囲内の任意値で、平均や中点ではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=13ca3456-e5bf-4bb1-af95-b1378658a358"
+          ],
+          "locator": "12.3, Metabolism / Elimination",
+          "access_level": "full_label",
+          "required_action": "58 hの選定理由を明記。CL/Fの反復条件と混ぜた臨床パラメータとしない。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": "null; spec F1=1",
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "絶対Fの数値は保存されておらず、確認した資料から補わない。F1=1はCL/F・V/Fを使う尺度上の約束で完全吸収の実測値ではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=13ca3456-e5bf-4bb1-af95-b1378658a358",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC12370162/"
+          ],
+          "locator": "12.3; original Methods oral apparent parameters",
+          "access_level": "mixed",
+          "required_action": "未知のFを維持し、F1を生物学的Fとして出力しない。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=13ca3456-e5bf-4bb1-af95-b1378658a358",
+          "status": "retrieved",
+          "note": "DailyMed現行ラベル本文取得。"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40851704/",
+          "status": "retrieved",
+          "note": "PubMed抄録取得。"
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12370162/",
+          "status": "retrieved",
+          "note": "webはCAPTCHA。curl HTTPSで原著HTML全文取得しMethods/Results/Discussionを照合。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "HIV反復600 mg/dayモデル由来CL/Fを、健常者100 mg単回・独自V/kaへ移植。",
+          "action": "臨床用採用保留。対象モデル単位で再選定。"
+        },
+        {
+          "severity": "P2",
+          "finding": "58 hをarithmetic_mean、SD1 hとするtargetは実測統計ではない。",
+          "action": "fixtureの決定値と合成SDと表示。"
+        }
+      ],
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "erythromycin",
+      "overall": "hold",
+      "summary": "健常群のCLと半減期は原著一致。Vは導出で、投与時間が原著30分と現spec1時間で違う。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": "0.53 L/h/kg → 37.1 L/h at 70 kg",
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "source_1 Table 2の健常群n=12に総CL0.53±0.13 L/h/kg。125 mg静注、NCAのDose/AUCでsystemic CL。70 kg倍は算術一致。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3581054/"
+          ],
+          "locator": "Results, Table 2; Methods, Pharmacokinetic analyses",
+          "access_level": "full_paper",
+          "required_action": "健常群をESRD群CL0.35と混同せず、線形70 kg換算を明記。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": "1.7586452548436462 L/kg → 123.10516783905524 L",
+          "verdict": "DERIVED",
+          "reason": "37.1×2.3/ln(2)で得る単一V。原著Vssは0.74±0.19 L/kgであり同じ指標ではない。平均CLと平均半減期の積は個人Vの平均でもない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3581054/"
+          ],
+          "locator": "Table 2; repository formula",
+          "access_level": "full_paper",
+          "required_action": "Vのfixture派生と実測Vssを別項目に保持。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": "2.3 h",
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "Table 2健常群の終末半減期2.30±1.03 hに一致。回帰で推定した終末相であり、Vをこれから作った場合の再一致は独立検証ではない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3581054/"
+          ],
+          "locator": "Table 2; Methods, Pharmacokinetic analyses",
+          "access_level": "full_paper",
+          "required_action": "独立した半減期検証という記述を避ける。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": "1.0; IV",
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "静注のF=1は投与経路によるモデル定義。原著は別途経口250 mgも扱うが、その経口Fをここへ転用しない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3581054/"
+          ],
+          "locator": "Methods, Clinical study and Pharmacokinetic analyses",
+          "access_level": "full_paper",
+          "required_action": "route-definedと記録。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3581054/",
+          "status": "retrieved",
+          "note": "webはCAPTCHA、curl HTTPSで同一PMC本文全体を取得。Table 2とMethodsを確認。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "原著は125 mgを30分静注、spec_pk1_iv.ymlはinfusion_h=1.0。",
+          "action": "元研究を再現するなら投与時間の出典対応を修正。fixtureなら変更した条件を明記。"
+        },
+        {
+          "severity": "P2",
+          "finding": "導出Vから同じ半減期へ戻るためCL/V整合性は独立妥当性ではない。",
+          "action": "Vssとの差を維持し、モデル検証対象を別に用意。"
+        }
+      ],
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "ethinylestradiol",
+      "overall": "hold",
+      "summary": "配合錠の周期内PKを単剤100 mgへ移植している。半減期範囲の出典帰属と絶対Fの一次根拠が不十分。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": "25.7 L/h (CL/F)",
+          "verdict": "QUALIFIED",
+          "reason": "Table IのEE25.7(SD9.1)は一致。ただしdesogestrel配合、EE0.02 mg、第3周期day1のCL/Fで、未投与健常者の単剤単回条件ではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=142c4b90-c9ab-45ce-9172-f1ea7d366686"
+          ],
+          "locator": "Clinical Pharmacology, Table I, EE day1; preceding study paragraph",
+          "access_level": "full_label",
+          "required_action": "配合成分、性別、周期、0.02 mgの条件をscenarioへ固定。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": "632.1673264919305 L (V/F)",
+          "verdict": "DERIVED",
+          "reason": "25.7×17.05/ln(2)の計算は一致。17.05 hの出典範囲が裏付かず、原資料にこのV/Fの実測値はない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=142c4b90-c9ab-45ce-9172-f1ea7d366686"
+          ],
+          "locator": "Table I versus pk.yml derived formula",
+          "access_level": "full_label",
+          "required_action": "半減期根拠が解決するまで採用保留。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": "17.05 h, stored 16.5–17.6 h range",
+          "verdict": "CONTRADICTION",
+          "reason": "source_1 Table IはEE day1 16.5、day21 23.9、day24 18.8/18.9 h。17.6 hも16.5–17.6という範囲も取得本文にはなく、provenanceの範囲帰属は不一致。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=142c4b90-c9ab-45ce-9172-f1ea7d366686"
+          ],
+          "locator": "Table I, EE rows",
+          "access_level": "full_label",
+          "required_action": "範囲の原典を特定し、異なる周期の統計を範囲化しない。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": "0.43 (midpoint of 0.38–0.48)",
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "source_2本文の38–48%は他文献の背景要約で、この配合錠試験の絶対F測定ではない。source_1は溶液等に対する相対F93%/99%で別指標。0.43は範囲中点の仮定。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=142c4b90-c9ab-45ce-9172-f1ea7d366686",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC4285808/"
+          ],
+          "locator": "source_1 Absorption; source_2 Introduction and Discussion references 5,7,15",
+          "access_level": "mixed",
+          "required_action": "絶対/相対Fを区別し、対応する一次の静注比較試験を取得。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=142c4b90-c9ab-45ce-9172-f1ea7d366686",
+          "status": "retrieved",
+          "note": "DailyMed配合錠kitラベル全文取得。"
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4285808/",
+          "status": "retrieved",
+          "note": "PMC原著全文取得。ただし絶対F範囲の主張は当該研究で実測せず二次引用。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "spec/targetsの100 mgは、CL/Fの由来EE0.02 mgの5000倍。",
+          "action": "通常薬剤と同じ100 mg既定値を臨床シナリオとして扱わず、用量・製剤を根拠付き再設定。"
+        },
+        {
+          "severity": "P1",
+          "finding": "checked済みの半減期範囲が引用ラベルにない。",
+          "action": "原典から再抽出し派生Vも再審査。"
+        }
+      ],
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "felodipine",
+      "overall": "hold",
+      "summary": "レビューの血液CL上限とV/終末半減期を合成。公式ラベルでは血漿CL・製剤別半減期が異なり、100 mgへの外挿も未検証。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": "90 L/h (1.5 L/min upper bound)",
+          "verdict": "QUALIFIED",
+          "reason": "source_2は原著でなくレビュー。抄録の血液総CL1–1.5 L/min上限×60は一致するが、公式ラベルの若年健常者血漿CLは約0.8 L/min。血液/血漿を区別しない統合は不可。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/3327676/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=2e4298cf-02e9-49c7-9803-887161e1989a"
+          ],
+          "locator": "Review Abstract; DailyMed Pharmacokinetics and Metabolism",
+          "access_level": "mixed",
+          "required_action": "一次の同一matrix条件を確認し、血液CLを血漿濃度モデルへ直接転用しない。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": "10 L/kg → 700 L at 70 kg",
+          "verdict": "QUALIFIED",
+          "reason": "レビュー抄録と公式ラベルは約10 L/kgを支持。ラベルはapparent volumeと記すがVss/Vz/Vcの区別がないため単一Vとの一致は未検証。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/3327676/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=2e4298cf-02e9-49c7-9803-887161e1989a"
+          ],
+          "locator": "Review Abstract; DailyMed Pharmacokinetics and Metabolism",
+          "access_level": "mixed",
+          "required_action": "Vの推定定義と濃度matrixを原著で確定。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": "24.5 h (24–25 midpoint)",
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "source_2レビューは約25 h。24.5 hは複数レビュー要約の中点で平均ではない。公式ラベルは静注三相・IR終末11–16 hを記載し、一律値として扱えない。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/3327676/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=2e4298cf-02e9-49c7-9803-887161e1989a"
+          ],
+          "locator": "Review Abstract; DailyMed disposition phases",
+          "access_level": "mixed",
+          "required_action": "製剤・sampling期間・terminal phaseを原著で特定。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": "0.15",
+          "verdict": "QUALIFIED",
+          "reason": "source_2レビュー抄録は経口5–40 mgで約15%を支持。別の公式ERラベルは約20%。製剤/試験差未解決のため単一の正答としない。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/3327676/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=2e4298cf-02e9-49c7-9803-887161e1989a"
+          ],
+          "locator": "Review Abstract; DailyMed Absorption",
+          "access_level": "mixed",
+          "required_action": "F15%の対応試験を特定し100 mgへ外挿しない。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/1782737/",
+          "status": "failed",
+          "note": "PubMed本文はCAPTCHAで未取得。検索結果に抄録はあるが単独検証には使用しない。"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/3327676/",
+          "status": "retrieved",
+          "note": "PubMedレビュー抄録を取得。原著ではない。"
+        },
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=2e4298cf-02e9-49c7-9803-887161e1989a",
+          "status": "retrieved",
+          "note": "公式ERラベル全文取得。"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/3593901/",
+          "status": "failed",
+          "note": "一次試験候補を同定したが本文/抄録ページ取得は失敗。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "血液CLを血漿CL/Vと同じ値として扱う根拠がない。100 mgも引用範囲5–40 mgを超える。",
+          "action": "matrixと用量範囲を確定するまで臨床採用保留。"
+        },
+        {
+          "severity": "P2",
+          "finding": "CL/V由来t1/2≈5.39 hと24.5 hとの差は多相性・定義差を含む。",
+          "action": "半減期に合わせた黙示のCL/V補正をしない。"
+        }
+      ],
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "fluconazole",
+      "overall": "qualified_fixture",
+      "summary": "元setidのラベルは取得不可。別の公式ラベルで数値を再確認したが、Vは導出、静注200 mgの同一試験組としては未検証。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": "0.23 mL/min/kg → 0.966 L/h at 70 kg",
+          "verdict": "QUALIFIED",
+          "reason": "代替公式ラベルの成人body clearance0.23 mL/min/kgを確認。×60/1000×70=0.966。元URLへの帰属は未確認で、成人値の具体的な採血/経路条件はこの要約だけでは限定できない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=4d7cf836-d115-456c-a636-6f05eae043cd"
+          ],
+          "locator": "Clinical Pharmacology, Pharmacokinetics in Pediatric Patients, adult comparison",
+          "access_level": "full_label",
+          "required_action": "元版回収または代替setidと版を明示して出典差替え。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": "41.80930228496216 L",
+          "verdict": "DERIVED",
+          "reason": "0.966×30/ln(2)の算術は一致。ラベルは総体水分量相当と述べ、41.8093 Lという実測値は示していない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=4d7cf836-d115-456c-a636-6f05eae043cd"
+          ],
+          "locator": "Clinical Pharmacology; pk.yml conversion",
+          "access_level": "full_label",
+          "required_action": "直接測定Vとして表示しない。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": "30 h",
+          "verdict": "QUALIFIED",
+          "reason": "代替ラベルの絶食正常被験者・経口後の約30 h(20–50 h)に一致。IV/POのPKは類似と説明されるが、現静注200 mg/1時間の同一試験値の確認ではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=4d7cf836-d115-456c-a636-6f05eae043cd"
+          ],
+          "locator": "Pharmacokinetics and Metabolism, opening paragraphs",
+          "access_level": "full_label",
+          "required_action": "経口由来と範囲を保持し、静注試験原典を補完。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": "1.0; IV",
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "静注F=1は経路の定義。代替ラベルの経口F>90%とは別項目であり、IVの1を実測絶対Fとして扱わない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=4d7cf836-d115-456c-a636-6f05eae043cd"
+          ],
+          "locator": "Pharmacokinetics and Metabolism, opening paragraph",
+          "access_level": "full_label",
+          "required_action": "IV route-definedと明記。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f6e44764-c652-4926-b081-9111c82c7957",
+          "status": "failed",
+          "note": "web取得エラー。curl取得はDailyMedホーム画面で対象ラベル本文ではなかった。"
+        },
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=4d7cf836-d115-456c-a636-6f05eae043cd",
+          "status": "retrieved",
+          "note": "別製造販売者の公式錠剤ラベル全文取得。IV/PO PK要約を含む。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P2",
+          "finding": "checkedの元URLは対象本文が得られず、今回の支持は代替公式ラベルによる。",
+          "action": "代替資料と製剤差を出典記録に保存。"
+        },
+        {
+          "severity": "P2",
+          "finding": "半減期から導いたVなので半減期の再一致は自己整合性に限る。",
+          "action": "臨床予測の検証と区別。"
+        }
+      ],
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "fluvoxamine",
+      "overall": "hold",
+      "summary": "F53%とV約25 L/kgは確認。ただしV/Fという定義と9–28 hの単回代表値は未確認で、導出CLに影響する。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": "65.56797653945428 L/h (claimed CL/F)",
+          "verdict": "DERIVED",
+          "reason": "25×70×ln(2)/18.5の算術値で直接測定CLではない。V/Fの定義と18.5 hの対象/用量条件が確定していない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=35b377d9-5b7a-4d8e-b6c1-4291d02f5dae"
+          ],
+          "locator": "12.3 and repository formula",
+          "access_level": "full_label",
+          "required_action": "入力Vの定義と単回半減期を同一試験で確認して再評価。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": "25 L/kg → 1750 L at 70 kg (claimed V/F)",
+          "verdict": "QUALIFIED",
+          "reason": "source_1は平均apparent volume約25 L/kgを記載するがV/Fとは明記しない。apparentという語だけでF除算済みと確定できず、V×F=927.5 Lも未検証。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=35b377d9-5b7a-4d8e-b6c1-4291d02f5dae"
+          ],
+          "locator": "12.3 Distribution",
+          "access_level": "full_label",
+          "required_action": "静注/経口と算出式を一次試験で確認しbasis confirmedを再審査。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": "18.5 h (9–28 midpoint)",
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "source_1は若年健常者100 mg/day反復で15.6 h、用量/高齢別の別値を示す。18.5 hは広い要約範囲の中点で成人健常者100 mg単回の実測平均ではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=35b377d9-5b7a-4d8e-b6c1-4291d02f5dae"
+          ],
+          "locator": "12.3 Elimination and Elderly Subjects",
+          "access_level": "full_label",
+          "required_action": "単回・反復と年齢を分離。9–28 hの各端点の一次出典を特定。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": "0.53; spec F1=1",
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "source_1は錠剤の絶対F53%を明記、53/100=0.53。F1=1はapparent parameterizationの約束だが、V/Fの根拠未解決なのでモデル全体のF整合を承認するものではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=35b377d9-5b7a-4d8e-b6c1-4291d02f5dae"
+          ],
+          "locator": "12.3 Absorption",
+          "access_level": "full_label",
+          "required_action": "Fの実測値とmodel F1を別の意味として保持。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=35b377d9-5b7a-4d8e-b6c1-4291d02f5dae",
+          "status": "retrieved",
+          "note": "DailyMed公式錠剤ラベル全文取得。その他の二次サイトは数値確定の根拠に使わない。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "apparent volumeを無条件にV/Fと読み替え、CL/Fとsystemic値を派生している。",
+          "action": "原著のparameter definition確定まで採用保留。"
+        },
+        {
+          "severity": "P1",
+          "finding": "異なる年齢/反復投与の半減期要約から単回fixtureのCLを導出。ラベルは非線形性も記載。",
+          "action": "同一条件パラメータセットを選び直す。"
+        }
+      ],
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "inulin",
+      "overall": "hold",
+      "summary": "13 Lは当該試験Vssの実測値ではなくDiscussionの過去文献一般論。原著の健常者Vssは11.00 L/70kgで、出典帰属の誤りがある。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": "5.61 L/h (93.5 mL/min at 70 kg)",
+          "verdict": "QUALIFIED",
+          "reason": "93.5はResultsにある6点log-trapezoid法のsystemic CLで、×60/1000=5.61。主要tri-exponential推定は96.1 mL/min/70kg。健常男性16名、5 g/1分静注で現100 mgとは異なる。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1873801/"
+          ],
+          "locator": "Methods, Protocol and Kinetic analysis; Results clearance comparison",
+          "access_level": "full_paper",
+          "required_action": "6点法という推定法を明記し、主解析と混ぜない。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": "13 L (claimed study Vss)",
+          "verdict": "CONTRADICTION",
+          "reason": "Abstractの当該研究健常者Vssは11.00(SD1.21) L/70kg。Discussionの13 L/70kgは引用文献[13]に基づく一般論で、これを当該研究Vssとしてcheckedにした帰属は誤り。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1873801/"
+          ],
+          "locator": "Abstract Results; Table 1 caption; Discussion reference 13 context",
+          "access_level": "full_paper",
+          "required_action": "誤帰属を訂正し、Vssを元解析単位で再審査。今回はcanonical値を自動置換しない。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": "1.6062234130622617 h",
+          "verdict": "DERIVED",
+          "reason": "ln(2)×13/5.61は算術一致。ただし13 Lの根拠帰属が誤り。原著は3指数モデルで、これは単一コンパートメントの人工的な半減期。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1873801/"
+          ],
+          "locator": "Abstract; Discussion; repository formula",
+          "access_level": "full_paper",
+          "required_action": "clinical terminal half-lifeから除外しfixture由来と表示。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": "1.0; IV",
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "IVなのでF=1はモデル上の定義。原著の尿回収率98%と絶対バイオアベイラビリティは別指標。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1873801/"
+          ],
+          "locator": "Methods, Protocol",
+          "access_level": "full_paper",
+          "required_action": "IV route-definedとして保存。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1873801/",
+          "status": "retrieved",
+          "note": "webはCAPTCHA、curl HTTPSで同一原論文全文取得。Abstract/Methods/Discussionを直接照合。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "過去文献の一般的inulin space13 Lを当該試験Vssとして帰属。",
+          "action": "原典の研究値と引用背景値を分離。"
+        },
+        {
+          "severity": "P2",
+          "finding": "spec metaに旧CL7.2/V16/t1/2 2–4 hの要約が残る。現theta/targetsとは異なる。",
+          "action": "監査後の同期修正時に旧metaを明示的整理。"
+        },
+        {
+          "severity": "P2",
+          "finding": "原著5 g/1分静注から100 mg bolusへ変更している。",
+          "action": "fixture条件の変更として明記。"
+        }
+      ],
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "itraconazole",
+      "overall": "qualified_fixture",
+      "summary": "CLと経口Fの数値はラベル支持。V>700 Lを700 Lに置くこと、22 hの中点と1comp線形化はfixture仮定に限定。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": "16.68 L/h systemic",
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "source_1は静注後の平均総血漿CL278 mL/min。278×60/1000=16.68は正しい。用量依存の飽和代謝が記載され普遍CLではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b1274d78-1096-4ae3-8299-a2e94eaa0ea5"
+          ],
+          "locator": "Clinical Pharmacology, General Pharmacokinetic Characteristics",
+          "access_level": "full_label",
+          "required_action": "単回・用量条件を保持し、高用量/反復へ固定CLを外挿しない。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": "700 L from >700 L",
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "source_1の記述はapparent volume>700 L。700ちょうどは測定値でなく下限境界を採用したfixtureで、不等号を失う変換。Vss/Vz/Vcの定義も示されない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b1274d78-1096-4ae3-8299-a2e94eaa0ea5"
+          ],
+          "locator": "Clinical Pharmacology, Distribution",
+          "access_level": "full_label",
+          "required_action": "censored valueと採用仮定を保持しnot_applicableの制約表示を見直す。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": "22 h from single-dose 16–28 h",
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "単回16–28 hと反復34–42 hはラベル一致。22 hは単回範囲中点で実測平均ではなく、CL/Vからは約29.09 h。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b1274d78-1096-4ae3-8299-a2e94eaa0ea5"
+          ],
+          "locator": "General Pharmacokinetic Characteristics",
+          "access_level": "full_label",
+          "required_action": "単回範囲と中点仮定を保存し、臨床終末半減期の適合を主張しない。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": "0.55",
+          "verdict": "QUALIFIED",
+          "reason": "カプセルの観測絶対F約55%を確認。食後最大、胃酸低下で吸収減少、同用量の液剤とは曝露が異なる。具体的な55%測定試験の食条件は本文だけでは確定しない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b1274d78-1096-4ae3-8299-a2e94eaa0ea5"
+          ],
+          "locator": "Clinical Pharmacology, Absorption",
+          "access_level": "full_label",
+          "required_action": "カプセル条件を維持し、55%=特定の食後試験値という断定は原著で確認。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b1274d78-1096-4ae3-8299-a2e94eaa0ea5",
+          "status": "retrieved",
+          "note": "DailyMed100 mgカプセルラベル全文取得。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P2",
+          "finding": ">700 Lをexact700 L、範囲16–28を平均22 hとして読み出せる。",
+          "action": "不等号/代表値フラグを下流にも保持。"
+        },
+        {
+          "severity": "P2",
+          "finding": "線形1compは飽和代謝、反復曝露、活性代謝物を再現しない。",
+          "action": "workflow用途に限定し薬剤ごとの臨床予測と区別。"
+        }
+      ],
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "mefenamic_acid",
+      "overall": "hold",
+      "summary": "21.13 L/hはFDA2024版で支持されるが、引用先DailyMedの現本文は21.23。値と出典版の対応修復が必要。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": "21.13 L/h (oral CL/F)",
+          "verdict": "CONTRADICTION",
+          "reason": "source_1 Table 1は21.23 L/hで現exact_quoteの21.13と不一致。source_2 FDA2024 Table 1は21.13を支持するため、21.13自体を誤値とは断定しない。腎CLでなくoral clearance。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=d0291319-ab3e-20c8-e053-2a95a90afabb",
+            "https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/015034s046lbl.pdf"
+          ],
+          "locator": "Both labels Table 1, healthy adults18–45; FDA PDF p.3",
+          "access_level": "full_label",
+          "required_action": "source_id/版/引用を対応させ、資料間差を残す。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": "1.06 L/kg → 74.2 L at 70 kg",
+          "verdict": "QUALIFIED",
+          "reason": "両資料Table 1はVz/F1.06 L/kg、70 kg換算は一致。Distribution本文は500 mg経口後、現scenario100 mg。Vz/FはVssと同じではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=d0291319-ab3e-20c8-e053-2a95a90afabb",
+            "https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/015034s046lbl.pdf"
+          ],
+          "locator": "Distribution and Table 1",
+          "access_level": "full_label",
+          "required_action": "500 mg条件とVz/Fを保持し100 mgの独立検証とはしない。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": "3 h from 2–4 h",
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "両資料に2–4 hの範囲があり、3 hはその中点。個人の分布/平均/SDではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=d0291319-ab3e-20c8-e053-2a95a90afabb",
+            "https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/015034s046lbl.pdf"
+          ],
+          "locator": "Table 1 and Excretion",
+          "access_level": "full_label",
+          "required_action": "中点仮定をarithmetic_meanから区別。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": "null; spec F1=1",
+          "verdict": "QUALIFIED",
+          "reason": "FDA資料はカプセルのIV/経口液剤に対するbioavailability未研究と明記。null保持は適切。F1=1はCL/F・Vz/Fのモデル尺度で100%の証拠ではない。",
+          "source_urls": [
+            "https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/015034s046lbl.pdf"
+          ],
+          "locator": "Clinical Pharmacology, Absorption, PDF p.2",
+          "access_level": "full_label",
+          "required_action": "未知Fを推測しない。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=d0291319-ab3e-20c8-e053-2a95a90afabb",
+          "status": "retrieved",
+          "note": "DailyMed本文取得、oral CL21.23を直接確認。"
+        },
+        {
+          "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/015034s046lbl.pdf",
+          "status": "retrieved",
+          "note": "FDA2024ラベルPDF全文取得、Table1の21.13を確認。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "数値を支持する資料とprovenance source_idがずれている。",
+          "action": "FDA版を特定して帰属修正するか元DailyMed版を回収。"
+        },
+        {
+          "severity": "P2",
+          "finding": "500 mg由来Vz/Fを100 mgへ用いる適合性は未検証。",
+          "action": "同一用量モデルという表示を避ける。"
+        }
+      ],
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "metoprolol",
+      "overall": "hold",
+      "summary": "静注CL48 L/hは原著抄録で支持。Vの参照ラベル帰属とFのCmax比からの確定に問題が残る。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": "48 L/h systemic",
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "source_2と同じ原著の出版社Summaryで健常者CL0.8±0.1 L/minを確認。20 mg tartrate静注、0.8×60=48。腎障害群の1.0 L/minとは別。",
+          "source_urls": [
+            "https://link.springer.com/article/10.2165/00003088-198005020-00004"
+          ],
+          "locator": "Original article Summary, 1980; abstract-only",
+          "access_level": "abstract",
+          "required_action": "本文未確認の範囲を残し、20 mg静注由来と明示。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": "346.2468098133512 L",
+          "verdict": "DERIVED",
+          "reason": "48×5/ln(2)の算術は一致。source_1の取得した現行ERラベルにVd3.2–5.6 L/kgは見当たらず、checkedの範囲帰属は未確認。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=cbc32a80-717b-4cf2-b76a-6d03a3720419",
+            "https://link.springer.com/article/10.2165/00003088-198005020-00004"
+          ],
+          "locator": "DailyMed12.3 Distribution; repository formula",
+          "access_level": "mixed",
+          "required_action": "Vd範囲の別一次出典を特定し、derived値の根拠を分離。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": "5 h from 3–7 h",
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "source_1現行ERラベルは3–7 hを記載。5 hは中点。既存reviewer_noteの通常3–4/PM7–9 hは当該取得ラベルに対応せず、CL原著の健常群は4.1±1.0 h。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=cbc32a80-717b-4cf2-b76a-6d03a3720419",
+            "https://link.springer.com/article/10.2165/00003088-198005020-00004"
+          ],
+          "locator": "DailyMed12.3 Elimination; original Summary",
+          "access_level": "mixed",
+          "required_action": "中点と実測平均を区別し、別版記載を混在させない。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": "0.5; spec F1=0.5",
+          "verdict": "UNVERIFIED",
+          "reason": "source_1引用は通常錠経口/静注のpeak濃度約50%で、用量補正AUC比の絶対Fではない。ERの相対F77%とも別。原著は健常対照の定常状態F55±7%で、現単回F0.5を直接確定しない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=cbc32a80-717b-4cf2-b76a-6d03a3720419",
+            "https://link.springer.com/article/10.2165/00003088-198005020-00004"
+          ],
+          "locator": "DailyMed12.3 Absorption; original Summary",
+          "access_level": "mixed",
+          "required_action": "通常錠の絶対Fが明示された一次試験/公式資料を別途採用し、Cmax比のF換算を廃止。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=cbc32a80-717b-4cf2-b76a-6d03a3720419",
+          "status": "retrieved",
+          "note": "DailyMed ERラベル本文取得。"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/6102500/",
+          "status": "failed",
+          "note": "PubMedページの本文取得は失敗。"
+        },
+        {
+          "url": "https://link.springer.com/article/10.2165/00003088-198005020-00004",
+          "status": "retrieved",
+          "note": "同一原著の出版社Summaryを取得。本文は購読が必要で未確認。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "Cmax比を絶対Fとする出典対応は成立していない。",
+          "action": "AUCに基づく絶対F根拠を確定。"
+        },
+        {
+          "severity": "P2",
+          "finding": "現行source_1にないVd範囲と別の半減期文言をchecked記録が引用する。",
+          "action": "版固定とsource_id整理。"
+        }
+      ],
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "mexiletine",
+      "overall": "hold",
+      "summary": "V範囲と引用source_idが混線。V/Fの定義は確認できず、systemic換算と派生CLも保留。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": "30.87655622494302 L/h (claimed CL/F)",
+          "verdict": "DERIVED",
+          "reason": "(7×70)×ln(2)/11の計算は一致。ただし元VはV/Fと明記されていないためCL/Fというbasisは未確定、直接測定CLではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab73778b-6794-441c-b127-610a6d0733ea"
+          ],
+          "locator": "Clinical Pharmacology, Pharmacokinetics; repository formula",
+          "access_level": "full_label",
+          "required_action": "Vの定義と同一試験のterminal half-lifeを原著で確認。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": "7 L/kg → 490 L, claimed V/F",
+          "verdict": "CONTRADICTION",
+          "reason": "source_1ラベルはVd5–7 L/kg。現exact_quoteの5–9 L/kgはsource_2レビュー抄録の文章でsource_id/locatorが誤り。どちらもV/Fとは明記せず、7は上端/中点選択という仮定。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab73778b-6794-441c-b127-610a6d0733ea",
+            "https://pubmed.ncbi.nlm.nih.gov/10589372/"
+          ],
+          "locator": "DailyMed Pharmacokinetics; PubMed review Abstract",
+          "access_level": "mixed",
+          "required_action": "source_idを正し、systemic/V/Fの推定定義を未確定へ戻して再審査。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": "11 h from 10–12 h",
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "source_1正常被験者の約10–12 hに対応する中点で、実測平均11 hではない。CLをこの値から逆算したため一致は循環的。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab73778b-6794-441c-b127-610a6d0733ea"
+          ],
+          "locator": "Clinical Pharmacology, Pharmacokinetics",
+          "access_level": "full_label",
+          "required_action": "中点仮定として保存。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": "0.9; spec F1=1",
+          "verdict": "QUALIFIED",
+          "reason": "source_1の吸収約90%だけでは絶対Fと断定しない。補助公式SmPC5.2はsystemic bioavailability約90%と明示し数値を支持するが別製品。F1=1はapparent尺度としてのみ説明可能。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab73778b-6794-441c-b127-610a6d0733ea",
+            "https://www.medicines.org.uk/emc/product/13305/smpc"
+          ],
+          "locator": "DailyMed Pharmacokinetics; Clinigen SmPC5.2",
+          "access_level": "full_label",
+          "required_action": "Fの根拠をsystemic availability記載に結び、V/Fの未確認とは切り離す。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab73778b-6794-441c-b127-610a6d0733ea",
+          "status": "retrieved",
+          "note": "DailyMedカプセルラベル全文取得。"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/10589372/",
+          "status": "retrieved",
+          "note": "レビュー抄録取得、一次試験本文ではない。"
+        },
+        {
+          "url": "https://www.medicines.org.uk/emc/product/13305/smpc",
+          "status": "retrieved",
+          "note": "Clinigen100 mgカプセルSmPC全文取得、改訂2024-09-30。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "Vdという記述をV/F confirmedとし、×Fでsystemic V/CLを生成する根拠がない。",
+          "action": "原著定義が確認できるまでbasis変換を保留。"
+        },
+        {
+          "severity": "P1",
+          "finding": "source_1=DailyMedにsource_2=PubMedの5–9 L/kg文をexact_quoteとして保存。",
+          "action": "引用とsource_idを同時に修復。"
+        },
+        {
+          "severity": "P2",
+          "finding": "100 mgが塩酸塩量か遊離塩基量かscenarioにない。SmPCは100 mg HCl=83.10 mg base。",
+          "action": "dose moietyを明示して濃度単位と整合させる。"
+        }
+      ],
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "moclobemide",
+      "overall": "qualified_fixture",
+      "summary": "初回IVのCL/Vss/半減期と初回経口Fは原著抄録と一致。反復投与に依存する薬物動態を単一組へ一般化できない。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 39.4,
+              "unit": "L/h"
+            },
+            "absolute_L_per_h": 39.4,
+            "basis": "systemic"
+          },
+          "verdict": "QUALIFIED",
+          "reason": "source_5の12名の正常男性、初回IV CL=39.4 L/hを直接保存。反復経口投与後のIV CL=29.1 L/hとは別条件。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/3665338/"
+          ],
+          "locator": "PMID 3665338 Abstract; first intravenous infusion",
+          "access_level": "abstract",
+          "required_action": "初回IV由来を保持し、反復・疾患群へ外挿しない。原著全文で投与条件・採血・推定法を確認する。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 84.3,
+              "unit": "L"
+            },
+            "absolute_L": 84.3,
+            "basis": "systemic"
+          },
+          "verdict": "QUALIFIED",
+          "reason": "source_5の初回IV Vss=84.3 Lを確認。70 kg換算値ではなく研究集団の絶対値。Vssを1区画Vに採用することは追加仮定。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/3665338/"
+          ],
+          "locator": "PMID 3665338 Abstract; steady-state volume",
+          "access_level": "abstract",
+          "required_action": "Vssの定義を明記し、Vz/Vcとの互換性を主張しない。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value": 1.6,
+            "unit": "h"
+          },
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "初回IV elimination half-life 1.60 hを確認。抄録の15%はCVでありSDではない。targetsのSD=1 hは原著由来ではない。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/3665338/"
+          ],
+          "locator": "PMID 3665338 Abstract; first IV infusion",
+          "access_level": "abstract",
+          "required_action": "CVとfixture SDを分離し、初回IV半減期の経口転用を明示する。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "value": 0.56,
+            "unit": "fraction"
+          },
+          "verdict": "QUALIFIED",
+          "reason": "初回経口F=0.56を確認。同研究の1週/2週では0.86/0.90であり恒常値ではない。100 mg t.i.d.反復期間と初回単回を区別する。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/3665338/"
+          ],
+          "locator": "PMID 3665338 Abstract; absolute oral bioavailability",
+          "access_level": "abstract",
+          "required_action": "初回経口条件を明記する。定常状態モデルには独立再評価が必要。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/3665338/",
+          "status": "retrieved",
+          "note": "PubMed通常HTMLはchallenge。NCBI公式efetch XMLから同一PMIDの抄録を実取得。本文未取得。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P2",
+          "finding": "spec.meta.sourcesにcanonical採用source_5がなく、旧PK要約が残る。",
+          "action": "meta出典・要約とcanonical provenanceを対応させる。"
+        }
+      ],
+      "audited_files": [
+        "drugs/moclobemide/pk.yml",
+        "drugs/moclobemide/spec_pk1_oral.yml",
+        "drugs/moclobemide/targets.yml"
+      ],
+      "scenario_review": {
+        "regimen": {
+          "route": "oral",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        },
+        "population": {
+          "species": "human",
+          "group": "adult_healthy"
+        },
+        "model_theta": {
+          "CL": 39.4,
+          "V": 84.3,
+          "KA": 1.2,
+          "F1": 0.56,
+          "ALAG1": 0.5
+        },
+        "one_compartment_half_life_h": 1.4830534853097308
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "montelukast",
+      "overall": "qualified_fixture",
+      "summary": "保存CL/Vss/半減期は高齢健常者7 mg IV由来。F=.615は高齢/若年の異なる平均61%/62%を折半したfixtureであり実測平均ではない。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 1.8479999999999999,
+              "unit": "L/h"
+            },
+            "absolute_L_per_h": 1.8479999999999999,
+            "basis": "systemic"
+          },
+          "verdict": "QUALIFIED",
+          "reason": "30.8 mL/min×60/1000=1.848 L/hは正しい。source_1の高齢健常者N=12、7 mg/5分IVのsystemic CL。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/9429741/"
+          ],
+          "locator": "PMID 9429741 Abstract; elderly IV paragraph",
+          "access_level": "abstract",
+          "required_action": "高齢者/IV/7 mgを記録しadult_healthy 100 mg経口と同条件扱いしない。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 9.7,
+              "unit": "L"
+            },
+            "absolute_L": 9.7,
+            "basis": "systemic"
+          },
+          "verdict": "QUALIFIED",
+          "reason": "9.7 Lはsource_1の高齢者IV Vss。CLと同条件の値だが1区画Vではない。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/9429741/"
+          ],
+          "locator": "PMID 9429741 Abstract; elderly IV paragraph",
+          "access_level": "abstract",
+          "required_action": "Vss型を明記し終末相半減期との単純対応を採用根拠にしない。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value": 6.7,
+            "unit": "h"
+          },
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "高齢健常者IVの平均終末半減期6.7 hは一致。保存CL/Vssの1区画半減期は約3.64 hであり、数値の誤記ではなく区画構造の不一致。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/9429741/"
+          ],
+          "locator": "PMID 9429741 Abstract; plasma terminal half-life",
+          "access_level": "abstract",
+          "required_action": "終末相を再現するなら原著の多区画性を評価する。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "value": 0.615,
+            "unit": "fraction"
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "10 mg経口で高齢者平均61%、既報若年者62%。.615は別群平均の中点で、統合推定値でも同一個体のFでもない。抄録は高齢者Fを7日反復後とは明示しない。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/9429741/"
+          ],
+          "locator": "PMID 9429741 Abstract; oral bioavailability paragraph",
+          "access_level": "abstract",
+          "required_action": ".615を実測値と扱わず、対象群に対応するFと時点を全文で確定する。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/9429741/",
+          "status": "retrieved",
+          "note": "PubMed通常HTMLはchallenge。NCBI公式efetch XMLでAbstractを取得。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P2",
+          "finding": "F provenanceの「10 mg経口、7日投与後」は抄録からは確定できない。若年者反復PKと高齢者F比較を混同する余地がある。",
+          "action": "原著の試験別条件を分離して記録する。"
+        },
+        {
+          "severity": "P2",
+          "finding": "1区画fixtureの100 mg経口シナリオは引用研究10 mg経口/7 mg IVと異なる。",
+          "action": "100 mgを臨床検証済み条件としない。"
+        }
+      ],
+      "audited_files": [
+        "drugs/montelukast/pk.yml",
+        "drugs/montelukast/spec_pk1_oral.yml",
+        "drugs/montelukast/targets.yml"
+      ],
+      "scenario_review": {
+        "regimen": {
+          "route": "oral",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        },
+        "population": {
+          "species": "human",
+          "group": "adult_healthy"
+        },
+        "model_theta": {
+          "CL": 1.8479999999999999,
+          "V": 9.7,
+          "KA": 1.2,
+          "F1": 0.615,
+          "ALAG1": 0.5
+        },
+        "one_compartment_half_life_h": 3.6382725386533923
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "motavizumab_medi_524",
+      "overall": "qualified_fixture",
+      "summary": "原著本文・Table 2を再取得。親抗体motavizumabの成人IV用量群範囲から中点を生成しており小児RSV予防の値ではない。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 0.010229166666666666,
+              "unit": "L/h"
+            },
+            "absolute_L_per_h": 0.010229166666666666,
+            "basis": "systemic"
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "本文165–326 mL/dayの中点245.5÷1000÷24=.0102291667 L/hは算術一致。0.3/3/15/30 mg/kgの各用量群を横断する中点で単一研究推定平均ではない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3837853/"
+          ],
+          "locator": "Results Pharmacokinetics; Table 2, motavizumab rows",
+          "access_level": "full_paper",
+          "required_action": "用量群別の値を保持し、範囲中点を実測・PopPK代表値としない。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 7.35,
+              "unit": "L"
+            },
+            "absolute_L": 7.35,
+            "basis": "systemic"
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "本文の親抗体Vss 5.2–9.5 Lの中点7.35 Lは一致。原著のVssであり分布容積の型を曖昧にしない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3837853/"
+          ],
+          "locator": "Results Pharmacokinetics; Table 2",
+          "access_level": "full_paper",
+          "required_action": "Vssと一室Vの相違および群横断中点を明示。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value": 636.0,
+            "unit": "h"
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "本文の19–34日を中点26.5日×24=636 hに変換。Table 2には各群18.9/22.3/20.4/34.4日があり、中点は観測平均ではない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3837853/"
+          ],
+          "locator": "Results Pharmacokinetics; Table 2",
+          "access_level": "full_paper",
+          "required_action": "rounded range由来のfixtureであることを保持し平均/SDとして再解釈しない。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "value": 1.0,
+            "unit": "fraction"
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "F=1は静脈投与経路のモデル定義。原著は成人単回IVであり、吸収率を測ったF=100%の結果ではない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3837853/"
+          ],
+          "locator": "Materials and Methods, Study design",
+          "access_level": "full_paper",
+          "required_action": "bioavailability measuredではなくIV route definitionとして扱う。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3837853/",
+          "status": "retrieved",
+          "note": "Web openはchallenge。curlでPMC HTML本文159038 bytesを取得しMethods/Results/Table 2を確認。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P2",
+          "finding": "原著は健常成人31名中親抗体15名、開発中の抗体比較。100 mg固定用量や小児・IM投与のパラメータとは一致しない。",
+          "action": "候補抗体・成人・単回IV・用量群を必須メタデータにする。"
+        }
+      ],
+      "audited_files": [
+        "drugs/motavizumab_medi_524/pk.yml",
+        "drugs/motavizumab_medi_524/spec_pk1_iv.yml",
+        "drugs/motavizumab_medi_524/targets.yml"
+      ],
+      "scenario_review": {
+        "regimen": {
+          "route": "iv",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        },
+        "population": {
+          "species": "human",
+          "group": "adult_healthy"
+        },
+        "model_theta": {
+          "CL": 0.010229166666666666,
+          "V": 7.35
+        },
+        "one_compartment_half_life_h": 498.0495423656796
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "motavizumab_yte",
+      "overall": "hold",
+      "summary": "Fc変異体と親抗体を区別して一次本文確認。CLの「43–68の中点」記録と保存55 mL/dayが不一致。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 0.0022916666666666667,
+              "unit": "L/h"
+            },
+            "absolute_L_per_h": 0.0022916666666666667,
+            "basis": "systemic"
+          },
+          "verdict": "CONTRADICTION",
+          "reason": "本文の43–68 mL/dayを確認。保存.0022916667 L/hは55 mL/dayだが、記載された中点式なら55.5 mL/day=.0023125 L/h。丸めまたは値選択の根拠がない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3837853/"
+          ],
+          "locator": "Results Pharmacokinetics; Table 2, mota-YTE rows; local value_provenance conversion",
+          "access_level": "full_paper",
+          "required_action": "55を選んだfixture方針か厳密中点かを決め、raw/式/normalizedを一致させる。監査では値を変更しない。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 6.744599316155904,
+              "unit": "L"
+            },
+            "absolute_L": 6.744599316155904,
+            "basis": "systemic"
+          },
+          "verdict": "DERIVED",
+          "reason": "保存6.744599 Lは選択CL55 mL/day×85日/ln2。原著Vss 4.6–8.3 Lの報告値ではなく、終末半減期とCLから作った一室V。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3837853/"
+          ],
+          "locator": "Table 2; local fixture formula",
+          "access_level": "full_paper",
+          "required_action": "CL選択矛盾を解決後、derived VをVssと混同しない。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value": 2040,
+            "unit": "h"
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "本文70–100日の中点85日×24=2040 hは一致。Table 2の群別69.5/100.4/84.3/73.2日を要約したfixture。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3837853/"
+          ],
+          "locator": "Results Pharmacokinetics; Table 2",
+          "access_level": "full_paper",
+          "required_action": "85日を実測平均とせず、Vの導出入力に使用した事実を記録する。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "value": 1.0,
+            "unit": "fraction"
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "F=1は成人静脈投与のモデル定義。YTE変異体の成人IVデータを親抗体、他YTE抗体、小児へ転用しない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3837853/"
+          ],
+          "locator": "Materials and Methods; Study design",
+          "access_level": "full_paper",
+          "required_action": "製品同一性をM252Y/S254T/T256E変異体まで識別する。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3837853/",
+          "status": "retrieved",
+          "note": "curlでPMC本文を取得。31名の健常成人、YTE16名/親抗体15名、0.3/3/15/30 mg/kg単回IV。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "CL式の厳密中点55.5と採用55が食い違う。",
+          "action": "数式provenanceを修復して下流CL/V/AUCへの影響を再評価。"
+        },
+        {
+          "severity": "P2",
+          "finding": "Vは半減期から導出しているのに、t_halfはCL/V再調整に使っていないと記載。",
+          "action": "校正に使った半減期と独立検証ターゲットを区別する。"
+        }
+      ],
+      "audited_files": [
+        "drugs/motavizumab_yte/pk.yml",
+        "drugs/motavizumab_yte/spec_pk1_iv.yml",
+        "drugs/motavizumab_yte/targets.yml"
+      ],
+      "scenario_review": {
+        "regimen": {
+          "route": "iv",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100.0,
+              "infusion_h": 1.0
+            }
+          }
+        },
+        "population": {
+          "species": "human",
+          "group": "adult_healthy"
+        },
+        "model_theta": {
+          "CL": 0.0022916666666666667,
+          "V": 6.744599316155904
+        },
+        "one_compartment_half_life_h": 2040.0
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "omeprazole",
+      "overall": "hold",
+      "summary": "原著抄録624 mL/minに対し保存43.56 L/hは換算誤り。Vss 0.23 L/kgは確認できるがraw0.4 L/kgや旧注記が矛盾する。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 43.56,
+              "unit": "L/h"
+            },
+            "absolute_L_per_h": 43.56,
+            "basis": "systemic"
+          },
+          "verdict": "CONTRADICTION",
+          "reason": "source_4抄録は8名の若年健常者、10 mg IV/20 mg緩衝経口液、systemic CL中央値624 mL/min。式624×60/1000=37.44 L/hであり保存43.56 L/hとは一致しない。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/2315973/"
+          ],
+          "locator": "PMID 2315973 Abstract, median systemic plasma clearance",
+          "access_level": "abstract",
+          "required_action": "監査差分として37.44との算術不一致を修正候補化し、関連derived/theta/AUCを再計算・検証する。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 0.23,
+              "unit": "L/kg"
+            },
+            "absolute_L": 16.1,
+            "basis": "systemic"
+          },
+          "verdict": "QUALIFIED",
+          "reason": "source_4の平均IV Vss 0.23±0.04 L/kg、70 kg仮定で16.1 Lは一致。pk_rawは0.4 L/kg、basis_noteはunresolvedのままで保存値と説明が不一致。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/2315973/"
+          ],
+          "locator": "PMID 2315973 Abstract, Mean Vss",
+          "access_level": "abstract",
+          "required_action": "rawの旧値と新採用値の系譜を明確にする。70 kgは標準化仮定で原集団平均体重とはしない。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value": 0.75,
+            "unit": "h"
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "source_2の健常者ラベル0.5–1 hに.75 hは含まれるが中点は観測平均ではない。source_4のIV中央値35分/経口39分とは別の要約。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d8b466e0-a35e-4fba-9d43-4e6c0122e7ad",
+            "https://pubmed.ncbi.nlm.nih.gov/2315973/"
+          ],
+          "locator": "DailyMed 12.3; PMID 2315973 Abstract",
+          "access_level": "mixed",
+          "required_action": "ラベル範囲と原著中央値を別扱いにし、.75 hをarithmetic_mean実測値としない。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "value": 0.35,
+            "unit": "fraction"
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "ラベル遅延放出20–40 mgのF約30–40%から.35を作ったfixture。40 mgを超えると初回通過飽和によりAUCが非線形で、100 mgへ一定Fとしての外挿は非検証。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d8b466e0-a35e-4fba-9d43-4e6c0122e7ad"
+          ],
+          "locator": "DailyMed 12.3 Absorption",
+          "access_level": "full_label",
+          "required_action": "100 mgシナリオを採用条件から外すか用量/製剤に合った独立一次データを取得する。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/2315973/",
+          "status": "retrieved",
+          "note": "PubMed抄録本文をWeb openで取得。全文未取得。"
+        },
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d8b466e0-a35e-4fba-9d43-4e6c0122e7ad",
+          "status": "retrieved",
+          "note": "DailyMed全ラベルを取得。repackaged label、2011-01-12更新、遅延放出カプセル。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "CLの単位換算が原値・式と一致せず、下流theta/AUCにも影響する。",
+          "action": "43.56がどこから来たかを追跡して修復する。"
+        },
+        {
+          "severity": "P1",
+          "finding": "100 mg経口へ30–40% Fを適用しているが、ラベルは40 mg超で非線形性を記載。",
+          "action": "濃度やAUCを臨床予測値としない。対象条件に合った入力が必要。"
+        }
+      ],
+      "audited_files": [
+        "drugs/omeprazole/pk.yml",
+        "drugs/omeprazole/spec_pk1_oral.yml",
+        "drugs/omeprazole/targets.yml"
+      ],
+      "scenario_review": {
+        "regimen": {
+          "route": "oral",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        },
+        "population": {
+          "species": "human",
+          "group": "adult_healthy"
+        },
+        "model_theta": {
+          "CL": 43.56,
+          "V": 16.1,
+          "KA": 1.2,
+          "F1": 0.35,
+          "ALAG1": 0.5
+        },
+        "one_compartment_half_life_h": 0.2561907623281708
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "raltegravir",
+      "overall": "hold",
+      "summary": "CL/F60.2は二室PopPK原著Table 2に一致。F=1は相対スケールなのにsystemic値を生成しており、Vは別研究半減期との混成導出。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 60.2,
+              "unit": "L/h"
+            },
+            "absolute_L_per_h": 60.2,
+            "basis": "apparent"
+          },
+          "verdict": "QUALIFIED",
+          "reason": "source_1 Table 2のCL/F=60.2 L/h（SE44.3%）を確認。HIV陽性/健常混合二室モデル。provenanceのexact_quoteは半減期の文章でCLを裏付けない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3370715/"
+          ],
+          "locator": "PMC3370715 Table 2, CL/F row and footnotes",
+          "access_level": "full_paper",
+          "required_action": "CL引用・locatorをTable 2へ対応させる。CL/Fとsystemic CLを分離。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 677.4318833998217,
+              "unit": "L"
+            },
+            "absolute_L": 677.4318833998217,
+            "basis": "apparent"
+          },
+          "verdict": "DERIVED",
+          "reason": "677.431883 L=60.2×7.8/ln2は算術一致だが二室原著V1/F223 L、V2/F113 Lとは異なる合成V/F。7.8 hは別の健常者試験由来。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3370715/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3165315/"
+          ],
+          "locator": "PMC3370715 Table 2; PMC3165315 Abstract/Methods",
+          "access_level": "full_paper",
+          "required_action": "derived one-compartment V/Fとして隔離し、観測Vss/Vz/Vcとはしない。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value": 7.8,
+            "unit": "h"
+          },
+          "verdict": "QUALIFIED",
+          "reason": "source_2同一論文PMC3165315は男性健常者6名、400 mg単回経口、血漿GM半減期7.8 h、95%CI5.5–11.3を確認。保存targetsのarithmetic_meanとは統計量が違う。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3165315/"
+          ],
+          "locator": "PMC3165315 Abstract; Pharmacokinetics methods",
+          "access_level": "full_paper",
+          "required_action": "GM/95%CIを保持し、CIを患者範囲やSDに変換しない。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "value": 1.0,
+            "unit": "fraction"
+          },
+          "verdict": "CONTRADICTION",
+          "reason": "source_1 Table 2の健常群F=1は固定した相対Fスケール。実測absolute F=1ではない。保存bioavailability_frac=1からsystemic CL/Vへ変換する根拠はない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3370715/"
+          ],
+          "locator": "PMC3370715 Table 2, F rows and final model",
+          "access_level": "full_paper",
+          "required_action": "absolute Fは未確定として分離し、apparent用F1=1のみをモデル規約として保持する。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3370715/",
+          "status": "retrieved",
+          "note": "Web openはchallengeだったがcurlでPMC全HTML取得。Methods/Results/Tableを直接確認。"
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3165315/",
+          "status": "retrieved",
+          "note": "Web openはchallengeだったがcurlでPMC全HTML取得。Methods/Results/Tableを直接確認。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "相対F=1をabsolute Fと解釈したsystemic値は根拠がない。",
+          "action": "systemic派生値を採用保留にし、relative/model Fとabsolute Fを別項目にする。"
+        },
+        {
+          "severity": "P2",
+          "finding": "半減期GMをarithmetic_meanにしている。CL exact_quoteも誤対応。",
+          "action": "統計型とsource locator/quoteを訂正する。"
+        }
+      ],
+      "audited_files": [
+        "drugs/raltegravir/pk.yml",
+        "drugs/raltegravir/spec_pk1_oral.yml",
+        "drugs/raltegravir/targets.yml"
+      ],
+      "scenario_review": {
+        "regimen": {
+          "route": "oral",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 400.0
+            }
+          }
+        },
+        "population": {
+          "species": "human",
+          "group": "adult_healthy"
+        },
+        "model_theta": {
+          "CL": 60.2,
+          "V": 677.4318833998217,
+          "KA": 1.2,
+          "F1": 1.0,
+          "ALAG1": 0.5
+        },
+        "one_compartment_half_life_h": 7.8
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "sildenafil",
+      "overall": "hold",
+      "summary": "V105 LをV/Fとした基礎の誤り、および平均F41%に対する保存44%を確認。既存source_2はED作用発現試験でPKパラメータの直接推定論文ではない。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 18.195113489698564,
+              "unit": "L/h",
+              "derived_from": "volume and half_life_h assuming ke=ln(2)/t1/2"
+            },
+            "absolute_L_per_h": 18.195113489698564,
+            "basis": "apparent"
+          },
+          "verdict": "CONTRADICTION",
+          "reason": "18.1951 L/hは105×ln2/4の一室導出。105 LをV/Fとする前提が誤りで、追加一次論文Table1のIV CLは40.8 L/h。前者を観測CL/Fまたはsystemic CLとして採用できない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1874258/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1874251/"
+          ],
+          "locator": "PMC1874258 Methods Pharmacokinetic assessments and Table 1; source_2 identity",
+          "access_level": "full_paper",
+          "required_action": "systemic CL/Vssと終末半減期の関係を再設計し、原著の観測CL/Fと混同しない。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 105.0,
+              "unit": "L"
+            },
+            "absolute_L": 105.0,
+            "basis": "apparent"
+          },
+          "verdict": "CONTRADICTION",
+          "reason": "FDA source_3はVss105 Lと記載しV/Fとは書かない。追加一次PMC1874258 Methods/Table1はIV後算出と明示。本文のapparentという語だけからV/Fへ読み替えた現在basisは誤り。",
+          "source_urls": [
+            "https://www.accessdata.fda.gov/drugsatfda_docs/label/2007/020895s027lbl.pdf",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1874258/"
+          ],
+          "locator": "FDA label p3 Absorption and Distribution; PMC1874258 Table1 IV column",
+          "access_level": "mixed",
+          "required_action": "105 Lをsystemic IV Vssとして再分類し、F補正・theta・派生値を影響評価する。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value": 4.0,
+            "unit": "h"
+          },
+          "verdict": "QUALIFIED",
+          "reason": "4 h自体はDailyMed source_1の終末半減期約4 hに一致。source_2は効力持続の論文で、そこでの既報PK要約を新たなPK推定値とは扱わない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=7086e222-0f2b-4c02-84c0-4f8635c90993",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1874251/"
+          ],
+          "locator": "DailyMed 12.3; PMC1874251 Introduction",
+          "access_level": "mixed",
+          "required_action": "ラベル由来約4 hと原著の調和平均等を区別し、VssからCLを算出する独立根拠にしない。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "value": 0.44,
+            "unit": "fraction"
+          },
+          "verdict": "CONTRADICTION",
+          "reason": "source_1ラベルは平均absolute F41%（範囲25–63%）。保存.44は範囲の中点に相当するが、rawの41%にも原著Table1の41%にも一致せず導出説明もない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=7086e222-0f2b-4c02-84c0-4f8635c90993",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1874258/"
+          ],
+          "locator": "DailyMed 12.3; PMC1874258 Table 1, F row",
+          "access_level": "mixed",
+          "required_action": "平均41%と範囲を保持し、44%を実測平均とする記録を是正する。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=7086e222-0f2b-4c02-84c0-4f8635c90993",
+          "status": "retrieved",
+          "note": "DailyMedラベルおよび2007 FDA添付文書PDF本文をWeb取得。FDA文書はclinical reviewではなくlabel。"
+        },
+        {
+          "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2007/020895s027lbl.pdf",
+          "status": "retrieved",
+          "note": "DailyMedラベルおよび2007 FDA添付文書PDF本文をWeb取得。FDA文書はclinical reviewではなくlabel。"
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1874258/",
+          "status": "retrieved",
+          "note": "curlでPMC全HTML取得。追加一次PMC1874258は健常男性50 mg IV/経口クロスオーバーN=12; 100 mg食事試験N=34も報告。"
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1874251/",
+          "status": "retrieved",
+          "note": "curlでPMC全HTML取得。追加一次PMC1874258は健常男性50 mg IV/経口クロスオーバーN=12; 100 mg食事試験N=34も報告。"
+        },
+        {
+          "url": "https://labeling.pfizer.com/ShowLabeling.aspx?id=14610",
+          "status": "failed",
+          "note": "Pfizer Error.htmへリダイレクト。採用根拠に未使用。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "systemic IV Vss105 Lをapparent V/Fと誤解釈し、さらにFを乗じてsystemic V46.2 Lを生成している。",
+          "action": "V basis/CL導出/theta/F適用を一括再評価する。"
+        },
+        {
+          "severity": "P1",
+          "finding": "原資料平均F=.41に対し保存.44で、provenanceがない。",
+          "action": "平均と範囲中点を混同しない入力へ修復する。"
+        },
+        {
+          "severity": "P2",
+          "finding": "source_3の種類をFDA clinical reviewと記載し、存在しないexact_quoteを付けている。",
+          "action": "文書種別labelと正確なlocatorへ訂正する。"
+        }
+      ],
+      "audited_files": [
+        "drugs/sildenafil/pk.yml",
+        "drugs/sildenafil/spec_pk1_oral.yml",
+        "drugs/sildenafil/targets.yml"
+      ],
+      "scenario_review": {
+        "regimen": {
+          "route": "oral",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        },
+        "population": {
+          "species": "human",
+          "group": "adult_healthy"
+        },
+        "model_theta": {
+          "CL": 18.195113489698564,
+          "V": 105.0,
+          "KA": 1.2,
+          "F1": 1.0,
+          "ALAG1": 0.5
+        },
+        "one_compartment_half_life_h": 4.0
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "sufentanil",
+      "overall": "qualified_fixture",
+      "summary": "現ファイルは30 mcg舌下投与と正しく区別。CL/F108 L/h、13.4 h、F53%、AUC0-inf .278 ng*h/mLをDSUVIAラベルで再確認。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 108.0,
+              "unit": "L/h"
+            },
+            "absolute_L_per_h": 108.0,
+            "basis": "apparent"
+          },
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "DSUVIA単回舌下投与後の平均apparent plasma CL108 L/hを確認。F1=1によるCL/Fモデル規約は整合。経口嚥下CLとして転用できない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8b580f3d-e3b5-4086-b093-87a980631147"
+          ],
+          "locator": "DailyMed DSUVIA 12.3 Elimination",
+          "access_level": "full_label",
+          "required_action": "source populationの詳細は原PK試験へ遡る。ラベル平均から個体分布を作らない。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 2087.868263174508,
+              "unit": "L"
+            },
+            "absolute_L": 2087.868263174508,
+            "basis": "apparent"
+          },
+          "verdict": "DERIVED",
+          "reason": "2087.868 L=108×13.4/ln2は算術一致。ラベルにこの観測Vdはなく、一室終末相を合わせる見かけVのfixture。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8b580f3d-e3b5-4086-b093-87a980631147"
+          ],
+          "locator": "DailyMed 12.3; local value_provenance formula",
+          "access_level": "full_label",
+          "required_action": "導出Vとして扱い、半減期一致を独立モデル検証と数えない。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value": 13.4,
+            "unit": "h"
+          },
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "ラベル単回平均terminal half-life13.4 hは一致。反復投与、IV半減期や作用時間とは区別する。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8b580f3d-e3b5-4086-b093-87a980631147"
+          ],
+          "locator": "DailyMed DSUVIA 12.3 Elimination",
+          "access_level": "full_label",
+          "required_action": "targets.used_to_calibrate_cl_v=falseの説明を、V導出に使った事実と整合させる。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "value": 0.53,
+            "unit": "fraction"
+          },
+          "verdict": "QUALIFIED",
+          "reason": "30 mcg舌下のabsolute F約53%、比較基準は30 mcg/1分IV。嚥下した経口製剤の9%とは明確に異なる。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8b580f3d-e3b5-4086-b093-87a980631147"
+          ],
+          "locator": "DailyMed DSUVIA 12.3 Absorption",
+          "access_level": "full_label",
+          "required_action": "SLとGI oralを明示し続ける。F1=1は絶対F100%の意味ではない。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8b580f3d-e3b5-4086-b093-87a980631147",
+          "status": "retrieved",
+          "note": "DailyMed全ラベルをWeb取得。改訂12/2025、§12.3を確認。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P2",
+          "finding": "targets.aucはラベル値なのに後段notesがDose/CLから計算した非独立targetと説明している。",
+          "action": "source記載とnotesを統一する。"
+        },
+        {
+          "severity": "P2",
+          "finding": "ファイル名spec_pk1_oralとtemplate名はgeneric外血管モデルで、現regimenはsublingual。吸収KA/ALAGはDSUVIA検証済み値ではない。",
+          "action": "舌下というrouteを出力でも維持し、吸収fixture仮定を明記。"
+        }
+      ],
+      "audited_files": [
+        "drugs/sufentanil/pk.yml",
+        "drugs/sufentanil/spec_pk1_oral.yml",
+        "drugs/sufentanil/targets.yml"
+      ],
+      "scenario_review": {
+        "regimen": {
+          "route": "sublingual",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 0.03
+            }
+          }
+        },
+        "population": {
+          "species": "human",
+          "group": "adult_healthy"
+        },
+        "model_theta": {
+          "CL": 108.0,
+          "V": 2087.868263174508,
+          "KA": 1.2,
+          "F1": 1.0,
+          "ALAG1": 0.5
+        },
+        "one_compartment_half_life_h": 13.399999999999999
+      },
+      "auc_review": {
+        "stored_value": 0.278,
+        "unit": "ng*h/mL",
+        "verdict": "VERIFIED_VALUE_ONLY",
+        "source_value": 278,
+        "source_unit": "h*pg/mL",
+        "conversion": "278 * 0.001 = 0.278",
+        "source_urls": [
+          "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8b580f3d-e3b5-4086-b093-87a980631147"
+        ],
+        "locator": "12.3 Absorption",
+        "note": "fixture式から独立に転記したラベルAUC。CLも同ラベルの要約なので独立研究による外部検証ではない。"
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "tefibazumab",
+      "overall": "hold",
+      "summary": "数値は原著のESRD血液透析患者8名10/20 mg/kg IV要約と一致。adult_healthy 100 mg単回シナリオへの一般化を採用保留。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 0.012,
+              "unit": "L/h"
+            },
+            "absolute_L_per_h": 0.012,
+            "basis": "systemic"
+          },
+          "verdict": "QUALIFIED",
+          "reason": "source_1 Abstractの平均12 mL/h→.012 L/hは一致。実際はESRD透析2群各4名で、Table1の群別12.65/11.80 mL/hの概数要約。健常者値ではない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1610062/"
+          ],
+          "locator": "Abstract; Methods; Table 1 CL row",
+          "access_level": "full_paper",
+          "required_action": "ESRD/hemodialysis/10–20 mg/kg/30分IV条件を保持する。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 7.3,
+              "unit": "L"
+            },
+            "absolute_L": 7.3,
+            "basis": "systemic"
+          },
+          "verdict": "QUALIFIED",
+          "reason": "Abstractの平均7.3 Lは一致。Table1の7.43/7.11 Lを概括した数値。本文はNCAでVと表記し、Vssと断定する記載は確認できない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1610062/"
+          ],
+          "locator": "Table 1 V row; PK analysis methods",
+          "access_level": "full_paper",
+          "required_action": "容積種別の定義を原解析手順で確認する。Vss/Vcとは記載しない。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value": 420.0,
+            "unit": "h"
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "Abstract17–18日の中点17.5×24=420 h。Table1は439.35 h/416.69 hであり420 h自体は研究の観測群平均ではない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1610062/"
+          ],
+          "locator": "Abstract; Table 1 t1/2 row",
+          "access_level": "full_paper",
+          "required_action": "range midpointを平均値やSD付き実測targetにしない。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "value": 1.0,
+            "unit": "fraction"
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "F=1はIV経路定義。非IVバイオアベイラビリティを測定した結果ではない。",
+          "source_urls": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC1610062/"
+          ],
+          "locator": "Methods, single IV infusion",
+          "access_level": "full_paper",
+          "required_action": "IV route definitionとして記録。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1610062/",
+          "status": "retrieved",
+          "note": "curlでPMC本文119044 bytes取得。Methods/Abstract/Table 1を確認。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P1",
+          "finding": "原著はESRD血液透析患者なのにtargetsはadult_healthy。healthyの別研究との類似性の論述は同一条件の証明ではない。",
+          "action": "対象集団を正しくラベル付けし、健常者モデルなら別の原著から完全なパラメータ組を採用する。"
+        },
+        {
+          "severity": "P2",
+          "finding": "100 mg固定量は原著10/20 mg/kg、30分点滴に一致せず、抗体一般の典型値と扱えない。",
+          "action": "開発品名、研究集団、投与量・点滴時間を明示する。"
+        }
+      ],
+      "audited_files": [
+        "drugs/tefibazumab/pk.yml",
+        "drugs/tefibazumab/spec_pk1_iv.yml",
+        "drugs/tefibazumab/targets.yml"
+      ],
+      "scenario_review": {
+        "regimen": {
+          "route": "iv",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        },
+        "population": {
+          "species": "human",
+          "group": "adult_healthy"
+        },
+        "model_theta": {
+          "CL": 0.012,
+          "V": 7.3
+        },
+        "one_compartment_half_life_h": 421.6645348406334
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "tizanidine",
+      "overall": "qualified_fixture",
+      "summary": "ラベルのVss/F/半減期は確認。CL46.5795 L/hはIV Vssと経口半減期を混ぜたfixture導出であり臨床CLとして未検証。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 46.579490533628324,
+              "unit": "L/h",
+              "derived_from": "IV steady-state volume and oral half-life assuming ke=ln(2)/t1/2"
+            },
+            "absolute_L_per_h": 46.579490533628324,
+            "basis": "systemic"
+          },
+          "verdict": "DERIVED",
+          "reason": "2.4 L/kg×70 kg×ln2/2.5 h=46.57949 L/hは算術一致。IV Vssと経口終末半減期からsystemic CLを特定する科学的根拠はなく、ラベルの直接報告値ではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=043d9e51-bfa2-4add-9058-5ece332f7e99"
+          ],
+          "locator": "DailyMed 12.3 Absorption and Distribution / Metabolism and Excretion; local formula",
+          "access_level": "full_label",
+          "required_action": "臨床CLに採用せず、同一条件の原著CLを取得する。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 2.4,
+              "unit": "L/kg"
+            },
+            "absolute_L": 168.0,
+            "basis": "systemic"
+          },
+          "verdict": "QUALIFIED",
+          "reason": "健常成人IV Vss平均2.4 L/kg（CV21%）を確認。70 kg基準168 Lは計算一致、V/Fではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=043d9e51-bfa2-4add-9058-5ece332f7e99"
+          ],
+          "locator": "DailyMed 12.3 Absorption and Distribution",
+          "access_level": "full_label",
+          "required_action": "Vssとterminal volumeの相違を維持する。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value": 2.5,
+            "unit": "h"
+          },
+          "verdict": "VERIFIED_VALUE_ONLY",
+          "reason": "Metabolism and Excretionの約2.5 h（CV33%）に一致。別の空腹時8 mg製剤比較では約2 hも記載され、製剤/食事条件を固定する必要。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=043d9e51-bfa2-4add-9058-5ece332f7e99"
+          ],
+          "locator": "DailyMed 12.3, formulation comparison and Metabolism and Excretion",
+          "access_level": "full_label",
+          "required_action": "targets SD1 hは原著推定としない。半減期をCL導出に使った事実を表示する。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "value": 0.4,
+            "unit": "fraction"
+          },
+          "verdict": "QUALIFIED",
+          "reason": "absolute oral F約40%（CV24%）は一致。ただし錠剤/カプセルは空腹時のみ生物学的同等、食事や内容物散布で吸収が異なる。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=043d9e51-bfa2-4add-9058-5ece332f7e99"
+          ],
+          "locator": "DailyMed 12.3 Absorption and Distribution",
+          "access_level": "full_label",
+          "required_action": "製剤/食事状態を必須にする。100 mgは記載された線形性検証1–20 mgの外である。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=043d9e51-bfa2-4add-9058-5ece332f7e99",
+          "status": "retrieved",
+          "note": "DailyMed全ラベル取得、updated2025-05-05/revised12-2020。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P2",
+          "finding": "CLと半減期の一致はVssと半減期からCLを作ったためで、モデル妥当性の独立根拠ではない。",
+          "action": "CLをfixture_derivedに限定し臨床推定から隔離する。"
+        },
+        {
+          "severity": "P2",
+          "finding": "100 mgはラベルのPK線形性検証1–20 mgの範囲外。",
+          "action": "用量妥当性を未確認と明示し臨床用途から除外する。"
+        }
+      ],
+      "audited_files": [
+        "drugs/tizanidine/pk.yml",
+        "drugs/tizanidine/spec_pk1_oral.yml",
+        "drugs/tizanidine/targets.yml"
+      ],
+      "scenario_review": {
+        "regimen": {
+          "route": "oral",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        },
+        "population": {
+          "species": "human",
+          "group": "adult_healthy"
+        },
+        "model_theta": {
+          "CL": 46.579490533628324,
+          "V": 168.0,
+          "KA": 1.2,
+          "F1": 0.4,
+          "ALAG1": 0.5
+        },
+        "one_compartment_half_life_h": 2.5
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "triazolam",
+      "overall": "qualified_fixture",
+      "summary": "CL/F31.56 L/hの原著値とF44%の別一次抄録を確認。ただしVは別出典半減期中点との合成で、100 mgへの臨床外挿は支持されない。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 31.560000000000002,
+              "unit": "L/h"
+            },
+            "absolute_L_per_h": 31.560000000000002,
+            "basis": "apparent"
+          },
+          "verdict": "QUALIFIED",
+          "reason": "source_3同一論文PMID3567010は54名の健常若年男性、0.5 mg経口、oral CL526±38 mL/min（平均±SEM）。×60/1000=31.56 L/hは正しいCL/F。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/3567010/"
+          ],
+          "locator": "PMID 3567010 Abstract",
+          "access_level": "abstract",
+          "required_action": "SEMとSDを区別する。70 kg補正ではなく平均体重77 kgの研究の絶対CL/F値。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 159.36009421659492,
+              "unit": "L",
+              "derived_from": "clearance and half_life_h assuming ke=ln(2)/t1/2"
+            },
+            "absolute_L": 159.36009421659492,
+            "basis": "apparent"
+          },
+          "verdict": "DERIVED",
+          "reason": "159.3601 L=31.56×3.5/ln2。ラベル半減期中点と別研究CL/Fを合わせた一室V/Fで、原著の観測容積ではない。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/3567010/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ce6ddb53-89ca-4edf-a519-553d34ce7938"
+          ],
+          "locator": "PMID 3567010 Abstract; DailyMed Clinical Pharmacology; local formula",
+          "access_level": "mixed",
+          "required_action": "異なる研究の導出値と明示し、t_halfの独立検証性を主張しない。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value": 3.5,
+            "unit": "h"
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "ラベル1.5–5.5 h中点3.5 hは算術一致。CLの原著は平均2.6 hであり、3.5 hは同一集団の観測平均ではない。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ce6ddb53-89ca-4edf-a519-553d34ce7938",
+            "https://pubmed.ncbi.nlm.nih.gov/3567010/"
+          ],
+          "locator": "DailyMed Clinical Pharmacology; PMID3567010 Abstract",
+          "access_level": "mixed",
+          "required_action": "中点のsummaryをarithmetic_mean実測値としない。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "value": 0.44,
+            "unit": "fraction"
+          },
+          "verdict": "QUALIFIED",
+          "reason": "保存.44は既存value_provenanceに項目欠落。追加一次PMID7593708抄録で12男性、0.25 mg市販経口錠/IV比較の実測平均F44%を確認。CL研究0.5 mgとは別の研究。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/7593708/"
+          ],
+          "locator": "PMID7593708 Abstract, observed absolute availability",
+          "access_level": "abstract",
+          "required_action": "source_id/条件を追加して根拠を明示。F1=1のCL/Fモデル規約と区別する。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/3567010/",
+          "status": "retrieved",
+          "note": "PubMed抄録およびDailyMed本文をWeb取得。PMC source_3の通常Web openはchallenge。"
+        },
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ce6ddb53-89ca-4edf-a519-553d34ce7938",
+          "status": "retrieved",
+          "note": "PubMed抄録およびDailyMed本文をWeb取得。PMC source_3の通常Web openはchallenge。"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/7593708/",
+          "status": "retrieved",
+          "note": "NCBI公式efetch XMLで追加原著抄録を取得。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P2",
+          "finding": "F44%のsource mappingがなく、systemic値は別研究Fを掛けて作っている。",
+          "action": "Fの新規一次出典をレビューし、交差研究によるsystemic換算を限定する。"
+        },
+        {
+          "severity": "P2",
+          "finding": "100 mg fixtureはCL研究0.5 mgの200倍。原著による裏付けはない。",
+          "action": "合成用テスト条件とし、用量の臨床適合は別途是正する。"
+        }
+      ],
+      "audited_files": [
+        "drugs/triazolam/pk.yml",
+        "drugs/triazolam/spec_pk1_oral.yml",
+        "drugs/triazolam/targets.yml"
+      ],
+      "scenario_review": {
+        "regimen": {
+          "route": "oral",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        },
+        "population": {
+          "species": "human",
+          "group": "adult_healthy"
+        },
+        "model_theta": {
+          "CL": 31.560000000000002,
+          "V": 159.36009421659492,
+          "KA": 1.2,
+          "F1": 1.0,
+          "ALAG1": 0.5
+        },
+        "one_compartment_half_life_h": 3.5
+      },
+      "clinical_use_status": "HOLD"
+    },
+    {
+      "slug": "verapamil",
+      "overall": "qualified_fixture",
+      "summary": "6名のIV/経口原著でCL、Vd(area)、Fを確認。半減期5.1 hは別ラベル範囲中点で、二室研究の終末相4.21 hとは異なる。",
+      "parameters": [
+        {
+          "parameter": "clearance",
+          "stored_value": {
+            "parsed": {
+              "value": 30.0384,
+              "unit": "L/h"
+            },
+            "absolute_L_per_h": 30.0384,
+            "basis": "systemic"
+          },
+          "verdict": "QUALIFIED",
+          "reason": "source_3の10 mg IV、6健常者平均body CL500.64 mL/min×60/1000=30.0384 L/hは一致。二室モデルのsystemic CL。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/432439/"
+          ],
+          "locator": "PMID432439 Abstract",
+          "access_level": "abstract",
+          "required_action": "非対称体別反復投与CLと混合しない。"
+        },
+        {
+          "parameter": "volume",
+          "stored_value": {
+            "parsed": {
+              "value": 175.7,
+              "unit": "L"
+            },
+            "absolute_L": 175.7,
+            "basis": "systemic"
+          },
+          "verdict": "QUALIFIED",
+          "reason": "IV Vd(area)2.51 L/kg×70 kg=175.7 Lは一致。原著のapparent volumeはarea法の容積でありoral V/Fの意味ではない。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/432439/"
+          ],
+          "locator": "PMID432439 Abstract, IV two-compartment parameters",
+          "access_level": "abstract",
+          "required_action": "Vd(area)/Vzとして型を保持し、Vss/Vcと混同しない。"
+        },
+        {
+          "parameter": "half_life",
+          "stored_value": {
+            "value": 5.1,
+            "unit": "h"
+          },
+          "verdict": "FIXTURE_ASSUMPTION",
+          "reason": "ラベルの単回研究平均半減期2.8–7.4 hから中点5.1 hを選択。source_3のIV終末相平均は4.21 hであり異なる出典・要約。",
+          "source_urls": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c9d71191-b32a-44f9-bc5a-283a06884c82",
+            "https://pubmed.ncbi.nlm.nih.gov/432439/"
+          ],
+          "locator": "DailyMed Pharmacokinetics and metabolism; PMID432439 Abstract",
+          "access_level": "mixed",
+          "required_action": "5.1を実測平均ではなくfixture midpointと記録する。"
+        },
+        {
+          "parameter": "bioavailability",
+          "stored_value": {
+            "value": 0.2247,
+            "unit": "fraction"
+          },
+          "verdict": "QUALIFIED",
+          "reason": "6名で120 mg経口/10 mg IV比較、平均22.47%=.2247は一致。単回条件であり反復、徐放製剤へ外挿できない。",
+          "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/432439/"
+          ],
+          "locator": "PMID432439 Abstract, oral administration paragraph",
+          "access_level": "abstract",
+          "required_action": "原著全文で経口製剤を確認する。抄録だけではimmediate_releaseと断定しない。"
+        }
+      ],
+      "source_checks": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/432439/",
+          "status": "retrieved",
+          "note": "PubMed通常HTMLはchallenge。NCBI公式efetch XMLでAbstractを取得。"
+        },
+        {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c9d71191-b32a-44f9-bc5a-283a06884c82",
+          "status": "retrieved",
+          "note": "DailyMed全ラベルをWeb取得。"
+        }
+      ],
+      "issues": [
+        {
+          "severity": "P2",
+          "finding": "F provenanceのimmediate_release_oralは取得した抄録に製剤明記がなく未確認。spec.meta.sourcesから原著source_3も欠落。",
+          "action": "製剤根拠を全文で確定しmeta出典に採用原著を反映する。"
+        }
+      ],
+      "audited_files": [
+        "drugs/verapamil/pk.yml",
+        "drugs/verapamil/spec_pk1_oral.yml",
+        "drugs/verapamil/targets.yml"
+      ],
+      "scenario_review": {
+        "regimen": {
+          "route": "oral",
+          "units": {
+            "dose": "mg"
+          },
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        },
+        "population": {
+          "species": "human",
+          "group": "adult_healthy"
+        },
+        "model_theta": {
+          "CL": 30.0384,
+          "V": 175.7,
+          "KA": 1.2,
+          "F1": 0.2247,
+          "ALAG1": 0.5
+        },
+        "one_compartment_half_life_h": 4.054342429170076
+      },
+      "clinical_use_status": "HOLD"
+    }
+  ]
+}

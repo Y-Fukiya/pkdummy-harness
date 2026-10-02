@@ -1,0 +1,222 @@
+{
+  "capture_count": 27,
+  "note": "Only shell-captured files have byte hashes; web-only reads are documented separately in source-access.csv. Temporary paths are not durable archives.",
+  "captures": [
+    {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:10589373&format=json&resultType=core",
+      "temporary_path": "/tmp/pk-audit-a/10589373.json",
+      "sha256": "2a799c1293fd9b9a430faa2ea5df63bf493fb380541d4b40713fdf28101fdcdd",
+      "bytes": 6017,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:11907493&format=json&resultType=core",
+      "temporary_path": "/tmp/pk-audit-a/11907493.json",
+      "sha256": "4de251c95ab1096954c1e31458fe4e61dfee1a5798df4540c1c13f2338912ed4",
+      "bytes": 7616,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:18502001&format=json&resultType=core",
+      "temporary_path": "/tmp/pk-audit-a/18502001.json",
+      "sha256": "13ab7941184ec88eec865a10662e8e2b2f8b5e6a0fcf3cbae04e31d631d7c614",
+      "bytes": 8806,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:34342172&format=json&resultType=core",
+      "temporary_path": "/tmp/pk-audit-a/34342172.json",
+      "sha256": "95cf9f4f70049d3567e7175c2b3ad8ce6812f7b001b821d9c994018607e27761",
+      "bytes": 6971,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:6152055&format=json&resultType=core",
+      "temporary_path": "/tmp/pk-audit-a/6152055.json",
+      "sha256": "9a7c4654279c4b5997c41b0418020857a1c385a63faf36491a64d217a3e7aeaf",
+      "bytes": 5316,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:7048912&format=json&resultType=core",
+      "temporary_path": "/tmp/pk-audit-a/7048912.json",
+      "sha256": "69f2a283ae86b0fb6f4dba7b4ef678d8560524720f92ecc18e2f99833d054285",
+      "bytes": 4894,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:8513649&format=json&resultType=core",
+      "temporary_path": "/tmp/pk-audit-a/8513649.json",
+      "sha256": "abb7d231bc52b6d9708e1921d643e90d18bab4bd785c1cefbb296c9cea8da70b",
+      "bytes": 6691,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1635184/",
+      "temporary_path": "/tmp/pk-audit-a/PMC1635184.html",
+      "sha256": "690699b368f29ce3d3f542462ceb7a2cbc68865a0a3175cba59378d4a5308a16",
+      "bytes": 187638,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2628753/",
+      "temporary_path": "/tmp/pk-audit-a/PMC2628753.html",
+      "sha256": "caaebbdf1ffb79f567f13509f4837cee0fabc45d9e36017c596ecb7cafe7da2b",
+      "bytes": 189225,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3663890/",
+      "temporary_path": "/tmp/pk-audit-a/PMC3663890.html",
+      "sha256": "2daf86f1669d833deefe4b177e296106755c0a133de1f2f2cceb3395f695e02c",
+      "bytes": 161037,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3837853/",
+      "temporary_path": "/tmp/pk-audit-group-c-xn5g3665/motavizumab-PMC3837853.html",
+      "sha256": "568433f5bbaaab6663c155921e81a798ff6ae51bfc61b1716df4b3ba96bef785",
+      "bytes": 159230,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1610062/",
+      "temporary_path": "/tmp/pk-audit-group-c-xn5g3665/tefibazumab-PMC1610062.html",
+      "sha256": "d5dafdc58a6c9f10aa79428e8bf541b86c913aefca83b6b14f874edc63614022",
+      "bytes": 119078,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3370715/",
+      "temporary_path": "/tmp/pk-audit-group-c-xn5g3665/raltegravir-PMC3370715.html",
+      "sha256": "7a2ea2a22560bd5e0e420904da6029fb7529b59df65f8ab8dc77739313e1e3ca",
+      "bytes": 219954,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3165315/",
+      "temporary_path": "/tmp/pk-audit-group-c-xn5g3665/raltegravir-half-life-PMC3165315.html",
+      "sha256": "7c89c6b7d2ae2a5b752dd1f2c21cfd84fafa54cc37edc4250e200404c871ad17",
+      "bytes": 157195,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1874258/",
+      "temporary_path": "/tmp/pk-audit-group-c-xn5g3665/sildenafil-primary-PMC1874258.html",
+      "sha256": "1f059dcff81f8edc721d0d3b4ef26f7a8dd9723e5e89c8f093d2165c08d092c4",
+      "bytes": 151392,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1874251/",
+      "temporary_path": "/tmp/pk-audit-group-c-xn5g3665/sildenafil-existing-PMC1874251.html",
+      "sha256": "edbd3b52eed585f6eb48a0e8aafac7c3f3247cbb08646211d6608cf74d9ed674",
+      "bytes": 129992,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=3665338,9429741,432439,2315973,3567010,7593708&retmode=xml",
+      "temporary_path": "/tmp/pk-audit-group-c-xn5g3665/pubmed-abstracts.xml",
+      "sha256": "0b656ec40010a094f1175f00590c900fb0e2cda4a3316f370623504ecd7c4a97",
+      "bytes": 38291,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d8b466e0-a35e-4fba-9d43-4e6c0122e7ad",
+      "temporary_path": "/tmp/pk-audit-group-c-xn5g3665/omeprazole-label.html",
+      "sha256": "22bca12ab1a6bc1e38fad1b74fab3cae638ef3b8c763bcecc7ee881628967d3b",
+      "bytes": 149377,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8b580f3d-e3b5-4086-b093-87a980631147",
+      "temporary_path": "/tmp/pk-audit-group-c-xn5g3665/sufentanil-label.html",
+      "sha256": "990521dddc42fc81a09c20a552928553f962110712b697ba877087eca7e91dad",
+      "bytes": 123766,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=7086e222-0f2b-4c02-84c0-4f8635c90993",
+      "temporary_path": "/tmp/pk-audit-group-c-xn5g3665/sildenafil-label.html",
+      "sha256": "48cafd86708c88d34ff27170533c78becd3f5f353dd3cf060ec938837d6ba54e",
+      "bytes": 245725,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=043d9e51-bfa2-4add-9058-5ece332f7e99",
+      "temporary_path": "/tmp/pk-audit-group-c-xn5g3665/tizanidine-label.html",
+      "sha256": "08d231fa9791401f17d62a26a818eb7612e47cc3783fa9a1824e128c131e7099",
+      "bytes": 226275,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ce6ddb53-89ca-4edf-a519-553d34ce7938",
+      "temporary_path": "/tmp/pk-audit-group-c-xn5g3665/triazolam-label.html",
+      "sha256": "3eb46d24ede9e0720e579670f3ec1d90c6037eb18e717f35d55a9e790ea2659a",
+      "bytes": 171743,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c9d71191-b32a-44f9-bc5a-283a06884c82",
+      "temporary_path": "/tmp/pk-audit-group-c-xn5g3665/verapamil-label.html",
+      "sha256": "42a381cf6764d712f0cc44bbdc2afba7f771981494014a30fcdd3188e2620d05",
+      "bytes": 175730,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2007/020895s027lbl.pdf",
+      "temporary_path": "/tmp/pk-audit-group-c-xn5g3665/sildenafil-fda-label-2007.pdf",
+      "sha256": "4343fd8bd2ba0a0689e04d81ad14fea088c3e715ca611a49df37e3de87cd5eca",
+      "bytes": 440477,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary capture; original full text is not included in the repository report."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3581054/",
+      "temporary_path": "/tmp/pk-audit-b-erythromycin.html",
+      "sha256": "e15802edc8076e1f8f1c45a31a668e71432f2dace3c6337a032af11379c692f7",
+      "bytes": 200755,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary full HTML capture; source text not included in repository report."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1873801/",
+      "temporary_path": "/tmp/pk-audit-b-inulin.html",
+      "sha256": "bf80292ee9a0074ea67da5c47e46ea3c8a0fbd96e999b6356d2473a3f8f9bd6d",
+      "bytes": 128000,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary full HTML capture; source text not included in repository report."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12370162/",
+      "temporary_path": "/tmp/pk-audit-b-efavirenz.html",
+      "sha256": "e86d3c44005c4438c9e8eea5245a7a343206614ad0922b1ace9e4192e6a82615",
+      "bytes": 167974,
+      "retrieved_date": "2026-10-02",
+      "note": "Local temporary full HTML capture; source text not included in repository report."
+    }
+  ]
+}

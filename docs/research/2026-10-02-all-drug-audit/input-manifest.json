@@ -1,0 +1,450 @@
+{
+  "audit_date": "2026-10-02",
+  "drug_count": 37,
+  "files": [
+    {
+      "path": "drugs/abciximab/pk.yml",
+      "sha256": "303204993cf429ee2f48310333701d76ec35bb5a579ab1877c2120477a98ff06"
+    },
+    {
+      "path": "drugs/abciximab/spec_pk1_iv.yml",
+      "sha256": "4ad73c4e93747e148c7046e2f70c0a75b02cd902f396f50af5b6e51fec5caf7f"
+    },
+    {
+      "path": "drugs/abciximab/targets.yml",
+      "sha256": "fb239f400f13316223c0b2b810537508a2500eeea3e57eacd6f3fae3f9cfecac"
+    },
+    {
+      "path": "drugs/aciclovir/pk.yml",
+      "sha256": "b6e8f2a145569001c6cf9c4deb57e92a6c8e455bcd8dd5e27fb267fe95bfdfa0"
+    },
+    {
+      "path": "drugs/aciclovir/spec_pk1_oral.yml",
+      "sha256": "164f270db594094b18206d8e6b1528b675f2f4e2502943b58bd2c99ea4d97f9f"
+    },
+    {
+      "path": "drugs/aciclovir/targets.yml",
+      "sha256": "c9bf8244faeee69a3a3ee7d25eff53c4b524f7d28be1cf0ca605c8256f7d5911"
+    },
+    {
+      "path": "drugs/albuterol/pk.yml",
+      "sha256": "1c6597efb4f8f4fa73fcaee6d84b974e4e4c7e05e4a85e473d78674f8437237d"
+    },
+    {
+      "path": "drugs/albuterol/spec_pk1_iv.yml",
+      "sha256": "4086ea4ccd62e0ceacedf2bb0f4e7bd87a8c694ad336aaa584b57e610bc93488"
+    },
+    {
+      "path": "drugs/albuterol/targets.yml",
+      "sha256": "e5385bfcca98e529186dd9a38114348d719a16e98896264cc0ca54e6148f0484"
+    },
+    {
+      "path": "drugs/alfentanil/pk.yml",
+      "sha256": "dd369695ab30f7ec20a43119e061722daadbc8e2b677073c13afd9a3faff0145"
+    },
+    {
+      "path": "drugs/alfentanil/spec_pk1_iv.yml",
+      "sha256": "6905f64719b4b4f44ee72a726976a732305b023952732015193f068736affeb9"
+    },
+    {
+      "path": "drugs/alfentanil/targets.yml",
+      "sha256": "2d1c8e1e2b9aa8c78654b260b07010416d4d0438441b4a193eb8d48526f52d3b"
+    },
+    {
+      "path": "drugs/alprazolam/pk.yml",
+      "sha256": "8e20ec3f8ad4eea8c37e13416eb700dca399ab024c37d47bff8953c85c152aaf"
+    },
+    {
+      "path": "drugs/alprazolam/spec_pk1_oral.yml",
+      "sha256": "13f3bf21bc8d9e60ca43a62b64c4fe2c261651364f81b25e25aa0f09b5e65b32"
+    },
+    {
+      "path": "drugs/alprazolam/targets.yml",
+      "sha256": "814ed18f3f9cdf58a05de21411786e96fe8eca181b75b3d7b7c91048b75e56ec"
+    },
+    {
+      "path": "drugs/amikacin/pk.yml",
+      "sha256": "522866cc652246ff64c127b752c55e34394aa5d7fed8f1b4d68c0e671e575b3a"
+    },
+    {
+      "path": "drugs/amikacin/spec_pk1_iv.yml",
+      "sha256": "62dd2b26fa3fa40dbff18f661f4e8ee5fcdcc3be07d7e3040b26e0269d599a7a"
+    },
+    {
+      "path": "drugs/amikacin/targets.yml",
+      "sha256": "895bcb21b0b4e1691dcff01533b87f8f532708002ac89fee8f44a60534c8fcab"
+    },
+    {
+      "path": "drugs/apixaban/pk.yml",
+      "sha256": "4398f32ea9f14016bf21bed13d6fa7f64d87f287e775e65d9c329d5fe5345ac8"
+    },
+    {
+      "path": "drugs/apixaban/spec_pk1_oral.yml",
+      "sha256": "aa1c82bbfe6fae044b2a9515000ff3abcccdcc9171f7e6464779fd2ea961c42c"
+    },
+    {
+      "path": "drugs/apixaban/targets.yml",
+      "sha256": "5e0e5ea4dd1edb4de1ea6e4beb1d81ebd13e7ed71854acc768745ff1fea969ed"
+    },
+    {
+      "path": "drugs/atazanavir/pk.yml",
+      "sha256": "cf7f2885300b28ed4192e3ef6d053c829df247cb7750d74e491537e1f91b31de"
+    },
+    {
+      "path": "drugs/atazanavir/spec_pk1_oral.yml",
+      "sha256": "a854dca06f5d73e764fc30c527287d6a9882dda8894af43d3141e2b29e2b098c"
+    },
+    {
+      "path": "drugs/atazanavir/targets.yml",
+      "sha256": "c230cd8c0324514c1a69cc8cedfb1ccb8530734e858fa8ee73be34cba7cb20f5"
+    },
+    {
+      "path": "drugs/buprenorphine/pk.yml",
+      "sha256": "843375b431eabd9bb7a1dde4510d3ea54a479d2ad44eeca8661812341a0f94a7"
+    },
+    {
+      "path": "drugs/buprenorphine/spec_pk1_iv.yml",
+      "sha256": "71929cd7e489f89f822afa04652549bebe189d801a221579e6ccb7c116b86e1f"
+    },
+    {
+      "path": "drugs/buprenorphine/targets.yml",
+      "sha256": "3539ef778dde26bc8269bd9e48d585160882cd19a2d8376f875183ab740c2b26"
+    },
+    {
+      "path": "drugs/carbamazepine/pk.yml",
+      "sha256": "70b81a0edc8ff2af8c70166af5f06bbbe5b51f7373f69a0c8d445f057117f98d"
+    },
+    {
+      "path": "drugs/carbamazepine/spec_pk1_oral.yml",
+      "sha256": "f807778d0ad1bcc9e4d62621a41c6740ce226e8520755a3f990522859ccd9618"
+    },
+    {
+      "path": "drugs/carbamazepine/targets.yml",
+      "sha256": "35bb0f343e9116f96ed45bd43ca4ecdd72d64017be160975a0d1213b6751371a"
+    },
+    {
+      "path": "drugs/cda1/pk.yml",
+      "sha256": "ae3de763f502209c01ae2fe512a5b0709977a7e504c5f17883f767cb5de1e0e6"
+    },
+    {
+      "path": "drugs/cda1/spec_pk1_iv.yml",
+      "sha256": "185464e84581084fde1a22632a01e28860f74db6242f1e18a72d883e7f9ccc10"
+    },
+    {
+      "path": "drugs/cda1/targets.yml",
+      "sha256": "fe3d6338e58e22c4fcdcd182422d4edf9342647043f8b77f8463baaeff8f6e9a"
+    },
+    {
+      "path": "drugs/cimetidine/pk.yml",
+      "sha256": "d24b186aab5a0767ee82370fbc053166d98bc8f7cd24557cc62e5b8ea931a043"
+    },
+    {
+      "path": "drugs/cimetidine/spec_pk1_oral.yml",
+      "sha256": "29fa4a8eb56d46211c24f7a8dce30f771ea19cccec0fd745cec5778d160e2b35"
+    },
+    {
+      "path": "drugs/cimetidine/targets.yml",
+      "sha256": "cb786c24a928e5f0db030100777fc2b890e2dc91e10b27c12f0aff58ed443d33"
+    },
+    {
+      "path": "drugs/clarithromycin/pk.yml",
+      "sha256": "0f63904ae320ff286402a7e3af829b40e7f65d223094d82710bf4dffc752cf79"
+    },
+    {
+      "path": "drugs/clarithromycin/spec_pk1_oral.yml",
+      "sha256": "72fa029b6555812fc9fc8468c8ceb7d595beda6a1f11f27e1a80f6e564069c08"
+    },
+    {
+      "path": "drugs/clarithromycin/targets.yml",
+      "sha256": "659a3806be460d5485a470af25d1cca6c1902af2e63967aa9d247fe9c847ee19"
+    },
+    {
+      "path": "drugs/dapagliflozin/pk.yml",
+      "sha256": "da4aaa43368be4811a013b3d9784e89e9b300b70fc7d35aeccb798fce989b07d"
+    },
+    {
+      "path": "drugs/dapagliflozin/spec_pk1_oral.yml",
+      "sha256": "6176f6e8c0abcd91de332556824307bcea767d0da8e4dfd4f29fbc8efd4bb818"
+    },
+    {
+      "path": "drugs/dapagliflozin/targets.yml",
+      "sha256": "436946a809493a32475e703f7832521cfc206b0f2d419a9f7b7fdaf946bce311"
+    },
+    {
+      "path": "drugs/efavirenz/pk.yml",
+      "sha256": "72d353a8db30b9ec0eccbd3c997c0afa51385130d24c2ffa768c638f546e384e"
+    },
+    {
+      "path": "drugs/efavirenz/spec_pk1_oral.yml",
+      "sha256": "d32acfc50a87e85ca7104d416f034c4377777e10b2b76048bfe1aa3c3094453b"
+    },
+    {
+      "path": "drugs/efavirenz/targets.yml",
+      "sha256": "554041057ff4241b78108168b09969ec6af4bc9c665b7bae52ab94a49514ac73"
+    },
+    {
+      "path": "drugs/erythromycin/pk.yml",
+      "sha256": "87064062493d8e42bc1ca198811915e00db0205fc6e4726167161ecb4cfd6acb"
+    },
+    {
+      "path": "drugs/erythromycin/spec_pk1_iv.yml",
+      "sha256": "eb4e037b1bb0e5eccb602bc18c34c41d3deeb9756ff4190da8807652619f2066"
+    },
+    {
+      "path": "drugs/erythromycin/targets.yml",
+      "sha256": "c4127460cf4b7d53943f528f2b0a71f19e808bfc47799fea4b09fb0ca905f01e"
+    },
+    {
+      "path": "drugs/ethinylestradiol/pk.yml",
+      "sha256": "384164d0903f5728a3dc74f11fbb7c4f97abc5f54c10b001a9435fa3b7f3ac85"
+    },
+    {
+      "path": "drugs/ethinylestradiol/spec_pk1_oral.yml",
+      "sha256": "81ff7cb537909def5b56fe04315abb498873406a291792a87b4c859298a1b189"
+    },
+    {
+      "path": "drugs/ethinylestradiol/targets.yml",
+      "sha256": "4976174950c07f6c1c47d1bcea9d6a2a0324d582c74f86dd207a0b3c0f1ce756"
+    },
+    {
+      "path": "drugs/felodipine/pk.yml",
+      "sha256": "de8aa84a96e1e0d8a84151b47bf5752aebf525f0f53c1a2390646e84bb99f255"
+    },
+    {
+      "path": "drugs/felodipine/spec_pk1_oral.yml",
+      "sha256": "abcfa08bc834887422de4b7773aca228ed202fbec3d97cca643248dfd14c723b"
+    },
+    {
+      "path": "drugs/felodipine/targets.yml",
+      "sha256": "9f20363c5f92f22d6eb9393c14c7ff03dbad49c4fc4cfc7b3c96ee130a019698"
+    },
+    {
+      "path": "drugs/fluconazole/pk.yml",
+      "sha256": "47b618add07cd9d3d4638e9621d5bb3dccb77bd55e0c6156dca8093f42c842f6"
+    },
+    {
+      "path": "drugs/fluconazole/spec_pk1_iv.yml",
+      "sha256": "841469bde2c4b86d293a39ed4fe642b0467d1ec6c9f290ce33f8bd0c938a1f3b"
+    },
+    {
+      "path": "drugs/fluconazole/targets.yml",
+      "sha256": "becde3ec99289e5ab1ab09d573f5b0714616e82e0e62e622b3f300551b07cc98"
+    },
+    {
+      "path": "drugs/fluvoxamine/pk.yml",
+      "sha256": "7e8df449d89e402b751238b61360665d9bef8d511d11d7eb5d6673153ad0bd07"
+    },
+    {
+      "path": "drugs/fluvoxamine/spec_pk1_oral.yml",
+      "sha256": "a5e42c91fabbd69685a6488a0c03fb11a59420cefcb59d07120ddb6053991558"
+    },
+    {
+      "path": "drugs/fluvoxamine/targets.yml",
+      "sha256": "099f4a50337e66f9c166e9b011d44715e8617271aa4b09dbb95f8bd3a6e0f332"
+    },
+    {
+      "path": "drugs/inulin/pk.yml",
+      "sha256": "95f9375a6005862ec7d52ee5e1b4bd5bad09300bb2119d84026775010b235492"
+    },
+    {
+      "path": "drugs/inulin/spec_pk1_iv.yml",
+      "sha256": "8917a06c3c19e620c0d2178b799c772a13ba36581c765fc3b117bf817dbf793f"
+    },
+    {
+      "path": "drugs/inulin/targets.yml",
+      "sha256": "1810c626769bd262849466f02d4622912f1cb627635f35dc9438c536818e622b"
+    },
+    {
+      "path": "drugs/itraconazole/pk.yml",
+      "sha256": "f3e22d7f2c45546be32716b35e8ead379f842acab99a7d3f7a05a4dbf98c7579"
+    },
+    {
+      "path": "drugs/itraconazole/spec_pk1_oral.yml",
+      "sha256": "09aff78c1c79f33940756d82db533b18f8293022b3b51a15fec6e06a8b59f7ca"
+    },
+    {
+      "path": "drugs/itraconazole/targets.yml",
+      "sha256": "83f74edccd40ef3a74fabb6b7e6052a55b0520cf894a7a569feeaeecde484009"
+    },
+    {
+      "path": "drugs/mefenamic_acid/pk.yml",
+      "sha256": "4d4a437a838e0e7df48a5509440f141f938eb0e5995eead5e227ec485a6a2866"
+    },
+    {
+      "path": "drugs/mefenamic_acid/spec_pk1_oral.yml",
+      "sha256": "39b8aeae40a44df4b9bcf7dec14a6c34a7307e50beef0addf122ca100fbebd02"
+    },
+    {
+      "path": "drugs/mefenamic_acid/targets.yml",
+      "sha256": "6205515f6f4c4278b89b267a98b5619fa6897b2a89f4d0ca2839c2190102a884"
+    },
+    {
+      "path": "drugs/metoprolol/pk.yml",
+      "sha256": "a01b8d947ee1aaac829b35940e48ef34038fad7a3124563ae462199a56a6871d"
+    },
+    {
+      "path": "drugs/metoprolol/spec_pk1_oral.yml",
+      "sha256": "ea875ae753372039b04bcace8d195eea05dec30abe59ed5ee36eb35aadabae8c"
+    },
+    {
+      "path": "drugs/metoprolol/targets.yml",
+      "sha256": "a9c62a51f5a7cc178a6599254d117ca228a825309056f2408a2a9c091a6d82e2"
+    },
+    {
+      "path": "drugs/mexiletine/pk.yml",
+      "sha256": "5e0a4cdcc58eca105225b6af404537dd3eed4cadde14bbb0ab2ae24a52f8ee6f"
+    },
+    {
+      "path": "drugs/mexiletine/spec_pk1_oral.yml",
+      "sha256": "40f0a09e1052841d7588381f609750d82ebfe595e48b66d24296f25a5e13a346"
+    },
+    {
+      "path": "drugs/mexiletine/targets.yml",
+      "sha256": "e55bc60a87c57430f61271dc056db5b61048e868caa7703218e101239275c6f9"
+    },
+    {
+      "path": "drugs/moclobemide/pk.yml",
+      "sha256": "997bcf1dbb31efe7b6d307a8fa71dd7287c40712d0c718f8727c7e5c39bb6467"
+    },
+    {
+      "path": "drugs/moclobemide/spec_pk1_oral.yml",
+      "sha256": "37ddc6a9ab8643e0ff28a73d887d4432450c45cebcba54b40ef7e01d60d08d92"
+    },
+    {
+      "path": "drugs/moclobemide/targets.yml",
+      "sha256": "792886643fb3f41d35bc3129ab6a93cee70d71bba0a884b935cb8dec33da3e1d"
+    },
+    {
+      "path": "drugs/montelukast/pk.yml",
+      "sha256": "cb12067bb04ad94174300060a1efe75a19a6d4c98f0b7af68ceacc6d878cdb18"
+    },
+    {
+      "path": "drugs/montelukast/spec_pk1_oral.yml",
+      "sha256": "094d3f8daae69149b071eeedfc33b0e9a550926bd9a00c7a87275ebdea4d9fb5"
+    },
+    {
+      "path": "drugs/montelukast/targets.yml",
+      "sha256": "47a97826b03a050e3f112d181335a7109fb894e5270c1adc25118e8051ff48e6"
+    },
+    {
+      "path": "drugs/motavizumab_medi_524/pk.yml",
+      "sha256": "5450522126dec3262f7d09069fb50062ae16cc7d12fefce5d77f2102ae800011"
+    },
+    {
+      "path": "drugs/motavizumab_medi_524/spec_pk1_iv.yml",
+      "sha256": "e69c09fec1b4dbd5c1ca3f1b20146bc83d6153a2e1f792a4e7522d99e5c6614b"
+    },
+    {
+      "path": "drugs/motavizumab_medi_524/targets.yml",
+      "sha256": "9d9ce3278e60c85cab05bb868d885458f391ff820e21960a0d19b07855b2fd56"
+    },
+    {
+      "path": "drugs/motavizumab_yte/pk.yml",
+      "sha256": "3728b1399b5b891ae0c262e0efe98787eee662a4fe10c0b9e2daf5ca1dbe142d"
+    },
+    {
+      "path": "drugs/motavizumab_yte/spec_pk1_iv.yml",
+      "sha256": "d97b5c6bd21c75a905031c255894293c0409a0c97569dc143613d2e9eedd976a"
+    },
+    {
+      "path": "drugs/motavizumab_yte/targets.yml",
+      "sha256": "a35fbcde4f13d6337d35440c0f55c278359db4ce7dc309ef6ae7d981f1781281"
+    },
+    {
+      "path": "drugs/omeprazole/pk.yml",
+      "sha256": "0f72f19d84440e4cf924e4c21ee9d740e69c9d0e45911e615754eb5a7aa4e596"
+    },
+    {
+      "path": "drugs/omeprazole/spec_pk1_oral.yml",
+      "sha256": "e9017efee765d871ad7cb54494b7c34621815eea1a507e749bbf7f699532d25d"
+    },
+    {
+      "path": "drugs/omeprazole/targets.yml",
+      "sha256": "f97f269a95a418e09611c5ab18a21363bb4bb4618c558296b716fa9a762e607b"
+    },
+    {
+      "path": "drugs/raltegravir/pk.yml",
+      "sha256": "85cefdc9d799c8e66cce6fb7c6826614094832f634aac8b2e928491b263bd85e"
+    },
+    {
+      "path": "drugs/raltegravir/spec_pk1_oral.yml",
+      "sha256": "5d66159a38d5ae6968a0899845bdb319b48c5e603a6419a4a9f9d6d713216bad"
+    },
+    {
+      "path": "drugs/raltegravir/targets.yml",
+      "sha256": "1ee18fe8ae639c0992196ed58810bf25af3b1722a8cc79083a9de2b4b10f2a4d"
+    },
+    {
+      "path": "drugs/sildenafil/pk.yml",
+      "sha256": "d974221b29b905d36f199b3a8108f0aba97a16e345c2a77fff2c0f6c8bdd57d8"
+    },
+    {
+      "path": "drugs/sildenafil/spec_pk1_oral.yml",
+      "sha256": "5eea28835609aa2e74db0d29bf3e02b3c877f1d6611060c04595fc47378c6657"
+    },
+    {
+      "path": "drugs/sildenafil/targets.yml",
+      "sha256": "e24986fa1bf6c3abea98d34f0b4db0012e39be20f6ca2c0e9491d843ba7ab234"
+    },
+    {
+      "path": "drugs/sufentanil/pk.yml",
+      "sha256": "3292e2b914e348a797d430426ae5549e362b4c2e24ec444846b88f78d9ffb244"
+    },
+    {
+      "path": "drugs/sufentanil/spec_pk1_oral.yml",
+      "sha256": "52e576352c1a74c4773a045fbd1a310b5b8696e5d87d62fc5423969c8635b451"
+    },
+    {
+      "path": "drugs/sufentanil/targets.yml",
+      "sha256": "5f2626fe75d523c2f67796b329d36cbb7a7c1bbd3fdbe07f8f7fccedb29e1888"
+    },
+    {
+      "path": "drugs/tefibazumab/pk.yml",
+      "sha256": "d8164b5d5c5451ae68622e5c9831359cd548705d9b5428d4e325286069c0b61b"
+    },
+    {
+      "path": "drugs/tefibazumab/spec_pk1_iv.yml",
+      "sha256": "397fa9d7344a5105d2bb33a4bd91e4e232367c5b7caf3fe7578472045b8c7050"
+    },
+    {
+      "path": "drugs/tefibazumab/targets.yml",
+      "sha256": "84f50be3db8106e8c970114d55811ee6c03752cf791696143d42ca6e42e403c8"
+    },
+    {
+      "path": "drugs/tizanidine/pk.yml",
+      "sha256": "455fd29db28cd05a32a7fffb28e7b0266373952491ddeb016d301108ced19462"
+    },
+    {
+      "path": "drugs/tizanidine/spec_pk1_oral.yml",
+      "sha256": "6c7568aa8db7574688598ce822a66ebdf37aa2b658ed5ca73ff3c8d1ec5b849d"
+    },
+    {
+      "path": "drugs/tizanidine/targets.yml",
+      "sha256": "2453f5aadff04e8476623f88807b38552a5f432d635a1301448b458665f5bb8f"
+    },
+    {
+      "path": "drugs/triazolam/pk.yml",
+      "sha256": "6048da5a0e67c52fa0670508c9f6a07cdfa6cd06c07b458d5726e83ea6634176"
+    },
+    {
+      "path": "drugs/triazolam/spec_pk1_oral.yml",
+      "sha256": "e75644f000ae8a6f94946ce2fee40f78394493031d33b250b61ca21c7d6de644"
+    },
+    {
+      "path": "drugs/triazolam/targets.yml",
+      "sha256": "398ffc61bc3f98b0011a9c3c24f044bc7af12ac58ce042283cc5d6328a17e3b9"
+    },
+    {
+      "path": "drugs/verapamil/pk.yml",
+      "sha256": "ab3d5a1c62b353efa76519263ad76c033160f8dde46b631a7360ba48db2b5aba"
+    },
+    {
+      "path": "drugs/verapamil/spec_pk1_oral.yml",
+      "sha256": "f81aa6f19a5e124bd9e41a2b7cb3a1e9205844f96e171da72efd6bdbe0986c82"
+    },
+    {
+      "path": "drugs/verapamil/targets.yml",
+      "sha256": "22ade8dfdd7917da8fa9b9d1b9b72367fb476889be4f88cd0ee5665101711a0f"
+    }
+  ]
+}

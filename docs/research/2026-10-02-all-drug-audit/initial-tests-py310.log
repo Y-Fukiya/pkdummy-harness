@@ -1,0 +1,87 @@
+PYTHONDONTWRITEBYTECODE=1 /private/tmp/pk-audit-20261002-venv/bin/python -m pytest -q -p no:cacheprovider
+........................................FF.............................. [  7%]
+........................................................................ [ 14%]
+.................sssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 21%]
+ssssssssssssssssssssssssssssssssss.................F..............ssssss [ 28%]
+sssssssssssssssss....................................................... [ 35%]
+........................................................................ [ 43%]
+........................................................................ [ 50%]
+...............................................................sssssssss [ 57%]
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 64%]
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 71%]
+ssssssssssssssssssssssssssssssssss...................................... [ 79%]
+...............................................s........................ [ 86%]
+....s................................................................... [ 93%]
+..................................................................       [100%]
+=================================== FAILURES ===================================
+_________ test_versioned_background_examples_regenerate_exactly[japan] _________
+
+tmp_path = PosixPath('/private/var/folders/dq/flj26s3j6v51t2xzbqt9yjrm0000gn/T/pytest-of-yfukiya/pytest-106/test_versioned_background_exam0')
+country = 'japan'
+
+    @pytest.mark.parametrize("country", ["japan", "us"])
+    def test_versioned_background_examples_regenerate_exactly(tmp_path, country):
+        out = tmp_path / country
+        assert main(["--country", country, "--n", "100", "--dose-mg", "100", "--out-dir", str(out)]) == 0
+        example = ROOT / "examples" / "background_subjects" / country
+        for name in ("subjects.csv", "distribution.csv", "reference_source.yml", "BACKGROUND_MANIFEST.yml", "body_distribution.csv", "body_source.json"):
+>           assert (out / name).read_bytes() == (example / name).read_bytes()
+E           AssertionError: assert b'AGE_GROUP,S...54504339012\n' == b'AGE_GROUP,S...54504339012\n'
+E
+E             At index 409 diff: b'4' != b'5'
+E             Use -v to get more diff
+
+tests/test_background_subjects.py:173: AssertionError
+----------------------------- Captured stdout call -----------------------------
+Created 100 synthetic JPN backgrounds: /private/var/folders/dq/flj26s3j6v51t2xzbqt9yjrm0000gn/T/pytest-of-yfukiya/pytest-106/test_versioned_background_exam0/japan/subjects.csv
+Reference: https://www.stat.go.jp/data/jinsui/2024np/zuhyou/05k2024-1.xlsx
+WT and HEIGHT_CM use age/sex-conditioned survey statistics.
+See BACKGROUND_MANIFEST.yml for sources and assumptions.
+__________ test_versioned_background_examples_regenerate_exactly[us] ___________
+
+tmp_path = PosixPath('/private/var/folders/dq/flj26s3j6v51t2xzbqt9yjrm0000gn/T/pytest-of-yfukiya/pytest-106/test_versioned_background_exam1')
+country = 'us'
+
+    @pytest.mark.parametrize("country", ["japan", "us"])
+    def test_versioned_background_examples_regenerate_exactly(tmp_path, country):
+        out = tmp_path / country
+        assert main(["--country", country, "--n", "100", "--dose-mg", "100", "--out-dir", str(out)]) == 0
+        example = ROOT / "examples" / "background_subjects" / country
+        for name in ("subjects.csv", "distribution.csv", "reference_source.yml", "BACKGROUND_MANIFEST.yml", "body_distribution.csv", "body_source.json"):
+>           assert (out / name).read_bytes() == (example / name).read_bytes()
+E           AssertionError: assert b'AGE_GROUP,S...68477569318\n' == b'AGE_GROUP,S...68477569318\n'
+E
+E             At index 708 diff: b'8' != b'4'
+E             Use -v to get more diff
+
+tests/test_background_subjects.py:173: AssertionError
+----------------------------- Captured stdout call -----------------------------
+Created 100 synthetic USA backgrounds: /private/var/folders/dq/flj26s3j6v51t2xzbqt9yjrm0000gn/T/pytest-of-yfukiya/pytest-106/test_versioned_background_exam1/us/subjects.csv
+Reference: https://www2.census.gov/programs-surveys/acs/summary_file/2024/table-based-SF/data/1YRData/acsdt1y2024-b01001.dat
+WT and HEIGHT_CM use age/sex-conditioned survey statistics.
+See BACKGROUND_MANIFEST.yml for sources and assumptions.
+_ test_source_reference_clock_requires_complete_whole_seconds[2026-01-01T08:00:00.36] _
+
+tmp_path = PosixPath('/private/var/folders/dq/flj26s3j6v51t2xzbqt9yjrm0000gn/T/pytest-of-yfukiya/pytest-106/test_source_reference_clock_re0')
+invalid_datetime = '2026-01-01T08:00:00.36'
+
+    @pytest.mark.parametrize("invalid_datetime", ["2026-01-01T08:00:00.36", "2026-01-01T08:00:00+09:00", "2026-01-01"])
+    def test_source_reference_clock_requires_complete_whole_seconds(tmp_path, invalid_datetime):
+        source = tmp_path / "source"
+        shutil.copytree(EXAMPLE / "source", source)
+        rows = read_csv(source / "repeated_EX.csv")
+        rows[0]["EXSTDTC"] = invalid_datetime
+        write_csv(source / "repeated_EX.csv", rows, list(rows[0]))
+        out = tmp_path / "output"
+
+>       with pytest.raises(ValueError, match="complete datetime in whole seconds"):
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'complete datetime in whole seconds'
+E         Actual message: "Invalid isoformat string: '2026-01-01T08:00:00.36'"
+
+tests/test_dapagliflozin_adnca_generator_review.py:62: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_background_subjects.py::test_versioned_background_examples_regenerate_exactly[japan]
+FAILED tests/test_background_subjects.py::test_versioned_background_examples_regenerate_exactly[us]
+FAILED tests/test_dapagliflozin_adnca_generator_review.py::test_source_reference_clock_requires_complete_whole_seconds[2026-01-01T08:00:00.36]
+make: *** [test] Error 1

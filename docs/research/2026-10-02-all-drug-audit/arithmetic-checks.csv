@@ -1,0 +1,124 @@
+slug,parameter,raw_value,raw_unit,stored,computed,status,calculation,documented_formula
+abciximab,CL_abs_L_per_h_at_70kg,183,mL/min,10.98,10.98,MATCH,selected raw 183 * factor 0.06,183 mL/min * 60 min/h / 1000 mL/L
+abciximab,V_abs_L_at_70kg,1.44,L/kg,100.8,100.8,MATCH,selected raw 1.44 * factor 70,pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs
+abciximab,t_half_h,20-30,min,0.4166666666666667,0.4166666666666667,MATCH,selected raw 25 * factor 0.0166666666666667,((20 min + 30 min) / 2) / 60 min/h
+aciclovir,CL_abs_L_per_h_at_70kg,327,mL/min/1.73 m2,19.62,19.62,MATCH,selected raw 327 * factor 0.06,327 mL/min/1.73 m2 * 60 min/h / 1000 mL/L
+aciclovir,V_abs_L_at_70kg,0.6666666666666666,L/kg,46.666666666666664,46.666666666666664,MATCH,selected raw 0.666667 * factor 70,(2/3) L/kg * 70 kg
+aciclovir,bioavailability_frac,10-20,percent,0.1,0.1,MATCH,selected raw 10 * factor 0.01,lower bound of reported average oral bioavailability range (10% to 20%)
+aciclovir,t_half_h,2.5-3.3,h,2.5,2.5,MATCH,selected raw 2.5 * factor 1,lower bound of reported adult half-life range (2.5 to 3.3 h)
+albuterol,CL_abs_L_per_h_at_70kg,480,mL/min,28.8,28.799999999999997,MATCH,selected raw 480 * factor 0.06,480 mL/min * 60 min/h / 1000 mL/L
+albuterol,V_abs_L_at_70kg,480,mL/min with t1/2 3.86 h,160.38152230554428,160.38152230554428,MATCH,V = CL * t_half / ln(2),CL_abs_L_per_h_at_70kg * t_half_h / ln(2)
+albuterol,t_half_h,3.86,h,3.86,3.86,MATCH,selected raw 3.86 * factor 1,pk_parsed.half_life_h
+alfentanil,CL_abs_L_per_h_at_70kg,5.0,mL/kg/min,21.0,21.0,MATCH,selected raw 5 * factor 4.2,5 mL/kg/min * 70 kg * 60 min/h / 1000 mL/L
+alfentanil,V_abs_L_at_70kg,0.4-1.0,L/kg,70.0,70.0,MATCH,selected raw 1 * factor 70,upper bound of reported apparent volume range (1 L/kg) * 70 kg
+alfentanil,t_half_h,90-111,min,1.675,1.675,MATCH,selected raw 100.5 * factor 0.0166666666666667,mean of reported 90-111 min range / 60 min/h
+alprazolam,CL_abs_L_per_h_at_70kg,1.5,mL/min/kg,6.3,6.300000000000001,MATCH,selected raw 1.5 * factor 4.2,1.5 mL/min/kg * 60 min/h / 1000 mL/L * 70 kg
+alprazolam,V_abs_L_at_70kg,1.3,L/kg,91.0,91.0,MATCH,selected raw 1.3 * factor 70,1.3 L/kg * 70 kg
+alprazolam,t_half_h,9-16,h,12.5,12.5,MATCH,selected raw 12.5 * factor 1,midpoint of reported 9-16 h range
+amikacin,CL_abs_L_per_h_at_70kg,100.0,mL/min,6.0,6.0,MATCH,selected raw 100 * factor 0.06,100 mL/min * 60 min/h / 1000 mL/L
+amikacin,V_abs_L_at_70kg,24.0,L,24.0,24.0,MATCH,selected raw 24 * factor 1,pk_parsed.volume.value
+amikacin,t_half_h,slightly over 2,h,2.0,,NOT_EVALUATED,Formula not independently evaluated; see manual review,"reported ""slightly over 2 hours"" retained as 2.0 h fixture value"
+apixaban,CL_abs_L_per_h_at_70kg,3.3,L/h,3.3,3.3,MATCH,selected raw 3.3 * factor 1,pk_parsed.clearance.value
+apixaban,V_abs_L_at_70kg,3.3 and 12.0,L/h and h,57.130723619202946,57.130723619202946,MATCH,V = CL * t_half / ln(2),CL_abs_L_per_h_at_70kg * t_half_h / ln(2)
+apixaban,t_half_h,12.0,h,12.0,12.0,MATCH,selected raw 12 * factor 1,pk_parsed.half_life_h
+atazanavir,CL_abs_L_per_h_at_70kg,12.9,L/h,12.9,12.9,MATCH,selected raw 12.9 * factor 1,pk_parsed.clearance.value
+atazanavir,V_abs_L_at_70kg,88.3,L,88.3,88.3,MATCH,selected raw 88.3 * factor 1,pk_parsed.volume.value
+atazanavir,t_half_h,4.6,h,4.6,4.6,MATCH,selected raw 4.6 * factor 1,pk_parsed.half_life_h
+buprenorphine,CL_abs_L_per_h_at_70kg,54.0,L/h,54.0,54.0,MATCH,selected raw 54 * factor 1,source_2 reported IV clearance
+buprenorphine,V_abs_L_at_70kg,806.0,L,806.0,806.0,MATCH,selected raw 806 * factor 1,source_2 reported IV Vd
+buprenorphine,t_half_h,54.0,L/h,10.345863472802147,10.345863472802147,MATCH,t_half = ln(2) * V / CL,ln(2) * V / CL = ln(2) * 806 L / 54 L/h
+carbamazepine,CL_abs_L_per_h_at_70kg,80,mL/min,4.8,4.8,MATCH,selected raw 80 * factor 0.06,80 mL/min * 60 min/h / 1000 mL/L
+carbamazepine,V_abs_L_at_70kg,80,mL/min,100.41157484587185,100.41157484587185,MATCH,V = CL * t_half / ln(2),CL_apparent_L_per_h_at_70kg * half_life_h / ln(2)
+carbamazepine,t_half_h,12-17,h,14.5,14.5,MATCH,selected raw 14.5 * factor 1,(12 h + 17 h) / 2
+cda1,CL_abs_L_per_h_at_70kg,0.0014,mL/min/kg,0.00588,0.00588,MATCH,selected raw 0.0014 * factor 4.2,0.0014 mL/min/kg * 60 min/h / 1000 mL/L * 70 kg
+cda1,V_abs_L_at_70kg,0.07,L/kg,4.9,4.9,MATCH,selected raw 0.07 * factor 70,0.070 L/kg * 70 kg
+cda1,t_half_h,25.3-31.8,days,685.2,685.2,MATCH,selected raw 28.55 * factor 24,fixture midpoint 28.55 days * 24 h/day
+cimetidine,CL_abs_L_per_h_at_70kg,495,mL/min,29.7,29.7,MATCH,selected raw 495 * factor 0.06,495 mL/min * 60 min/h / 1000 mL/L
+cimetidine,V_abs_L_at_70kg,0.8,L/kg,56.0,56.0,MATCH,selected raw 0.8 * factor 70,pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs
+cimetidine,bioavailability_frac,60,percent,0.6,0.6,MATCH,selected raw 60 * factor 0.01,60 percent / 100
+cimetidine,t_half_h,2.0,h,2.0,2.0,MATCH,selected raw 2 * factor 1,pk_parsed.half_life_h
+clarithromycin,CL_abs_L_per_h_at_70kg,58.1,L/h,58.1,58.1,MATCH,selected raw 58.1 * factor 1,pk_parsed.clearance.value
+clarithromycin,V_abs_L_at_70kg,172.0,L,172.0,172.0,MATCH,selected raw 172 * factor 1,pk_parsed.volume.value
+clarithromycin,t_half_h,3-7,h,5.0,5.0,MATCH,selected raw 5 * factor 1,midpoint of reported terminal half-life range (3 to 7 h)
+dapagliflozin,CL_abs_L_per_h_at_70kg,207,mL/min,12.42,12.42,MATCH,selected raw 207 * factor 0.06,207 mL/min * 60 min/h / 1000 mL/L
+dapagliflozin,V_abs_L_at_70kg,118,L,118.0,118.0,MATCH,selected raw 118 * factor 1,FDA source_1 Table 24 reported Vss
+dapagliflozin,bioavailability_frac,77.8,percent,0.78,0.778,MISMATCH,selected raw 77.8 * factor 0.01,77.8 percent / 100
+dapagliflozin,t_half_h,12.9,h,12.9,12.9,MATCH,selected raw 12.9 * factor 1,FDA source_1 reported oral terminal t1/2
+efavirenz,CL_abs_L_per_h_at_70kg,13.9,L/h,13.9,13.9,MATCH,selected raw 13.9 * factor 1,source_2 reported typical oral CL/F
+efavirenz,V_abs_L_at_70kg,13.9,L/h,1163.1007419646824,1163.1007419646824,MATCH,V = CL * t_half / ln(2),CL_apparent_L_per_h_at_70kg * half_life_h / ln(2)
+efavirenz,t_half_h,52-76,h,58.0,,NOT_EVALUATED,Formula not independently evaluated; see manual review,single-dose range is retained; current 58 h is the fixture representative
+erythromycin,CL_abs_L_per_h_at_70kg,0.53,L/h/kg,37.1,37.1,MATCH,selected raw 0.53 * factor 70,0.53 L/h/kg * 70 kg
+erythromycin,V_abs_L_at_70kg,0.53 and 2.30,L/h/kg and h,123.10516783905524,123.10516783905526,MATCH,V = CL * t_half / ln(2),CL_abs_L_per_h_at_70kg * t_half_h / ln(2)
+erythromycin,t_half_h,2.3,h,2.3,2.3,MATCH,selected raw 2.3 * factor 1,pk_parsed.half_life_h
+ethinylestradiol,CL_abs_L_per_h_at_70kg,25.7,L/h,25.7,25.7,MATCH,selected raw 25.7 * factor 1,pk_parsed.clearance.value
+ethinylestradiol,V_abs_L_at_70kg,25.7 and 17.05,L/h and h,632.1673264919305,632.1673264919305,MATCH,V = CL * t_half / ln(2),CL_abs_L_per_h_at_70kg * t_half_h / ln(2)
+ethinylestradiol,t_half_h,16.5-17.6,h,17.05,17.05,MATCH,selected raw 17.05 * factor 1,midpoint of reported 16.5-17.6 h range
+felodipine,CL_abs_L_per_h_at_70kg,1-1.5,L/min,90.0,90.0,MATCH,selected raw 1.5 * factor 60,upper bound of reported clearance range (1.5 L/min) * 60 min/h
+felodipine,V_abs_L_at_70kg,10.0,L/kg,700.0,700.0,MATCH,selected raw 10 * factor 70,pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs
+felodipine,bioavailability_frac,15,percent,0.15,0.15,MATCH,selected raw 15 * factor 0.01,15 percent / 100
+felodipine,t_half_h,approximately 25,h,24.5,,NOT_EVALUATED,Formula not independently evaluated; see manual review,"fixture midpoint of local 24-25 h range, source-confirmed as approximately 25 h"
+fluconazole,CL_abs_L_per_h_at_70kg,0.23,mL/min/kg,0.966,0.9660000000000001,MATCH,selected raw 0.23 * factor 4.2,0.23 mL/min/kg * 60 min/h / 1000 mL/L * 70 kg
+fluconazole,V_abs_L_at_70kg,0.23 and 30.0,mL/min/kg and h,41.80930228496216,41.809302284962165,MATCH,V = CL * t_half / ln(2),CL_abs_L_per_h_at_70kg * t_half_h / ln(2)
+fluconazole,t_half_h,30.0,h,30.0,30.0,MATCH,selected raw 30 * factor 1,pk_parsed.half_life_h
+fluvoxamine,CL_abs_L_per_h_at_70kg,25.0,L/kg,65.56797653945428,65.56797653945428,MATCH,CL = V * ln(2) / t_half,(25 L/kg * 70 kg) * ln(2) / 18.5 h
+fluvoxamine,V_abs_L_at_70kg,25.0,L/kg,1750.0,1750.0,MATCH,selected raw 25 * factor 70,25 L/kg * 70 kg
+fluvoxamine,t_half_h,9-28,h,18.5,18.5,MATCH,selected raw 18.5 * factor 1,(9 h + 28 h) / 2
+inulin,CL_abs_L_per_h_at_70kg,93.5,mL/min,5.61,5.609999999999999,MATCH,selected raw 93.5 * factor 0.06,93.5 mL/min * 60 min/h / 1000 mL/L
+inulin,V_abs_L_at_70kg,13.0,L/70 kg,13.0,13.0,MATCH,selected raw 13 * factor 1,source_3 reports Vss approximately 13 L/70 kg
+inulin,t_half_h,1.6062234130622617,h,1.6062234130622617,1.6062234130622617,MATCH,t_half = ln(2) * V / CL,ln(2) * 13 L / 5.61 L/h
+itraconazole,CL_abs_L_per_h_at_70kg,278.0,mL/min,16.68,16.68,MATCH,selected raw 278 * factor 0.06,278 mL/min * 60 min/h / 1000 mL/L
+itraconazole,V_abs_L_at_70kg,>700,L,700.0,,NOT_EVALUATED,Formula not independently evaluated; see manual review,lower bound of reported apparent volume (>700 L)
+itraconazole,bioavailability_frac,55,percent,0.55,0.55,MATCH,selected raw 55 * factor 0.01,55 percent / 100
+itraconazole,t_half_h,16-28,h,22.0,22.0,MATCH,selected raw 22 * factor 1,midpoint of reported single-dose terminal half-life range (16 to 28 h)
+mefenamic_acid,CL_abs_L_per_h_at_70kg,21.13,L/h,21.13,21.13,MATCH,selected raw 21.13 * factor 1,pk_parsed.clearance.value
+mefenamic_acid,V_abs_L_at_70kg,1.06,L/kg,74.2,74.2,MATCH,selected raw 1.06 * factor 70,1.06 L/kg * 70 kg
+mefenamic_acid,t_half_h,2-4,h,3.0,3.0,MATCH,selected raw 3 * factor 1,midpoint of reported 2-4 h range
+metoprolol,CL_abs_L_per_h_at_70kg,0.8,L/min,48.0,48.0,MATCH,selected raw 0.8 * factor 60,0.8 L/min * 60 min/h
+metoprolol,V_abs_L_at_70kg,346.2468098133512,L,346.2468098133512,346.2468098133512,MATCH,V = CL * t_half / ln(2),CL_abs_L_per_h_at_70kg * half_life_h / ln(2)
+metoprolol,bioavailability_frac,50,percent,0.5,0.5,MATCH,selected raw 50 * factor 0.01,50 percent / 100
+metoprolol,t_half_h,5.0,h,5.0,5.0,MATCH,selected raw 5 * factor 1,(3 h + 7 h) / 2
+mexiletine,CL_abs_L_per_h_at_70kg,7.0,L/kg,30.87655622494302,30.87655622494302,MATCH,CL = V * ln(2) / t_half,(7 L/kg * 70 kg) * ln(2) / 11 h
+mexiletine,V_abs_L_at_70kg,7.0,L/kg,490.0,490.0,MATCH,selected raw 7 * factor 70,7 L/kg * 70 kg
+mexiletine,t_half_h,10-12,h,11.0,11.0,MATCH,selected raw 11 * factor 1,(10 h + 12 h) / 2
+moclobemide,CL_abs_L_per_h_at_70kg,39.4,L/h,39.4,39.4,MATCH,selected raw 39.4 * factor 1,source_5 first IV infusion clearance
+moclobemide,V_abs_L_at_70kg,84.3,L,84.3,84.3,MATCH,selected raw 84.3 * factor 1,source_5 first IV infusion Vss
+moclobemide,t_half_h,1.6,h,1.6,1.6,MATCH,selected raw 1.6 * factor 1,source_5 first IV infusion elimination half-life
+moclobemide,bioavailability_frac,0.56,fraction,0.56,0.56,MATCH,selected raw 0.56 * factor 1,source_5 first oral dose absolute bioavailability
+montelukast,CL_abs_L_per_h_at_70kg,30.8,mL/min,1.8479999999999999,1.8479999999999999,MATCH,selected raw 30.8 * factor 0.06,30.8 mL/min * 60 min/h / 1000 mL/L
+montelukast,V_abs_L_at_70kg,9.7,L,9.7,9.7,MATCH,selected raw 9.7 * factor 1,pk_parsed.volume.value
+montelukast,t_half_h,6.7,h,6.7,6.7,MATCH,selected raw 6.7 * factor 1,pk_parsed.half_life_h
+montelukast,bioavailability_frac,61-62,percent,0.615,0.615,MATCH,selected raw 61.5 * factor 0.01,midpoint of healthy elderly and healthy young oral bioavailability (61% and 62%)
+motavizumab_medi_524,CL_abs_L_per_h_at_70kg,165-326,mL/day,0.010229166666666666,0.010229166666666666,MATCH,selected raw 245.5 * factor 4.16666666666667e-05,midpoint of 165-326 mL/day * 1 L/1000 mL / 24 h/day
+motavizumab_medi_524,V_abs_L_at_70kg,5.2-9.5,L,7.35,7.35,MATCH,selected raw 7.35 * factor 1,midpoint of reported 5.2-9.5 L range
+motavizumab_medi_524,t_half_h,19-34,days,636.0,636.0,MATCH,selected raw 26.5 * factor 24,midpoint of reported 19-34 days * 24 h/day
+motavizumab_yte,CL_abs_L_per_h_at_70kg,43-68,mL/day,0.0022916666666666667,0.0023125,MISMATCH,selected raw 55.5 * factor 4.16666666666667e-05,midpoint of 43-68 mL/day * 1 L/1000 mL / 24 h/day
+motavizumab_yte,V_abs_L_at_70kg,55 and 85,mL/day and days,6.744599316155904,6.744599316155904,MATCH,V = CL * t_half / ln(2),CL_abs_L_per_h_at_70kg * t_half_h / ln(2)
+motavizumab_yte,t_half_h,70-100,days,2040,2040.0,MATCH,selected raw 85 * factor 24,midpoint of reported 70-100 days * 24 h/day
+omeprazole,CL_abs_L_per_h_at_70kg,624,mL/min,43.56,37.44,MISMATCH,selected raw 624 * factor 0.06,624 mL/min * 60 min/h / 1000 mL/L
+omeprazole,V_abs_L_at_70kg,0.23,L/kg,16.1,16.1,MATCH,selected raw 0.23 * factor 70,0.23 L/kg * 70 kg
+omeprazole,bioavailability_frac,30-40,percent,0.35,0.35000000000000003,MATCH,selected raw 35 * factor 0.01,midpoint of healthy-subject label range (30% to 40%) at 20-40 mg
+omeprazole,t_half_h,0.5-1.0,h,0.75,,NOT_EVALUATED,Formula not independently evaluated; see manual review,fixture value retained within reported plasma half-life range (0.5 to 1 h)
+raltegravir,CL_abs_L_per_h_at_70kg,60.2,L/h,60.2,60.2,MATCH,selected raw 60.2 * factor 1,source_1 reported oral CL/F
+raltegravir,V_abs_L_at_70kg,677.4318833998217,L,677.4318833998217,677.4318833998217,MATCH,V = CL * t_half / ln(2),CL_abs_L_per_h_at_70kg * half_life_h / ln(2)
+raltegravir,t_half_h,7.8,h,7.8,7.8,MATCH,selected raw 7.8 * factor 1,source_2 reported geometric-mean apparent plasma half-life
+sildenafil,CL_abs_L_per_h_at_70kg,105 and 4.0,L and h,18.195113489698564,18.195113489698564,MATCH,CL = V * ln(2) / t_half,V_abs_L_at_70kg * ln(2) / t_half_h
+sildenafil,V_abs_L_at_70kg,105,L,105.0,105.0,MATCH,selected raw 105 * factor 1,pk_parsed.volume.value
+sildenafil,t_half_h,3-5,h,4.0,4.0,MATCH,selected raw 4 * factor 1,midpoint of reported 3-5 h range
+sufentanil,CL_abs_L_per_h_at_70kg,108,L/h,108.0,108.0,MATCH,selected raw 108 * factor 1,pk_parsed.clearance.value
+sufentanil,V_abs_L_at_70kg,108,L/h,2087.868263174508,2087.868263174508,MATCH,V = CL * t_half / ln(2),CL_apparent / (ln(2) / terminal_half_life)
+sufentanil,t_half_h,13.4,h,13.4,13.4,MATCH,selected raw 13.4 * factor 1,pk_parsed.half_life_h
+sufentanil,bioavailability_frac,53,percent,0.53,0.53,MATCH,selected raw 53 * factor 0.01,53 / 100
+tefibazumab,CL_abs_L_per_h_at_70kg,12,mL/h,0.012,0.012,MATCH,selected raw 12 * factor 0.001,12 mL/h / 1000 mL/L
+tefibazumab,V_abs_L_at_70kg,7.3,L,7.3,7.3,MATCH,selected raw 7.3 * factor 1,source_1 reported IV volume of distribution
+tefibazumab,t_half_h,17-18,days,420.0,420.0,MATCH,selected raw 17.5 * factor 24,((17 days + 18 days) / 2) * 24 h/day
+tizanidine,CL_abs_L_per_h_at_70kg,46.579490533628324,L/h,46.579490533628324,46.579490533628324,MATCH,CL = V * ln(2) / t_half,2.4 L/kg * 70 kg * ln(2) / 2.5 h
+tizanidine,V_abs_L_at_70kg,2.4,L/kg,168.0,168.0,MATCH,selected raw 2.4 * factor 70,2.4 L/kg * 70 kg
+tizanidine,bioavailability_frac,40,percent,0.4,0.4,MATCH,selected raw 40 * factor 0.01,40 percent / 100
+tizanidine,t_half_h,2.5,h,2.5,2.5,MATCH,selected raw 2.5 * factor 1,pk_parsed.half_life_h
+triazolam,CL_abs_L_per_h_at_70kg,526,mL/min,31.56,31.56,MATCH,selected raw 526 * factor 0.06,526 mL/min * 60 min/h / 1000 mL/L
+triazolam,V_abs_L_at_70kg,31.56,L/h,159.36009421659492,159.36009421659492,MATCH,V = CL * t_half / ln(2),CL_apparent / (ln(2) / selected_fixture_half_life)
+triazolam,t_half_h,1.5-5.5,h,3.5,3.5,MATCH,selected raw 3.5 * factor 1,midpoint of DailyMed reported range (1.5 to 5.5 h)
+verapamil,CL_abs_L_per_h_at_70kg,500.64,mL/min,30.0384,30.0384,MATCH,selected raw 500.64 * factor 0.06,500.64 mL/min * 60 min/h / 1000 mL/L
+verapamil,V_abs_L_at_70kg,2.51,L/kg,175.7,175.7,MATCH,selected raw 2.51 * factor 70,2.51 L/kg * 70 kg
+verapamil,bioavailability_frac,22.47,percent,0.2247,0.22469999999999998,MATCH,selected raw 22.47 * factor 0.01,22.47 percent / 100
+verapamil,t_half_h,2.8-7.4,h,5.1,5.1,MATCH,selected raw 5.1 * factor 1,midpoint of reported single-dose terminal half-life range (2.8 to 7.4 h)

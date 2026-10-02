@@ -1,0 +1,45 @@
+{
+  "a": [
+    "abciximab",
+    "aciclovir",
+    "albuterol",
+    "alfentanil",
+    "alprazolam",
+    "amikacin",
+    "apixaban",
+    "atazanavir",
+    "buprenorphine",
+    "carbamazepine",
+    "cda1",
+    "cimetidine",
+    "clarithromycin"
+  ],
+  "b": [
+    "dapagliflozin",
+    "efavirenz",
+    "erythromycin",
+    "ethinylestradiol",
+    "felodipine",
+    "fluconazole",
+    "fluvoxamine",
+    "inulin",
+    "itraconazole",
+    "mefenamic_acid",
+    "metoprolol",
+    "mexiletine"
+  ],
+  "c": [
+    "moclobemide",
+    "montelukast",
+    "motavizumab_medi_524",
+    "motavizumab_yte",
+    "omeprazole",
+    "raltegravir",
+    "sildenafil",
+    "sufentanil",
+    "tefibazumab",
+    "tizanidine",
+    "triazolam",
+    "verapamil"
+  ]
+}

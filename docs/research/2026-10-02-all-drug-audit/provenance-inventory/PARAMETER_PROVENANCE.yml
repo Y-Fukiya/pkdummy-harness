@@ -1,0 +1,37 @@
+report_version: '1.0'
+generated_by: tools/make_parameter_provenance_report.py
+generated_at_utc: null
+scope:
+  root: /Users/yfukiya/pkdummy-harness
+  drugs_dir: /Users/yfukiya/pkdummy-harness/drugs
+  selected_drugs: all
+  canonical_inputs:
+  - drugs/*/pk.yml
+  - drugs/*/targets.yml
+  - drugs/*/spec_pk1_*.yml
+summary:
+  drug_count: 37
+  source_count: 83
+  parameter_row_count: 720
+  status_counts:
+    derived_from_pk_yml_source_fields: 105
+    derived_target: 25
+    fixture_policy_apparent_parameters: 24
+    fixture_policy_no_external_source: 224
+    mapped_to_pk_derived: 74
+    source_url_present_not_parameter_mapped: 34
+    target_without_source_mapping: 49
+    value_level_metadata: 185
+outputs:
+- PARAMETER_PROVENANCE.csv
+- SOURCES.csv
+- PARAMETER_PROVENANCE.md
+- PARAMETER_PROVENANCE.yml
+interpretation:
+- A source URL alone is not proof of an exact parameter-to-source match.
+- Only rows with source_mapping_status=checked have a value-level source mapping;
+  blank reference_value means no checked source value is claimed.
+- Derived values retain their formula/basis and should not be read as directly reported
+  values.
+- fixture_policy rows are demo assumptions and require a separate source review before
+  external use.

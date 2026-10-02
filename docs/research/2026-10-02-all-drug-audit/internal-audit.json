@@ -1,0 +1,3995 @@
+{
+  "audit_date": "2026-10-02",
+  "drug_count": 37,
+  "input_hashes_unchanged": true,
+  "formula_counts": {
+    "MATCH": 115,
+    "NOT_EVALUATED": 5,
+    "MISMATCH": 3
+  },
+  "formula_mismatches": [
+    {
+      "slug": "dapagliflozin",
+      "parameter": "bioavailability_frac",
+      "raw_value": 77.8,
+      "raw_unit": "percent",
+      "stored": 0.78,
+      "computed": 0.778,
+      "status": "MISMATCH",
+      "calculation": "selected raw 77.8 * factor 0.01",
+      "documented_formula": "77.8 percent / 100"
+    },
+    {
+      "slug": "motavizumab_yte",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": "43-68",
+      "raw_unit": "mL/day",
+      "stored": 0.0022916666666666667,
+      "computed": 0.0023125,
+      "status": "MISMATCH",
+      "calculation": "selected raw 55.5 * factor 4.16666666666667e-05",
+      "documented_formula": "midpoint of 43-68 mL/day * 1 L/1000 mL / 24 h/day"
+    },
+    {
+      "slug": "omeprazole",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 624,
+      "raw_unit": "mL/min",
+      "stored": 43.56,
+      "computed": 37.44,
+      "status": "MISMATCH",
+      "calculation": "selected raw 624 * factor 0.06",
+      "documented_formula": "624 mL/min * 60 min/h / 1000 mL/L"
+    }
+  ],
+  "half_warning_drugs": [
+    "abciximab",
+    "aciclovir",
+    "alfentanil",
+    "amikacin",
+    "cimetidine",
+    "clarithromycin",
+    "dapagliflozin",
+    "felodipine",
+    "itraconazole",
+    "montelukast",
+    "omeprazole"
+  ],
+  "CL_V_half_dependency_drugs": [
+    "albuterol",
+    "apixaban",
+    "buprenorphine",
+    "carbamazepine",
+    "efavirenz",
+    "erythromycin",
+    "ethinylestradiol",
+    "fluconazole",
+    "fluvoxamine",
+    "inulin",
+    "metoprolol",
+    "mexiletine",
+    "motavizumab_yte",
+    "raltegravir",
+    "sildenafil",
+    "sufentanil",
+    "tizanidine",
+    "triazolam"
+  ],
+  "no_independent_auc_count": 36,
+  "shorter_than_one_stored_half_drugs": [
+    "motavizumab_medi_524",
+    "motavizumab_yte",
+    "tefibazumab"
+  ],
+  "default_dose_100mg_count": 28,
+  "common_iiv_patterns": {
+    "{\"corr\": false, \"eta\": {\"CL\": 0.09, \"V\": 0.04}}": 12,
+    "{\"corr\": false, \"eta\": {\"CL\": 0.09, \"KA\": 0.16, \"V\": 0.04}}": 25
+  },
+  "common_residual_patterns": {
+    "{\"add\": 0.0, \"prop\": 0.25, \"type\": \"prop+add\"}": 37
+  },
+  "records": [
+    {
+      "slug": "abciximab",
+      "route": "iv_bolus",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 10.98,
+      "V_L": 100.8,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 1.0,
+      "F1_model": 1,
+      "KA_h_1": null,
+      "ALAG1_h": null,
+      "stored_half_h": 0.4166666666666667,
+      "one_compartment_half_h": 6.363318378910972,
+      "relative_half_difference": 14.271964109386332,
+      "repository_25_percent_half_warning": true,
+      "derived_parameters": [],
+      "half_independent_of_CL_V": true,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 9107.468123861567,
+      "calculated_auc_ng_h_mL": 9107.468123861565,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 172.79999999999998,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "aciclovir",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 19.62,
+      "V_L": 46.666666666666664,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 0.1,
+      "F1_model": 0.1,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 2.5,
+      "one_compartment_half_h": 1.6486681155010587,
+      "relative_half_difference": 0.3405327537995765,
+      "repository_25_percent_half_warning": true,
+      "derived_parameters": [],
+      "half_independent_of_CL_V": true,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 509.683995922528,
+      "calculated_auc_ng_h_mL": 509.683995922528,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 28.8,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "fixture_consistency_check",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "albuterol",
+      "route": "iv",
+      "dose_mg": 1.0,
+      "infusion_h": 1.0,
+      "CL_L_h": 28.8,
+      "V_L": 160.38152230554428,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 1.0,
+      "F1_model": 1,
+      "KA_h_1": null,
+      "ALAG1_h": null,
+      "stored_half_h": 3.86,
+      "one_compartment_half_h": 3.8599999999999994,
+      "relative_half_difference": 1.1504901809587116e-16,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [
+        "V_abs_L_at_70kg"
+      ],
+      "half_independent_of_CL_V": false,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 34.72222222222222,
+      "calculated_auc_ng_h_mL": 34.72222222222222,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 18.652849740932645,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "alfentanil",
+      "route": "iv_bolus",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 21.0,
+      "V_L": 70.0,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 1.0,
+      "F1_model": 1,
+      "KA_h_1": null,
+      "ALAG1_h": null,
+      "stored_half_h": 1.675,
+      "one_compartment_half_h": 2.3104906018664844,
+      "relative_half_difference": 0.37939737424864733,
+      "repository_25_percent_half_warning": true,
+      "derived_parameters": [],
+      "half_independent_of_CL_V": true,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 4761.9047619047615,
+      "calculated_auc_ng_h_mL": 4761.9047619047615,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 42.98507462686567,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "alprazolam",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 6.3,
+      "V_L": 91.0,
+      "clearance_basis": "apparent",
+      "volume_basis": "apparent",
+      "F_reported": 0.9,
+      "F1_model": 1.0,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 12.5,
+      "one_compartment_half_h": 10.012125941421433,
+      "relative_half_difference": 0.1990299246862854,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [],
+      "half_independent_of_CL_V": true,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 15873.015873015873,
+      "calculated_auc_ng_h_mL": 15873.015873015873,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 75.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 6.0,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 3.125
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "amikacin",
+      "route": "iv_bolus",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 6.0,
+      "V_L": 24.0,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 1.0,
+      "F1_model": 1,
+      "KA_h_1": null,
+      "ALAG1_h": null,
+      "stored_half_h": 2.0,
+      "one_compartment_half_h": 2.772588722239781,
+      "relative_half_difference": 0.3862943611198906,
+      "repository_25_percent_half_warning": true,
+      "derived_parameters": [],
+      "half_independent_of_CL_V": true,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 16666.666666666668,
+      "calculated_auc_ng_h_mL": 16666.666666666668,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 36.0,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "apixaban",
+      "route": "oral",
+      "dose_mg": 10.0,
+      "infusion_h": null,
+      "CL_L_h": 3.3,
+      "V_L": 57.130723619202946,
+      "clearance_basis": "apparent",
+      "volume_basis": "apparent",
+      "F_reported": 0.5,
+      "F1_model": 1.0,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 12.0,
+      "one_compartment_half_h": 11.999999999999998,
+      "relative_half_difference": 1.4802973661668753e-16,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [
+        "V_abs_L_at_70kg"
+      ],
+      "half_independent_of_CL_V": false,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 3030.3030303030305,
+      "calculated_auc_ng_h_mL": 3030.3030303030305,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 6.0,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "atazanavir",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 12.9,
+      "V_L": 88.3,
+      "clearance_basis": "apparent",
+      "volume_basis": "apparent",
+      "F_reported": null,
+      "F1_model": 1.0,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 4.6,
+      "one_compartment_half_h": 4.744565584763036,
+      "relative_half_difference": 0.03142730103544267,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [],
+      "half_independent_of_CL_V": true,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 7751.937984496124,
+      "calculated_auc_ng_h_mL": 7751.937984496124,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 15.65217391304348,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "buprenorphine",
+      "route": "iv",
+      "dose_mg": 0.3,
+      "infusion_h": 1.0,
+      "CL_L_h": 54.0,
+      "V_L": 806.0,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 1.0,
+      "F1_model": 1,
+      "KA_h_1": null,
+      "ALAG1_h": null,
+      "stored_half_h": 10.345863472802147,
+      "one_compartment_half_h": 10.345863472802147,
+      "relative_half_difference": 0.0,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [
+        "t_half_h"
+      ],
+      "half_independent_of_CL_V": false,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 5.555555555555555,
+      "calculated_auc_ng_h_mL": 5.555555555555555,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 6.959303125280756,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "carbamazepine",
+      "route": "oral",
+      "dose_mg": 200.0,
+      "infusion_h": null,
+      "CL_L_h": 4.8,
+      "V_L": 100.41157484587185,
+      "clearance_basis": "apparent",
+      "volume_basis": "apparent",
+      "F_reported": 1.0,
+      "F1_model": 1.0,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 14.5,
+      "one_compartment_half_h": 14.5,
+      "relative_half_difference": 0.0,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [
+        "V_abs_L_at_70kg"
+      ],
+      "half_independent_of_CL_V": false,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 41666.66666666667,
+      "calculated_auc_ng_h_mL": 41666.66666666667,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 4.9655172413793105,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "cda1",
+      "route": "iv_bolus",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 0.00588,
+      "V_L": 4.9,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 1.0,
+      "F1_model": 1,
+      "KA_h_1": null,
+      "ALAG1_h": null,
+      "stored_half_h": 685.2,
+      "one_compartment_half_h": 577.622650466621,
+      "relative_half_difference": 0.15700138577550932,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [],
+      "half_independent_of_CL_V": true,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 17006802.721088436,
+      "calculated_auc_ng_h_mL": 17006802.721088436,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 3938.4000000000005,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 5.747810858143608,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 171.3
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "cimetidine",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 29.7,
+      "V_L": 56.0,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 0.6,
+      "F1_model": 0.6,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 2.0,
+      "one_compartment_half_h": 1.306944178833567,
+      "relative_half_difference": 0.3465279105832165,
+      "repository_25_percent_half_warning": true,
+      "derived_parameters": [],
+      "half_independent_of_CL_V": true,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 2020.2020202020203,
+      "calculated_auc_ng_h_mL": 2020.2020202020203,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 36.0,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "fixture_consistency_check",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "clarithromycin",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 58.1,
+      "V_L": 172.0,
+      "clearance_basis": "apparent",
+      "volume_basis": "apparent",
+      "F_reported": 0.525,
+      "F1_model": 1.0,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 5.0,
+      "one_compartment_half_h": 2.0520019803151563,
+      "relative_half_difference": 0.5895996039369688,
+      "repository_25_percent_half_warning": true,
+      "derived_parameters": [],
+      "half_independent_of_CL_V": true,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 1721.170395869191,
+      "calculated_auc_ng_h_mL": 1721.170395869191,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 14.4,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.25
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "dapagliflozin",
+      "route": "oral",
+      "dose_mg": 10.0,
+      "infusion_h": null,
+      "CL_L_h": 12.42,
+      "V_L": 118.0,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 0.78,
+      "F1_model": 0.78,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 12.9,
+      "one_compartment_half_h": 6.585456304836839,
+      "relative_half_difference": 0.4894995112529582,
+      "repository_25_percent_half_warning": true,
+      "derived_parameters": [],
+      "half_independent_of_CL_V": true,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 628.0193236714975,
+      "calculated_auc_ng_h_mL": 628.0193236714975,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 5.5813953488372094,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "efavirenz",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 13.9,
+      "V_L": 1163.1007419646824,
+      "clearance_basis": "apparent",
+      "volume_basis": "apparent",
+      "F_reported": null,
+      "F1_model": 1.0,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 58.0,
+      "one_compartment_half_h": 58.0,
+      "relative_half_difference": 0.0,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [
+        "V_abs_L_at_70kg"
+      ],
+      "half_independent_of_CL_V": false,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 7194.244604316546,
+      "calculated_auc_ng_h_mL": 7194.244604316546,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 1.2413793103448276,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "erythromycin",
+      "route": "iv",
+      "dose_mg": 125.0,
+      "infusion_h": 1.0,
+      "CL_L_h": 37.1,
+      "V_L": 123.10516783905524,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 1.0,
+      "F1_model": 1,
+      "KA_h_1": null,
+      "ALAG1_h": null,
+      "stored_half_h": 2.3,
+      "one_compartment_half_h": 2.3,
+      "relative_half_difference": 0.0,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [
+        "V_abs_L_at_70kg"
+      ],
+      "half_independent_of_CL_V": false,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 3369.272237196765,
+      "calculated_auc_ng_h_mL": 3369.272237196765,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 31.30434782608696,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "ethinylestradiol",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 25.7,
+      "V_L": 632.1673264919305,
+      "clearance_basis": "apparent",
+      "volume_basis": "apparent",
+      "F_reported": 0.43,
+      "F1_model": 1.0,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 17.05,
+      "one_compartment_half_h": 17.05,
+      "relative_half_difference": 0.0,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [
+        "V_abs_L_at_70kg"
+      ],
+      "half_independent_of_CL_V": false,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 3891.0505836575876,
+      "calculated_auc_ng_h_mL": 3891.0505836575876,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 4.222873900293255,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "felodipine",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 90.0,
+      "V_L": 700.0,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 0.15,
+      "F1_model": 0.15,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 24.5,
+      "one_compartment_half_h": 5.391144737688464,
+      "relative_half_difference": 0.7799532760127158,
+      "repository_25_percent_half_warning": true,
+      "derived_parameters": [],
+      "half_independent_of_CL_V": true,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 166.66666666666666,
+      "calculated_auc_ng_h_mL": 166.66666666666666,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 147.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 6.0,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 6.125
+      },
+      "target_auc_summary": "fixture_consistency_check",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "fluconazole",
+      "route": "iv",
+      "dose_mg": 200.0,
+      "infusion_h": 1.0,
+      "CL_L_h": 0.966,
+      "V_L": 41.80930228496216,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 1.0,
+      "F1_model": 1,
+      "KA_h_1": null,
+      "ALAG1_h": null,
+      "stored_half_h": 30.0,
+      "one_compartment_half_h": 29.999999999999996,
+      "relative_half_difference": 1.1842378929335003e-16,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [
+        "V_abs_L_at_70kg"
+      ],
+      "half_independent_of_CL_V": false,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 207039.33747412008,
+      "calculated_auc_ng_h_mL": 207039.33747412008,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 2.4,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "fluvoxamine",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 65.56797653945428,
+      "V_L": 1750.0,
+      "clearance_basis": "apparent",
+      "volume_basis": "apparent",
+      "F_reported": 0.53,
+      "F1_model": 1.0,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 18.5,
+      "one_compartment_half_h": 18.5,
+      "relative_half_difference": 0.0,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [
+        "CL_abs_L_per_h_at_70kg"
+      ],
+      "half_independent_of_CL_V": false,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 1525.1347575111902,
+      "calculated_auc_ng_h_mL": 1525.13475751119,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 3.891891891891892,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "inulin",
+      "route": "iv_bolus",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 5.61,
+      "V_L": 13.0,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 1.0,
+      "F1_model": 1,
+      "KA_h_1": null,
+      "ALAG1_h": null,
+      "stored_half_h": 1.6062234130622617,
+      "one_compartment_half_h": 1.6062234130622617,
+      "relative_half_difference": 0.0,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [
+        "t_half_h"
+      ],
+      "half_independent_of_CL_V": false,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 17825.311942959,
+      "calculated_auc_ng_h_mL": 17825.311942959,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 44.82564468583617,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "itraconazole",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 16.68,
+      "V_L": 700.0,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 0.55,
+      "F1_model": 0.55,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 22.0,
+      "one_compartment_half_h": 29.08891045515358,
+      "relative_half_difference": 0.32222320250698094,
+      "repository_25_percent_half_warning": true,
+      "derived_parameters": [],
+      "half_independent_of_CL_V": true,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 3297.3621103117507,
+      "calculated_auc_ng_h_mL": 3297.362110311751,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 132.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 6.0,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 5.5
+      },
+      "target_auc_summary": "fixture_consistency_check",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "mefenamic_acid",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 21.13,
+      "V_L": 74.2,
+      "clearance_basis": "apparent",
+      "volume_basis": "apparent",
+      "F_reported": null,
+      "F1_model": 1.0,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 3.0,
+      "one_compartment_half_h": 2.4340520964291503,
+      "relative_half_difference": 0.18864930119028323,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [],
+      "half_independent_of_CL_V": true,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 4732.60766682442,
+      "calculated_auc_ng_h_mL": 4732.60766682442,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 24.0,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "metoprolol",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 48.0,
+      "V_L": 346.2468098133512,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 0.5,
+      "F1_model": 0.5,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 5.0,
+      "one_compartment_half_h": 4.999999999999999,
+      "relative_half_difference": 1.7763568394002506e-16,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [
+        "V_abs_L_at_70kg"
+      ],
+      "half_independent_of_CL_V": false,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 1041.6666666666667,
+      "calculated_auc_ng_h_mL": 1041.6666666666667,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 14.4,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "mexiletine",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 30.87655622494302,
+      "V_L": 490.0,
+      "clearance_basis": "apparent",
+      "volume_basis": "apparent",
+      "F_reported": 0.9,
+      "F1_model": 1.0,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 11.0,
+      "one_compartment_half_h": 11.0,
+      "relative_half_difference": 0.0,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [
+        "CL_abs_L_per_h_at_70kg"
+      ],
+      "half_independent_of_CL_V": false,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 3238.7031530160402,
+      "calculated_auc_ng_h_mL": 3238.70315301604,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 6.545454545454546,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "moclobemide",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 39.4,
+      "V_L": 84.3,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 0.56,
+      "F1_model": 0.56,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 1.6,
+      "one_compartment_half_h": 1.4830534853097308,
+      "relative_half_difference": 0.0730915716814183,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [],
+      "half_independent_of_CL_V": true,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 1421.3197969543148,
+      "calculated_auc_ng_h_mL": 1421.319796954315,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 45.0,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "montelukast",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 1.8479999999999999,
+      "V_L": 9.7,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 0.615,
+      "F1_model": 0.615,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 6.7,
+      "one_compartment_half_h": 3.6382725386533923,
+      "relative_half_difference": 0.4569742479621803,
+      "repository_25_percent_half_warning": true,
+      "derived_parameters": [],
+      "half_independent_of_CL_V": true,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 33279.22077922078,
+      "calculated_auc_ng_h_mL": 33279.22077922078,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 10.746268656716417,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.675
+      },
+      "target_auc_summary": "fixture_consistency_check",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "motavizumab_medi_524",
+      "route": "iv",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 0.010229166666666666,
+      "V_L": 7.35,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 1.0,
+      "F1_model": 1,
+      "KA_h_1": null,
+      "ALAG1_h": null,
+      "stored_half_h": 636.0,
+      "one_compartment_half_h": 498.0495423656796,
+      "relative_half_difference": 0.21690323527408867,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [],
+      "half_independent_of_CL_V": true,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 9775967.413441956,
+      "calculated_auc_ng_h_mL": 9775967.413441956,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 168.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 0.2641509433962264,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "motavizumab_yte",
+      "route": "iv",
+      "dose_mg": 100.0,
+      "infusion_h": 1.0,
+      "CL_L_h": 0.0022916666666666667,
+      "V_L": 6.744599316155904,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 1.0,
+      "F1_model": 1,
+      "KA_h_1": null,
+      "ALAG1_h": null,
+      "stored_half_h": 2040,
+      "one_compartment_half_h": 2040.0,
+      "relative_half_difference": 0.0,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [
+        "V_abs_L_at_70kg"
+      ],
+      "half_independent_of_CL_V": false,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 43636363.63636363,
+      "calculated_auc_ng_h_mL": 43636363.63636364,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 0.03529411764705882,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "omeprazole",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 43.56,
+      "V_L": 16.1,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 0.35,
+      "F1_model": 0.35,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 0.75,
+      "one_compartment_half_h": 0.2561907623281708,
+      "relative_half_difference": 0.6584123168957723,
+      "repository_25_percent_half_warning": true,
+      "derived_parameters": [],
+      "half_independent_of_CL_V": true,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 803.4894398530762,
+      "calculated_auc_ng_h_mL": 803.4894398530762,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.1,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 96.0,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "fixture_consistency_check",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "raltegravir",
+      "route": "oral",
+      "dose_mg": 400.0,
+      "infusion_h": null,
+      "CL_L_h": 60.2,
+      "V_L": 677.4318833998217,
+      "clearance_basis": "apparent",
+      "volume_basis": "apparent",
+      "F_reported": 1.0,
+      "F1_model": 1.0,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 7.8,
+      "one_compartment_half_h": 7.8,
+      "relative_half_difference": 0.0,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [
+        "V_abs_L_at_70kg"
+      ],
+      "half_independent_of_CL_V": false,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 6644.518272425249,
+      "calculated_auc_ng_h_mL": 6644.518272425249,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 9.230769230769232,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "sildenafil",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 18.195113489698564,
+      "V_L": 105.0,
+      "clearance_basis": "apparent",
+      "volume_basis": "apparent",
+      "F_reported": 0.44,
+      "F1_model": 1.0,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 4.0,
+      "one_compartment_half_h": 4.0,
+      "relative_half_difference": 0.0,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [
+        "CL_abs_L_per_h_at_70kg"
+      ],
+      "half_independent_of_CL_V": false,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 5495.981108148432,
+      "calculated_auc_ng_h_mL": 5495.981108148432,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 18.0,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "sufentanil",
+      "route": "sublingual",
+      "dose_mg": 0.03,
+      "infusion_h": null,
+      "CL_L_h": 108.0,
+      "V_L": 2087.868263174508,
+      "clearance_basis": "apparent",
+      "volume_basis": "apparent",
+      "F_reported": 0.53,
+      "F1_model": 1.0,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 13.4,
+      "one_compartment_half_h": 13.399999999999999,
+      "relative_half_difference": 1.3256394323882465e-16,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [
+        "V_abs_L_at_70kg"
+      ],
+      "half_independent_of_CL_V": false,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": true,
+      "stored_auc_ng_h_mL": 0.278,
+      "calculated_auc_ng_h_mL": 0.2777777777777778,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 5.3731343283582085,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "tefibazumab",
+      "route": "iv",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 0.012,
+      "V_L": 7.3,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 1.0,
+      "F1_model": 1,
+      "KA_h_1": null,
+      "ALAG1_h": null,
+      "stored_half_h": 420.0,
+      "one_compartment_half_h": 421.6645348406334,
+      "relative_half_difference": 0.003963178191984271,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [],
+      "half_independent_of_CL_V": true,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 8333333.333333333,
+      "calculated_auc_ng_h_mL": 8333333.333333334,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 168.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 0.4,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "tizanidine",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 46.579490533628324,
+      "V_L": 168.0,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 0.4,
+      "F1_model": 0.4,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 2.5,
+      "one_compartment_half_h": 2.5,
+      "relative_half_difference": 0.0,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [
+        "CL_abs_L_per_h_at_70kg"
+      ],
+      "half_independent_of_CL_V": false,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 858.7470481481926,
+      "calculated_auc_ng_h_mL": 858.7470481481924,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 28.8,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "geometric_mean",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "triazolam",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 31.560000000000002,
+      "V_L": 159.36009421659492,
+      "clearance_basis": "apparent",
+      "volume_basis": "apparent",
+      "F_reported": 0.44,
+      "F1_model": 1.0,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 3.5,
+      "one_compartment_half_h": 3.5,
+      "relative_half_difference": 0.0,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [
+        "V_abs_L_at_70kg"
+      ],
+      "half_independent_of_CL_V": false,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 3168.5678073510776,
+      "calculated_auc_ng_h_mL": 3168.567807351077,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 20.571428571428573,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.0
+      },
+      "target_auc_summary": "fixture_consistency_check",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    },
+    {
+      "slug": "verapamil",
+      "route": "oral",
+      "dose_mg": 100,
+      "infusion_h": null,
+      "CL_L_h": 30.0384,
+      "V_L": 175.7,
+      "clearance_basis": "systemic",
+      "volume_basis": "systemic",
+      "F_reported": 0.2247,
+      "F1_model": 0.2247,
+      "KA_h_1": 1.2,
+      "ALAG1_h": 0.5,
+      "stored_half_h": 5.1,
+      "one_compartment_half_h": 4.054342429170076,
+      "relative_half_difference": 0.20503089624116158,
+      "repository_25_percent_half_warning": false,
+      "derived_parameters": [],
+      "half_independent_of_CL_V": true,
+      "target_claims_half_not_used_to_calibrate": true,
+      "independent_literature_auc": false,
+      "stored_auc_ng_h_mL": 748.0425055928413,
+      "calculated_auc_ng_h_mL": 748.0425055928413,
+      "population": {
+        "species": "human",
+        "group": "adult_healthy"
+      },
+      "weight_distribution": {
+        "wt_kg": {
+          "dist": "lognormal",
+          "median": 70.0,
+          "cv": 0.25,
+          "min": 40,
+          "max": 120
+        }
+      },
+      "sampling": {
+        "t_end_h": 72.0,
+        "dt_h": 0.5,
+        "include_t0": true
+      },
+      "sampling_end_over_stored_half": 14.11764705882353,
+      "iiv": {
+        "eta": {
+          "CL": 0.09,
+          "V": 0.04,
+          "KA": 0.16
+        },
+        "corr": false
+      },
+      "residual": {
+        "type": "prop+add",
+        "prop": 0.25,
+        "add": 0.0
+      },
+      "target_half_summary": "arithmetic_mean",
+      "target_half_variability": {
+        "type": "sd",
+        "value": 1.275
+      },
+      "target_auc_summary": "fixture_consistency_check",
+      "target_auc_variability": {
+        "type": "gcv_percent",
+        "value": 35
+      },
+      "internal_mapping_issues": [],
+      "clinical_use_status": "HOLD: source/context review and drug-specific variability/model validation required"
+    }
+  ],
+  "arithmetic_checks": [
+    {
+      "slug": "abciximab",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 183,
+      "raw_unit": "mL/min",
+      "stored": 10.98,
+      "computed": 10.98,
+      "status": "MATCH",
+      "calculation": "selected raw 183 * factor 0.06",
+      "documented_formula": "183 mL/min * 60 min/h / 1000 mL/L"
+    },
+    {
+      "slug": "abciximab",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 1.44,
+      "raw_unit": "L/kg",
+      "stored": 100.8,
+      "computed": 100.8,
+      "status": "MATCH",
+      "calculation": "selected raw 1.44 * factor 70",
+      "documented_formula": "pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs"
+    },
+    {
+      "slug": "abciximab",
+      "parameter": "t_half_h",
+      "raw_value": "20-30",
+      "raw_unit": "min",
+      "stored": 0.4166666666666667,
+      "computed": 0.4166666666666667,
+      "status": "MATCH",
+      "calculation": "selected raw 25 * factor 0.0166666666666667",
+      "documented_formula": "((20 min + 30 min) / 2) / 60 min/h"
+    },
+    {
+      "slug": "aciclovir",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 327,
+      "raw_unit": "mL/min/1.73 m2",
+      "stored": 19.62,
+      "computed": 19.62,
+      "status": "MATCH",
+      "calculation": "selected raw 327 * factor 0.06",
+      "documented_formula": "327 mL/min/1.73 m2 * 60 min/h / 1000 mL/L"
+    },
+    {
+      "slug": "aciclovir",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 0.6666666666666666,
+      "raw_unit": "L/kg",
+      "stored": 46.666666666666664,
+      "computed": 46.666666666666664,
+      "status": "MATCH",
+      "calculation": "selected raw 0.666667 * factor 70",
+      "documented_formula": "(2/3) L/kg * 70 kg"
+    },
+    {
+      "slug": "aciclovir",
+      "parameter": "bioavailability_frac",
+      "raw_value": "10-20",
+      "raw_unit": "percent",
+      "stored": 0.1,
+      "computed": 0.1,
+      "status": "MATCH",
+      "calculation": "selected raw 10 * factor 0.01",
+      "documented_formula": "lower bound of reported average oral bioavailability range (10% to 20%)"
+    },
+    {
+      "slug": "aciclovir",
+      "parameter": "t_half_h",
+      "raw_value": "2.5-3.3",
+      "raw_unit": "h",
+      "stored": 2.5,
+      "computed": 2.5,
+      "status": "MATCH",
+      "calculation": "selected raw 2.5 * factor 1",
+      "documented_formula": "lower bound of reported adult half-life range (2.5 to 3.3 h)"
+    },
+    {
+      "slug": "albuterol",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 480,
+      "raw_unit": "mL/min",
+      "stored": 28.8,
+      "computed": 28.799999999999997,
+      "status": "MATCH",
+      "calculation": "selected raw 480 * factor 0.06",
+      "documented_formula": "480 mL/min * 60 min/h / 1000 mL/L"
+    },
+    {
+      "slug": "albuterol",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 480,
+      "raw_unit": "mL/min with t1/2 3.86 h",
+      "stored": 160.38152230554428,
+      "computed": 160.38152230554428,
+      "status": "MATCH",
+      "calculation": "V = CL * t_half / ln(2)",
+      "documented_formula": "CL_abs_L_per_h_at_70kg * t_half_h / ln(2)"
+    },
+    {
+      "slug": "albuterol",
+      "parameter": "t_half_h",
+      "raw_value": 3.86,
+      "raw_unit": "h",
+      "stored": 3.86,
+      "computed": 3.86,
+      "status": "MATCH",
+      "calculation": "selected raw 3.86 * factor 1",
+      "documented_formula": "pk_parsed.half_life_h"
+    },
+    {
+      "slug": "alfentanil",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 5.0,
+      "raw_unit": "mL/kg/min",
+      "stored": 21.0,
+      "computed": 21.0,
+      "status": "MATCH",
+      "calculation": "selected raw 5 * factor 4.2",
+      "documented_formula": "5 mL/kg/min * 70 kg * 60 min/h / 1000 mL/L"
+    },
+    {
+      "slug": "alfentanil",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": "0.4-1.0",
+      "raw_unit": "L/kg",
+      "stored": 70.0,
+      "computed": 70.0,
+      "status": "MATCH",
+      "calculation": "selected raw 1 * factor 70",
+      "documented_formula": "upper bound of reported apparent volume range (1 L/kg) * 70 kg"
+    },
+    {
+      "slug": "alfentanil",
+      "parameter": "t_half_h",
+      "raw_value": "90-111",
+      "raw_unit": "min",
+      "stored": 1.675,
+      "computed": 1.675,
+      "status": "MATCH",
+      "calculation": "selected raw 100.5 * factor 0.0166666666666667",
+      "documented_formula": "mean of reported 90-111 min range / 60 min/h"
+    },
+    {
+      "slug": "alprazolam",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 1.5,
+      "raw_unit": "mL/min/kg",
+      "stored": 6.3,
+      "computed": 6.300000000000001,
+      "status": "MATCH",
+      "calculation": "selected raw 1.5 * factor 4.2",
+      "documented_formula": "1.5 mL/min/kg * 60 min/h / 1000 mL/L * 70 kg"
+    },
+    {
+      "slug": "alprazolam",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 1.3,
+      "raw_unit": "L/kg",
+      "stored": 91.0,
+      "computed": 91.0,
+      "status": "MATCH",
+      "calculation": "selected raw 1.3 * factor 70",
+      "documented_formula": "1.3 L/kg * 70 kg"
+    },
+    {
+      "slug": "alprazolam",
+      "parameter": "t_half_h",
+      "raw_value": "9-16",
+      "raw_unit": "h",
+      "stored": 12.5,
+      "computed": 12.5,
+      "status": "MATCH",
+      "calculation": "selected raw 12.5 * factor 1",
+      "documented_formula": "midpoint of reported 9-16 h range"
+    },
+    {
+      "slug": "amikacin",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 100.0,
+      "raw_unit": "mL/min",
+      "stored": 6.0,
+      "computed": 6.0,
+      "status": "MATCH",
+      "calculation": "selected raw 100 * factor 0.06",
+      "documented_formula": "100 mL/min * 60 min/h / 1000 mL/L"
+    },
+    {
+      "slug": "amikacin",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 24.0,
+      "raw_unit": "L",
+      "stored": 24.0,
+      "computed": 24.0,
+      "status": "MATCH",
+      "calculation": "selected raw 24 * factor 1",
+      "documented_formula": "pk_parsed.volume.value"
+    },
+    {
+      "slug": "amikacin",
+      "parameter": "t_half_h",
+      "raw_value": "slightly over 2",
+      "raw_unit": "h",
+      "stored": 2.0,
+      "computed": null,
+      "status": "NOT_EVALUATED",
+      "calculation": "Formula not independently evaluated; see manual review",
+      "documented_formula": "reported \"slightly over 2 hours\" retained as 2.0 h fixture value"
+    },
+    {
+      "slug": "apixaban",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 3.3,
+      "raw_unit": "L/h",
+      "stored": 3.3,
+      "computed": 3.3,
+      "status": "MATCH",
+      "calculation": "selected raw 3.3 * factor 1",
+      "documented_formula": "pk_parsed.clearance.value"
+    },
+    {
+      "slug": "apixaban",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": "3.3 and 12.0",
+      "raw_unit": "L/h and h",
+      "stored": 57.130723619202946,
+      "computed": 57.130723619202946,
+      "status": "MATCH",
+      "calculation": "V = CL * t_half / ln(2)",
+      "documented_formula": "CL_abs_L_per_h_at_70kg * t_half_h / ln(2)"
+    },
+    {
+      "slug": "apixaban",
+      "parameter": "t_half_h",
+      "raw_value": 12.0,
+      "raw_unit": "h",
+      "stored": 12.0,
+      "computed": 12.0,
+      "status": "MATCH",
+      "calculation": "selected raw 12 * factor 1",
+      "documented_formula": "pk_parsed.half_life_h"
+    },
+    {
+      "slug": "atazanavir",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 12.9,
+      "raw_unit": "L/h",
+      "stored": 12.9,
+      "computed": 12.9,
+      "status": "MATCH",
+      "calculation": "selected raw 12.9 * factor 1",
+      "documented_formula": "pk_parsed.clearance.value"
+    },
+    {
+      "slug": "atazanavir",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 88.3,
+      "raw_unit": "L",
+      "stored": 88.3,
+      "computed": 88.3,
+      "status": "MATCH",
+      "calculation": "selected raw 88.3 * factor 1",
+      "documented_formula": "pk_parsed.volume.value"
+    },
+    {
+      "slug": "atazanavir",
+      "parameter": "t_half_h",
+      "raw_value": 4.6,
+      "raw_unit": "h",
+      "stored": 4.6,
+      "computed": 4.6,
+      "status": "MATCH",
+      "calculation": "selected raw 4.6 * factor 1",
+      "documented_formula": "pk_parsed.half_life_h"
+    },
+    {
+      "slug": "buprenorphine",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 54.0,
+      "raw_unit": "L/h",
+      "stored": 54.0,
+      "computed": 54.0,
+      "status": "MATCH",
+      "calculation": "selected raw 54 * factor 1",
+      "documented_formula": "source_2 reported IV clearance"
+    },
+    {
+      "slug": "buprenorphine",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 806.0,
+      "raw_unit": "L",
+      "stored": 806.0,
+      "computed": 806.0,
+      "status": "MATCH",
+      "calculation": "selected raw 806 * factor 1",
+      "documented_formula": "source_2 reported IV Vd"
+    },
+    {
+      "slug": "buprenorphine",
+      "parameter": "t_half_h",
+      "raw_value": 54.0,
+      "raw_unit": "L/h",
+      "stored": 10.345863472802147,
+      "computed": 10.345863472802147,
+      "status": "MATCH",
+      "calculation": "t_half = ln(2) * V / CL",
+      "documented_formula": "ln(2) * V / CL = ln(2) * 806 L / 54 L/h"
+    },
+    {
+      "slug": "carbamazepine",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 80,
+      "raw_unit": "mL/min",
+      "stored": 4.8,
+      "computed": 4.8,
+      "status": "MATCH",
+      "calculation": "selected raw 80 * factor 0.06",
+      "documented_formula": "80 mL/min * 60 min/h / 1000 mL/L"
+    },
+    {
+      "slug": "carbamazepine",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 80,
+      "raw_unit": "mL/min",
+      "stored": 100.41157484587185,
+      "computed": 100.41157484587185,
+      "status": "MATCH",
+      "calculation": "V = CL * t_half / ln(2)",
+      "documented_formula": "CL_apparent_L_per_h_at_70kg * half_life_h / ln(2)"
+    },
+    {
+      "slug": "carbamazepine",
+      "parameter": "t_half_h",
+      "raw_value": "12-17",
+      "raw_unit": "h",
+      "stored": 14.5,
+      "computed": 14.5,
+      "status": "MATCH",
+      "calculation": "selected raw 14.5 * factor 1",
+      "documented_formula": "(12 h + 17 h) / 2"
+    },
+    {
+      "slug": "cda1",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 0.0014,
+      "raw_unit": "mL/min/kg",
+      "stored": 0.00588,
+      "computed": 0.00588,
+      "status": "MATCH",
+      "calculation": "selected raw 0.0014 * factor 4.2",
+      "documented_formula": "0.0014 mL/min/kg * 60 min/h / 1000 mL/L * 70 kg"
+    },
+    {
+      "slug": "cda1",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 0.07,
+      "raw_unit": "L/kg",
+      "stored": 4.9,
+      "computed": 4.9,
+      "status": "MATCH",
+      "calculation": "selected raw 0.07 * factor 70",
+      "documented_formula": "0.070 L/kg * 70 kg"
+    },
+    {
+      "slug": "cda1",
+      "parameter": "t_half_h",
+      "raw_value": "25.3-31.8",
+      "raw_unit": "days",
+      "stored": 685.2,
+      "computed": 685.2,
+      "status": "MATCH",
+      "calculation": "selected raw 28.55 * factor 24",
+      "documented_formula": "fixture midpoint 28.55 days * 24 h/day"
+    },
+    {
+      "slug": "cimetidine",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 495,
+      "raw_unit": "mL/min",
+      "stored": 29.7,
+      "computed": 29.7,
+      "status": "MATCH",
+      "calculation": "selected raw 495 * factor 0.06",
+      "documented_formula": "495 mL/min * 60 min/h / 1000 mL/L"
+    },
+    {
+      "slug": "cimetidine",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 0.8,
+      "raw_unit": "L/kg",
+      "stored": 56.0,
+      "computed": 56.0,
+      "status": "MATCH",
+      "calculation": "selected raw 0.8 * factor 70",
+      "documented_formula": "pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs"
+    },
+    {
+      "slug": "cimetidine",
+      "parameter": "bioavailability_frac",
+      "raw_value": 60,
+      "raw_unit": "percent",
+      "stored": 0.6,
+      "computed": 0.6,
+      "status": "MATCH",
+      "calculation": "selected raw 60 * factor 0.01",
+      "documented_formula": "60 percent / 100"
+    },
+    {
+      "slug": "cimetidine",
+      "parameter": "t_half_h",
+      "raw_value": 2.0,
+      "raw_unit": "h",
+      "stored": 2.0,
+      "computed": 2.0,
+      "status": "MATCH",
+      "calculation": "selected raw 2 * factor 1",
+      "documented_formula": "pk_parsed.half_life_h"
+    },
+    {
+      "slug": "clarithromycin",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 58.1,
+      "raw_unit": "L/h",
+      "stored": 58.1,
+      "computed": 58.1,
+      "status": "MATCH",
+      "calculation": "selected raw 58.1 * factor 1",
+      "documented_formula": "pk_parsed.clearance.value"
+    },
+    {
+      "slug": "clarithromycin",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 172.0,
+      "raw_unit": "L",
+      "stored": 172.0,
+      "computed": 172.0,
+      "status": "MATCH",
+      "calculation": "selected raw 172 * factor 1",
+      "documented_formula": "pk_parsed.volume.value"
+    },
+    {
+      "slug": "clarithromycin",
+      "parameter": "t_half_h",
+      "raw_value": "3-7",
+      "raw_unit": "h",
+      "stored": 5.0,
+      "computed": 5.0,
+      "status": "MATCH",
+      "calculation": "selected raw 5 * factor 1",
+      "documented_formula": "midpoint of reported terminal half-life range (3 to 7 h)"
+    },
+    {
+      "slug": "dapagliflozin",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 207,
+      "raw_unit": "mL/min",
+      "stored": 12.42,
+      "computed": 12.42,
+      "status": "MATCH",
+      "calculation": "selected raw 207 * factor 0.06",
+      "documented_formula": "207 mL/min * 60 min/h / 1000 mL/L"
+    },
+    {
+      "slug": "dapagliflozin",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 118,
+      "raw_unit": "L",
+      "stored": 118.0,
+      "computed": 118.0,
+      "status": "MATCH",
+      "calculation": "selected raw 118 * factor 1",
+      "documented_formula": "FDA source_1 Table 24 reported Vss"
+    },
+    {
+      "slug": "dapagliflozin",
+      "parameter": "bioavailability_frac",
+      "raw_value": 77.8,
+      "raw_unit": "percent",
+      "stored": 0.78,
+      "computed": 0.778,
+      "status": "MISMATCH",
+      "calculation": "selected raw 77.8 * factor 0.01",
+      "documented_formula": "77.8 percent / 100"
+    },
+    {
+      "slug": "dapagliflozin",
+      "parameter": "t_half_h",
+      "raw_value": 12.9,
+      "raw_unit": "h",
+      "stored": 12.9,
+      "computed": 12.9,
+      "status": "MATCH",
+      "calculation": "selected raw 12.9 * factor 1",
+      "documented_formula": "FDA source_1 reported oral terminal t1/2"
+    },
+    {
+      "slug": "efavirenz",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 13.9,
+      "raw_unit": "L/h",
+      "stored": 13.9,
+      "computed": 13.9,
+      "status": "MATCH",
+      "calculation": "selected raw 13.9 * factor 1",
+      "documented_formula": "source_2 reported typical oral CL/F"
+    },
+    {
+      "slug": "efavirenz",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 13.9,
+      "raw_unit": "L/h",
+      "stored": 1163.1007419646824,
+      "computed": 1163.1007419646824,
+      "status": "MATCH",
+      "calculation": "V = CL * t_half / ln(2)",
+      "documented_formula": "CL_apparent_L_per_h_at_70kg * half_life_h / ln(2)"
+    },
+    {
+      "slug": "efavirenz",
+      "parameter": "t_half_h",
+      "raw_value": "52-76",
+      "raw_unit": "h",
+      "stored": 58.0,
+      "computed": null,
+      "status": "NOT_EVALUATED",
+      "calculation": "Formula not independently evaluated; see manual review",
+      "documented_formula": "single-dose range is retained; current 58 h is the fixture representative"
+    },
+    {
+      "slug": "erythromycin",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 0.53,
+      "raw_unit": "L/h/kg",
+      "stored": 37.1,
+      "computed": 37.1,
+      "status": "MATCH",
+      "calculation": "selected raw 0.53 * factor 70",
+      "documented_formula": "0.53 L/h/kg * 70 kg"
+    },
+    {
+      "slug": "erythromycin",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": "0.53 and 2.30",
+      "raw_unit": "L/h/kg and h",
+      "stored": 123.10516783905524,
+      "computed": 123.10516783905526,
+      "status": "MATCH",
+      "calculation": "V = CL * t_half / ln(2)",
+      "documented_formula": "CL_abs_L_per_h_at_70kg * t_half_h / ln(2)"
+    },
+    {
+      "slug": "erythromycin",
+      "parameter": "t_half_h",
+      "raw_value": 2.3,
+      "raw_unit": "h",
+      "stored": 2.3,
+      "computed": 2.3,
+      "status": "MATCH",
+      "calculation": "selected raw 2.3 * factor 1",
+      "documented_formula": "pk_parsed.half_life_h"
+    },
+    {
+      "slug": "ethinylestradiol",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 25.7,
+      "raw_unit": "L/h",
+      "stored": 25.7,
+      "computed": 25.7,
+      "status": "MATCH",
+      "calculation": "selected raw 25.7 * factor 1",
+      "documented_formula": "pk_parsed.clearance.value"
+    },
+    {
+      "slug": "ethinylestradiol",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": "25.7 and 17.05",
+      "raw_unit": "L/h and h",
+      "stored": 632.1673264919305,
+      "computed": 632.1673264919305,
+      "status": "MATCH",
+      "calculation": "V = CL * t_half / ln(2)",
+      "documented_formula": "CL_abs_L_per_h_at_70kg * t_half_h / ln(2)"
+    },
+    {
+      "slug": "ethinylestradiol",
+      "parameter": "t_half_h",
+      "raw_value": "16.5-17.6",
+      "raw_unit": "h",
+      "stored": 17.05,
+      "computed": 17.05,
+      "status": "MATCH",
+      "calculation": "selected raw 17.05 * factor 1",
+      "documented_formula": "midpoint of reported 16.5-17.6 h range"
+    },
+    {
+      "slug": "felodipine",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": "1-1.5",
+      "raw_unit": "L/min",
+      "stored": 90.0,
+      "computed": 90.0,
+      "status": "MATCH",
+      "calculation": "selected raw 1.5 * factor 60",
+      "documented_formula": "upper bound of reported clearance range (1.5 L/min) * 60 min/h"
+    },
+    {
+      "slug": "felodipine",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 10.0,
+      "raw_unit": "L/kg",
+      "stored": 700.0,
+      "computed": 700.0,
+      "status": "MATCH",
+      "calculation": "selected raw 10 * factor 70",
+      "documented_formula": "pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs"
+    },
+    {
+      "slug": "felodipine",
+      "parameter": "bioavailability_frac",
+      "raw_value": 15,
+      "raw_unit": "percent",
+      "stored": 0.15,
+      "computed": 0.15,
+      "status": "MATCH",
+      "calculation": "selected raw 15 * factor 0.01",
+      "documented_formula": "15 percent / 100"
+    },
+    {
+      "slug": "felodipine",
+      "parameter": "t_half_h",
+      "raw_value": "approximately 25",
+      "raw_unit": "h",
+      "stored": 24.5,
+      "computed": null,
+      "status": "NOT_EVALUATED",
+      "calculation": "Formula not independently evaluated; see manual review",
+      "documented_formula": "fixture midpoint of local 24-25 h range, source-confirmed as approximately 25 h"
+    },
+    {
+      "slug": "fluconazole",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 0.23,
+      "raw_unit": "mL/min/kg",
+      "stored": 0.966,
+      "computed": 0.9660000000000001,
+      "status": "MATCH",
+      "calculation": "selected raw 0.23 * factor 4.2",
+      "documented_formula": "0.23 mL/min/kg * 60 min/h / 1000 mL/L * 70 kg"
+    },
+    {
+      "slug": "fluconazole",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": "0.23 and 30.0",
+      "raw_unit": "mL/min/kg and h",
+      "stored": 41.80930228496216,
+      "computed": 41.809302284962165,
+      "status": "MATCH",
+      "calculation": "V = CL * t_half / ln(2)",
+      "documented_formula": "CL_abs_L_per_h_at_70kg * t_half_h / ln(2)"
+    },
+    {
+      "slug": "fluconazole",
+      "parameter": "t_half_h",
+      "raw_value": 30.0,
+      "raw_unit": "h",
+      "stored": 30.0,
+      "computed": 30.0,
+      "status": "MATCH",
+      "calculation": "selected raw 30 * factor 1",
+      "documented_formula": "pk_parsed.half_life_h"
+    },
+    {
+      "slug": "fluvoxamine",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 25.0,
+      "raw_unit": "L/kg",
+      "stored": 65.56797653945428,
+      "computed": 65.56797653945428,
+      "status": "MATCH",
+      "calculation": "CL = V * ln(2) / t_half",
+      "documented_formula": "(25 L/kg * 70 kg) * ln(2) / 18.5 h"
+    },
+    {
+      "slug": "fluvoxamine",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 25.0,
+      "raw_unit": "L/kg",
+      "stored": 1750.0,
+      "computed": 1750.0,
+      "status": "MATCH",
+      "calculation": "selected raw 25 * factor 70",
+      "documented_formula": "25 L/kg * 70 kg"
+    },
+    {
+      "slug": "fluvoxamine",
+      "parameter": "t_half_h",
+      "raw_value": "9-28",
+      "raw_unit": "h",
+      "stored": 18.5,
+      "computed": 18.5,
+      "status": "MATCH",
+      "calculation": "selected raw 18.5 * factor 1",
+      "documented_formula": "(9 h + 28 h) / 2"
+    },
+    {
+      "slug": "inulin",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 93.5,
+      "raw_unit": "mL/min",
+      "stored": 5.61,
+      "computed": 5.609999999999999,
+      "status": "MATCH",
+      "calculation": "selected raw 93.5 * factor 0.06",
+      "documented_formula": "93.5 mL/min * 60 min/h / 1000 mL/L"
+    },
+    {
+      "slug": "inulin",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 13.0,
+      "raw_unit": "L/70 kg",
+      "stored": 13.0,
+      "computed": 13.0,
+      "status": "MATCH",
+      "calculation": "selected raw 13 * factor 1",
+      "documented_formula": "source_3 reports Vss approximately 13 L/70 kg"
+    },
+    {
+      "slug": "inulin",
+      "parameter": "t_half_h",
+      "raw_value": 1.6062234130622617,
+      "raw_unit": "h",
+      "stored": 1.6062234130622617,
+      "computed": 1.6062234130622617,
+      "status": "MATCH",
+      "calculation": "t_half = ln(2) * V / CL",
+      "documented_formula": "ln(2) * 13 L / 5.61 L/h"
+    },
+    {
+      "slug": "itraconazole",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 278.0,
+      "raw_unit": "mL/min",
+      "stored": 16.68,
+      "computed": 16.68,
+      "status": "MATCH",
+      "calculation": "selected raw 278 * factor 0.06",
+      "documented_formula": "278 mL/min * 60 min/h / 1000 mL/L"
+    },
+    {
+      "slug": "itraconazole",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": ">700",
+      "raw_unit": "L",
+      "stored": 700.0,
+      "computed": null,
+      "status": "NOT_EVALUATED",
+      "calculation": "Formula not independently evaluated; see manual review",
+      "documented_formula": "lower bound of reported apparent volume (>700 L)"
+    },
+    {
+      "slug": "itraconazole",
+      "parameter": "bioavailability_frac",
+      "raw_value": 55,
+      "raw_unit": "percent",
+      "stored": 0.55,
+      "computed": 0.55,
+      "status": "MATCH",
+      "calculation": "selected raw 55 * factor 0.01",
+      "documented_formula": "55 percent / 100"
+    },
+    {
+      "slug": "itraconazole",
+      "parameter": "t_half_h",
+      "raw_value": "16-28",
+      "raw_unit": "h",
+      "stored": 22.0,
+      "computed": 22.0,
+      "status": "MATCH",
+      "calculation": "selected raw 22 * factor 1",
+      "documented_formula": "midpoint of reported single-dose terminal half-life range (16 to 28 h)"
+    },
+    {
+      "slug": "mefenamic_acid",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 21.13,
+      "raw_unit": "L/h",
+      "stored": 21.13,
+      "computed": 21.13,
+      "status": "MATCH",
+      "calculation": "selected raw 21.13 * factor 1",
+      "documented_formula": "pk_parsed.clearance.value"
+    },
+    {
+      "slug": "mefenamic_acid",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 1.06,
+      "raw_unit": "L/kg",
+      "stored": 74.2,
+      "computed": 74.2,
+      "status": "MATCH",
+      "calculation": "selected raw 1.06 * factor 70",
+      "documented_formula": "1.06 L/kg * 70 kg"
+    },
+    {
+      "slug": "mefenamic_acid",
+      "parameter": "t_half_h",
+      "raw_value": "2-4",
+      "raw_unit": "h",
+      "stored": 3.0,
+      "computed": 3.0,
+      "status": "MATCH",
+      "calculation": "selected raw 3 * factor 1",
+      "documented_formula": "midpoint of reported 2-4 h range"
+    },
+    {
+      "slug": "metoprolol",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 0.8,
+      "raw_unit": "L/min",
+      "stored": 48.0,
+      "computed": 48.0,
+      "status": "MATCH",
+      "calculation": "selected raw 0.8 * factor 60",
+      "documented_formula": "0.8 L/min * 60 min/h"
+    },
+    {
+      "slug": "metoprolol",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 346.2468098133512,
+      "raw_unit": "L",
+      "stored": 346.2468098133512,
+      "computed": 346.2468098133512,
+      "status": "MATCH",
+      "calculation": "V = CL * t_half / ln(2)",
+      "documented_formula": "CL_abs_L_per_h_at_70kg * half_life_h / ln(2)"
+    },
+    {
+      "slug": "metoprolol",
+      "parameter": "bioavailability_frac",
+      "raw_value": 50,
+      "raw_unit": "percent",
+      "stored": 0.5,
+      "computed": 0.5,
+      "status": "MATCH",
+      "calculation": "selected raw 50 * factor 0.01",
+      "documented_formula": "50 percent / 100"
+    },
+    {
+      "slug": "metoprolol",
+      "parameter": "t_half_h",
+      "raw_value": 5.0,
+      "raw_unit": "h",
+      "stored": 5.0,
+      "computed": 5.0,
+      "status": "MATCH",
+      "calculation": "selected raw 5 * factor 1",
+      "documented_formula": "(3 h + 7 h) / 2"
+    },
+    {
+      "slug": "mexiletine",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 7.0,
+      "raw_unit": "L/kg",
+      "stored": 30.87655622494302,
+      "computed": 30.87655622494302,
+      "status": "MATCH",
+      "calculation": "CL = V * ln(2) / t_half",
+      "documented_formula": "(7 L/kg * 70 kg) * ln(2) / 11 h"
+    },
+    {
+      "slug": "mexiletine",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 7.0,
+      "raw_unit": "L/kg",
+      "stored": 490.0,
+      "computed": 490.0,
+      "status": "MATCH",
+      "calculation": "selected raw 7 * factor 70",
+      "documented_formula": "7 L/kg * 70 kg"
+    },
+    {
+      "slug": "mexiletine",
+      "parameter": "t_half_h",
+      "raw_value": "10-12",
+      "raw_unit": "h",
+      "stored": 11.0,
+      "computed": 11.0,
+      "status": "MATCH",
+      "calculation": "selected raw 11 * factor 1",
+      "documented_formula": "(10 h + 12 h) / 2"
+    },
+    {
+      "slug": "moclobemide",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 39.4,
+      "raw_unit": "L/h",
+      "stored": 39.4,
+      "computed": 39.4,
+      "status": "MATCH",
+      "calculation": "selected raw 39.4 * factor 1",
+      "documented_formula": "source_5 first IV infusion clearance"
+    },
+    {
+      "slug": "moclobemide",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 84.3,
+      "raw_unit": "L",
+      "stored": 84.3,
+      "computed": 84.3,
+      "status": "MATCH",
+      "calculation": "selected raw 84.3 * factor 1",
+      "documented_formula": "source_5 first IV infusion Vss"
+    },
+    {
+      "slug": "moclobemide",
+      "parameter": "t_half_h",
+      "raw_value": 1.6,
+      "raw_unit": "h",
+      "stored": 1.6,
+      "computed": 1.6,
+      "status": "MATCH",
+      "calculation": "selected raw 1.6 * factor 1",
+      "documented_formula": "source_5 first IV infusion elimination half-life"
+    },
+    {
+      "slug": "moclobemide",
+      "parameter": "bioavailability_frac",
+      "raw_value": 0.56,
+      "raw_unit": "fraction",
+      "stored": 0.56,
+      "computed": 0.56,
+      "status": "MATCH",
+      "calculation": "selected raw 0.56 * factor 1",
+      "documented_formula": "source_5 first oral dose absolute bioavailability"
+    },
+    {
+      "slug": "montelukast",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 30.8,
+      "raw_unit": "mL/min",
+      "stored": 1.8479999999999999,
+      "computed": 1.8479999999999999,
+      "status": "MATCH",
+      "calculation": "selected raw 30.8 * factor 0.06",
+      "documented_formula": "30.8 mL/min * 60 min/h / 1000 mL/L"
+    },
+    {
+      "slug": "montelukast",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 9.7,
+      "raw_unit": "L",
+      "stored": 9.7,
+      "computed": 9.7,
+      "status": "MATCH",
+      "calculation": "selected raw 9.7 * factor 1",
+      "documented_formula": "pk_parsed.volume.value"
+    },
+    {
+      "slug": "montelukast",
+      "parameter": "t_half_h",
+      "raw_value": 6.7,
+      "raw_unit": "h",
+      "stored": 6.7,
+      "computed": 6.7,
+      "status": "MATCH",
+      "calculation": "selected raw 6.7 * factor 1",
+      "documented_formula": "pk_parsed.half_life_h"
+    },
+    {
+      "slug": "montelukast",
+      "parameter": "bioavailability_frac",
+      "raw_value": "61-62",
+      "raw_unit": "percent",
+      "stored": 0.615,
+      "computed": 0.615,
+      "status": "MATCH",
+      "calculation": "selected raw 61.5 * factor 0.01",
+      "documented_formula": "midpoint of healthy elderly and healthy young oral bioavailability (61% and 62%)"
+    },
+    {
+      "slug": "motavizumab_medi_524",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": "165-326",
+      "raw_unit": "mL/day",
+      "stored": 0.010229166666666666,
+      "computed": 0.010229166666666666,
+      "status": "MATCH",
+      "calculation": "selected raw 245.5 * factor 4.16666666666667e-05",
+      "documented_formula": "midpoint of 165-326 mL/day * 1 L/1000 mL / 24 h/day"
+    },
+    {
+      "slug": "motavizumab_medi_524",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": "5.2-9.5",
+      "raw_unit": "L",
+      "stored": 7.35,
+      "computed": 7.35,
+      "status": "MATCH",
+      "calculation": "selected raw 7.35 * factor 1",
+      "documented_formula": "midpoint of reported 5.2-9.5 L range"
+    },
+    {
+      "slug": "motavizumab_medi_524",
+      "parameter": "t_half_h",
+      "raw_value": "19-34",
+      "raw_unit": "days",
+      "stored": 636.0,
+      "computed": 636.0,
+      "status": "MATCH",
+      "calculation": "selected raw 26.5 * factor 24",
+      "documented_formula": "midpoint of reported 19-34 days * 24 h/day"
+    },
+    {
+      "slug": "motavizumab_yte",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": "43-68",
+      "raw_unit": "mL/day",
+      "stored": 0.0022916666666666667,
+      "computed": 0.0023125,
+      "status": "MISMATCH",
+      "calculation": "selected raw 55.5 * factor 4.16666666666667e-05",
+      "documented_formula": "midpoint of 43-68 mL/day * 1 L/1000 mL / 24 h/day"
+    },
+    {
+      "slug": "motavizumab_yte",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": "55 and 85",
+      "raw_unit": "mL/day and days",
+      "stored": 6.744599316155904,
+      "computed": 6.744599316155904,
+      "status": "MATCH",
+      "calculation": "V = CL * t_half / ln(2)",
+      "documented_formula": "CL_abs_L_per_h_at_70kg * t_half_h / ln(2)"
+    },
+    {
+      "slug": "motavizumab_yte",
+      "parameter": "t_half_h",
+      "raw_value": "70-100",
+      "raw_unit": "days",
+      "stored": 2040,
+      "computed": 2040.0,
+      "status": "MATCH",
+      "calculation": "selected raw 85 * factor 24",
+      "documented_formula": "midpoint of reported 70-100 days * 24 h/day"
+    },
+    {
+      "slug": "omeprazole",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 624,
+      "raw_unit": "mL/min",
+      "stored": 43.56,
+      "computed": 37.44,
+      "status": "MISMATCH",
+      "calculation": "selected raw 624 * factor 0.06",
+      "documented_formula": "624 mL/min * 60 min/h / 1000 mL/L"
+    },
+    {
+      "slug": "omeprazole",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 0.23,
+      "raw_unit": "L/kg",
+      "stored": 16.1,
+      "computed": 16.1,
+      "status": "MATCH",
+      "calculation": "selected raw 0.23 * factor 70",
+      "documented_formula": "0.23 L/kg * 70 kg"
+    },
+    {
+      "slug": "omeprazole",
+      "parameter": "bioavailability_frac",
+      "raw_value": "30-40",
+      "raw_unit": "percent",
+      "stored": 0.35,
+      "computed": 0.35000000000000003,
+      "status": "MATCH",
+      "calculation": "selected raw 35 * factor 0.01",
+      "documented_formula": "midpoint of healthy-subject label range (30% to 40%) at 20-40 mg"
+    },
+    {
+      "slug": "omeprazole",
+      "parameter": "t_half_h",
+      "raw_value": "0.5-1.0",
+      "raw_unit": "h",
+      "stored": 0.75,
+      "computed": null,
+      "status": "NOT_EVALUATED",
+      "calculation": "Formula not independently evaluated; see manual review",
+      "documented_formula": "fixture value retained within reported plasma half-life range (0.5 to 1 h)"
+    },
+    {
+      "slug": "raltegravir",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 60.2,
+      "raw_unit": "L/h",
+      "stored": 60.2,
+      "computed": 60.2,
+      "status": "MATCH",
+      "calculation": "selected raw 60.2 * factor 1",
+      "documented_formula": "source_1 reported oral CL/F"
+    },
+    {
+      "slug": "raltegravir",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 677.4318833998217,
+      "raw_unit": "L",
+      "stored": 677.4318833998217,
+      "computed": 677.4318833998217,
+      "status": "MATCH",
+      "calculation": "V = CL * t_half / ln(2)",
+      "documented_formula": "CL_abs_L_per_h_at_70kg * half_life_h / ln(2)"
+    },
+    {
+      "slug": "raltegravir",
+      "parameter": "t_half_h",
+      "raw_value": 7.8,
+      "raw_unit": "h",
+      "stored": 7.8,
+      "computed": 7.8,
+      "status": "MATCH",
+      "calculation": "selected raw 7.8 * factor 1",
+      "documented_formula": "source_2 reported geometric-mean apparent plasma half-life"
+    },
+    {
+      "slug": "sildenafil",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": "105 and 4.0",
+      "raw_unit": "L and h",
+      "stored": 18.195113489698564,
+      "computed": 18.195113489698564,
+      "status": "MATCH",
+      "calculation": "CL = V * ln(2) / t_half",
+      "documented_formula": "V_abs_L_at_70kg * ln(2) / t_half_h"
+    },
+    {
+      "slug": "sildenafil",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 105,
+      "raw_unit": "L",
+      "stored": 105.0,
+      "computed": 105.0,
+      "status": "MATCH",
+      "calculation": "selected raw 105 * factor 1",
+      "documented_formula": "pk_parsed.volume.value"
+    },
+    {
+      "slug": "sildenafil",
+      "parameter": "t_half_h",
+      "raw_value": "3-5",
+      "raw_unit": "h",
+      "stored": 4.0,
+      "computed": 4.0,
+      "status": "MATCH",
+      "calculation": "selected raw 4 * factor 1",
+      "documented_formula": "midpoint of reported 3-5 h range"
+    },
+    {
+      "slug": "sufentanil",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 108,
+      "raw_unit": "L/h",
+      "stored": 108.0,
+      "computed": 108.0,
+      "status": "MATCH",
+      "calculation": "selected raw 108 * factor 1",
+      "documented_formula": "pk_parsed.clearance.value"
+    },
+    {
+      "slug": "sufentanil",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 108,
+      "raw_unit": "L/h",
+      "stored": 2087.868263174508,
+      "computed": 2087.868263174508,
+      "status": "MATCH",
+      "calculation": "V = CL * t_half / ln(2)",
+      "documented_formula": "CL_apparent / (ln(2) / terminal_half_life)"
+    },
+    {
+      "slug": "sufentanil",
+      "parameter": "t_half_h",
+      "raw_value": 13.4,
+      "raw_unit": "h",
+      "stored": 13.4,
+      "computed": 13.4,
+      "status": "MATCH",
+      "calculation": "selected raw 13.4 * factor 1",
+      "documented_formula": "pk_parsed.half_life_h"
+    },
+    {
+      "slug": "sufentanil",
+      "parameter": "bioavailability_frac",
+      "raw_value": 53,
+      "raw_unit": "percent",
+      "stored": 0.53,
+      "computed": 0.53,
+      "status": "MATCH",
+      "calculation": "selected raw 53 * factor 0.01",
+      "documented_formula": "53 / 100"
+    },
+    {
+      "slug": "tefibazumab",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 12,
+      "raw_unit": "mL/h",
+      "stored": 0.012,
+      "computed": 0.012,
+      "status": "MATCH",
+      "calculation": "selected raw 12 * factor 0.001",
+      "documented_formula": "12 mL/h / 1000 mL/L"
+    },
+    {
+      "slug": "tefibazumab",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 7.3,
+      "raw_unit": "L",
+      "stored": 7.3,
+      "computed": 7.3,
+      "status": "MATCH",
+      "calculation": "selected raw 7.3 * factor 1",
+      "documented_formula": "source_1 reported IV volume of distribution"
+    },
+    {
+      "slug": "tefibazumab",
+      "parameter": "t_half_h",
+      "raw_value": "17-18",
+      "raw_unit": "days",
+      "stored": 420.0,
+      "computed": 420.0,
+      "status": "MATCH",
+      "calculation": "selected raw 17.5 * factor 24",
+      "documented_formula": "((17 days + 18 days) / 2) * 24 h/day"
+    },
+    {
+      "slug": "tizanidine",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 46.579490533628324,
+      "raw_unit": "L/h",
+      "stored": 46.579490533628324,
+      "computed": 46.579490533628324,
+      "status": "MATCH",
+      "calculation": "CL = V * ln(2) / t_half",
+      "documented_formula": "2.4 L/kg * 70 kg * ln(2) / 2.5 h"
+    },
+    {
+      "slug": "tizanidine",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 2.4,
+      "raw_unit": "L/kg",
+      "stored": 168.0,
+      "computed": 168.0,
+      "status": "MATCH",
+      "calculation": "selected raw 2.4 * factor 70",
+      "documented_formula": "2.4 L/kg * 70 kg"
+    },
+    {
+      "slug": "tizanidine",
+      "parameter": "bioavailability_frac",
+      "raw_value": 40,
+      "raw_unit": "percent",
+      "stored": 0.4,
+      "computed": 0.4,
+      "status": "MATCH",
+      "calculation": "selected raw 40 * factor 0.01",
+      "documented_formula": "40 percent / 100"
+    },
+    {
+      "slug": "tizanidine",
+      "parameter": "t_half_h",
+      "raw_value": 2.5,
+      "raw_unit": "h",
+      "stored": 2.5,
+      "computed": 2.5,
+      "status": "MATCH",
+      "calculation": "selected raw 2.5 * factor 1",
+      "documented_formula": "pk_parsed.half_life_h"
+    },
+    {
+      "slug": "triazolam",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 526,
+      "raw_unit": "mL/min",
+      "stored": 31.56,
+      "computed": 31.56,
+      "status": "MATCH",
+      "calculation": "selected raw 526 * factor 0.06",
+      "documented_formula": "526 mL/min * 60 min/h / 1000 mL/L"
+    },
+    {
+      "slug": "triazolam",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 31.56,
+      "raw_unit": "L/h",
+      "stored": 159.36009421659492,
+      "computed": 159.36009421659492,
+      "status": "MATCH",
+      "calculation": "V = CL * t_half / ln(2)",
+      "documented_formula": "CL_apparent / (ln(2) / selected_fixture_half_life)"
+    },
+    {
+      "slug": "triazolam",
+      "parameter": "t_half_h",
+      "raw_value": "1.5-5.5",
+      "raw_unit": "h",
+      "stored": 3.5,
+      "computed": 3.5,
+      "status": "MATCH",
+      "calculation": "selected raw 3.5 * factor 1",
+      "documented_formula": "midpoint of DailyMed reported range (1.5 to 5.5 h)"
+    },
+    {
+      "slug": "verapamil",
+      "parameter": "CL_abs_L_per_h_at_70kg",
+      "raw_value": 500.64,
+      "raw_unit": "mL/min",
+      "stored": 30.0384,
+      "computed": 30.0384,
+      "status": "MATCH",
+      "calculation": "selected raw 500.64 * factor 0.06",
+      "documented_formula": "500.64 mL/min * 60 min/h / 1000 mL/L"
+    },
+    {
+      "slug": "verapamil",
+      "parameter": "V_abs_L_at_70kg",
+      "raw_value": 2.51,
+      "raw_unit": "L/kg",
+      "stored": 175.7,
+      "computed": 175.7,
+      "status": "MATCH",
+      "calculation": "selected raw 2.51 * factor 70",
+      "documented_formula": "2.51 L/kg * 70 kg"
+    },
+    {
+      "slug": "verapamil",
+      "parameter": "bioavailability_frac",
+      "raw_value": 22.47,
+      "raw_unit": "percent",
+      "stored": 0.2247,
+      "computed": 0.22469999999999998,
+      "status": "MATCH",
+      "calculation": "selected raw 22.47 * factor 0.01",
+      "documented_formula": "22.47 percent / 100"
+    },
+    {
+      "slug": "verapamil",
+      "parameter": "t_half_h",
+      "raw_value": "2.8-7.4",
+      "raw_unit": "h",
+      "stored": 5.1,
+      "computed": 5.1,
+      "status": "MATCH",
+      "calculation": "selected raw 5.1 * factor 1",
+      "documented_formula": "midpoint of reported single-dose terminal half-life range (2.8 to 7.4 h)"
+    }
+  ],
+  "limitations": [
+    "Internal arithmetic matches do not prove source accuracy or clinical validity.",
+    "25% is a repository warning threshold, not a clinical acceptance criterion.",
+    "Unparsed formulas require manual review; no blanket arithmetic pass is claimed.",
+    "Scalar inventory does not establish external validation for any parameter."
+  ]
+}

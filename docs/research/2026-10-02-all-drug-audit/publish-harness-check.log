@@ -1,0 +1,221 @@
+find . -type d \( -name __pycache__ -o -name .pytest_cache \) -prune -exec rm -rf {} +
+find . -maxdepth 2 -type d -name '*.egg-info' -prune -exec rm -rf {} +
+find . -type f \( -name '*.pyc' -o -name '.DS_Store' -o -name '._*' \) -delete
+/private/tmp/pk-audit-20261002-py312/bin/python tools/validate_library.py .
+Library validation: OK
+Warnings (1-compartment attainability and basis assumptions):
+- abciximab: t_half_h 0.3333333333333333 h conflicts with CL/V implied 16.1734 h (rel_error=47.5; threshold=0.25). This target may be unattainable by the 1-compartment fixture without choosing a different independent parameter pair.
+- aciclovir: t_half_h 2.5 h conflicts with CL/V implied 1.4838 h (rel_error=0.406; threshold=0.25). This target may be unattainable by the 1-compartment fixture without choosing a different independent parameter pair.
+- alfentanil: t_half_h 1.675 h conflicts with CL/V implied 2.31049 h (rel_error=0.379; threshold=0.25). This target may be unattainable by the 1-compartment fixture without choosing a different independent parameter pair.
+- amikacin: t_half_h 2.0 h conflicts with CL/V implied 2.77259 h (rel_error=0.386; threshold=0.25). This target may be unattainable by the 1-compartment fixture without choosing a different independent parameter pair.
+- cimetidine: t_half_h 2.0 h conflicts with CL/V implied 1.29387 h (rel_error=0.353; threshold=0.25). This target may be unattainable by the 1-compartment fixture without choosing a different independent parameter pair.
+- clarithromycin: t_half_h 5.0 h conflicts with CL/V implied 2.052 h (rel_error=0.59; threshold=0.25). This target may be unattainable by the 1-compartment fixture without choosing a different independent parameter pair.
+- felodipine: t_half_h 24.5 h conflicts with CL/V implied 5.39114 h (rel_error=0.78; threshold=0.25). This target may be unattainable by the 1-compartment fixture without choosing a different independent parameter pair.
+- inulin: t_half_h 3.0 h conflicts with CL/V implied 1.54033 h (rel_error=0.487; threshold=0.25). This target may be unattainable by the 1-compartment fixture without choosing a different independent parameter pair.
+- itraconazole: t_half_h 22.0 h conflicts with CL/V implied 29.0889 h (rel_error=0.322; threshold=0.25). This target may be unattainable by the 1-compartment fixture without choosing a different independent parameter pair.
+- moclobemide: t_half_h 1.5 h conflicts with CL/V implied 0.933083 h (rel_error=0.378; threshold=0.25). This target may be unattainable by the 1-compartment fixture without choosing a different independent parameter pair.
+- montelukast: t_half_h 6.7 h conflicts with CL/V implied 3.63827 h (rel_error=0.457; threshold=0.25). This target may be unattainable by the 1-compartment fixture without choosing a different independent parameter pair.
+- omeprazole: t_half_h 0.85 h conflicts with CL/V implied 0.445549 h (rel_error=0.476; threshold=0.25). This target may be unattainable by the 1-compartment fixture without choosing a different independent parameter pair.
+- verapamil: t_half_h 5.1 h conflicts with CL/V implied 9.20514 h (rel_error=0.805; threshold=0.25). This target may be unattainable by the 1-compartment fixture without choosing a different independent parameter pair.
+/private/tmp/pk-audit-20261002-py312/bin/python tools/check_value_provenance.py .
+Value provenance check: OK
+/private/tmp/pk-audit-20261002-py312/bin/python tools/codex_harness_check.py .
+Codex harness check: OK
+PYTHONDONTWRITEBYTECODE=1 /private/tmp/pk-audit-20261002-py312/bin/python -m pytest -q -p no:cacheprovider
+........................................................................ [ 29%]
+........s............................................................... [ 59%]
+........................................................................ [ 89%]
+..........................                                               [100%]
+/private/tmp/pk-audit-20261002-py312/bin/python tools/regen_check.py .
+Regeneration check: OK
+/private/tmp/pk-audit-20261002-py312/bin/python tools/check_derived_drift.py . --strict
+# derived-block drift report
+
+- Drugs scanned: 37
+- Drugs with drift vs current derive_quantities: 0
+- pk_parsed.clearance_basis persisted: 37/37
+
+## ke convention used by committed pk.yml
+
+| Convention | Drugs |
+| --- | ---: |
+| CL/V | 19 |
+| both_coincide | 18 |
+
+`ln2/t_half` is what validate_library.py enforces; `CL/V` is what the current
+derive_quantities produces. Where committed uses `ln2/t_half`, regenerating with
+the current generator would change ke and FAIL validate_library's ke check.
+
+## Per-drug drift
+
+| Drug | ke conv | basis saved | drifted fields | keys+gen | keys+committed |
+| --- | --- | :-: | --- | --- | --- |
+| abciximab | CL/V | Y | - | - | - |
+| aciclovir | CL/V | Y | - | - | - |
+| albuterol | both_coincide | Y | - | - | - |
+| alfentanil | CL/V | Y | - | - | - |
+| alprazolam | CL/V | Y | - | - | - |
+| amikacin | CL/V | Y | - | - | - |
+| apixaban | both_coincide | Y | - | - | - |
+| atazanavir | CL/V | Y | - | - | - |
+| buprenorphine | both_coincide | Y | - | - | - |
+| carbamazepine | both_coincide | Y | - | - | - |
+| cda1 | CL/V | Y | - | - | - |
+| cimetidine | CL/V | Y | - | - | - |
+| clarithromycin | CL/V | Y | - | - | - |
+| dapagliflozin | both_coincide | Y | - | - | - |
+| efavirenz | both_coincide | Y | - | - | - |
+| erythromycin | both_coincide | Y | - | - | - |
+| ethinylestradiol | both_coincide | Y | - | - | - |
+| felodipine | CL/V | Y | - | - | - |
+| fluconazole | both_coincide | Y | - | - | - |
+| fluvoxamine | both_coincide | Y | - | - | - |
+| inulin | CL/V | Y | - | - | - |
+| itraconazole | CL/V | Y | - | - | - |
+| mefenamic_acid | CL/V | Y | - | - | - |
+| metoprolol | both_coincide | Y | - | - | - |
+| mexiletine | both_coincide | Y | - | - | - |
+| moclobemide | CL/V | Y | - | - | - |
+| montelukast | CL/V | Y | - | - | - |
+| motavizumab_medi_524 | CL/V | Y | - | - | - |
+| motavizumab_yte | both_coincide | Y | - | - | - |
+| omeprazole | CL/V | Y | - | - | - |
+| raltegravir | both_coincide | Y | - | - | - |
+| sildenafil | both_coincide | Y | - | - | - |
+| sufentanil | both_coincide | Y | - | - | - |
+| tefibazumab | CL/V | Y | - | - | - |
+| tizanidine | both_coincide | Y | - | - | - |
+| triazolam | both_coincide | Y | - | - | - |
+| verapamil | CL/V | Y | - | - | - |
+
+/private/tmp/pk-audit-20261002-py312/bin/python tools/make_calibrated_oral_spec.py . --check
+
+calibrated profiles: 9 eligible drug(s); would change 0.
+/private/tmp/pk-audit-20261002-py312/bin/python -m tools.pk_fixture_cli --help
+pk_fixture_cli: CLI entrypoint for pkdummy-harness
+
+Usage:
+  python -m tools.pk_fixture_cli <command> [args...]
+  (run from the repository root)
+
+Commands:
+  doctor               Check local Python/R/Quarto/simPop readiness.
+  run                  Run a harness YAML config.
+  workflow             Run post-simulation validate/sample/SDTM-like/analysis workflow.
+  validate-simulation  Recalculate AUC/Cmax/Tmax/t1/2 from sim_full.csv.
+  validate-config      Validate a run_harness YAML config.
+  sample-timepoints    Sample dense simulation output at nominal clinical times.
+  make-sdtm            Generate limited SDTM-like DM/VS/LB/EX/PC CSVs.
+  make-analysis        Generate ADPC/NCA/PopPK smoke-test input CSVs.
+  downstream-smoke     Run downstream NCA/PopPK parser smoke checks.
+  site-adapter         Generate site-specific adapter CSVs from a YAML mapping.
+  external-validation  Probe or run optional Phoenix/NONMEM/nlmixr2 profiles.
+  manifest-viewer      Render a MANIFEST.yml to a static HTML viewer.
+  examples-check       Regenerate versioned examples in a temp dir and compare.
+  audit-library        Read-only internal-first library priority audit.
+  cdisc-reference      Fetch optional CDISC DM/EX reference fixtures.
+
+Examples:
+  python -m tools.pk_fixture_cli doctor
+  python -m tools.pk_fixture_cli run harness_examples/demo_set.yml
+  python -m tools.pk_fixture_cli workflow --sim-full outputs/<run>/raw/sim_full.csv --drug aciclovir --times 0,1,2 --out-dir outputs/<run>/workflow
+
+Boundary:
+  Generated data are workflow fixtures, not clinical inference or dose-selection evidence.
+/private/tmp/pk-audit-20261002-py312/bin/python -m tools.pk_fixture_cli doctor --json
+{
+  "purpose": "pk_fixture_harness_preflight",
+  "status": "WARN",
+  "checks": [
+    {
+      "name": "python3",
+      "status": "OK",
+      "level": "required",
+      "message": "Python CLI is available."
+    },
+    {
+      "name": "python_package:yaml",
+      "status": "OK",
+      "level": "required",
+      "message": "PyYAML is importable."
+    },
+    {
+      "name": "Rscript",
+      "status": "OK",
+      "level": "recommended",
+      "message": "Rscript is available for reporting tools."
+    },
+    {
+      "name": "R_package:ggplot2",
+      "status": "OK",
+      "level": "recommended",
+      "message": "ggplot2 is available for concentration plots."
+    },
+    {
+      "name": "R_package:yaml",
+      "status": "OK",
+      "level": "recommended",
+      "message": "yaml is available for the mrgsolve runner."
+    },
+    {
+      "name": "R_package:mrgsolve",
+      "status": "OK",
+      "level": "recommended",
+      "message": "mrgsolve is available for ODE PopPK simulation."
+    },
+    {
+      "name": "quarto",
+      "status": "OK",
+      "level": "recommended",
+      "message": "Quarto is available for DOCX report rendering."
+    },
+    {
+      "name": "R_package:simpop",
+      "status": "WARN",
+      "level": "optional",
+      "message": "simpop is missing; built-in fallback subject fixtures can still be used."
+    }
+  ]
+}
+/private/tmp/pk-audit-20261002-py312/bin/python tools/check_examples.py examples
+Examples check: OK
+checked: minimal_aciclovir
+checked: minimal_albuterol_iv
+checked: minimal_cda1_mab_iv
+/private/tmp/pk-audit-20261002-py312/bin/python tools/run_downstream_smoke.py --analysis-dir examples/minimal_aciclovir/workflow/analysis_inputs --out-dir outputs/downstream_smoke_check/minimal_aciclovir
+Downstream smoke: OK
+Output directory: outputs/downstream_smoke_check/minimal_aciclovir
+adapter_manifest: outputs/downstream_smoke_check/minimal_aciclovir/adapters/MANIFEST.yml
+manifest: outputs/downstream_smoke_check/minimal_aciclovir/DOWNSTREAM_SMOKE_MANIFEST.yml
+nca_summary_csv: outputs/downstream_smoke_check/minimal_aciclovir/nca_smoke/NCA_SUMMARY.csv
+nlmixr2_model_template: outputs/downstream_smoke_check/minimal_aciclovir/poppk_smoke/nlmixr2_parser_template.R
+nonmem_control_template: outputs/downstream_smoke_check/minimal_aciclovir/poppk_smoke/nonmem_parser_template.ctl
+poppk_summary_yml: outputs/downstream_smoke_check/minimal_aciclovir/poppk_smoke/POPPK_PARSE_SUMMARY.yml
+/private/tmp/pk-audit-20261002-py312/bin/python tools/run_downstream_smoke.py --analysis-dir examples/minimal_albuterol_iv/workflow/analysis_inputs --out-dir outputs/downstream_smoke_check/minimal_albuterol_iv
+Downstream smoke: OK
+Output directory: outputs/downstream_smoke_check/minimal_albuterol_iv
+adapter_manifest: outputs/downstream_smoke_check/minimal_albuterol_iv/adapters/MANIFEST.yml
+manifest: outputs/downstream_smoke_check/minimal_albuterol_iv/DOWNSTREAM_SMOKE_MANIFEST.yml
+nca_summary_csv: outputs/downstream_smoke_check/minimal_albuterol_iv/nca_smoke/NCA_SUMMARY.csv
+nlmixr2_model_template: outputs/downstream_smoke_check/minimal_albuterol_iv/poppk_smoke/nlmixr2_parser_template.R
+nonmem_control_template: outputs/downstream_smoke_check/minimal_albuterol_iv/poppk_smoke/nonmem_parser_template.ctl
+poppk_summary_yml: outputs/downstream_smoke_check/minimal_albuterol_iv/poppk_smoke/POPPK_PARSE_SUMMARY.yml
+/private/tmp/pk-audit-20261002-py312/bin/python tools/make_site_adapters.py --analysis-dir examples/minimal_aciclovir/workflow/analysis_inputs --spec-yml external_validation/site_adapter_template.yml --out-dir outputs/site_adapter_check/minimal_aciclovir
+Site adapters written: OK
+Output directory: outputs/site_adapter_check/minimal_aciclovir
+manifest: outputs/site_adapter_check/minimal_aciclovir/SITE_ADAPTER_MANIFEST.yml
+site_nca_example: outputs/site_adapter_check/minimal_aciclovir/site_nca_example.csv
+site_poppk_example: outputs/site_adapter_check/minimal_aciclovir/site_poppk_example.csv
+/private/tmp/pk-audit-20261002-py312/bin/python tools/run_external_tool_validation.py --downstream-dir outputs/downstream_smoke_check/minimal_aciclovir --out-dir outputs/external_validation_probe/minimal_aciclovir
+External tool validation: WARN
+execute=false
+manifest: outputs/external_validation_probe/minimal_aciclovir/EXTERNAL_TOOL_VALIDATION.yml
+nlmixr2: OK - probe passed; execute=false
+nonmem: SKIPPED - executable not found: nmfe75
+phoenix: SKIPPED - executable not found: phoenix-placeholder
+/Applications/Xcode.app/Contents/Developer/usr/bin/make clean
+find . -type d \( -name __pycache__ -o -name .pytest_cache \) -prune -exec rm -rf {} +
+find . -maxdepth 2 -type d -name '*.egg-info' -prune -exec rm -rf {} +
+find . -type f \( -name '*.pyc' -o -name '.DS_Store' -o -name '._*' \) -delete
+/private/tmp/pk-audit-20261002-py312/bin/python tools/codex_harness_check.py .
+Codex harness check: OK
