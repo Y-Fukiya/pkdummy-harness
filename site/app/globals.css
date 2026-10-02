@@ -329,3 +329,16 @@ code { color: #6d5c90; background: #f3f0f8; padding: 3px 5px; font-size: 10px; }
   .detail-footer { display: block; }
   .detail-footer span { display: block; margin-bottom: 5px; }
 }
+
+.audit-panel { border-top: 3px solid var(--gold); margin: 24px 0; }
+.audit-panel h2 { margin: 10px 0; }
+.audit-scope { color: var(--muted); font-size: 13px; }
+.audit-counts { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; }
+.audit-counts > span { padding: 12px 18px; background: var(--paper); border-radius: 8px; }
+.audit-counts strong { display: block; font-size: 24px; margin-top: 6px; }
+.audit-items details { border-top: 1px solid var(--line); padding: 14px 0; }
+.audit-items summary { cursor: pointer; min-height: 44px; padding: 10px 0; }
+.audit-verdict { display: inline-block; margin-left: 15px; font-size: 12px; background: var(--paper); padding: 5px 10px; border-radius: 5px; }
+.audit-contradiction { background: #fff0e9; color: #9c361a; }
+.audit-unverified { background: #fff6db; color: #74530c; }
+.audit-items a { display: block; overflow-wrap: anywhere; margin: 8px 0; }

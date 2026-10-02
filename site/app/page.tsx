@@ -2,8 +2,38 @@
 
 import { useEffect, useMemo, useState } from "react";
 import rawBundle from "./drugs.json";
+import parameterAudit from "../../docs/research/2026-10-02-all-drug-audit/all-drug-audit.json";
 
 type Language = "ja" | "en";
+const auditLabels: Record<string, [string, string]> = {
+  VERIFIED_VALUE_ONLY: ["数値照合", "Value matched"],
+  QUALIFIED: ["条件付き", "Qualified"],
+  CONTRADICTION: ["不整合", "Contradiction"],
+  FIXTURE_ASSUMPTION: ["仮定", "Fixture assumption"],
+  UNVERIFIED: ["未確認", "Unverified"],
+  DERIVED: ["導出", "Derived"],
+};
+const auditReportUrl = "https://github.com/Y-Fukiya/pkdummy-harness/blob/main/docs/research/2026-10-02-all-drug-audit/REPORT.md";
+function AuditPanel({ slug, lang }: { slug?: string; lang: Language }) {
+  const item = parameterAudit.drugs.find((drug) => drug.slug === slug);
+  return <section className="panel audit-panel" aria-label={lang === "ja" ? "最新パラメータ監査" : "Latest parameter audit"}>
+    <span className="eyebrow">PARAMETER AUDIT · {parameterAudit.audit_date}</span>
+    <h2>{lang === "ja" ? "最新パラメータ監査" : "Latest parameter audit"}</h2>
+    <p>{lang === "ja" ? "37薬剤・148項目を監査。数値照合はモデル採用の承認ではありません。全37薬剤の臨床モデル採用は保留です。" : "37 drugs and 148 parameters reviewed. Matching a value does not qualify a model. Clinical model use remains on hold for all 37 drugs."}</p>
+    <p className="audit-scope">{lang === "ja" ? "監査対象は記録されたローカル作業版の入力snapshotです。掲載先mainの全薬剤YAMLを監査済みという意味ではありません。従来のPKチェック・確認状態と今回の監査判定は別に表示します。" : "The audit covers the recorded local working-tree snapshot, not every canonical YAML in main. Earlier PK checks and the new audit verdicts are separate assessments."}</p>
+    {item ? <>
+      <p>{item.summary}</p>
+      <div className="audit-items">{item.parameters.map((entry) => <details key={entry.parameter}>
+        <summary><strong>{({clearance: "CL", volume: "V", half_life: "t½", bioavailability: "F"} as Record<string, string>)[entry.parameter] ?? entry.parameter}</strong><span className={`audit-verdict audit-${entry.verdict.toLowerCase()}`}>{auditLabels[entry.verdict]?.[lang === "ja" ? 0 : 1] ?? entry.verdict}</span></summary>
+        <p>{entry.reason}</p><p><strong>{lang === "ja" ? "次の対応: " : "Required action: "}</strong>{entry.required_action}</p>
+        <p>{entry.locator} · {entry.access_level}</p>
+        {entry.source_urls.map((url) => <a key={url} href={url} target="_blank" rel="noreferrer">{url}</a>)}
+      </details>)}</div>
+    </> : <div className="audit-counts">{Object.entries(parameterAudit.verdict_counts).map(([key, count]) => <span key={key}>{auditLabels[key]?.[lang === "ja" ? 0 : 1] ?? key}<strong>{count}</strong></span>)}</div>}
+    <a href={auditReportUrl}>{lang === "ja" ? "監査レポート全文" : "Full audit report"} ↗</a>
+  </section>;
+}
+
 type JsonObject = Record<string, unknown>;
 
 type Source = {
@@ -391,6 +421,12 @@ function hasCitationGap(drug: Drug): boolean {
 }
 
 function statusForDrug(drug: Drug, lang: Language): string {
+  const audit = parameterAudit.drugs.find((entry) => entry.slug === drug.slug);
+  if (audit) {
+    const order = ["CONTRADICTION", "UNVERIFIED", "QUALIFIED", "FIXTURE_ASSUMPTION", "DERIVED", "VERIFIED_VALUE_ONLY"];
+    const verdict = order.find((key) => audit.parameters.some((entry) => entry.verdict === key))!;
+    return `${lang === "ja" ? "監査" : "Audit"}: ${auditLabels[verdict][lang === "ja" ? 0 : 1]}`;
+  }
   if (drug.review.provenance_field_count === 0) return copy[lang].notRecorded;
   if (hasOpenReview(drug)) return copy[lang].needsReview;
   if (hasCitationGap(drug)) return copy[lang].citationGap;
@@ -398,6 +434,8 @@ function statusForDrug(drug: Drug, lang: Language): string {
 }
 
 function statusClass(drug: Drug): string {
+  const audit = parameterAudit.drugs.find((entry) => entry.slug === drug.slug);
+  if (audit) return audit.parameters.some((entry) => ["CONTRADICTION", "UNVERIFIED"].includes(entry.verdict)) ? "status warning" : "status context";
   if (drug.review.provenance_field_count === 0) return "status muted";
   if (hasOpenReview(drug)) return "status warning";
   if (hasCitationGap(drug)) return "status context";
@@ -655,6 +693,8 @@ function DetailView({ drug, lang, onBack }: { drug: Drug; lang: Language; onBack
         </div>
       </div>
 
+      <AuditPanel slug={drug.slug} lang={lang} />
+
       <div className="metrics detail-metrics">
         <div className="metric-card accent-blue">
           <span>CL</span>
@@ -911,7 +951,6 @@ function Catalog({
   const pharmacologyClaimCount = bundle.drugs.reduce((sum, drug) => sum + (drug.pharmacology.claim_count ?? 0), 0);
   const pharmacologyReviewedCount = bundle.drugs.reduce((sum, drug) => sum + (drug.pharmacology.reviewed_count ?? 0), 0);
   const pharmacologyCandidateCount = pharmacologyClaimCount - pharmacologyReviewedCount;
-  const strictPassCount = bundle.drugs.filter((drug) => drug.review.strict_status === "PASS").length;
 
   return (
     <div className="catalog-view">
@@ -922,8 +961,8 @@ function Catalog({
           <p>{t.intro}</p>
           <div className="hero-note"><span className="dot" /> {t.notClinical}</div>
           <div className="hero-note readiness-note"><span className="dot" /> {lang === "ja"
-            ? `PKチェック: ${strictPassCount}/${bundle.drug_count} PASS。PK引用と薬効候補の原典確認は継続中です。`
-            : `PK checks: ${strictPassCount}/${bundle.drug_count} PASS. PK citations and pharmacology source candidates remain under review.`}</div>
+            ? `最新監査: ${parameterAudit.drug_count}薬剤・${parameterAudit.core_parameter_count}項目。臨床モデル採用は全薬剤で保留です。`
+            : `Latest audit: ${parameterAudit.drug_count} drugs, ${parameterAudit.core_parameter_count} parameters. Clinical model use remains on hold.`}</div>
           <a className="mobile-catalog-jump" href="#catalog-section">{t.mobileCatalogJump} →</a>
         </div>
         <div className="hero-stamp">
@@ -932,6 +971,8 @@ function Catalog({
           <small>{t.drugs}</small>
         </div>
       </section>
+
+      <AuditPanel lang={lang} />
 
       <div className="metrics">
         <div className="metric-card accent-blue"><span>{t.drugs}</span><strong>{bundle.drug_count}</strong><small>canonical YAML records</small></div>
