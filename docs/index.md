@@ -6,6 +6,8 @@ Generated data are not for clinical inference, dose selection, or regulatory mod
 
 ## Start Here
 
+- [シミュレーションに必要なパラメータ](SIMULATION_PARAMETERS.md)
+
 - [Quickstart](QUICKSTART.md)
 - [User Guide](USER_GUIDE.md)
 - [README](https://github.com/Y-Fukiya/pkdummy-harness#readme)
