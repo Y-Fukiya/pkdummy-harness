@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 薬剤別シミュレーションパラメータ
-permalink: /parameters/
+permalink: /parameter-values/
 ---
 
 # 薬剤別シミュレーションパラメータ
