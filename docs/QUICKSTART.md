@@ -35,7 +35,7 @@ UI/launcherから呼ぶ場合の契約は [LAUNCHER_CONTRACT.md](LAUNCHER_CONTRA
 リポジトリ直下で実行します。
 
 ```bash
-python3 -m pip install -r requirements.txt
+python3 -m pip install -r requirements-dev.txt
 make validate
 ```
 
