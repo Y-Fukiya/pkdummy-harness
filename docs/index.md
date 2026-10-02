@@ -6,6 +6,8 @@ Generated data are not for clinical inference, dose selection, or regulatory mod
 
 ## Start Here
 
+- [薬剤別パラメータ値・出典一覧](PARAMETERS.md)
+
 - [シミュレーションに必要なパラメータ](SIMULATION_PARAMETERS.md)
 
 - [Quickstart](QUICKSTART.md)

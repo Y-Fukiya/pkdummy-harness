@@ -6,6 +6,8 @@ permalink: /simulation-parameters/
 
 # シミュレーションに必要なパラメータ
 
+薬剤ごとの採用値は[薬剤別パラメータ一覧](PARAMETERS.md)で確認できます。
+
 このページは、現在の `spec_pk1_*.yml` と `tools/mrgsolve_runner.R` に基づく、1-compartment PKシミュレーションの入力仕様です。薬剤の科学的根拠は `pk.yml`、実行条件はspec、比較目標は `targets.yml` に分けて管理します。生成データはワークフロー検証用fixtureで、臨床推論・用量選択用モデルとして検証されたものではありません。
 
 ## 最初に決めること
