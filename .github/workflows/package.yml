@@ -29,7 +29,7 @@ jobs:
           # and there is no console script, so this smoke is an import/CLI-help check.
           python -m tools.pk_fixture_cli --help
       - name: Upload package artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: python-package-dist
           path: dist/*
