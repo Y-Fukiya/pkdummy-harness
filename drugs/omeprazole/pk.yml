@@ -168,24 +168,19 @@ simulation_validity:
   status: clinical_hold
   review_date: '2026-10-28'
   correction_notes:
-  - CL=37.44 L/h is 624 mL/min * 60/1000 from the source_4 median. V=16.1 L is the
-    source_4 mean IV Vss 0.23 L/kg * 70 kg; median CL and mean Vss are different summary
-    statistics.
-  - F1=0.35 and half-life 0.75 h are midpoint fixture selections from the healthy-subject
-    label ranges, not the PubMed study median F=39% or its IV half-life. The retained
-    100 mg dose is a stress-test fixture, not a validated 20 mg oral buffered-solution
-    scenario.
-  - Legacy pk_raw volume 0.4 L/kg is retained as the original capture; the adopted
-    source_4 IV Vss is 0.23 L/kg. KA, lag, IIV and residual errors remain generic
-    fixture assumptions.
+  - Systemic CL was corrected from 43.56 to 37.44 L/h using the source_4 median
+    of 624 mL/min and the conversion 624 * 60 / 1000.
+  - The adopted V is the source_4 mean IV Vss of 0.23 L/kg, scaled to 16.1 L at
+    70 kg. The legacy pk_raw volume of 0.4 L/kg is retained as the original capture.
+  - The elimination-route description was corrected to distinguish hepatic metabolism
+    from urinary recovery of metabolites.
   reasons:
-  - CL=37.44 L/h is 624 mL/min * 60/1000 from the source_4 median. V=16.1 L is the
-    source_4 mean IV Vss 0.23 L/kg * 70 kg; median CL and mean Vss are different summary
-    statistics.
-  - F1=0.35 and half-life 0.75 h are midpoint fixture selections from the healthy-subject
-    label ranges, not the PubMed study median F=39% or its IV half-life. The retained
-    100 mg dose is a stress-test fixture, not a validated 20 mg oral buffered-solution
-    scenario.
-  - Legacy pk_raw volume 0.4 L/kg is retained as the original capture; the adopted
-    source_4 IV Vss is 0.23 L/kg. KA, lag, IIV and residual errors remain generic
-    fixture assumptions.
+  - The selected CL of 37.44 L/h and V of 16.1 L combine a median systemic CL with
+    a mean IV Vss from source_4. These different summary statistics are not a jointly
+    estimated one-compartment parameter set.
+  - F1 of 0.35 and half-life of 0.75 h are midpoint fixture selections from separate
+    healthy-subject label ranges. They are not the study's median F of 39% or its
+    IV half-life, and the retained CL and V do not reproduce the selected half-life.
+  - The 100 mg computational regimen has not been qualified for extrapolation from
+    the 20 mg oral buffered-solution study. KA, lag, IIV and residual errors remain
+    generic fixture assumptions.

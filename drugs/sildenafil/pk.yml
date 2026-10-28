@@ -18,7 +18,7 @@ sources:
   url: https://www.ema.europa.eu/en/documents/product-information/viagra-epar-product-information_en.pdf
 pk_raw:
   half_life: 3-5 hours
-  clearance: 41 L/h (total body clearance; EMA source_7 section5.2)
+  clearance: 41 L/h (total body clearance; EMA source_7 section 5.2)
   volume_of_distribution: 105 L
   bioavailability: 41% (25-63%)
   elimination_route: Hepatic metabolism (mainly CYP3A4, minor CYP2C9); metabolites
@@ -42,8 +42,8 @@ pk_parsed:
   clearance_basis: systemic
   volume_basis: systemic
   clearance_basis_source: primary_source_reviewed
-  clearance_basis_note: EMA source_7 section5.2 reports total body CL41 L/h, Vss105
-    L and mean absolute oral F41%; Vss is not V/F.
+  clearance_basis_note: EMA source_7 section 5.2 reports total body CL 41 L/h, Vss 105
+    L and mean absolute oral F 41%; Vss is not V/F.
 derived:
   ke_1_per_h: 0.3904761904761905
   CL_abs_L_per_h_at_70kg: 41.0
@@ -73,7 +73,7 @@ value_provenance:
       assumptions: {}
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: EMA source_7 section5.2 reports total body clearance41 L/h. No
+    reviewer_note: EMA source_7 section 5.2 reports total body clearance 41 L/h. No
       CL is inferred from Vss and terminal half-life.
     source_review_status: checked
     fixture_limitation_status: not_applicable
@@ -96,7 +96,7 @@ value_provenance:
       assumptions: {}
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: EMA source_7 section5.2 reports steady-state volume105 L. Vss is
+    reviewer_note: EMA source_7 section 5.2 reports steady-state volume 105 L. Vss is
       used as the one-compartment fixture volume, with structural limitations retained.
     source_review_status: checked
     fixture_limitation_status: acknowledged
@@ -120,11 +120,11 @@ value_provenance:
         range_summary: midpoint
     role: check_only
     reviewer_status: checked
-    reviewer_note: EMA source_7 section5.2 reports terminal half-life3–5 h. The4 h
+    reviewer_note: EMA source_7 section 5.2 reports terminal half-life 3–5 h. The 4 h
       midpoint is a check-only fixture choice and is not used to infer CL.
     source_review_status: checked
     fixture_limitation_status: acknowledged
-    source_locator: EMA product information section5.2
+    source_locator: EMA product information section 5.2
     selection:
       rule: range_midpoint
       rationale: midpoint of reported 3-5 h range Retained as an explicit legacy fixture
@@ -143,8 +143,8 @@ value_provenance:
       assumptions: {}
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: Mean F41% is the reported estimate. It replaces the fixture midpoint44%
-      of the25–63% range.
+    reviewer_note: Mean F 41% is the reported estimate. It replaces the fixture midpoint 44%
+      of the 25–63% range.
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: EMA product information section 5.2
@@ -157,22 +157,15 @@ simulation_validity:
   status: clinical_hold
   review_date: '2026-10-28'
   correction_notes:
-  - Systemic CL41 L/h and Vss105 L are reported in EMA source_7. The previous CL18.195113489698564
-    L/h was inferred from V and a midpoint half-life and is superseded, not treated
-    as a reported CL/F.
-  - "F1=0.41 is the reported mean absolute oral bioavailability. The terminal half-life4\
-    \ h is only the midpoint of the reported3\u20135 h range; CL/Vss does not reproduce\
-    \ this terminal phase in a one-compartment model."
-  - The retained100 mg oral dose is within the cited recommended-dose range, but Vss
-    mapping, KA, lag, IIV and residual errors remain fixture approximations and do
-    not establish clinical model validity.
+  - The earlier CL of 18.195113489698564 L/h, inferred from V and a midpoint half-life,
+    was replaced with the reported systemic CL of 41 L/h in EMA source_7.
+  - The retained volume of 105 L was reclassified from apparent V/F to systemic Vss.
+  - F and F1 were changed from the fixture choices of 0.44 and 1 to the reported
+    mean absolute oral bioavailability of 0.41.
   reasons:
-  - Systemic CL41 L/h and Vss105 L are reported in EMA source_7. The previous CL18.195113489698564
-    L/h was inferred from V and a midpoint half-life and is superseded, not treated
-    as a reported CL/F.
-  - F1=0.41 is the reported mean absolute oral bioavailability. The terminal half-life4
-    h is only the midpoint of the reported3–5 h range; CL/Vss does not reproduce this
-    terminal phase in a one-compartment model.
-  - The retained100 mg oral dose is within the cited recommended-dose range, but Vss
-    mapping, KA, lag, IIV and residual errors remain fixture approximations and do
-    not establish clinical model validity.
+  - The reported Vss of 105 L is used as the one-compartment V. With systemic CL
+    of 41 L/h, this approximation does not reproduce the reported terminal half-life
+    range of 3–5 h. The selected 4 h midpoint remains a check-only fixture reference.
+  - KA, lag, IIV and residual errors are generic fixture assumptions. The retained
+    100 mg computational regimen has not been qualified against independent concentration-time
+    data.

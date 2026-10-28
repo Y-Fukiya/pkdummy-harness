@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import copy
 import math
+import re
 from typing import Any
 
 
@@ -15,6 +16,51 @@ SELECTION_RULES = {
     "recorded_point_value", "range_midpoint", "range_midpoint_mixed_contexts",
     "upper_bound", "lower_bound", "censored_lower_bound", "derived_value", "legacy_fixture_value",
 }
+PROSE_IDENTIFIERS = {"F1", "CDA1", "V1", "V2", "m2", "t1"}
+
+
+def _authored_prose(pk: dict[str, Any]) -> list[tuple[str, Any]]:
+    validity = pk.get("simulation_validity") or {}
+    fields = []
+    for key in ("reasons", "correction_notes"):
+        values = validity.get(key)
+        if isinstance(values, list):
+            fields.extend((f"simulation_validity.{key}[{index}]", value) for index, value in enumerate(values))
+    fields.extend((f"pk_parsed.{key}", value) for key, value in (pk.get("pk_parsed") or {}).items() if key.endswith("_note"))
+    for key, entry in (pk.get("value_provenance") or {}).items():
+        prefix = f"value_provenance.{key}"
+        fields.extend((f"{prefix}.{field}", entry.get(field)) for field in ("reviewer_note", "source_locator"))
+        fields.append((f"{prefix}.selection.rationale", (entry.get("selection") or {}).get("rationale")))
+        fields.extend((f"{prefix}.review_update.{field}", (entry.get("review_update") or {}).get(field)) for field in ("note", "note_en"))
+    fields.extend(
+        (f"fixture_limitations[{index}].{key}", entry.get(key))
+        for index, entry in enumerate(pk.get("fixture_limitations") or [])
+        for key in ("statement", "source_locator")
+    )
+    fields.extend((f"derived.notes[{index}]", value) for index, value in enumerate((pk.get("derived") or {}).get("notes") or []))
+    return fields
+
+
+def _editorial_issues(pk: dict[str, Any]) -> list[str]:
+    issues = []
+    validity = pk.get("simulation_validity") or {}
+    def normalize(value: str) -> str:
+        return " ".join(value.split()).casefold().rstrip(" .!?。！？")
+    reason_values = validity.get("reasons")
+    reasons = {normalize(value) for value in reason_values if isinstance(value, str)} if isinstance(reason_values, list) else set()
+    notes = validity.get("correction_notes")
+    if isinstance(notes, list):
+        for note in notes:
+            if isinstance(note, str) and normalize(note) in reasons:
+                issues.append("simulation_validity.reasons and correction_notes contain a duplicate explanation")
+    for path, value in _authored_prose(pk):
+        if not isinstance(value, str):
+            continue
+        prose = re.sub(r"https?://\S+|`[^`]*`", " ", value)
+        for token in re.findall(r"(?<![A-Za-z0-9_])[A-Za-z][A-Za-z0-9-]*(?:\.\d+)*(?![A-Za-z0-9_])", prose):
+            if re.search(r"[A-Za-z]\d", token) and token not in PROSE_IDENTIFIERS and not re.fullmatch(r"CYP\d+[A-Za-z]?\d*(?:-[A-Za-z]+)*|q\d+(?:-\d+)?h?", token):
+                issues.append(f"{path}: missing space before numeric value in {token!r}")
+    return issues
 
 
 def _positive_number(value: Any) -> float | None:
@@ -42,6 +88,7 @@ def validate_fixture_context(pk: dict[str, Any], spec: dict[str, Any], targets: 
             notes = validity.get("correction_notes")
             if not isinstance(notes, list) or not notes or any(not isinstance(note, str) or not note.strip() for note in notes):
                 issues.append("simulation_validity.correction_notes must record source corrections separately")
+        issues.extend(_editorial_issues(pk))
     for field, entry in (pk.get("value_provenance") or {}).items():
         selection = entry.get("selection") or {}
         if selection.get("rule") not in SELECTION_RULES or not str(selection.get("rationale") or "").strip():

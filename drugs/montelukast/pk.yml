@@ -135,9 +135,9 @@ value_provenance:
         dose_context: 10 mg oral, single-dose bioavailability comparison
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: Source_1 reports mean oral F61% in healthy elderly subjects after10
+    reviewer_note: Source_1 reports mean oral F 61% in healthy elderly subjects after 10
       mg. This matches the elderly population of the IV CL, Vss and half-life values.
-      The separately reported young-subject62% is not averaged into this value.
+      The separately reported young-subject 62% is not averaged into this value.
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed abstract, oral bioavailability paragraph
@@ -150,22 +150,18 @@ simulation_validity:
   status: clinical_hold
   review_date: '2026-10-28'
   correction_notes:
-  - Parameter-source population is healthy elderly volunteers, N=12, from source_1.
-    CL30.8 mL/min, Vss9.7 L and terminal half-life6.7 h followed7 mg IV over5 min.
-    These are not the general healthy-young-adult label values.
-  - F1=0.61 is the elderly mean after10 mg oral; the prior0.615 mixed elderly61% with
-    a previously measured young-subject62%. Do not replace elderly CL/t_half with
-    a different population label value.
-  - The retained100 mg oral arm is a computational stress test, not the cited10 mg
-    oral or7 mg IV scenario. The generated body-weight distribution does not reconstruct
-    the elderly cohort. KA, lag, IIV and residual errors remain generic fixture assumptions.
+  - F was corrected from 0.615, an average of elderly and young-subject estimates,
+    to the elderly mean of 0.61 in source_1. With systemic CL and V, F1 was changed
+    from 1.0 to 0.61. The elderly CL, Vss and terminal half-life values were retained.
   reasons:
-  - Parameter-source population is healthy elderly volunteers, N=12, from source_1.
-    CL30.8 mL/min, Vss9.7 L and terminal half-life6.7 h followed7 mg IV over5 min.
-    These are not the general healthy-young-adult label values.
-  - F1=0.61 is the elderly mean after10 mg oral; the prior0.615 mixed elderly61% with
-    a previously measured young-subject62%. Do not replace elderly CL/t_half with
-    a different population label value.
-  - The retained100 mg oral arm is a computational stress test, not the cited10 mg
-    oral or7 mg IV scenario. The generated body-weight distribution does not reconstruct
-    the elderly cohort. KA, lag, IIV and residual errors remain generic fixture assumptions.
+  - CL 30.8 mL/min, Vss 9.7 L and terminal half-life 6.7 h come from 12 healthy
+    elderly volunteers after 7 mg IV over 5 min in source_1. Oral F 0.61 comes from
+    10 mg in that population. These inputs do not reconstruct a general healthy-young-adult
+    model, and the generated body-weight distribution does not reconstruct the elderly
+    cohort.
+  - The one-compartment model using the retained CL and V does not reproduce the
+    reported terminal half-life. KA, lag, IIV and residual errors are generic fixture
+    assumptions.
+  - The 100 mg oral arm is a computational stress test, not the source study's 10 mg
+    oral or 7 mg IV scenario. The model has not been qualified for this extrapolation
+    against independent concentration-time data.
