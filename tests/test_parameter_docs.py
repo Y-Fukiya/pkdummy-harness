@@ -7,7 +7,7 @@ from tools.export_parameter_docs import main
 def test_public_table_and_downloads_use_corrected_execution_parameters(tmp_path):
     root = Path(__file__).resolve().parents[1]
     assert main(["--root", str(root), "--out-dir", str(tmp_path)]) == 0
-    with (tmp_path / "parameters/PARAMETER_PROVENANCE.csv").open() as handle:
+    with (tmp_path / "parameters/PARAMETER_PROVENANCE.csv").open(encoding="utf-8", newline="") as handle:
         rows = list(csv.DictReader(handle))
     adopted = {(row["drug"], row["parameter"]): row["fixture_value"] for row in rows
                if row["record_type"] == "model_parameter"}
