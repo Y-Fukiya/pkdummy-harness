@@ -24,6 +24,22 @@ def test_repeated_reason_is_rejected_even_when_lists_differ(context_inputs):
     assert any("reasons" in issue and "correction_notes" in issue and "duplicate" in issue for issue in issues)
 
 
+@pytest.mark.parametrize("field, value, diagnostic", [
+    ("simulation_validity", [], "simulation_validity.status"),
+    ("simulation_validity", 42, "simulation_validity.status"),
+    ("reasons", 42, "simulation_validity.reasons"),
+    ("correction_notes", 42, "simulation_validity.correction_notes"),
+])
+def test_malformed_editorial_fields_keep_validation_diagnostics(context_inputs, field, value, diagnostic):
+    pk, spec, targets = context_inputs
+    if field == "simulation_validity":
+        pk[field] = value
+    else:
+        pk["simulation_validity"][field] = value
+        pk["simulation_validity"]["source_correction_date"] = "2026-10-28"
+    assert any(diagnostic in issue for issue in validate_fixture_context(pk, spec, targets))
+
+
 @pytest.mark.parametrize("token", [
     "CL3.3", "Vss21", "half-life12", "approximately50%", "section5.2", "F50%",
     "followed7", "over5", "after10", "prior0.615", "elderly61", "young-subject62",
@@ -61,7 +77,7 @@ def test_spacing_check_covers_authored_prose_fields(context_inputs):
 def test_scientific_identifiers_and_captured_material_are_preserved(context_inputs):
     pk, spec, targets = context_inputs
     pk["simulation_validity"]["reasons"] = [
-        "F1, CDA1, V1/V2, m2, t1/2, CYP3, CYP3A4, CYP2D6 and q12 or q8 are identifiers.",
+        "F1, CDA1, V1/V2, m2, t1/2, CYP3, CYP3A4, CYP2D6, CYP3A-mediated, q12, q8, q12h and q8-12h are identifiers.",
         "CL 3.3 L/h is from source_1. See https://example.org/section5.2 and `CL3.3`.",
     ]
     pk["pk_raw"] = {"clearance": "CL3.3"}

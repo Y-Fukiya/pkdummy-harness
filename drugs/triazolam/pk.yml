@@ -142,7 +142,7 @@ simulation_validity:
   status: clinical_hold
   review_date: '2026-10-28'
   correction_notes:
-  - DailyMed source_4 section12.3 distinguishes CYP3A-mediated metabolism and glucuronide
+  - DailyMed source_4 section 12.3 distinguishes CYP3A-mediated metabolism and glucuronide
     formation from the subsequent urinary excretion of metabolites. Urinary recovery
     does not mean renal clearance of unchanged triazolam.
   - No numeric PK parameter changes were made in this correction. The elimination-route

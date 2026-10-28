@@ -2903,14 +2903,13 @@
         "status": "clinical_hold",
         "review_date": "2026-10-28",
         "correction_notes": [
-          "The prior pk_raw text includes a mistaken fixture interpretation of total CL as apparent CL/F. That historical interpretation is superseded by the source_1 total/systemic CL and Vss definitions.",
-          "Use systemic CL3.3 L/h, reported Vss21 L and F1=0.5. Mapping Vss to one-compartment V is approximate; reported oral apparent half-life12 h remains check-only and is not used to derive V or establish an absorption-limited mechanism.",
-          "Source agreement does not validate the clinical model. KA, lag, IIV and residual errors remain generic fixture assumptions."
+          "The earlier interpretation of total CL as apparent CL/F was replaced with the systemic total CL definition in DailyMed source_1.",
+          "The half-life-derived V was replaced with the reported Vss of 21 L, and F1 was changed to 0.5 with systemic CL of 3.3 L/h."
         ],
         "reasons": [
-          "The prior pk_raw text includes a mistaken fixture interpretation of total CL as apparent CL/F. That historical interpretation is superseded by the source_1 total/systemic CL and Vss definitions.",
-          "Use systemic CL3.3 L/h, reported Vss21 L and F1=0.5. Mapping Vss to one-compartment V is approximate; reported oral apparent half-life12 h remains check-only and is not used to derive V or establish an absorption-limited mechanism.",
-          "Source agreement does not validate the clinical model. KA, lag, IIV and residual errors remain generic fixture assumptions."
+          "The reported Vss of 21 L is used as the one-compartment V. This is an approximation of steady-state distribution, not an independently qualified one-compartment volume.",
+          "The retained systemic CL and V imply a half-life that differs from the reported oral apparent half-life of 12 h. The oral half-life remains a check-only reference and does not establish an absorption-limited mechanism.",
+          "KA, lag, IIV and residual errors are generic fixture assumptions. The 100 mg computational regimen has not been qualified against independent concentration-time data."
         ]
       },
       "fixture_assessment": {
@@ -2967,7 +2966,7 @@
         "volume_basis": "systemic",
         "weight_ref_kg_for_abs": 70.0,
         "clearance_basis_source": "primary_source_reviewed",
-        "clearance_basis_note": "DailyMed source_1 section 12.3 reports total clearance 3.3 L/h and Vss21 L, not CL/F or V/F. Oral F is approximately50%."
+        "clearance_basis_note": "DailyMed source_1 section 12.3 reports total clearance 3.3 L/h and Vss 21 L, not CL/F or V/F. Oral F is approximately 50%."
       },
       "derived": {
         "ke_1_per_h": 0.15714285714285714,
@@ -2999,7 +2998,7 @@
           },
           "role": "simulation_parameter",
           "reviewer_status": "checked",
-          "reviewer_note": "Source_1 section12.3 reports total CL. Its oral apparent half-life does not make this CL an apparent CL/F.",
+          "reviewer_note": "Source_1 section 12.3 reports total CL. Its oral apparent half-life does not make this CL an apparent CL/F.",
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "Clinical Pharmacology, Pharmacokinetics",
@@ -3024,7 +3023,7 @@
           },
           "role": "simulation_parameter",
           "reviewer_status": "checked",
-          "reviewer_note": "Source_1 reports Vss21 L. Using IV Vss as the volume in a one-compartment oral fixture is an approximation; it is not terminal Vz.",
+          "reviewer_note": "Source_1 reports Vss 21 L. Using IV Vss as the volume in a one-compartment oral fixture is an approximation; it is not terminal Vz.",
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "Clinical Pharmacology, Pharmacokinetics",
@@ -3076,7 +3075,7 @@
           },
           "role": "simulation_parameter",
           "reviewer_status": "checked",
-          "reviewer_note": "Source_1 section12.3 reports approximate absolute F50% for doses up to10 mg.",
+          "reviewer_note": "Source_1 section 12.3 reports approximate absolute F 50% for doses up to 10 mg.",
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "Clinical Pharmacology, Pharmacokinetics",
@@ -3305,7 +3304,7 @@
             "evidence_status": "checked_summary",
             "evidence_level": "value_verified",
             "fixture_derived": false,
-            "evidence_summary": "Source_1 section12.3 reports total CL. Its oral apparent half-life does not make this CL an apparent CL/F.",
+            "evidence_summary": "Source_1 section 12.3 reports total CL. Its oral apparent half-life does not make this CL an apparent CL/F.",
             "exact_quote": "total clearance of approximately 3.3 L/hour",
             "source_locator": "Clinical Pharmacology, Pharmacokinetics",
             "missing": []
@@ -3322,7 +3321,7 @@
             "evidence_status": "checked_summary",
             "evidence_level": "value_verified",
             "fixture_derived": false,
-            "evidence_summary": "Source_1 reports Vss21 L. Using IV Vss as the volume in a one-compartment oral fixture is an approximation; it is not terminal Vz.",
+            "evidence_summary": "Source_1 reports Vss 21 L. Using IV Vss as the volume in a one-compartment oral fixture is an approximation; it is not terminal Vz.",
             "exact_quote": "approximately 21 liters",
             "source_locator": "Clinical Pharmacology, Pharmacokinetics",
             "missing": []
@@ -3356,7 +3355,7 @@
             "evidence_status": "checked_summary",
             "evidence_level": "value_verified",
             "fixture_derived": false,
-            "evidence_summary": "Source_1 section12.3 reports approximate absolute F50% for doses up to10 mg.",
+            "evidence_summary": "Source_1 section 12.3 reports approximate absolute F 50% for doses up to 10 mg.",
             "exact_quote": "approximately 50%",
             "source_locator": "Clinical Pharmacology, Pharmacokinetics",
             "missing": []
@@ -12592,14 +12591,12 @@
         "status": "clinical_hold",
         "review_date": "2026-10-28",
         "correction_notes": [
-          "Parameter-source population is healthy elderly volunteers, N=12, from source_1. CL30.8 mL/min, Vss9.7 L and terminal half-life6.7 h followed7 mg IV over5 min. These are not the general healthy-young-adult label values.",
-          "F1=0.61 is the elderly mean after10 mg oral; the prior0.615 mixed elderly61% with a previously measured young-subject62%. Do not replace elderly CL/t_half with a different population label value.",
-          "The retained100 mg oral arm is a computational stress test, not the cited10 mg oral or7 mg IV scenario. The generated body-weight distribution does not reconstruct the elderly cohort. KA, lag, IIV and residual errors remain generic fixture assumptions."
+          "F was corrected from 0.615, an average of elderly and young-subject estimates, to the elderly mean of 0.61 in source_1. With systemic CL and V, F1 was changed from 1.0 to 0.61. The elderly CL, Vss and terminal half-life values were retained."
         ],
         "reasons": [
-          "Parameter-source population is healthy elderly volunteers, N=12, from source_1. CL30.8 mL/min, Vss9.7 L and terminal half-life6.7 h followed7 mg IV over5 min. These are not the general healthy-young-adult label values.",
-          "F1=0.61 is the elderly mean after10 mg oral; the prior0.615 mixed elderly61% with a previously measured young-subject62%. Do not replace elderly CL/t_half with a different population label value.",
-          "The retained100 mg oral arm is a computational stress test, not the cited10 mg oral or7 mg IV scenario. The generated body-weight distribution does not reconstruct the elderly cohort. KA, lag, IIV and residual errors remain generic fixture assumptions."
+          "CL 30.8 mL/min, Vss 9.7 L and terminal half-life 6.7 h come from 12 healthy elderly volunteers after 7 mg IV over 5 min in source_1. Oral F 0.61 comes from 10 mg in that population. These inputs do not reconstruct a general healthy-young-adult model, and the generated body-weight distribution does not reconstruct the elderly cohort.",
+          "The one-compartment model using the retained CL and V does not reproduce the reported terminal half-life. KA, lag, IIV and residual errors are generic fixture assumptions.",
+          "The 100 mg oral arm is a computational stress test, not the source study's 10 mg oral or 7 mg IV scenario. The model has not been qualified for this extrapolation against independent concentration-time data."
         ]
       },
       "fixture_assessment": {
@@ -12793,7 +12790,7 @@
           },
           "role": "simulation_parameter",
           "reviewer_status": "checked",
-          "reviewer_note": "Source_1 reports mean oral F61% in healthy elderly subjects after10 mg. This matches the elderly population of the IV CL, Vss and half-life values. The separately reported young-subject62% is not averaged into this value.",
+          "reviewer_note": "Source_1 reports mean oral F 61% in healthy elderly subjects after 10 mg. This matches the elderly population of the IV CL, Vss and half-life values. The separately reported young-subject 62% is not averaged into this value.",
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract, oral bioavailability paragraph",
@@ -13077,7 +13074,7 @@
             "evidence_status": "checked_summary",
             "evidence_level": "value_verified",
             "fixture_derived": false,
-            "evidence_summary": "Source_1 reports mean oral F61% in healthy elderly subjects after10 mg. This matches the elderly population of the IV CL, Vss and half-life values. The separately reported young-subject62% is not averaged into this value.",
+            "evidence_summary": "Source_1 reports mean oral F 61% in healthy elderly subjects after 10 mg. This matches the elderly population of the IV CL, Vss and half-life values. The separately reported young-subject 62% is not averaged into this value.",
             "exact_quote": "the bioavailability of montelukast in healthy elderly averaged 61%",
             "source_locator": "PubMed abstract, oral bioavailability paragraph",
             "missing": []
@@ -13975,14 +13972,14 @@
         "status": "clinical_hold",
         "review_date": "2026-10-28",
         "correction_notes": [
-          "CL=37.44 L/h is 624 mL/min * 60/1000 from the source_4 median. V=16.1 L is the source_4 mean IV Vss 0.23 L/kg * 70 kg; median CL and mean Vss are different summary statistics.",
-          "F1=0.35 and half-life 0.75 h are midpoint fixture selections from the healthy-subject label ranges, not the PubMed study median F=39% or its IV half-life. The retained 100 mg dose is a stress-test fixture, not a validated 20 mg oral buffered-solution scenario.",
-          "Legacy pk_raw volume 0.4 L/kg is retained as the original capture; the adopted source_4 IV Vss is 0.23 L/kg. KA, lag, IIV and residual errors remain generic fixture assumptions."
+          "Systemic CL was corrected from 43.56 to 37.44 L/h using the source_4 median of 624 mL/min and the conversion 624 * 60 / 1000.",
+          "The adopted V is the source_4 mean IV Vss of 0.23 L/kg, scaled to 16.1 L at 70 kg. The legacy pk_raw volume of 0.4 L/kg is retained as the original capture.",
+          "The elimination-route description was corrected to distinguish hepatic metabolism from urinary recovery of metabolites."
         ],
         "reasons": [
-          "CL=37.44 L/h is 624 mL/min * 60/1000 from the source_4 median. V=16.1 L is the source_4 mean IV Vss 0.23 L/kg * 70 kg; median CL and mean Vss are different summary statistics.",
-          "F1=0.35 and half-life 0.75 h are midpoint fixture selections from the healthy-subject label ranges, not the PubMed study median F=39% or its IV half-life. The retained 100 mg dose is a stress-test fixture, not a validated 20 mg oral buffered-solution scenario.",
-          "Legacy pk_raw volume 0.4 L/kg is retained as the original capture; the adopted source_4 IV Vss is 0.23 L/kg. KA, lag, IIV and residual errors remain generic fixture assumptions."
+          "The selected CL of 37.44 L/h and V of 16.1 L combine a median systemic CL with a mean IV Vss from source_4. These different summary statistics are not a jointly estimated one-compartment parameter set.",
+          "F1 of 0.35 and half-life of 0.75 h are midpoint fixture selections from separate healthy-subject label ranges. They are not the study's median F of 39% or its IV half-life, and the retained CL and V do not reproduce the selected half-life.",
+          "The 100 mg computational regimen has not been qualified for extrapolation from the 20 mg oral buffered-solution study. KA, lag, IIV and residual errors remain generic fixture assumptions."
         ]
       },
       "fixture_assessment": {
@@ -15004,14 +15001,13 @@
         "status": "clinical_hold",
         "review_date": "2026-10-28",
         "correction_notes": [
-          "Systemic CL41 L/h and Vss105 L are reported in EMA source_7. The previous CL18.195113489698564 L/h was inferred from V and a midpoint half-life and is superseded, not treated as a reported CL/F.",
-          "F1=0.41 is the reported mean absolute oral bioavailability. The terminal half-life4 h is only the midpoint of the reported3–5 h range; CL/Vss does not reproduce this terminal phase in a one-compartment model.",
-          "The retained100 mg oral dose is within the cited recommended-dose range, but Vss mapping, KA, lag, IIV and residual errors remain fixture approximations and do not establish clinical model validity."
+          "The earlier CL of 18.195113489698564 L/h, inferred from V and a midpoint half-life, was replaced with the reported systemic CL of 41 L/h in EMA source_7.",
+          "The retained volume of 105 L was reclassified from apparent V/F to systemic Vss.",
+          "F and F1 were changed from the fixture choices of 0.44 and 1 to the reported mean absolute oral bioavailability of 0.41."
         ],
         "reasons": [
-          "Systemic CL41 L/h and Vss105 L are reported in EMA source_7. The previous CL18.195113489698564 L/h was inferred from V and a midpoint half-life and is superseded, not treated as a reported CL/F.",
-          "F1=0.41 is the reported mean absolute oral bioavailability. The terminal half-life4 h is only the midpoint of the reported3–5 h range; CL/Vss does not reproduce this terminal phase in a one-compartment model.",
-          "The retained100 mg oral dose is within the cited recommended-dose range, but Vss mapping, KA, lag, IIV and residual errors remain fixture approximations and do not establish clinical model validity."
+          "The reported Vss of 105 L is used as the one-compartment V. With systemic CL of 41 L/h, this approximation does not reproduce the reported terminal half-life range of 3–5 h. The selected 4 h midpoint remains a check-only fixture reference.",
+          "KA, lag, IIV and residual errors are generic fixture assumptions. The retained 100 mg computational regimen has not been qualified against independent concentration-time data."
         ]
       },
       "fixture_assessment": {
@@ -15099,7 +15095,7 @@
       ],
       "raw": {
         "half_life": "3-5 hours",
-        "clearance": "41 L/h (total body clearance; EMA source_7 section5.2)",
+        "clearance": "41 L/h (total body clearance; EMA source_7 section 5.2)",
         "volume_of_distribution": "105 L",
         "bioavailability": "41% (25-63%)",
         "elimination_route": "Hepatic metabolism (mainly CYP3A4, minor CYP2C9); metabolites recovered predominantly in feces (~80%) and urine (~13%)."
@@ -15127,7 +15123,7 @@
         "clearance_basis": "systemic",
         "volume_basis": "systemic",
         "clearance_basis_source": "primary_source_reviewed",
-        "clearance_basis_note": "EMA source_7 section5.2 reports total body CL41 L/h, Vss105 L and mean absolute oral F41%; Vss is not V/F."
+        "clearance_basis_note": "EMA source_7 section 5.2 reports total body CL 41 L/h, Vss 105 L and mean absolute oral F 41%; Vss is not V/F."
       },
       "derived": {
         "ke_1_per_h": 0.3904761904761905,
@@ -15159,7 +15155,7 @@
           },
           "role": "simulation_parameter",
           "reviewer_status": "checked",
-          "reviewer_note": "EMA source_7 section5.2 reports total body clearance41 L/h. No CL is inferred from Vss and terminal half-life.",
+          "reviewer_note": "EMA source_7 section 5.2 reports total body clearance 41 L/h. No CL is inferred from Vss and terminal half-life.",
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "EMA product information section 5.2",
@@ -15184,7 +15180,7 @@
           },
           "role": "simulation_parameter",
           "reviewer_status": "checked",
-          "reviewer_note": "EMA source_7 section5.2 reports steady-state volume105 L. Vss is used as the one-compartment fixture volume, with structural limitations retained.",
+          "reviewer_note": "EMA source_7 section 5.2 reports steady-state volume 105 L. Vss is used as the one-compartment fixture volume, with structural limitations retained.",
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "EMA product information section 5.2",
@@ -15211,10 +15207,10 @@
           },
           "role": "check_only",
           "reviewer_status": "checked",
-          "reviewer_note": "EMA source_7 section5.2 reports terminal half-life3–5 h. The4 h midpoint is a check-only fixture choice and is not used to infer CL.",
+          "reviewer_note": "EMA source_7 section 5.2 reports terminal half-life 3–5 h. The 4 h midpoint is a check-only fixture choice and is not used to infer CL.",
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
-          "source_locator": "EMA product information section5.2",
+          "source_locator": "EMA product information section 5.2",
           "selection": {
             "rule": "range_midpoint",
             "rationale": "midpoint of reported 3-5 h range Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
@@ -15235,7 +15231,7 @@
           },
           "role": "simulation_parameter",
           "reviewer_status": "checked",
-          "reviewer_note": "Mean F41% is the reported estimate. It replaces the fixture midpoint44% of the25–63% range.",
+          "reviewer_note": "Mean F 41% is the reported estimate. It replaces the fixture midpoint 44% of the 25–63% range.",
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "EMA product information section 5.2",
@@ -15473,7 +15469,7 @@
             "evidence_status": "checked_summary",
             "evidence_level": "value_verified",
             "fixture_derived": false,
-            "evidence_summary": "EMA source_7 section5.2 reports total body clearance41 L/h. No CL is inferred from Vss and terminal half-life.",
+            "evidence_summary": "EMA source_7 section 5.2 reports total body clearance 41 L/h. No CL is inferred from Vss and terminal half-life.",
             "exact_quote": "total body clearance of sildenafil is 41 L/h",
             "source_locator": "EMA product information section 5.2",
             "missing": []
@@ -15490,7 +15486,7 @@
             "evidence_status": "checked_summary",
             "evidence_level": "value_verified",
             "fixture_derived": false,
-            "evidence_summary": "EMA source_7 section5.2 reports steady-state volume105 L. Vss is used as the one-compartment fixture volume, with structural limitations retained.",
+            "evidence_summary": "EMA source_7 section 5.2 reports steady-state volume 105 L. Vss is used as the one-compartment fixture volume, with structural limitations retained.",
             "exact_quote": "105 L",
             "source_locator": "EMA product information section 5.2",
             "missing": []
@@ -15507,9 +15503,9 @@
             "evidence_status": "checked_summary",
             "evidence_level": "summary_only",
             "fixture_derived": true,
-            "evidence_summary": "EMA source_7 section5.2 reports terminal half-life3–5 h. The4 h midpoint is a check-only fixture choice and is not used to infer CL.",
+            "evidence_summary": "EMA source_7 section 5.2 reports terminal half-life 3–5 h. The 4 h midpoint is a check-only fixture choice and is not used to infer CL.",
             "exact_quote": null,
-            "source_locator": "EMA product information section5.2",
+            "source_locator": "EMA product information section 5.2",
             "missing": [
               "exact_quote"
             ]
@@ -15526,7 +15522,7 @@
             "evidence_status": "checked_summary",
             "evidence_level": "value_verified",
             "fixture_derived": false,
-            "evidence_summary": "Mean F41% is the reported estimate. It replaces the fixture midpoint44% of the25–63% range.",
+            "evidence_summary": "Mean F 41% is the reported estimate. It replaces the fixture midpoint 44% of the 25–63% range.",
             "exact_quote": "41%",
             "source_locator": "EMA product information section 5.2",
             "missing": []
@@ -17002,7 +16998,7 @@
         "status": "clinical_hold",
         "review_date": "2026-10-28",
         "correction_notes": [
-          "DailyMed source_4 section12.3 distinguishes CYP3A-mediated metabolism and glucuronide formation from the subsequent urinary excretion of metabolites. Urinary recovery does not mean renal clearance of unchanged triazolam.",
+          "DailyMed source_4 section 12.3 distinguishes CYP3A-mediated metabolism and glucuronide formation from the subsequent urinary excretion of metabolites. Urinary recovery does not mean renal clearance of unchanged triazolam.",
           "No numeric PK parameter changes were made in this correction. The elimination-route description was corrected to distinguish hepatic metabolism from urinary recovery of metabolites."
         ],
         "reasons": [
