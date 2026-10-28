@@ -24,9 +24,9 @@ from typing import Any
 import yaml
 
 try:
-    from export_fixture_context import resolve_fixture_context
+    from export_fixture_context import CONTEXT_FIELDS, context_columns, resolve_fixture_context
 except ModuleNotFoundError:
-    from tools.export_fixture_context import resolve_fixture_context
+    from tools.export_fixture_context import CONTEXT_FIELDS, context_columns, resolve_fixture_context
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -637,17 +637,22 @@ def _make_model_qc(
     return len(qc_rows), warnings
 
 
-def _write_summary(out_dir: Path, counts: dict[str, int], status: str, warnings: list[str]) -> dict[str, Path]:
+def _write_summary(out_dir: Path, counts: dict[str, int], status: str, warnings: list[str], fixture_context: dict[str, Any]) -> dict[str, Path]:
     summary_csv = out_dir / "summary.csv"
     summary_md = out_dir / "summary.md"
-    _write_csv(summary_csv, [{"status": status, **counts, "warnings": " | ".join(warnings)}], ["status", *counts.keys(), "warnings"])
+    clinical = context_columns(fixture_context)
+    _write_csv(summary_csv, [{"status": status, **counts, "warnings": " | ".join(warnings), **clinical}], ["status", *counts.keys(), "warnings", *CONTEXT_FIELDS])
     lines = [
         "# Repeated Oral Demo Summary",
         "",
         "Workflow fixture only; not clinical validation output.",
         "",
-        f"- Status: `{status}`",
+        f"- Technical workflow status: `{status}`",
         f"- Warnings: {len(warnings)}",
+        "",
+        "| Clinical | Clinical use | Dose purpose | Clinical dose verified |",
+        "| --- | --- | --- | --- |",
+        f"| {clinical['CLINICAL_ASSESSMENT']} | {clinical['CLINICAL_USE']} | {clinical['DOSE_PURPOSE']} | {clinical['CLINICAL_DOSE_VERIFIED']} |",
         "",
         "| Count | Value |",
         "| --- | ---: |",
@@ -932,7 +937,7 @@ def run_repeated_oral_demo(
         counts=counts,
         warnings=warnings,
     )
-    summary_files = _write_summary(output, counts, status, warnings)
+    summary_files = _write_summary(output, counts, status, warnings, fixture_context)
     demo_manifest = output / "DEMO_MANIFEST.yml"
     outputs = {
         "sim_full": sim_csv,

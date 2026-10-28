@@ -156,6 +156,16 @@ simulation_validity:
   source_correction_date: '2026-10-28'
   status: clinical_hold
   review_date: '2026-10-28'
+  correction_notes:
+  - Systemic CL41 L/h and Vss105 L are reported in EMA source_7. The previous CL18.195113489698564
+    L/h was inferred from V and a midpoint half-life and is superseded, not treated
+    as a reported CL/F.
+  - "F1=0.41 is the reported mean absolute oral bioavailability. The terminal half-life4\
+    \ h is only the midpoint of the reported3\u20135 h range; CL/Vss does not reproduce\
+    \ this terminal phase in a one-compartment model."
+  - The retained100 mg oral dose is within the cited recommended-dose range, but Vss
+    mapping, KA, lag, IIV and residual errors remain fixture approximations and do
+    not establish clinical model validity.
   reasons:
   - Systemic CL41 L/h and Vss105 L are reported in EMA source_7. The previous CL18.195113489698564
     L/h was inferred from V and a midpoint half-life and is superseded, not treated

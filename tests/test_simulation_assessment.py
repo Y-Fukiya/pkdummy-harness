@@ -22,6 +22,17 @@ def test_every_canonical_drug_declares_clinical_assessment():
     assert missing == []
 
 
+def test_triazolam_hold_is_separate_from_source_correction_history():
+    drug = build_drug(ROOT / "drugs/triazolam/pk.yml")
+    validity = drug["simulation_validity"]
+    reasons = " ".join(validity["reasons"])
+    assert "circular" in reasons
+    assert "not a jointly estimated parameter set" in reasons
+    assert "No numeric PK parameter changes" not in reasons
+    assert "No numeric PK parameter changes" in " ".join(validity.get("correction_notes", []))
+    assert drug["fixture_assessment"]["half_life_check"]["circular"] is True
+
+
 def test_public_projection_separates_screening_from_manual_status():
     drug = build_drug(ROOT / "drugs/abciximab/pk.yml")
     assert drug["simulation_validity"]["status"] == "clinical_hold"

@@ -2902,6 +2902,11 @@
         "source_correction_date": "2026-10-28",
         "status": "clinical_hold",
         "review_date": "2026-10-28",
+        "correction_notes": [
+          "The prior pk_raw text includes a mistaken fixture interpretation of total CL as apparent CL/F. That historical interpretation is superseded by the source_1 total/systemic CL and Vss definitions.",
+          "Use systemic CL3.3 L/h, reported Vss21 L and F1=0.5. Mapping Vss to one-compartment V is approximate; reported oral apparent half-life12 h remains check-only and is not used to derive V or establish an absorption-limited mechanism.",
+          "Source agreement does not validate the clinical model. KA, lag, IIV and residual errors remain generic fixture assumptions."
+        ],
         "reasons": [
           "The prior pk_raw text includes a mistaken fixture interpretation of total CL as apparent CL/F. That historical interpretation is superseded by the source_1 total/systemic CL and Vss definitions.",
           "Use systemic CL3.3 L/h, reported Vss21 L and F1=0.5. Mapping Vss to one-compartment V is approximate; reported oral apparent half-life12 h remains check-only and is not used to derive V or establish an absorption-limited mechanism.",
@@ -12586,6 +12591,11 @@
         "source_correction_date": "2026-10-28",
         "status": "clinical_hold",
         "review_date": "2026-10-28",
+        "correction_notes": [
+          "Parameter-source population is healthy elderly volunteers, N=12, from source_1. CL30.8 mL/min, Vss9.7 L and terminal half-life6.7 h followed7 mg IV over5 min. These are not the general healthy-young-adult label values.",
+          "F1=0.61 is the elderly mean after10 mg oral; the prior0.615 mixed elderly61% with a previously measured young-subject62%. Do not replace elderly CL/t_half with a different population label value.",
+          "The retained100 mg oral arm is a computational stress test, not the cited10 mg oral or7 mg IV scenario. The generated body-weight distribution does not reconstruct the elderly cohort. KA, lag, IIV and residual errors remain generic fixture assumptions."
+        ],
         "reasons": [
           "Parameter-source population is healthy elderly volunteers, N=12, from source_1. CL30.8 mL/min, Vss9.7 L and terminal half-life6.7 h followed7 mg IV over5 min. These are not the general healthy-young-adult label values.",
           "F1=0.61 is the elderly mean after10 mg oral; the prior0.615 mixed elderly61% with a previously measured young-subject62%. Do not replace elderly CL/t_half with a different population label value.",
@@ -13964,6 +13974,11 @@
         "source_correction_date": "2026-10-28",
         "status": "clinical_hold",
         "review_date": "2026-10-28",
+        "correction_notes": [
+          "CL=37.44 L/h is 624 mL/min * 60/1000 from the source_4 median. V=16.1 L is the source_4 mean IV Vss 0.23 L/kg * 70 kg; median CL and mean Vss are different summary statistics.",
+          "F1=0.35 and half-life 0.75 h are midpoint fixture selections from the healthy-subject label ranges, not the PubMed study median F=39% or its IV half-life. The retained 100 mg dose is a stress-test fixture, not a validated 20 mg oral buffered-solution scenario.",
+          "Legacy pk_raw volume 0.4 L/kg is retained as the original capture; the adopted source_4 IV Vss is 0.23 L/kg. KA, lag, IIV and residual errors remain generic fixture assumptions."
+        ],
         "reasons": [
           "CL=37.44 L/h is 624 mL/min * 60/1000 from the source_4 median. V=16.1 L is the source_4 mean IV Vss 0.23 L/kg * 70 kg; median CL and mean Vss are different summary statistics.",
           "F1=0.35 and half-life 0.75 h are midpoint fixture selections from the healthy-subject label ranges, not the PubMed study median F=39% or its IV half-life. The retained 100 mg dose is a stress-test fixture, not a validated 20 mg oral buffered-solution scenario.",
@@ -14988,6 +15003,11 @@
         "source_correction_date": "2026-10-28",
         "status": "clinical_hold",
         "review_date": "2026-10-28",
+        "correction_notes": [
+          "Systemic CL41 L/h and Vss105 L are reported in EMA source_7. The previous CL18.195113489698564 L/h was inferred from V and a midpoint half-life and is superseded, not treated as a reported CL/F.",
+          "F1=0.41 is the reported mean absolute oral bioavailability. The terminal half-life4 h is only the midpoint of the reported3–5 h range; CL/Vss does not reproduce this terminal phase in a one-compartment model.",
+          "The retained100 mg oral dose is within the cited recommended-dose range, but Vss mapping, KA, lag, IIV and residual errors remain fixture approximations and do not establish clinical model validity."
+        ],
         "reasons": [
           "Systemic CL41 L/h and Vss105 L are reported in EMA source_7. The previous CL18.195113489698564 L/h was inferred from V and a midpoint half-life and is superseded, not treated as a reported CL/F.",
           "F1=0.41 is the reported mean absolute oral bioavailability. The terminal half-life4 h is only the midpoint of the reported3–5 h range; CL/Vss does not reproduce this terminal phase in a one-compartment model.",
@@ -16981,9 +17001,13 @@
         "source_correction_date": "2026-10-28",
         "status": "clinical_hold",
         "review_date": "2026-10-28",
-        "reasons": [
+        "correction_notes": [
           "DailyMed source_4 section12.3 distinguishes CYP3A-mediated metabolism and glucuronide formation from the subsequent urinary excretion of metabolites. Urinary recovery does not mean renal clearance of unchanged triazolam.",
-          "No numeric PK parameter changes were made in this correction. Apparent CL and derived one-compartment volume remain a fixture and do not establish clinical model validity."
+          "No numeric PK parameter changes were made in this correction. The elimination-route description was corrected to distinguish hepatic metabolism from urinary recovery of metabolites."
+        ],
+        "reasons": [
+          "The apparent one-compartment volume is derived from oral CL/F and the selected 3.5 h midpoint of the label half-life range, rather than independently observed. Agreement of ln(2)*V/CL with this half-life is circular and does not independently validate the model.",
+          "The selected oral CL/F comes from a single 0.5 mg study in 54 healthy young men (source_3), whereas the selected half-life comes from a separate label range (source_1). These inputs are not a jointly estimated parameter set, and the 100 mg computational fixture has not been qualified against independent concentration-time data."
         ]
       },
       "fixture_assessment": {

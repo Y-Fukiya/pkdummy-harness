@@ -6,8 +6,9 @@ import shutil
 from pathlib import Path
 
 import yaml
+import pytest
 
-from tools.export_fixture_context import context_columns
+from tools.export_fixture_context import context_columns, load_manifest_fixture_context
 from tools.run_demo_set import make_demo_sim_full
 from tools.run_harness import run_harness
 
@@ -81,7 +82,10 @@ def test_failed_demo_still_reports_clinical_hold(tmp_path: Path) -> None:
     row = read_csv(result.files["summary_csv"])[0]
     assert row.get("CLINICAL_ASSESSMENT") == "clinical_hold"
     child_context = read_yaml(output / "triazolam" / "workflow" / "MANIFEST.yml")["fixture_context"]
-    assert read_yaml(result.files["manifest"]).get("fixture_contexts") == {"triazolam": child_context}
+    for name in ("DEMO_MANIFEST.yml", "HARNESS_MANIFEST.yml"):
+        assert read_yaml(output / name).get("fixture_contexts") == {"triazolam": child_context}
+    status = json.loads(result.files["status_json"].read_text(encoding="utf-8"))
+    assert status.get("fixture_contexts") == {"triazolam": child_context}
 
 
 def test_post_simulation_wrapper_preserves_child_context(tmp_path: Path) -> None:
@@ -117,3 +121,22 @@ def test_repeated_summary_and_wrapper_preserve_child_context(tmp_path: Path) -> 
     summary = result.files["summary_md"].read_text(encoding="utf-8")
     for value in ("clinical_hold", "not_approved", "computational_stress_test"):
         assert value in summary
+
+
+def test_manifest_without_context_defaults_to_unassessed(tmp_path: Path) -> None:
+    manifest = tmp_path / "MANIFEST.yml"
+    manifest.write_text("status: OK\n", encoding="utf-8")
+    context = load_manifest_fixture_context(manifest)
+
+    assert context["simulation_validity"]["status"] == "not_assessed"
+    assert context["clinical_use"] == "not_approved"
+    assert context["clinical_dose_verified"] is False
+
+
+@pytest.mark.parametrize("declared", [None, {"schema_version": "1", "clinical_use": "approved"}])
+def test_malformed_declared_manifest_context_is_rejected(tmp_path: Path, declared: object) -> None:
+    manifest = tmp_path / "MANIFEST.yml"
+    manifest.write_text(yaml.safe_dump({"fixture_context": declared}), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="Fixture context"):
+        load_manifest_fixture_context(manifest)

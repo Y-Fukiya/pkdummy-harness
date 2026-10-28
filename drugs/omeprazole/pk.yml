@@ -167,6 +167,17 @@ simulation_validity:
   source_correction_date: '2026-10-28'
   status: clinical_hold
   review_date: '2026-10-28'
+  correction_notes:
+  - CL=37.44 L/h is 624 mL/min * 60/1000 from the source_4 median. V=16.1 L is the
+    source_4 mean IV Vss 0.23 L/kg * 70 kg; median CL and mean Vss are different summary
+    statistics.
+  - F1=0.35 and half-life 0.75 h are midpoint fixture selections from the healthy-subject
+    label ranges, not the PubMed study median F=39% or its IV half-life. The retained
+    100 mg dose is a stress-test fixture, not a validated 20 mg oral buffered-solution
+    scenario.
+  - Legacy pk_raw volume 0.4 L/kg is retained as the original capture; the adopted
+    source_4 IV Vss is 0.23 L/kg. KA, lag, IIV and residual errors remain generic
+    fixture assumptions.
   reasons:
   - CL=37.44 L/h is 624 mL/min * 60/1000 from the source_4 median. V=16.1 L is the
     source_4 mean IV Vss 0.23 L/kg * 70 kg; median CL and mean Vss are different summary

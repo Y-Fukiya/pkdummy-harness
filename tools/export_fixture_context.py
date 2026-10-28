@@ -74,6 +74,13 @@ def resolve_fixture_context(spec_path: Path | str | None = None, *, pk_path: Pat
     return validate_context(context)
 
 
+def load_manifest_fixture_context(path: Path | str) -> dict[str, Any]:
+    manifest = _load(Path(path))
+    if "fixture_context" not in manifest:
+        return resolve_fixture_context()
+    return validate_context(manifest["fixture_context"])
+
+
 def context_columns(context: dict[str, Any]) -> dict[str, str]:
     context = validate_context(context)
     candidate = context["half_life_check"].get("hold_candidate")

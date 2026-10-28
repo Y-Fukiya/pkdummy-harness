@@ -28,6 +28,7 @@ from tools.run_demo_set import run_demo_set
 from tools.run_repeated_oral_demo import run_repeated_oral_demo
 from tools.validate_harness_config import validate_harness_config
 from tools.run_workflow import run_workflow
+from tools.export_fixture_context import load_manifest_fixture_context
 
 
 @dataclass(frozen=True)
@@ -161,6 +162,10 @@ def _run_demo_set_mode(config: dict[str, Any], *, config_path: Path) -> HarnessR
         "summary_csv": result.files["summary_csv"],
         "summary_md": result.files["summary_md"],
     }
+    fixture_contexts = {
+        slug: load_manifest_fixture_context(workflow.files["manifest"])
+        for slug, workflow in result.workflows.items()
+    }
     _write_yaml(
         manifest,
         _manifest_common(
@@ -175,6 +180,7 @@ def _run_demo_set_mode(config: dict[str, Any], *, config_path: Path) -> HarnessR
                 "n_subjects": simulation.get("n_subjects"),
                 "sampling": config.get("sampling") or {},
                 "counts": result.counts,
+                "fixture_contexts": fixture_contexts,
             },
         ),
     )
@@ -192,6 +198,7 @@ def _run_demo_set_mode(config: dict[str, Any], *, config_path: Path) -> HarnessR
                 "drugs": [str(drug) for drug in drugs],
                 "n_subjects": simulation.get("n_subjects"),
                 "sampling": config.get("sampling") or {},
+                "fixture_contexts": fixture_contexts,
             },
         ),
     )
@@ -249,6 +256,7 @@ def _run_post_simulation_mode(config: dict[str, Any], *, config_path: Path) -> H
         files["nca_input_csv"] = result.files["nca_input_csv"]
     if "poppk_input_csv" in result.files:
         files["poppk_input_csv"] = result.files["poppk_input_csv"]
+    fixture_context = load_manifest_fixture_context(result.files["manifest"])
     _write_yaml(
         manifest,
         _manifest_common(
@@ -260,6 +268,7 @@ def _run_post_simulation_mode(config: dict[str, Any], *, config_path: Path) -> H
             extra={
                 "validation_status": result.validation_status,
                 "counts": result.counts,
+                "fixture_context": fixture_context,
             },
         ),
     )
@@ -274,6 +283,7 @@ def _run_post_simulation_mode(config: dict[str, Any], *, config_path: Path) -> H
             counts=result.counts,
             extra={
                 "validation_status": result.validation_status,
+                "fixture_context": fixture_context,
             },
         ),
     )
@@ -315,6 +325,7 @@ def _run_repeated_oral_demo_mode(config: dict[str, Any], *, config_path: Path) -
         "demo_manifest": result.files.get("manifest", out_dir / "DEMO_MANIFEST.yml"),
         **{key: value for key, value in result.files.items() if key != "manifest"},
     }
+    fixture_context = load_manifest_fixture_context(files["demo_manifest"])
     _write_yaml(
         manifest,
         _manifest_common(
@@ -333,6 +344,7 @@ def _run_repeated_oral_demo_mode(config: dict[str, Any], *, config_path: Path) -
                 "validation_allow_failed": allow_failed,
                 "validation_status": validation_status,
                 "counts": result.counts,
+                "fixture_context": fixture_context,
             },
         ),
     )
@@ -354,6 +366,7 @@ def _run_repeated_oral_demo_mode(config: dict[str, Any], *, config_path: Path) -
                 "nca": config.get("nca") or {},
                 "validation_allow_failed": allow_failed,
                 "validation_status": validation_status,
+                "fixture_context": fixture_context,
             },
         ),
     )

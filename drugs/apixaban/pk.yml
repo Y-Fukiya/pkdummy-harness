@@ -136,6 +136,15 @@ simulation_validity:
   source_correction_date: '2026-10-28'
   status: clinical_hold
   review_date: '2026-10-28'
+  correction_notes:
+  - The prior pk_raw text includes a mistaken fixture interpretation of total CL as
+    apparent CL/F. That historical interpretation is superseded by the source_1 total/systemic
+    CL and Vss definitions.
+  - Use systemic CL3.3 L/h, reported Vss21 L and F1=0.5. Mapping Vss to one-compartment
+    V is approximate; reported oral apparent half-life12 h remains check-only and
+    is not used to derive V or establish an absorption-limited mechanism.
+  - Source agreement does not validate the clinical model. KA, lag, IIV and residual
+    errors remain generic fixture assumptions.
   reasons:
   - The prior pk_raw text includes a mistaken fixture interpretation of total CL as
     apparent CL/F. That historical interpretation is superseded by the source_1 total/systemic
