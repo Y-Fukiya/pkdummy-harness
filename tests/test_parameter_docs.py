@@ -21,5 +21,5 @@ def test_public_table_and_downloads_use_corrected_execution_parameters(tmp_path)
     assert (tmp_path / "parameters/PARAMETER_PROVENANCE.md").read_text().startswith("---\nlayout: page\n")
     assert not (tmp_path / "parameters/PARAMETER_PROVENANCE.yml").exists()
 
-    assert "(/pkdummy-harness/parameters/PARAMETER_PROVENANCE.csv)" in "\n".join(table_rows)
-    assert "(/pkdummy-harness/parameter-corrections/)" in "\n".join(table_rows)
+    assert "(https://y-fukiya.github.io/pkdummy-harness/parameters/PARAMETER_PROVENANCE.csv)" in "\n".join(table_rows)
+    assert "(https://y-fukiya.github.io/pkdummy-harness/parameter-corrections/)" in "\n".join(table_rows)

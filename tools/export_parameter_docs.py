@@ -39,7 +39,7 @@ def main(argv: list[str] | None = None) -> int:
         "# 薬剤別シミュレーションパラメータ", "",
         "このコミットの正本YAMLから生成した採用値です。CLはL/h、VはL、KAは1/h、F1は無次元、ALAG1はhです。",
         "数値の整合性は臨床モデルの妥当性を意味しません。全薬剤の臨床採用保留を継続しています。", "",
-        "[検索・詳細画面](/pkdummy-harness/parameters/) / [原典修正と残る制約](/pkdummy-harness/parameter-corrections/)", "",
+        "[検索・詳細画面](https://y-fukiya.github.io/pkdummy-harness/parameters/) / [原典修正と残る制約](https://y-fukiya.github.io/pkdummy-harness/parameter-corrections/)", "",
         "| 薬剤 | 経路 | CL | V | KA | F1 | ALAG1 | CL basis / V basis |",
         "| --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
@@ -52,9 +52,9 @@ def main(argv: list[str] | None = None) -> int:
         lines.append("| " + " | ".join(cells) + " |")
     lines.extend([
         "", "## 出典・変換・確認状態", "",
-        "- [全パラメータCSV](/pkdummy-harness/parameters/PARAMETER_PROVENANCE.csv)",
-        "- [出典CSV](/pkdummy-harness/parameters/SOURCES.csv)",
-        "- [値の由来一覧](/pkdummy-harness/parameters/PARAMETER_PROVENANCE.html)", "",
+        "- [全パラメータCSV](https://y-fukiya.github.io/pkdummy-harness/parameters/PARAMETER_PROVENANCE.csv)",
+        "- [出典CSV](https://y-fukiya.github.io/pkdummy-harness/parameters/SOURCES.csv)",
+        "- [値の由来一覧](https://y-fukiya.github.io/pkdummy-harness/parameters/PARAMETER_PROVENANCE.html)", "",
         "F1=1は、apparent CL/F・V/Fを用いたモデルでは実際の利用率100%を主張しません。",
         "原典照合、導出、fixture仮定、未確認事項を区別して確認してください。", "",
     ])
