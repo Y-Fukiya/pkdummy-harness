@@ -68,7 +68,7 @@ def test_bundle_adds_full_translations_and_preserves_canonical_english(translate
     assert drug["raw"] == canonical.get("pk_raw", {})
     assert drug["parsed"] == canonical["pk_parsed"]
     assert drug["derived"] == canonical["derived"]
-    assert str(CATALOG_PATH) in bundle["source"]
+    assert CATALOG_PATH.as_posix() in bundle["source"]
     assert path.read_bytes() == before
     assert build_drug(path)["fixture_context_i18n"] == drug["fixture_context_i18n"]
 
