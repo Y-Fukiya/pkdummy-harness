@@ -24,6 +24,11 @@ from typing import Any
 
 import yaml
 
+try:
+    from export_fixture_context import resolve_fixture_context
+except ModuleNotFoundError:
+    from tools.export_fixture_context import resolve_fixture_context
+
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -146,6 +151,7 @@ def _workflow_manifest(
     settings: dict[str, Any],
     target_metadata: dict[str, Any],
     value_provenance_summary: dict[str, Any],
+    fixture_context: dict[str, Any],
     created_at: str,
     output_checksums: dict[str, str],
 ) -> dict[str, Any]:
@@ -170,6 +176,7 @@ def _workflow_manifest(
             "attempts": validation_attempts,
         },
         "target_metadata": target_metadata,
+        "fixture_context": fixture_context,
         "value_provenance_summary": value_provenance_summary,
         "outputs": {key: str(value) for key, value in files.items()},
         "output_checksums": output_checksums,
@@ -246,6 +253,7 @@ def run_workflow(
     clinical_samples = raw_dir / "clinical_samples.csv"
     pk_data = _load_yaml(pk_path)
     targets_data = _load_yaml(targets_path)
+    fixture_context = resolve_fixture_context(spec_path, pk_path=pk_path, targets_path=targets_path)
     target_metadata = build_target_metadata(drug, pk_data, targets_data)
     value_provenance_summary = build_value_provenance_summary(pk_data, targets_data)
 
@@ -308,6 +316,7 @@ def run_workflow(
                 },
                 target_metadata=target_metadata,
                 value_provenance_summary=value_provenance_summary,
+                fixture_context=fixture_context,
                 created_at=_workflow_timestamp(reproducible=reproducible),
                 output_checksums=_output_checksums(result.files),
             ),
@@ -335,6 +344,7 @@ def run_workflow(
     )
 
     sdtm_result = make_sdtm_like_domains(
+        fixture_context=fixture_context,
         clinical_samples_csv=clinical_samples,
         spec_yml=spec_path,
         out_dir=sdtm_dir,
@@ -451,6 +461,7 @@ def run_workflow(
             },
             target_metadata=target_metadata,
             value_provenance_summary=value_provenance_summary,
+            fixture_context=fixture_context,
             created_at=_workflow_timestamp(reproducible=reproducible),
             output_checksums=_output_checksums(result.files),
         ),

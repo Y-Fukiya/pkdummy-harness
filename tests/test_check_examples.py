@@ -36,3 +36,14 @@ def test_check_examples_cli() -> None:
     assert "Examples check: OK" in completed.stdout
     assert "minimal_aciclovir" in completed.stdout
     assert "minimal_albuterol_iv" in completed.stdout
+
+
+def test_example_comparison_detects_clinical_context_drift(tmp_path):
+    import yaml
+    from tools.check_examples import _compare_manifest
+
+    expected = tmp_path / "expected.yml"
+    actual = tmp_path / "actual.yml"
+    expected.write_text(yaml.safe_dump({"fixture_context": {"clinical_use": "not_approved"}}), encoding="utf-8")
+    actual.write_text(yaml.safe_dump({"fixture_context": {"clinical_use": "approved"}}), encoding="utf-8")
+    assert any("fixture_context" in issue for issue in _compare_manifest(expected, actual))

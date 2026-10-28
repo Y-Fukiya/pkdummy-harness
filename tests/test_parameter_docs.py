@@ -17,7 +17,7 @@ def test_public_table_and_downloads_use_corrected_execution_parameters(tmp_path)
     table_rows = (tmp_path / "PARAMETERS.md").read_text(encoding="utf-8").splitlines()
     apixaban = next(line for line in table_rows if line.startswith("| apixaban |"))
     assert [float(value.strip()) for value in apixaban.split("|")[3:7]] == [3.3, 21, 1.2, 0.5]
-    assert "臨床採用保留" in "\n".join(table_rows)
+    assert "臨床モデルとしては未承認" in "\n".join(table_rows)
     assert (tmp_path / "parameters/PARAMETER_PROVENANCE.md").read_text(encoding="utf-8").startswith("---\nlayout: page\n")
     assert not (tmp_path / "parameters/PARAMETER_PROVENANCE.yml").exists()
 

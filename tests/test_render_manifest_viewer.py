@@ -65,3 +65,15 @@ def test_render_manifest_viewer_cli(tmp_path: Path) -> None:
     assert completed.returncode == 0, completed.stdout
     assert "Manifest viewer written" in completed.stdout
     assert out_html.exists()
+
+
+def test_manifest_viewer_keeps_clinical_hold_separate_from_execution_ok(tmp_path):
+    from tools.export_fixture_context import resolve_fixture_context
+
+    manifest = tmp_path / "MANIFEST.yml"
+    context = resolve_fixture_context(ROOT / "drugs/abciximab/spec_pk1_iv.yml")
+    write_yaml(manifest, {"status": "OK", "fixture_context": context})
+    html = render_manifest_viewer(manifest).read_text(encoding="utf-8")
+    assert "Execution status:" in html
+    assert "clinical_hold" in html and "not_approved" in html
+    assert "computational_stress_test" in html

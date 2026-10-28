@@ -10,6 +10,11 @@ from typing import Any
 
 import yaml
 
+try:
+    from export_fixture_context import resolve_fixture_context, validate_context
+except ModuleNotFoundError:
+    from tools.export_fixture_context import resolve_fixture_context, validate_context
+
 
 def _load_yaml(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as f:
@@ -46,6 +51,8 @@ def render_manifest_viewer(manifest_yml: Path | str, out_html: Path | str | None
     manifest = _load_yaml(manifest_path)
     out_path = Path(out_html) if out_html else manifest_path.with_suffix(".viewer.html")
     status = str(manifest.get("status") or "UNKNOWN")
+    declared_context = manifest.get("fixture_context")
+    context = validate_context(declared_context) if declared_context is not None else resolve_fixture_context()
     title = f"PK Fixture Manifest Viewer - {status}"
     html_text = f"""<!doctype html>
 <html lang="en">
@@ -74,7 +81,10 @@ def render_manifest_viewer(manifest_yml: Path | str, out_html: Path | str | None
 <main>
   <h1>PK Fixture Manifest Viewer</h1>
   <p class="note">Static local viewer for workflow fixture manifests. It does not execute simulations or edit PK files.</p>
-  <p>Status: <span class="status {_status_class(status)}">{html.escape(status)}</span></p>
+  <p>Execution status: <span class="status {_status_class(status)}">{html.escape(status)}</span></p>
+  <h2>Clinical assessment and computational dose</h2>
+  <p>Clinical use is not approved. Execution OK does not establish clinical validity.</p>
+  <table>{_rows(context)}</table>
   <h2>Summary</h2>
   <table>
     <tr><th>Manifest</th><td>{html.escape(str(manifest_path))}</td></tr>

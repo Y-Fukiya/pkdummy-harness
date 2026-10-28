@@ -16,6 +16,11 @@ from typing import Any
 
 import yaml
 
+try:
+    from export_fixture_context import CONTEXT_FIELDS, attach_context, inherit_fixture_context
+except ModuleNotFoundError:
+    from tools.export_fixture_context import CONTEXT_FIELDS, attach_context, inherit_fixture_context
+
 
 DEFAULT_TARGETS = ["r_nca", "phoenix_nca", "nonmem", "nlmixr2"]
 
@@ -188,23 +193,34 @@ def make_downstream_adapters(
     if not poppk_rows:
         raise ValueError("POPPK_INPUT.csv has no rows.")
 
+    has_context = any(field in adpc_rows[0] for field in CONTEXT_FIELDS)
+    context = inherit_fixture_context(analysis_path, adpc_rows)
+    attach_context(poppk_rows, context, require_existing=has_context)
     files: dict[str, Path] = {}
     warnings: list[str] = []
     if "r_nca" in target_list:
         path = out_path / "nca_r.csv"
-        _write_csv(path, _r_nca_rows(adpc_rows), ["ID", "TIME", "CONC", "CONC_UNIT", "DOSE", "DOSE_UNIT", "ROUTE", "ARM", "AGE", "SEX", "WT", "BSA", "CREAT_MG_DL"])
+        adapter_rows = _r_nca_rows(adpc_rows)
+        attach_context(adapter_rows, context)
+        _write_csv(path, adapter_rows, ["ID", "TIME", "CONC", "CONC_UNIT", "DOSE", "DOSE_UNIT", "ROUTE", "ARM", "AGE", "SEX", "WT", "BSA", "CREAT_MG_DL"] + CONTEXT_FIELDS)
         files["r_nca"] = path
     if "phoenix_nca" in target_list:
         path = out_path / "nca_phoenix.csv"
-        _write_csv(path, _phoenix_rows(adpc_rows), ["Subject", "Time", "Concentration", "ConcentrationUnit", "Dose", "DoseUnit", "Route", "Treatment", "NominalTime", "TimePoint", "TimePointNumber"])
+        adapter_rows = _phoenix_rows(adpc_rows)
+        attach_context(adapter_rows, context)
+        _write_csv(path, adapter_rows, ["Subject", "Time", "Concentration", "ConcentrationUnit", "Dose", "DoseUnit", "Route", "Treatment", "NominalTime", "TimePoint", "TimePointNumber"] + CONTEXT_FIELDS)
         files["phoenix_nca"] = path
     if "nonmem" in target_list:
         path = out_path / "poppk_nonmem.csv"
-        _write_csv(path, _nonmem_rows(poppk_rows), ["ID", "TIME", "EVID", "MDV", "AMT", "DV", "CMT", "RATE", "CENS", "LIMIT", "DOSE", "ROUTE", "WT", "AGE", "SEX", "BSA", "CREAT", "USUBJID"])
+        adapter_rows = _nonmem_rows(poppk_rows)
+        attach_context(adapter_rows, context)
+        _write_csv(path, adapter_rows, ["ID", "TIME", "EVID", "MDV", "AMT", "DV", "CMT", "RATE", "CENS", "LIMIT", "DOSE", "ROUTE", "WT", "AGE", "SEX", "BSA", "CREAT", "USUBJID"] + CONTEXT_FIELDS)
         files["nonmem"] = path
     if "nlmixr2" in target_list:
         path = out_path / "poppk_nlmixr2.csv"
-        _write_csv(path, _nlmixr2_rows(poppk_rows), ["id", "time", "evid", "mdv", "amt", "dv", "cmt", "rate", "cens", "limit", "dose", "route", "wt", "age", "sex", "bsa", "creat", "usubjid"])
+        adapter_rows = _nlmixr2_rows(poppk_rows)
+        attach_context(adapter_rows, context)
+        _write_csv(path, adapter_rows, ["id", "time", "evid", "mdv", "amt", "dv", "cmt", "rate", "cens", "limit", "dose", "route", "wt", "age", "sex", "bsa", "creat", "usubjid"] + CONTEXT_FIELDS)
         files["nlmixr2"] = path
 
     if any(_norm(row.get("AVAL")) == "" for row in adpc_rows):
@@ -220,6 +236,7 @@ def make_downstream_adapters(
         manifest,
         {
             "purpose": "downstream_tool_adapter_fixture",
+            "fixture_context": context,
             "status": "WARN" if warnings else "OK",
             "created_at": datetime.now().isoformat(timespec="seconds"),
             "inputs": {

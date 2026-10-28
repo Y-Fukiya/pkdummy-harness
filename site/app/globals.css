@@ -169,7 +169,7 @@ a { color: inherit; }
 .pharmacology-card-status > span { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
 .pharmacology-card-status.reviewed { color: #1f6b53; }
 .pharmacology-card-status.candidate { color: #5f478b; }
-.drug-card-values { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; border-top: 1px solid var(--line); padding-top: 13px; }
+.drug-card-values { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; border-top: 1px solid var(--line); padding-top: 13px; }
 .drug-card-values span, .drug-card-values small { display: block; color: var(--faint); font-size: 10px; }
 .drug-card-values strong { display: inline-block; font-size: 16px; margin: 3px 4px 0 0; letter-spacing: -.04em; }
 .drug-card-values small { display: inline-block; }

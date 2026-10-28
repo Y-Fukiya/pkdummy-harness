@@ -24,7 +24,7 @@ def test_every_canonical_drug_declares_clinical_assessment():
 
 def test_public_projection_separates_screening_from_manual_status():
     drug = build_drug(ROOT / "drugs/abciximab/pk.yml")
-    assert drug["simulation_validity"]["status"] == "not_assessed"
+    assert drug["simulation_validity"]["status"] == "clinical_hold"
     screening = drug["fixture_assessment"]["half_life_check"]
     assert screening["evaluated"] is True
     assert screening["hold_candidate"] is True
