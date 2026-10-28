@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 
 import yaml
+import pytest
 
 from tools.render_manifest_viewer import render_manifest_viewer
 
@@ -77,3 +78,25 @@ def test_manifest_viewer_keeps_clinical_hold_separate_from_execution_ok(tmp_path
     assert "Execution status:" in html
     assert "clinical_hold" in html and "not_approved" in html
     assert "computational_stress_test" in html
+
+
+def test_manifest_viewer_keeps_each_drug_clinical_context(tmp_path):
+    from tools.export_fixture_context import resolve_fixture_context
+
+    manifest = tmp_path / "HARNESS_MANIFEST.yml"
+    contexts = {slug: resolve_fixture_context(ROOT / f"drugs/{slug}/{spec}") for slug, spec in (
+        ("triazolam", "spec_pk1_oral.yml"), ("albuterol", "spec_pk1_iv.yml"),
+    )}
+    write_yaml(manifest, {"status": "OK", "fixture_contexts": contexts})
+    html = render_manifest_viewer(manifest).read_text(encoding="utf-8")
+    assert "clinical_hold" in html
+    assert "triazolam" in html and "albuterol" in html
+    assert "not_assessed" in html
+
+
+@pytest.mark.parametrize("declaration", [{"fixture_context": None}, {"fixture_contexts": None}, {"fixture_contexts": {}}, {"fixture_contexts": {"triazolam": None}}])
+def test_manifest_viewer_rejects_invalid_declared_context(tmp_path, declaration):
+    manifest = tmp_path / "HARNESS_MANIFEST.yml"
+    write_yaml(manifest, {"status": "OK", **declaration})
+    with pytest.raises(ValueError):
+        render_manifest_viewer(manifest)

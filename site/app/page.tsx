@@ -108,7 +108,7 @@ type Drug = {
   provenance: JsonObject;
   targets: JsonObject;
   spec: JsonObject;
-  simulation_validity: { status: "not_assessed" | "clinical_hold"; reasons: string[]; source_correction_date?: string };
+  simulation_validity: { status: "not_assessed" | "clinical_hold"; reasons: string[]; source_correction_date?: string; correction_notes?: string[] };
   fixture_assessment: {
     half_life_check: { evaluated: boolean; reported_h: number | null; implied_h: number | null; ratio: number | null; threshold_fold: number; hold_candidate: boolean | null; circular: boolean };
     dose_context: { purpose: string; clinical_dose_verified: boolean; arms: Record<string, { dose_mg: number; n: number; infusion_h?: number }> };
@@ -771,7 +771,7 @@ function DetailView({ drug, lang, onBack }: { drug: Drug; lang: Language; onBack
         <span className="eyebrow">SOURCE CORRECTIONS · 2026-10-28</span>
         <h2>{lang === "ja" ? "現行パラメータの修正と制約" : "Current corrections and limitations"}</h2>
         <p>{lang === "ja" ? "原典に基づく修正を実行spec・INDEX・表示データへ反映しています。原典値の照合と臨床モデルの妥当性確認は別です。" : "Source corrections are reflected in the execution spec, INDEX, and displayed data. Matching source values is separate from clinical model validation."}</p>
-        <ul>{drug.simulation_validity.reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul>
+        <ul>{drug.simulation_validity.correction_notes?.map((note) => <li key={note}>{note}</li>)}</ul>
         <a href={correctionReportUrl}>{lang === "ja" ? "修正値・換算式・原典を確認" : "Values, equations and source references"} ↗</a>
       </section>}
       <FixtureContext drug={drug} lang={lang} />

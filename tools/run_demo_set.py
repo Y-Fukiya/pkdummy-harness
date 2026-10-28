@@ -26,6 +26,7 @@ if __package__ in {None, ""}:
 
 from tools.run_workflow import WorkflowResult, run_workflow
 from tools.sample_clinical_timepoints import parse_times
+from tools.export_fixture_context import CONTEXT_FIELDS, context_columns, load_manifest_fixture_context
 
 
 DEFAULT_DEMO_DRUGS = ["albuterol", "alprazolam", "aciclovir", "abciximab", "felodipine"]
@@ -346,7 +347,7 @@ def make_demo_sim_full(
     return out_path
 
 
-def _summary_row(slug: str, workflow: WorkflowResult) -> dict[str, Any]:
+def _summary_row(slug: str, workflow: WorkflowResult, fixture_context: dict[str, Any]) -> dict[str, Any]:
     return {
         "drug": slug,
         "workflow_status": workflow.status,
@@ -359,6 +360,7 @@ def _summary_row(slug: str, workflow: WorkflowResult) -> dict[str, Any]:
         "warnings_n": len(workflow.warnings),
         "warnings": " | ".join(workflow.warnings),
         "run_dir": workflow.out_dir,
+        **context_columns(fixture_context),
     }
 
 
@@ -367,13 +369,15 @@ def _write_summary_md(path: Path, rows: list[dict[str, Any]]) -> None:
         "# Multi-drug Demo Summary",
         "",
         "These outputs are workflow smoke-test fixtures. They are not clinical validation outputs.",
+        "Workflow and Validation report technical checks. Clinical assessment and dose purpose are separate.",
         "",
-        "| Drug | Workflow | Validation | ADPC rows | NCA rows | PopPK rows | Warnings |",
-        "| --- | --- | --- | ---: | ---: | ---: | ---: |",
+        "| Drug | Workflow | Validation | Clinical | Clinical use | Dose purpose | Clinical dose verified | ADPC rows | NCA rows | PopPK rows | Warnings |",
+        "| --- | --- | --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: |",
     ]
     for row in rows:
         lines.append(
-            "| {drug} | {workflow_status} | {validation_status} | {analysis_adpc_rows} | "
+            "| {drug} | {workflow_status} | {validation_status} | {CLINICAL_ASSESSMENT} | "
+            "{CLINICAL_USE} | {DOSE_PURPOSE} | {CLINICAL_DOSE_VERIFIED} | {analysis_adpc_rows} | "
             "{analysis_nca_rows} | {analysis_poppk_rows} | {warnings_n} |".format(**row)
         )
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -398,6 +402,7 @@ def run_demo_set(
     drugs_path = Path(drugs_dir)
     times = sample_times_h or DEFAULT_SAMPLE_TIMES_H
     workflows: dict[str, WorkflowResult] = {}
+    fixture_contexts: dict[str, dict[str, Any]] = {}
     summary_rows: list[dict[str, Any]] = []
     all_warnings: list[str] = []
 
@@ -422,7 +427,8 @@ def run_demo_set(
             allow_validation_failed=allow_validation_failed,
         )
         workflows[slug] = workflow
-        summary_rows.append(_summary_row(slug, workflow))
+        fixture_contexts[slug] = load_manifest_fixture_context(workflow.files["manifest"])
+        summary_rows.append(_summary_row(slug, workflow, fixture_contexts[slug]))
         all_warnings.extend(f"{slug}: {warning}" for warning in workflow.warnings)
 
     summary_csv = out_path / "summary.csv"
@@ -440,6 +446,7 @@ def run_demo_set(
         "warnings_n",
         "warnings",
         "run_dir",
+        *CONTEXT_FIELDS,
     ]
     _write_csv(summary_csv, summary_rows, summary_fields)
     _write_summary_md(summary_md, summary_rows)
@@ -490,6 +497,7 @@ def run_demo_set(
             "status": status,
             "created_at": datetime.now().isoformat(timespec="seconds"),
             "drugs": drugs,
+            "fixture_contexts": fixture_contexts,
             "settings": {
                 "drugs_dir": str(drugs_path),
                 "sample_times_h": times,

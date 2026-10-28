@@ -149,6 +149,16 @@ simulation_validity:
   source_correction_date: '2026-10-28'
   status: clinical_hold
   review_date: '2026-10-28'
+  correction_notes:
+  - Parameter-source population is healthy elderly volunteers, N=12, from source_1.
+    CL30.8 mL/min, Vss9.7 L and terminal half-life6.7 h followed7 mg IV over5 min.
+    These are not the general healthy-young-adult label values.
+  - F1=0.61 is the elderly mean after10 mg oral; the prior0.615 mixed elderly61% with
+    a previously measured young-subject62%. Do not replace elderly CL/t_half with
+    a different population label value.
+  - The retained100 mg oral arm is a computational stress test, not the cited10 mg
+    oral or7 mg IV scenario. The generated body-weight distribution does not reconstruct
+    the elderly cohort. KA, lag, IIV and residual errors remain generic fixture assumptions.
   reasons:
   - Parameter-source population is healthy elderly volunteers, N=12, from source_1.
     CL30.8 mL/min, Vss9.7 L and terminal half-life6.7 h followed7 mg IV over5 min.

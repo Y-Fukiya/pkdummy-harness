@@ -141,10 +141,19 @@ simulation_validity:
   source_correction_date: '2026-10-28'
   status: clinical_hold
   review_date: '2026-10-28'
-  reasons:
+  correction_notes:
   - DailyMed source_4 section12.3 distinguishes CYP3A-mediated metabolism and glucuronide
     formation from the subsequent urinary excretion of metabolites. Urinary recovery
     does not mean renal clearance of unchanged triazolam.
-  - No numeric PK parameter changes were made in this correction. Apparent CL and
-    derived one-compartment volume remain a fixture and do not establish clinical
-    model validity.
+  - No numeric PK parameter changes were made in this correction. The elimination-route
+    description was corrected to distinguish hepatic metabolism from urinary recovery
+    of metabolites.
+  reasons:
+  - The apparent one-compartment volume is derived from oral CL/F and the selected
+    3.5 h midpoint of the label half-life range, rather than independently observed.
+    Agreement of ln(2)*V/CL with this half-life is circular and does not independently
+    validate the model.
+  - The selected oral CL/F comes from a single 0.5 mg study in 54 healthy young men
+    (source_3), whereas the selected half-life comes from a separate label range (source_1).
+    These inputs are not a jointly estimated parameter set, and the 100 mg computational
+    fixture has not been qualified against independent concentration-time data.

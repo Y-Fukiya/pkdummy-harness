@@ -38,6 +38,10 @@ def validate_fixture_context(pk: dict[str, Any], spec: dict[str, Any], targets: 
             issues.append("simulation_validity.reasons must be a list of nonempty strings")
         elif validity["status"] == "clinical_hold" and not reasons:
             issues.append("simulation_validity.reasons must explain clinical_hold")
+        if validity.get("source_correction_date"):
+            notes = validity.get("correction_notes")
+            if not isinstance(notes, list) or not notes or any(not isinstance(note, str) or not note.strip() for note in notes):
+                issues.append("simulation_validity.correction_notes must record source corrections separately")
     for field, entry in (pk.get("value_provenance") or {}).items():
         selection = entry.get("selection") or {}
         if selection.get("rule") not in SELECTION_RULES or not str(selection.get("rationale") or "").strip():
