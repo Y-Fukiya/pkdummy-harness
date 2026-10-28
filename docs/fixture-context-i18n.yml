@@ -1,0 +1,192 @@
+schema_version: '1'
+drugs:
+  abciximab:
+    reasons:
+    - en: Free plasma drug has multiphasic disposition, while platelet-bound drug persists
+        much longer. This fixed linear one-compartment fixture does not distinguish the free
+        and platelet-bound pools.
+      ja: 血漿中の遊離薬物は多相性の薬物動態を示す一方、血小板結合薬物ははるかに長く残存します。この固定パラメータの線形1-コンパートメント計算用fixtureは、遊離薬物と血小板結合薬物のプールを区別しません。
+    - en: The adopted clearance, volume and short plasma half-life come from different studies,
+        populations and summaries; they are not a jointly estimated parameter set.
+      ja: 採用したクリアランス、容積、短い血漿中半減期は、それぞれ異なる試験、集団、要約に由来しており、同時に推定されたパラメータの組ではありません。
+    fixture_limitations:
+      free_vs_platelet_bound_disposition:
+        en: The historical FDA label reports rapid loss of free plasma abciximab, with an
+          initial half-life below 10 min and a second phase of about 30 min, while platelet-bound
+          drug remains for 15 days or longer. The label relates rapid plasma decline to platelet
+          GPIIb/IIIa binding. The linear one-compartment fixture does not distinguish these
+          pools or establish a validated target-mediated disposition model.
+        ja: 過去のFDA添付文書は、血漿中の遊離アブシキシマブが速やかに減少し、初期半減期は10 min未満、次相は約30 minである一方、血小板結合薬物は15日以上残存すると報告しています。同文書は、血漿中濃度の急速な低下を血小板GPIIb/IIIaへの結合と関連づけています。この線形1-コンパートメント計算用fixtureは、これらのプールを区別するものでも、妥当性が検証された標的介在性薬物動態モデルを確立するものでもありません。
+  aciclovir:
+    fixture_limitations:
+      dose_dependent_bioavailability:
+        en: Oral bioavailability decreases with dose, and plasma concentrations rise less
+          than proportionally across the 200, 400 and 800 mg repeated-dose comparisons. Fixed
+          F1=0.1 does not reproduce this dose dependence.
+        ja: 経口バイオアベイラビリティは用量の増加に伴って低下し、200、400、800 mgの反復投与の比較では、血漿中濃度の上昇は用量比例を下回ります。固定したF1=0.1では、この用量依存性を再現しません。
+  apixaban:
+    reasons:
+    - en: The reported Vss of 21 L is used as the one-compartment V. This is an approximation
+        of steady-state distribution, not an independently qualified one-compartment volume.
+      ja: 報告されたVss 21 Lを1-コンパートメントのVとして使用しています。これは定常状態での分布を近似するものであり、独立した根拠によって妥当性が確認された1-コンパートメントの容積ではありません。
+    - en: The retained systemic CL and V imply a half-life that differs from the reported
+        oral apparent half-life of 12 h. The oral half-life remains a check-only reference
+        and does not establish an absorption-limited mechanism.
+      ja: 保持した全身CLとVから暗黙に決まる半減期は、報告された経口投与後の見かけの半減期12 hと異なります。この経口投与後の半減期は検証専用の参照値であり、吸収律速の機序を確立する根拠にはなりません。
+    - en: KA, lag, IIV and residual errors are generic fixture assumptions. The fixture has
+        not been qualified against independent concentration-time data.
+      ja: KA、ラグタイム、IIV、残差誤差は、計算用fixtureの汎用的な仮定です。この計算用fixtureの妥当性は、独立した濃度–時間データに照らして確認されていません。
+    correction_notes:
+    - en: The earlier interpretation of total CL as apparent CL/F was replaced with the systemic
+        total CL definition in DailyMed source_1.
+      ja: 総CLを見かけのCL/Fとした旧解釈を、DailyMed source_1にある全身総CLの定義に置き換えました。
+    - en: The half-life-derived V was replaced with the reported Vss of 21 L, and F1 was changed
+        to 0.5 with systemic CL of 3.3 L/h.
+      ja: 半減期から逆算したVを、報告されたVss 21 Lに置き換え、全身CL 3.3 L/hとともにF1を0.5へ変更しました。
+  carbamazepine:
+    fixture_limitations:
+      autoinduction:
+        en: Autoinduction completes after 3-5 weeks of a fixed regimen. Initial half-life
+          25-65 h shortens to 12-17 h with repeated dosing. The selected steady-state clearance
+          and 14.5 h half-life do not represent an untreated subject receiving a first dose.
+        ja: 自己誘導は、一定の投与レジメンを開始して3–5週間後に完了します。初回投与時の半減期25–65 hは、反復投与により12–17 hへ短縮します。採用した定常状態のクリアランスと半減期14.5
+          hは、未治療の被験者が初回投与を受ける状態を表していません。
+  clarithromycin:
+    fixture_limitations:
+      dose_dependent_pk:
+        en: The label reports mildly nonlinear kinetics, with half-life about 3-4 h at 250
+          mg every 12 h and 5-7 h at 500 mg every 8-12 h. Fixed CL/V and the selected 5 h
+          value do not reproduce dose dependence or the 14-OH metabolite; renal clearance
+          is comparatively dose independent.
+        ja: 添付文書は軽度の非線形動態を報告しており、半減期は250 mgを12 hごとに投与した場合に約3–4 h、500 mgを8–12 hごとに投与した場合に5–7
+          hです。固定したCL/Vと採用した5 hという値では、用量依存性や14-OH代謝物を再現しません。腎クリアランスは、比較的用量に依存しません。
+  efavirenz:
+    fixture_limitations:
+      autoinduction_and_mixed_dosing_context:
+        en: The label reports metabolic autoinduction and half-life 52-76 h after a single
+          dose versus 40-55 h after multiple doses. The retained 58 h is a legacy selection
+          within the single-dose range, not its midpoint.
+        ja: 添付文書は代謝の自己誘導を報告しており、半減期は単回投与後の52–76 hに対し、反復投与後は40–55 hです。保持した58 hは、単回投与時の範囲内で従来から採用されている値であり、その範囲の中点ではありません。
+      mixed_population_parameters:
+        en: CL/F=13.9 L/h comes from 89 HIV patients treated with 600 mg once daily. Combining
+          it with the selected single-dose half-life to derive V/F mixes populations and dosing
+          stages; this fixture does not reproduce that PopPK study.
+        ja: CL/F=13.9 L/hは、600 mgを1日1回投与されたHIV患者89例に由来します。この値と採用した単回投与時の半減期を組み合わせてV/Fを導出すると、集団と投与段階を混在させることになります。この計算用fixtureは、そのPopPK試験を再現するものではありません。
+  felodipine:
+    reasons:
+    - en: The source reports blood clearance, but this fixture projects plasma concentrations
+        without a verified blood-to-plasma conversion.
+      ja: 出典は血液クリアランスを報告していますが、この計算用fixtureは、検証済みの血液から血漿への換算なしに血漿中濃度を予測しています。
+    fixture_limitations:
+      blood_plasma_matrix_unresolved:
+        en: The source review reports total blood clearance 1-1.5 L/min, whereas the fixture
+          is interpreted as plasma concentration. The retained 90 L/h is the upper blood-clearance
+          bound, not a verified plasma clearance. No blood/plasma ratio has been established
+          for conversion.
+        ja: 出典の総説は総血液クリアランス1–1.5 L/minを報告している一方、この計算用fixtureは血漿中濃度を表すものとして解釈されています。保持した90
+          L/hは血液クリアランス範囲の上限であり、検証済みの血漿クリアランスではありません。換算に用いる血液／血漿濃度比は確立されていません。
+  fluvoxamine:
+    fixture_limitations:
+      nonlinear_exposure:
+        en: In 30 healthy volunteers given 100, 200 or 300 mg/day for 10 days, concentrations
+          rose more than proportionally with dose. The fixed linear fixture cannot reproduce
+          this nonlinearity. The label does not establish CYP2D6 saturation as its cause.
+        ja: 健康な志願者30例に100、200、300 mg/dayのいずれかを10日間投与したところ、濃度は用量比例を上回って上昇しました。この固定パラメータの線形計算用fixtureでは、その非線形性を再現できません。添付文書は、その原因がCYP2D6の飽和であるとは確定していません。
+  montelukast:
+    reasons:
+    - en: CL 30.8 mL/min, Vss 9.7 L and terminal half-life 6.7 h come from 12 healthy elderly
+        volunteers after 7 mg IV over 5 min in source_1. Oral F 0.61 comes from 10 mg in that
+        population. These inputs do not reconstruct a general healthy-young-adult model, and
+        the generated body-weight distribution does not reconstruct the elderly cohort.
+      ja: CL 30.8 mL/min、Vss 9.7 L、終末相半減期6.7 hは、source_1で健康な高齢志願者12例に7 mgを5 minかけて静脈内投与した後の値です。経口F
+        0.61は、同じ集団への10 mg投与に由来します。これらの入力値は一般的な健康若年成人モデルを再構成するものではなく、生成した体重分布も高齢者コホートを再構成するものではありません。
+    - en: The one-compartment model using the retained CL and V does not reproduce the reported
+        terminal half-life. KA, lag, IIV and residual errors are generic fixture assumptions.
+      ja: 保持したCLとVを用いた1-コンパートメントモデルは、報告された終末相半減期を再現しません。KA、ラグタイム、IIV、残差誤差は、計算用fixtureの汎用的な仮定です。
+    - en: The 100 mg oral arm is a computational stress test, not the source study's 10 mg
+        oral or 7 mg IV scenario. The model has not been qualified for this extrapolation
+        against independent concentration-time data.
+      ja: 100 mgの経口投与アームは計算用ストレス試験であり、出典の試験における10 mgの経口投与や7 mgの静脈内投与のシナリオではありません。この外挿に対するモデルの妥当性は、独立した濃度–時間データに照らして確認されていません。
+    correction_notes:
+    - en: F was corrected from 0.615, an average of elderly and young-subject estimates, to
+        the elderly mean of 0.61 in source_1. With systemic CL and V, F1 was changed from
+        1.0 to 0.61. The elderly CL, Vss and terminal half-life values were retained.
+      ja: 高齢者と若年者の推定値の平均である0.615から、source_1の高齢者の平均値0.61へFを訂正しました。全身CLとVを用いることに合わせ、F1を1.0から0.61へ変更しました。高齢者のCL、Vss、終末相半減期の値は保持しました。
+  omeprazole:
+    reasons:
+    - en: The selected CL of 37.44 L/h and V of 16.1 L combine a median systemic CL with a
+        mean IV Vss from source_4. These different summary statistics are not a jointly estimated
+        one-compartment parameter set.
+      ja: 採用したCL 37.44 L/hとV 16.1 Lは、source_4の全身CLの中央値と静脈内投与時のVssの平均値を組み合わせています。これらは種類の異なる要約統計量であり、同時に推定された1-コンパートメントのパラメータの組ではありません。
+    - en: F1 of 0.35 and half-life of 0.75 h are midpoint fixture selections from separate
+        healthy-subject label ranges. They are not the study's median F of 39% or its IV half-life,
+        and the retained CL and V do not reproduce the selected half-life.
+      ja: F1 0.35と半減期0.75 hは、添付文書にある健康被験者の別々の範囲から、それぞれ中点を選んだ計算用fixtureの値です。これらは当該試験のFの中央値39%や静脈内投与時の半減期ではなく、保持したCLとVも採用した半減期を再現しません。
+    - en: The 100 mg computational regimen has not been qualified for extrapolation from the
+        20 mg oral buffered-solution study. KA, lag, IIV and residual errors remain generic
+        fixture assumptions.
+      ja: 100 mgの計算用投与レジメンについては、20 mgの経口緩衝液製剤の試験から外挿する妥当性が確認されていません。KA、ラグタイム、IIV、残差誤差は、引き続き計算用fixtureの汎用的な仮定です。
+    correction_notes:
+    - en: Systemic CL was corrected from 43.56 to 37.44 L/h using the source_4 median of 624
+        mL/min and the conversion 624 * 60 / 1000.
+      ja: source_4の中央値624 mL/minと換算式624 * 60 / 1000を用い、全身CLを43.56から37.44 L/hへ訂正しました。
+    - en: The adopted V is the source_4 mean IV Vss of 0.23 L/kg, scaled to 16.1 L at 70 kg.
+        The legacy pk_raw volume of 0.4 L/kg is retained as the original capture.
+      ja: 採用したVは、source_4の静脈内投与時のVssの平均値0.23 L/kgを、70 kgで16.1 Lに換算したものです。従来のpk_rawにある容積0.4
+        L/kgは、最初に記録した値として保持しています。
+    - en: The elimination-route description was corrected to distinguish hepatic metabolism
+        from urinary recovery of metabolites.
+      ja: 肝代謝と代謝物の尿中回収を区別するよう、消失経路の記述を訂正しました。
+  sildenafil:
+    reasons:
+    - en: The reported Vss of 105 L is used as the one-compartment V. With systemic CL of
+        41 L/h, this approximation does not reproduce the reported terminal half-life range
+        of 3–5 h. The selected 4 h midpoint remains a check-only fixture reference.
+      ja: 報告されたVss 105 Lを1-コンパートメントのVとして使用しています。全身CL 41 L/hと組み合わせたこの近似では、報告された終末相半減期の範囲3–5
+        hを再現しません。採用した中点4 hは、引き続き計算用fixtureの検証専用の参照値です。
+    - en: KA, lag, IIV and residual errors are generic fixture assumptions. The retained 100
+        mg computational regimen has not been qualified against independent concentration-time
+        data.
+      ja: KA、ラグタイム、IIV、残差誤差は、計算用fixtureの汎用的な仮定です。保持した100 mgの計算用投与レジメンの妥当性は、独立した濃度–時間データに照らして確認されていません。
+    correction_notes:
+    - en: The earlier CL of 18.195113489698564 L/h, inferred from V and a midpoint half-life,
+        was replaced with the reported systemic CL of 41 L/h in EMA source_7.
+      ja: Vと半減期範囲の中点から推定した従来のCL 18.195113489698564 L/hを、EMA source_7に報告された全身CL 41 L/hに置き換えました。
+    - en: The retained volume of 105 L was reclassified from apparent V/F to systemic Vss.
+      ja: 保持した容積105 Lを、見かけのV/Fから全身Vssへ再分類しました。
+    - en: F and F1 were changed from the fixture choices of 0.44 and 1 to the reported mean
+        absolute oral bioavailability of 0.41.
+      ja: 計算用fixtureで選んでいたF 0.44とF1 1を、報告された平均絶対経口バイオアベイラビリティ0.41へ変更しました。
+  triazolam:
+    reasons:
+    - en: The apparent one-compartment volume is derived from oral CL/F and the selected 3.5
+        h midpoint of the label half-life range, rather than independently observed. Agreement
+        of ln(2)*V/CL with this half-life is circular and does not independently validate
+        the model.
+      ja: 見かけの1-コンパートメント容積は、独立して観測された値ではなく、経口CL/Fと、添付文書の半減期範囲から選んだ中点3.5 hを用いて導出しています。ln(2)*V/CLとこの半減期が一致しても、それは循環的な一致であり、モデルの妥当性を独立に検証するものではありません。
+    - en: The selected oral CL/F comes from a single 0.5 mg study in 54 healthy young men
+        (source_3), whereas the selected half-life comes from a separate label range (source_1).
+        These inputs are not a jointly estimated parameter set, and the 100 mg computational
+        fixture has not been qualified against independent concentration-time data.
+      ja: 採用した経口CL/Fは健康な若年男性54例を対象とした単一の0.5 mg投与試験（source_3）に由来する一方、採用した半減期は別の添付文書の範囲（source_1）に由来します。これらの入力値は同時に推定されたパラメータの組ではなく、100
+        mgの計算用fixtureの妥当性も、独立した濃度–時間データに照らして確認されていません。
+    correction_notes:
+    - en: DailyMed source_4 section 12.3 distinguishes CYP3A-mediated metabolism and glucuronide
+        formation from the subsequent urinary excretion of metabolites. Urinary recovery does
+        not mean renal clearance of unchanged triazolam.
+      ja: DailyMed source_4のsection 12.3は、CYP3Aを介した代謝およびグルクロン酸抱合体の生成と、その後の代謝物の尿中排泄を区別しています。尿中回収は、未変化体トリアゾラムの腎クリアランスを意味しません。
+    - en: No numeric PK parameter changes were made in this correction. The elimination-route
+        description was corrected to distinguish hepatic metabolism from urinary recovery
+        of metabolites.
+      ja: この訂正では、PKパラメータの数値は変更していません。肝代謝と代謝物の尿中回収を区別するよう、消失経路の記述を訂正しました。
+  verapamil:
+    fixture_limitations:
+      first_pass_and_repeat_dosing:
+        en: The label describes extensive first-pass metabolism, a nonlinear dose-concentration
+          relationship and a longer half-life with repeated dosing. A single fixed CL/V/F
+          does not express these changes.
+        ja: 添付文書は、広範な初回通過代謝、非線形の用量–濃度関係、反復投与に伴う半減期の延長を記載しています。単一の固定したCL/V/Fでは、これらの変化を表現しません。
+      stereoselective_first_pass:
+        en: Human data demonstrate stereoselective first-pass metabolism. This racemic single-compartment
+          fixture does not separate R/S enantiomers or their different oral disposition.
+        ja: ヒトのデータは、立体選択的な初回通過代謝を示しています。このラセミ体の1-コンパートメント計算用fixtureは、R/S鏡像異性体や、それぞれで異なる経口投与後の薬物動態を分けて扱いません。
