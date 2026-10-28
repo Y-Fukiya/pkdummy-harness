@@ -146,6 +146,7 @@ def make_pk_yml(
         "pk_raw": pk_raw,
         "pk_parsed": pk_parsed,
         "derived": derived,
+        "simulation_validity": {"status": "not_assessed", "reasons": []},
     }
 
 def make_targets_yml(
@@ -204,6 +205,8 @@ def make_targets_yml(
             "id": f"{slugify(name)}_dose{dose_mg:g}mg_{route_code}_single",
             "route": route_code,
             "regimen": "single",
+            "purpose": "computational_stress_test",
+            "clinical_dose_verified": False,
             "dose": {"value": float(dose_mg), "unit": "mg"},
             "population": {"species": "human", "group": "adult_healthy"},
         },

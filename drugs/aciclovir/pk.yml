@@ -86,8 +86,12 @@ value_provenance:
       to force agreement with terminal half-life.
     source_review_status: checked
     fixture_limitation_status: not_applicable
-    source_locator: DailyMed injection label, Clinical Pharmacology, Table 2, normal renal function (CrCl >80 mL/min/1.73 m2)
-    exact_quote: "Total Body Clearance ... 327"
+    source_locator: DailyMed injection label, Clinical Pharmacology, Table 2, normal
+      renal function (CrCl >80 mL/min/1.73 m2)
+    exact_quote: Total Body Clearance ... 327
+    selection:
+      rule: recorded_point_value
+      rationale: 327 mL/min/1.73 m2 * 60 min/h / 1000 mL/L
   V_abs_L_at_70kg:
     source_id: source_5
     source_field: IV_Vss_about_two_thirds_body_weight
@@ -110,7 +114,11 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed abstract
-    exact_quote: "The volume of distribution at steady state is about two-thirds of the body weight."
+    exact_quote: The volume of distribution at steady state is about two-thirds of
+      the body weight.
+    selection:
+      rule: recorded_point_value
+      rationale: (2/3) L/kg * 70 kg
   bioavailability_frac:
     source_id: source_1
     source_field: average_oral_bioavailability_range
@@ -121,17 +129,25 @@ value_provenance:
     normalized_unit: fraction
     conversion:
       method: derived_formula
-      formula: lower bound of reported average oral bioavailability range (10% to 20%)
+      formula: lower bound of reported average oral bioavailability range (10% to
+        20%)
       assumptions:
         range_summary: lower_bound
         dose_dependence: true
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: DailyMed source_1 reports average oral bioavailability of 10% to 20% and states that bioavailability decreases with increasing dose. The canonical F=0.1 is the lower-bound fixture value, not a dose-invariant clinical estimate.
+    reviewer_note: DailyMed source_1 reports average oral bioavailability of 10% to
+      20% and states that bioavailability decreases with increasing dose. The canonical
+      F=0.1 is the lower-bound fixture value, not a dose-invariant clinical estimate.
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: Clinical Pharmacology, Pharmacokinetics, Table 1
-    exact_quote: "Average oral bioavailability 10% to 20%"
+    exact_quote: Average oral bioavailability 10% to 20%
+    selection:
+      rule: lower_bound
+      rationale: lower bound of reported average oral bioavailability range (10% to
+        20%) Retained as an explicit legacy fixture choice, not a jointly fitted or
+        clinically qualified parameter set.
   t_half_h:
     source_id: source_1
     source_field: adult_half_life_range_normal_renal_function
@@ -155,4 +171,20 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: DailyMed tablet label, Clinical Pharmacology, Table 1
-    exact_quote: "Plasma elimination half-life 2.5 to 3.3 hr"
+    exact_quote: Plasma elimination half-life 2.5 to 3.3 hr
+    selection:
+      rule: lower_bound
+      rationale: lower bound of reported adult half-life range (2.5 to 3.3 h) Retained
+        as an explicit legacy fixture choice, not a jointly fitted or clinically qualified
+        parameter set.
+simulation_validity:
+  status: not_assessed
+  reasons: []
+fixture_limitations:
+- code: dose_dependent_bioavailability
+  statement: Oral bioavailability decreases with dose, and plasma concentrations rise
+    less than proportionally across the 200, 400 and 800 mg repeated-dose comparisons.
+    Fixed F1=0.1 does not reproduce this dose dependence.
+  source_id: source_1
+  source_locator: CLINICAL PHARMACOLOGY, Pharmacokinetics, Tables 1-2
+  checked_date: '2026-10-28'

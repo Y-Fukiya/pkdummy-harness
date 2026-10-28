@@ -15,8 +15,9 @@ pk_raw:
   clearance: 526 mL/min
   volume_of_distribution: null
   bioavailability: 44%
-  elimination_route: Hepatic CYP3A-mediated hydroxylation, then glucuronide conjugation; urinary excretion
-    mainly as metabolites, with only small amounts of unchanged triazolam.
+  elimination_route: Hepatic CYP3A-mediated hydroxylation, then glucuronide conjugation;
+    urinary excretion mainly as metabolites, with only small amounts of unchanged
+    triazolam.
 pk_parsed:
   half_life_h: 3.5
   half_life_h_range:
@@ -37,9 +38,10 @@ pk_parsed:
   clearance_basis: apparent
   volume_basis: apparent
   clearance_basis_source: confirmed
-  clearance_basis_note: 'Apparent basis reviewed against PubMed source_3: the 526 mL/min estimate is explicitly
-    oral clearance, so it is treated as CL/F rather than systemic CL. The volume is a fixture-derived
-    apparent volume from the selected CL and half-life and is not a directly observed Vd.'
+  clearance_basis_note: 'Apparent basis reviewed against PubMed source_3: the 526
+    mL/min estimate is explicitly oral clearance, so it is treated as CL/F rather
+    than systemic CL. The volume is a fixture-derived apparent volume from the selected
+    CL and half-life and is not a directly observed Vd.'
 derived:
   ke_1_per_h: 0.19804205158855578
   CL_abs_L_per_h_at_70kg: 31.560000000000002
@@ -50,10 +52,10 @@ derived:
   V_systemic_L_at_70kg: 70.11844145530176
   notes:
   - Systemic CL/V were derived as (apparent CL/V) * F (assumes values are CL/F, V/F).
-  - 'Basis detected/selected: apparent (CL/F, V/F). Model default can use CL_abs/V_abs as apparent and
-    set F1=1.'
-  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels typically report systemic
-    parameters.'
+  - 'Basis detected/selected: apparent (CL/F, V/F). Model default can use CL_abs/V_abs
+    as apparent and set F1=1.'
+  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
+    typically report systemic parameters.'
 value_provenance:
   CL_abs_L_per_h_at_70kg:
     source_id: source_3
@@ -69,13 +71,17 @@ value_provenance:
       assumptions: {}
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: PubMed Central source_3 reports mean oral clearance of 526 +/- 38 mL/min after a single
-      oral dose in 54 healthy young men. This is an apparent oral clearance estimate and is therefore
-      used with F1=1 in the apparent-basis fixture.
+    reviewer_note: PubMed Central source_3 reports mean oral clearance of 526 +/-
+      38 mL/min after a single oral dose in 54 healthy young men. This is an apparent
+      oral clearance estimate and is therefore used with F1=1 in the apparent-basis
+      fixture.
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: PMC source_3, Abstract
     exact_quote: oral clearance, 526 +/- 38 (175-1892) ml min-1
+    selection:
+      rule: recorded_point_value
+      rationale: 526 mL/min * 60 min/h / 1000 mL/L
   V_abs_L_at_70kg:
     source_id: source_3
     source_field: one_compartment_volume_derived_from_oral_CL_and_half_life
@@ -94,11 +100,18 @@ value_provenance:
         - source_3
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: Volume is not directly reported in the canonical sources. It is a transparent one-compartment
-      fixture derivation from the source-mapped oral clearance in source_3 and the selected midpoint of
-      the DailyMed half-life range in source_1; it must not be presented as an observed Vd.
+    reviewer_note: Volume is not directly reported in the canonical sources. It is
+      a transparent one-compartment fixture derivation from the source-mapped oral
+      clearance in source_3 and the selected midpoint of the DailyMed half-life range
+      in source_1; it must not be presented as an observed Vd.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: derived_value
+      rationale: CL_apparent / (ln(2) / selected_fixture_half_life)
+      depends_on:
+      - CL_abs_L_per_h_at_70kg
+      - t_half_h
   t_half_h:
     source_id: source_1
     source_field: mean_plasma_elimination_half_life_range
@@ -114,16 +127,24 @@ value_provenance:
         range_summary: midpoint
     role: check_only
     reviewer_status: checked
-    reviewer_note: DailyMed source_1 reports mean plasma elimination half-life of 1.5 to 5.5 h. The canonical
-      value retains the midpoint as a check-only fixture target; it is not used to recalibrate CL or V.
+    reviewer_note: DailyMed source_1 reports mean plasma elimination half-life of
+      1.5 to 5.5 h. The canonical value retains the midpoint as a check-only fixture
+      target; it is not used to recalibrate CL or V.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: range_midpoint
+      rationale: midpoint of DailyMed reported range (1.5 to 5.5 h) Retained as an
+        explicit legacy fixture choice, not a jointly fitted or clinically qualified
+        parameter set.
 simulation_validity:
+  source_correction_date: '2026-10-28'
   status: clinical_hold
   review_date: '2026-10-28'
   reasons:
-  - DailyMed source_4 section12.3 distinguishes CYP3A-mediated metabolism and glucuronide formation from
-    the subsequent urinary excretion of metabolites. Urinary recovery does not mean renal clearance of
-    unchanged triazolam.
-  - No numeric PK parameter changes were made in this correction. Apparent CL and derived one-compartment
-    volume remain a fixture and do not establish clinical model validity.
+  - DailyMed source_4 section12.3 distinguishes CYP3A-mediated metabolism and glucuronide
+    formation from the subsequent urinary excretion of metabolites. Urinary recovery
+    does not mean renal clearance of unchanged triazolam.
+  - No numeric PK parameter changes were made in this correction. Apparent CL and
+    derived one-compartment volume remain a fixture and do not establish clinical
+    model validity.

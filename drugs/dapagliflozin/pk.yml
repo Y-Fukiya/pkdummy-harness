@@ -59,7 +59,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: Clinical Pharmacology Review PDF, Table 24 (p. 74)
-    exact_quote: "CL (mL/min) ... Geom. Mean (CV %) NA 207 (23)"
+    exact_quote: CL (mL/min) ... Geom. Mean (CV %) NA 207 (23)
+    selection:
+      rule: recorded_point_value
+      rationale: 207 mL/min * 60 min/h / 1000 mL/L
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: IV_microdose_Vss
@@ -80,7 +83,11 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: Clinical Pharmacology Review PDF, p. 44
-    exact_quote: "After IV administration the volume of distribution of dapagliflozin is 118 L."
+    exact_quote: After IV administration the volume of distribution of dapagliflozin
+      is 118 L.
+    selection:
+      rule: recorded_point_value
+      rationale: FDA source_1 Table 24 reported Vss
   bioavailability_frac:
     source_id: source_1
     source_field: absolute_oral_bioavailability
@@ -97,11 +104,17 @@ value_provenance:
         study_design: 10 mg oral followed by 80 microgram IV microdose
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: FDA ClinPharm source_1 reports absolute bioavailability of 77.8% in the IV-microdose study. The normalized fixture value is 0.78; CL and V remain the systemic IV values.
+    reviewer_note: FDA ClinPharm source_1 reports absolute bioavailability of 77.8%
+      in the IV-microdose study. The normalized fixture value is 0.78; CL and V remain
+      the systemic IV values.
     source_review_status: checked
     fixture_limitation_status: acknowledged
-    source_locator: Clinical Pharmacology Review PDF, section 2.8.5, Table 24 (p. 74)
-    exact_quote: "The absolute bioavailability was 78%"
+    source_locator: Clinical Pharmacology Review PDF, section 2.8.5, Table 24 (p.
+      74)
+    exact_quote: The absolute bioavailability was 78%
+    selection:
+      rule: recorded_point_value
+      rationale: 77.8 percent / 100
   t_half_h:
     source_id: source_1
     source_field: oral_terminal_half_life
@@ -123,4 +136,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: Clinical Pharmacology Review PDF, Table 1 (p. 18)
-    exact_quote: "T1/2, hour ... 12.9 (5.54)"
+    exact_quote: T1/2, hour ... 12.9 (5.54)
+    selection:
+      rule: recorded_point_value
+      rationale: FDA source_1 reported oral terminal t1/2
+simulation_validity:
+  status: not_assessed
+  reasons: []

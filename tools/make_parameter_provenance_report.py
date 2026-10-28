@@ -20,9 +20,22 @@ from typing import Any, Iterable
 
 import yaml
 
+try:
+    from simulation_assessment import assess_fixture
+except ModuleNotFoundError:
+    from tools.simulation_assessment import assess_fixture
+
 
 REPORT_VERSION = "1.0"
 CSV_FIELDS = [
+    "clinical_assessment",
+    "dose_purpose",
+    "clinical_dose_verified",
+    "execution_arms",
+    "half_life_ratio",
+    "hold_candidate",
+    "selection_rule",
+    "selection_rationale",
     "record_type",
     "drug",
     "drug_id",
@@ -185,6 +198,8 @@ def _provenance_fields(
         "conversion_formula": _text(_path_value(entry, "conversion.formula")),
         "assumptions": _text(_path_value(entry, "conversion.assumptions")),
         "source_verification_status": _text(source_verification.get("status")),
+        "selection_rule": _text(_path_value(entry, "selection.rule")),
+        "selection_rationale": _text(_path_value(entry, "selection.rationale")),
     }
 
 
@@ -536,6 +551,17 @@ def _build_rows(root: Path, selected_drugs: set[str] | None = None) -> tuple[lis
             drug_rows.extend(_model_rows(slug=slug, pk=pk, spec=spec, spec_path=spec_path, source_map=source_map))
             drug_rows.extend(_variability_rows(slug=slug, pk=pk, spec=spec, spec_path=spec_path))
         drug_rows.extend(_target_rows(slug=slug, pk=pk, targets=targets, spec_path=spec_path))
+        assessment = assess_fixture(pk, spec, targets)
+        check = assessment["half_life_check"]
+        for row in drug_rows:
+            row.update({
+                "clinical_assessment": _text((pk.get("simulation_validity") or {}).get("status") or "not_assessed"),
+                "dose_purpose": _text(assessment["dose_context"]["purpose"] or "not_assessed"),
+                "clinical_dose_verified": _text(assessment["dose_context"]["clinical_dose_verified"]),
+                "execution_arms": _text(assessment["dose_context"]["arms"]),
+                "half_life_ratio": _text(check["ratio"]),
+                "hold_candidate": _text(check["hold_candidate"]),
+            })
         parameter_rows.extend(drug_rows)
         mapped = sum(1 for row in drug_rows if row["source_mapping_status"] == "checked")
         summary_rows.append(
@@ -575,6 +601,8 @@ def _write_markdown(path: Path, parameter_rows: list[dict[str, str]], source_row
         "# PK fixture parameter provenance inventory",
         "",
         "この一覧は `drugs/*/pk.yml`、`targets.yml`、`spec_pk1_*.yml` を読み取り、値の由来を確認するための監査用出力です。ソースURLが存在することだけでは、URL内のどの記載が特定の値に対応するかを証明しません。`reference_status` を必ず確認してください。",
+        "",
+        "全投与設定は計算用ストレス試験です。CSVのclinical_assessmentは臨床モデル評価、hold_candidateは半減期の自動候補で、どちらも出典照合済み表示とは別です。execution_armsは実行specの投与量で、常用量の案内ではありません。",
         "",
         "## 読み方",
         "",

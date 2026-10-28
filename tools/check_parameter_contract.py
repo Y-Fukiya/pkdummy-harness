@@ -18,9 +18,11 @@ from typing import Any
 import yaml
 
 try:
+    from simulation_assessment import validate_fixture_context
     from regen_check import build_index_text
     from template_gen import derive_quantities, normalize_route
 except ModuleNotFoundError:  # supports package imports in tests
+    from tools.simulation_assessment import validate_fixture_context
     from tools.regen_check import build_index_text
     from tools.template_gen import derive_quantities, normalize_route
 
@@ -94,6 +96,7 @@ def check_source_contract(root: Path) -> list[str]:
             continue
         spec = yaml.safe_load(specs[0].read_text(encoding="utf-8")) or {}
         targets = yaml.safe_load(target_path.read_text(encoding="utf-8")) or {}
+        issues.extend(f"{slug}: {issue}" for issue in validate_fixture_context(pk, spec, targets))
         for field, value in (
             ("regimen.route", (spec.get("regimen") or {}).get("route")),
             ("scenario.route", (targets.get("scenario") or {}).get("route")),

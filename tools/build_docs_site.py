@@ -14,8 +14,10 @@ from urllib.parse import parse_qs, urlparse
 import yaml
 
 try:
+    from simulation_assessment import assess_fixture
     from pharmacology_review import review_library
 except ModuleNotFoundError:  # pragma: no cover - supports package imports in tests
+    from tools.simulation_assessment import assess_fixture
     from tools.pharmacology_review import review_library
 
 
@@ -549,7 +551,9 @@ def build_drug(
     return clean(
         {
             "slug": drug_dir.name,
-            "simulation_validity": pk.get("simulation_validity") or {},
+            "simulation_validity": pk.get("simulation_validity") or {"status": "not_assessed", "reasons": []},
+            "fixture_assessment": assess_fixture(pk, spec, targets),
+            "fixture_limitations": pk.get("fixture_limitations") or [],
             "id": pk.get("id"),
             "name": pk.get("name") or drug_dir.name,
             "route": route,

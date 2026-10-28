@@ -61,7 +61,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: DailyMed label, Clinical Pharmacology, pharmacokinetics
-    exact_quote: "average plasma clearance of 5 mL/kg/min"
+    exact_quote: average plasma clearance of 5 mL/kg/min
+    selection:
+      rule: recorded_point_value
+      rationale: 5 mL/kg/min * 70 kg * 60 min/h / 1000 mL/L
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: apparent_volume_of_distribution_range
@@ -84,7 +87,12 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: DailyMed label, Clinical Pharmacology, pharmacokinetics
-    exact_quote: "apparent volume of distribution of 0.4 to 1 L/kg"
+    exact_quote: apparent volume of distribution of 0.4 to 1 L/kg
+    selection:
+      rule: upper_bound
+      rationale: upper bound of reported apparent volume range (1 L/kg) * 70 kg Retained
+        as an explicit legacy fixture choice, not a jointly fitted or clinically qualified
+        parameter set.
   t_half_h:
     source_id: source_1
     source_field: terminal_elimination_half_life_range
@@ -106,3 +114,11 @@ value_provenance:
       half-life in this deterministic one-compartment fixture.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: range_midpoint
+      rationale: mean of reported 90-111 min range / 60 min/h Retained as an explicit
+        legacy fixture choice, not a jointly fitted or clinically qualified parameter
+        set.
+simulation_validity:
+  status: not_assessed
+  reasons: []

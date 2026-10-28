@@ -8,13 +8,16 @@ sources:
   url: https://pubchem.ncbi.nlm.nih.gov/compound/Verapamil
 - id: source_3
   url: https://pubmed.ncbi.nlm.nih.gov/432439/
+- id: source_4
+  url: https://pubmed.ncbi.nlm.nih.gov/6508982/
 pk_raw:
   half_life: 2.8-7.4 hours (単回投与)
   clearance: 'Primary IV healthy-subject study: total body clearance 500.64 mL/min;
     legacy repeated-dose R/S values 340/664 mL/min are retained only as context'
   volume_of_distribution: 'Primary IV healthy-subject study: Vd(area) 2.51 L/kg; legacy
     repeated-dose R/S values 300/500 L are retained only as context'
-  bioavailability: 22.47% in the primary six-subject IV/oral study; label range 20-35% retained as context
+  bioavailability: 22.47% in the primary six-subject IV/oral study; label range 20-35%
+    retained as context
   elimination_route: 肝代謝、腎排泄、糞便排泄
 pk_parsed:
   half_life_h: 5.1
@@ -72,7 +75,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed abstract
-    exact_quote: "body clearance (C1b) showed 500.64 ml/min"
+    exact_quote: body clearance (C1b) showed 500.64 ml/min
+    selection:
+      rule: recorded_point_value
+      rationale: 500.64 mL/min * 60 min/h / 1000 mL/L
   V_abs_L_at_70kg:
     source_id: source_3
     source_field: IV_Vd_area
@@ -94,7 +100,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed abstract
-    exact_quote: "The apparent volume of distribution [Vd (area)] showed 2.51 1/kg"
+    exact_quote: The apparent volume of distribution [Vd (area)] showed 2.51 1/kg
+    selection:
+      rule: recorded_point_value
+      rationale: 2.51 L/kg * 70 kg
   bioavailability_frac:
     source_id: source_3
     source_field: oral_absolute_bioavailability
@@ -112,11 +121,17 @@ value_provenance:
         formulation_context: immediate_release_oral
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: PubMed source_3 reports mean oral bioavailability of 22.47% in six healthy subjects who received 120 mg orally and 10 mg intravenously. This primary-study value is selected over the broader label range of 20-35%; repeated dosing and formulation effects are not represented.
+    reviewer_note: PubMed source_3 reports mean oral bioavailability of 22.47% in
+      six healthy subjects who received 120 mg orally and 10 mg intravenously. This
+      primary-study value is selected over the broader label range of 20-35%; repeated
+      dosing and formulation effects are not represented.
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed abstract, oral administration paragraph
-    exact_quote: "The bioavailability was only 22.47% on an average."
+    exact_quote: The bioavailability was only 22.47% on an average.
+    selection:
+      rule: recorded_point_value
+      rationale: 22.47 percent / 100
   t_half_h:
     source_id: source_1
     source_field: terminal_half_life_range_single_dose
@@ -141,4 +156,28 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: DailyMed label, Pharmacokinetics and metabolism
-    exact_quote: "The mean elimination half-life in single-dose studies ranged from 2.8 to 7.4 hours."
+    exact_quote: The mean elimination half-life in single-dose studies ranged from
+      2.8 to 7.4 hours.
+    selection:
+      rule: range_midpoint
+      rationale: midpoint of reported single-dose terminal half-life range (2.8 to
+        7.4 h) Retained as an explicit legacy fixture choice, not a jointly fitted
+        or clinically qualified parameter set.
+simulation_validity:
+  status: not_assessed
+  reasons: []
+fixture_limitations:
+- code: first_pass_and_repeat_dosing
+  statement: The label describes extensive first-pass metabolism, a nonlinear dose-concentration
+    relationship and a longer half-life with repeated dosing. A single fixed CL/V/F
+    does not express these changes.
+  source_id: source_1
+  source_locator: CLINICAL PHARMACOLOGY, Pharmacokinetics and metabolism
+  checked_date: '2026-10-28'
+- code: stereoselective_first_pass
+  statement: Human data demonstrate stereoselective first-pass metabolism. This racemic
+    single-compartment fixture does not separate R/S enantiomers or their different
+    oral disposition.
+  source_id: source_4
+  source_locator: Abstract
+  checked_date: '2026-10-28'

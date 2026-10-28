@@ -61,6 +61,8 @@ value_provenance:
       formula: upper bound of reported clearance range (1.5 L/min) * 60 min/h
       assumptions:
         range_summary: upper_bound
+        clearance_matrix: blood
+        plasma_conversion: not_established
     role: simulation_parameter
     reviewer_status: checked
     reviewer_note: PubMed source_2 reports mean total clearance from blood of 1 to
@@ -70,7 +72,12 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: PubMed abstract
-    exact_quote: "Mean total clearance from the blood is 1 to 1.5 L/min"
+    exact_quote: Mean total clearance from the blood is 1 to 1.5 L/min
+    selection:
+      rule: upper_bound
+      rationale: upper bound of reported clearance range (1.5 L/min) * 60 min/h Retained
+        as an explicit legacy fixture choice, not a jointly fitted or clinically qualified
+        parameter set.
   V_abs_L_at_70kg:
     source_id: source_2
     source_field: volume_of_distribution
@@ -92,7 +99,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: PubMed abstract
-    exact_quote: "The volume of distribution of felodipine is about 10 L/kg"
+    exact_quote: The volume of distribution of felodipine is about 10 L/kg
+    selection:
+      rule: recorded_point_value
+      rationale: pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs
   bioavailability_frac:
     source_id: source_2
     source_field: oral_systemic_bioavailability
@@ -109,11 +119,17 @@ value_provenance:
         route_context: oral
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: PubMed source_2 reports that first-pass degradation reduces the amount reaching systemic circulation to about 15%. The fixture uses this oral systemic availability with IV-derived systemic CL/V.
+    reviewer_note: PubMed source_2 reports that first-pass degradation reduces the
+      amount reaching systemic circulation to about 15%. The fixture uses this oral
+      systemic availability with IV-derived systemic CL/V.
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed abstract
-    exact_quote: "the amount reaching the systemic circulation is reduced to about 15%"
+    exact_quote: the amount reaching the systemic circulation is reduced to about
+      15%
+    selection:
+      rule: recorded_point_value
+      rationale: 15 percent / 100
   t_half_h:
     source_id: source_2
     source_field: mean_elimination_half_life
@@ -138,4 +154,24 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed abstract
-    exact_quote: "The mean elimination half-life of felodipine is approximately 25h."
+    exact_quote: The mean elimination half-life of felodipine is approximately 25h.
+    selection:
+      rule: legacy_fixture_value
+      rationale: fixture midpoint of local 24-25 h range, source-confirmed as approximately
+        25 h Retained as an explicit legacy fixture choice, not a jointly fitted or
+        clinically qualified parameter set. The source reports approximately 25 h,
+        not an exact 24.5 h; 24-25 h is the older local summary.
+simulation_validity:
+  status: clinical_hold
+  reasons:
+  - The source reports blood clearance, but this fixture projects plasma concentrations
+    without a verified blood-to-plasma conversion.
+fixture_limitations:
+- code: blood_plasma_matrix_unresolved
+  statement: The source review reports total blood clearance 1-1.5 L/min, whereas
+    the fixture is interpreted as plasma concentration. The retained 90 L/h is the
+    upper blood-clearance bound, not a verified plasma clearance. No blood/plasma
+    ratio has been established for conversion.
+  source_id: source_2
+  source_locator: Abstract, total clearance from blood and three-phase plasma decline
+  checked_date: '2026-10-28'

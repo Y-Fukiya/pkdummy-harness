@@ -66,7 +66,11 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: DailyMed label, Clinical Pharmacology, Pharmacokinetics
-    exact_quote: "Itraconazole mean total plasma clearance following intravenous administration is 278 mL/min."
+    exact_quote: Itraconazole mean total plasma clearance following intravenous administration
+      is 278 mL/min.
+    selection:
+      rule: recorded_point_value
+      rationale: 278 mL/min * 60 min/h / 1000 mL/L
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: large_apparent_volume_of_distribution
@@ -88,7 +92,12 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: DailyMed label, Clinical Pharmacology, Distribution
-    exact_quote: "a large apparent volume in the body (>700 L)"
+    exact_quote: a large apparent volume in the body (>700 L)
+    selection:
+      rule: censored_lower_bound
+      rationale: lower bound of reported apparent volume (>700 L) Retained as an explicit
+        legacy fixture choice, not a jointly fitted or clinically qualified parameter
+        set.
   bioavailability_frac:
     source_id: source_1
     source_field: observed_absolute_oral_bioavailability
@@ -105,11 +114,18 @@ value_provenance:
         fed_context: immediately_after_full_meal
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: DailyMed source_1 reports observed absolute oral bioavailability of about 55% for itraconazole capsules and states that it is maximal immediately after a full meal. The fixture does not generalize this value to oral solution, fasting, or immunocompromised populations.
+    reviewer_note: DailyMed source_1 reports observed absolute oral bioavailability
+      of about 55% for itraconazole capsules and states that it is maximal immediately
+      after a full meal. The fixture does not generalize this value to oral solution,
+      fasting, or immunocompromised populations.
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: DailyMed label, Clinical Pharmacology, Absorption
-    exact_quote: "The observed absolute oral bioavailability of itraconazole is about 55%."
+    exact_quote: The observed absolute oral bioavailability of itraconazole is about
+      55%.
+    selection:
+      rule: recorded_point_value
+      rationale: 55 percent / 100
   t_half_h:
     source_id: source_1
     source_field: terminal_half_life_single_dose_range
@@ -134,4 +150,13 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: DailyMed label, Clinical Pharmacology, Pharmacokinetics
-    exact_quote: "The terminal half-life of itraconazole generally ranges from 16 to 28 hours after single dose"
+    exact_quote: The terminal half-life of itraconazole generally ranges from 16 to
+      28 hours after single dose
+    selection:
+      rule: range_midpoint
+      rationale: midpoint of reported single-dose terminal half-life range (16 to
+        28 h) Retained as an explicit legacy fixture choice, not a jointly fitted
+        or clinically qualified parameter set.
+simulation_validity:
+  status: not_assessed
+  reasons: []

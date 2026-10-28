@@ -17,6 +17,7 @@ def make_library(root: Path) -> Path:
     folder.mkdir(parents=True)
     pk = {
         "name": "Omeprazole", "route_inferred": "po",
+        "simulation_validity": {"status": "not_assessed", "reasons": []},
         "sources": [{"id": "source_1", "url": "https://pubmed.ncbi.nlm.nih.gov/2315973/"}],
         "pk_parsed": {
             "clearance": {"value": 37.44, "unit": "L/h"},
@@ -38,11 +39,13 @@ def make_library(root: Path) -> Path:
                 "raw_value": 624, "raw_unit": "mL/min",
                 "normalized_value": 37.44, "normalized_unit": "L/h",
                 "conversion": {"method": "unit_conversion"},
+                "selection": {"rule": "recorded_point_value", "rationale": "Reported 624 mL/min scaled to L/h."},
             },
             "V_abs_L_at_70kg": {
                 "raw_value": 0.23, "raw_unit": "L/kg",
                 "normalized_value": 16.1, "normalized_unit": "L",
                 "conversion": {"method": "body_weight_scaled", "assumptions": {"weight_ref_kg_for_abs": 70}},
+                "selection": {"rule": "recorded_point_value", "rationale": "Reported Vss scaled to 70 kg."},
             },
         },
     }
@@ -50,7 +53,7 @@ def make_library(root: Path) -> Path:
         "regimen": {"route": "oral", "units": {"dose": "mg"}, "arms": {"A": {"n": 1, "dose_mg": 20}}},
         "model": {"theta": {"CL": 37.44, "V": 16.1, "KA": 1.2, "F1": 0.35}},
     }
-    targets = {"scenario": {"route": "po"}, "targets": {"t_half": {"value": 0.75}}}
+    targets = {"scenario": {"route": "po", "purpose": "computational_stress_test", "clinical_dose_verified": False, "dose": {"value": 20, "unit": "mg"}}, "targets": {"t_half": {"value": 0.75}}}
     for name, value in (("pk.yml", pk), ("spec_pk1_oral.yml", spec), ("targets.yml", targets)):
         (folder / name).write_text(yaml.safe_dump(value), encoding="utf-8")
     (root / "INDEX.csv").write_text(build_index_text(root), encoding="utf-8")
@@ -194,6 +197,7 @@ def test_unrelated_provenance_is_not_bound_to_selected_clearance(tmp_path: Path)
         "raw_value": 1.0, "raw_unit": "L/h",
         "normalized_value": 1.0, "normalized_unit": "L/h",
         "role": "check_only", "conversion": {"method": "direct"},
+        "selection": {"rule": "recorded_point_value", "rationale": "Independent historical study value."},
     }
     (folder / "pk.yml").write_text(yaml.safe_dump(pk))
     assert check_contract(tmp_path, check_atlas=False) == []

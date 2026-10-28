@@ -67,7 +67,13 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: PubMed abstract
-    exact_quote: "clearance of 0.7 to 1.5 ml/min/kg"
+    exact_quote: clearance of 0.7 to 1.5 ml/min/kg
+    selection:
+      rule: upper_bound
+      rationale: 1.5 mL/min/kg * 60 min/h / 1000 mL/L * 70 kg Retained as an explicit
+        legacy fixture choice, not a jointly fitted or clinically qualified parameter
+        set. Existing source summary selects the upper bound; half-life uses a separate
+        midpoint.
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: oral_volume_of_distribution_after_single_1_mg_dose
@@ -90,7 +96,12 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: PubMed abstract
-    exact_quote: "volume of distribution of 0.8 to 1.3 L/kg"
+    exact_quote: volume of distribution of 0.8 to 1.3 L/kg
+    selection:
+      rule: upper_bound
+      rationale: 1.3 L/kg * 70 kg Retained as an explicit legacy fixture choice, not
+        a jointly fitted or clinically qualified parameter set. Existing source summary
+        selects the upper bound; half-life uses a separate midpoint.
   t_half_h:
     source_id: source_1
     source_field: oral_elimination_half_life_after_single_1_mg_dose
@@ -111,3 +122,10 @@ value_provenance:
       force CL/F or V/F agreement.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: range_midpoint
+      rationale: midpoint of reported 9-16 h range Retained as an explicit legacy
+        fixture choice, not a jointly fitted or clinically qualified parameter set.
+simulation_validity:
+  status: not_assessed
+  reasons: []

@@ -1,4 +1,6 @@
 scenario:
+  purpose: computational_stress_test
+  clinical_dose_verified: false
   id: abciximab_dose100mg_iv_single
   route: iv
   regimen: single

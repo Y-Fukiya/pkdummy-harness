@@ -63,7 +63,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: PMC source_2, Table 3, Population pharmacokinetic parameter estimates
-    exact_quote: "CL/F (liters/h) 12.9"
+    exact_quote: CL/F (liters/h) 12.9
+    selection:
+      rule: recorded_point_value
+      rationale: pk_parsed.clearance.value
   V_abs_L_at_70kg:
     source_id: source_2
     source_field: oral_volume_V_over_F
@@ -85,7 +88,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: PMC source_2, Table 3, Population pharmacokinetic parameter estimates
-    exact_quote: "V/F (liters) 88.3"
+    exact_quote: V/F (liters) 88.3
+    selection:
+      rule: recorded_point_value
+      rationale: pk_parsed.volume.value
   t_half_h:
     source_id: source_2
     source_field: elimination_half_life_without_ritonavir
@@ -107,4 +113,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PMC source_2, Results, covariate effect of ritonavir
-    exact_quote: "increasing the ATV elimination half-life from 4.6 h to 8.8 h"
+    exact_quote: increasing the ATV elimination half-life from 4.6 h to 8.8 h
+    selection:
+      rule: recorded_point_value
+      rationale: pk_parsed.half_life_h
+simulation_validity:
+  status: not_assessed
+  reasons: []

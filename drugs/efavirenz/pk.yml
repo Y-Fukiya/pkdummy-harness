@@ -68,7 +68,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed source_2, Abstract, Results
-    exact_quote: "Typical oral clearance (CL/F) was 13.9 L/h"
+    exact_quote: Typical oral clearance (CL/F) was 13.9 L/h
+    selection:
+      rule: recorded_point_value
+      rationale: source_2 reported typical oral CL/F
   V_abs_L_at_70kg:
     source_id: source_2
     source_field: one_compartment_volume_derived_from_oral_CL_over_F_and_terminal_half_life
@@ -89,6 +92,12 @@ value_provenance:
       half-life representative; it is not a directly reported efavirenz V/F value.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: derived_value
+      rationale: CL_apparent_L_per_h_at_70kg * half_life_h / ln(2)
+      depends_on:
+      - CL_abs_L_per_h_at_70kg
+      - t_half_h
   t_half_h:
     source_id: source_1
     source_field: oral_terminal_half_life_single_dose_range
@@ -112,3 +121,26 @@ value_provenance:
       context and must not be generalized to repeated dosing.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: legacy_fixture_value
+      rationale: single-dose range is retained; current 58 h is the fixture representative
+        Retained as an explicit legacy fixture choice, not a jointly fitted or clinically
+        qualified parameter set. 58 h is not the midpoint (64 h) of 52-76 h.
+simulation_validity:
+  status: not_assessed
+  reasons: []
+fixture_limitations:
+- code: autoinduction_and_mixed_dosing_context
+  statement: The label reports metabolic autoinduction and half-life 52-76 h after
+    a single dose versus 40-55 h after multiple doses. The retained 58 h is a legacy
+    selection within the single-dose range, not its midpoint.
+  source_id: source_1
+  source_locator: 12.3 Metabolism and Elimination
+  checked_date: '2026-10-28'
+- code: mixed_population_parameters
+  statement: CL/F=13.9 L/h comes from 89 HIV patients treated with 600 mg once daily.
+    Combining it with the selected single-dose half-life to derive V/F mixes populations
+    and dosing stages; this fixture does not reproduce that PopPK study.
+  source_id: source_2
+  source_locator: Abstract, Methodology and Results
+  checked_date: '2026-10-28'

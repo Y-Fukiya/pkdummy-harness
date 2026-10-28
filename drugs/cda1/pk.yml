@@ -65,7 +65,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: PMC source_2, Table 2, CL column, 1.0 mg/kg cohort
-    exact_quote: "0.0014 (0.0010, 0.0019)"
+    exact_quote: 0.0014 (0.0010, 0.0019)
+    selection:
+      rule: recorded_point_value
+      rationale: 0.0014 mL/min/kg * 60 min/h / 1000 mL/L * 70 kg
   V_abs_L_at_70kg:
     source_id: source_2
     source_field: table_2_median_volume_of_distribution
@@ -88,7 +91,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: PMC source_2, Table 2, Vd column, 0.3 mg/kg cohort
-    exact_quote: "0.070 (0.064, 0.081)"
+    exact_quote: 0.070 (0.064, 0.081)
+    selection:
+      rule: recorded_point_value
+      rationale: 0.070 L/kg * 70 kg
   t_half_h:
     source_id: source_1
     source_field: geometric_mean_half_life_range
@@ -105,10 +111,18 @@ value_provenance:
     role: check_only
     reviewer_status: checked
     reviewer_note: PubMed source_1 reports geometric mean CDA1 half-lives of 25.3
-      to 31.8 days. The fixture uses that single reported geometric-mean range as a
-      check-only context summary and does not mix it with dose-specific median values
+      to 31.8 days. The fixture uses that single reported geometric-mean range as
+      a check-only context summary and does not mix it with dose-specific median values
       from the full text or use it to force CL/V agreement.
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed abstract
-    exact_quote: "geometric mean values of the half-life of CDA1 ranged between 25.3 and 31.8 days"
+    exact_quote: geometric mean values of the half-life of CDA1 ranged between 25.3
+      and 31.8 days
+    selection:
+      rule: range_midpoint
+      rationale: fixture midpoint 28.55 days * 24 h/day Retained as an explicit legacy
+        fixture choice, not a jointly fitted or clinically qualified parameter set.
+simulation_validity:
+  status: not_assessed
+  reasons: []

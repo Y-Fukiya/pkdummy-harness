@@ -64,7 +64,14 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: PubMed abstract
-    exact_quote: "total body clearance and renal clearance in adults have ranged from 29.2 to 58.1 L/h and 6.7 to 12.8 L/h, respectively."
+    exact_quote: total body clearance and renal clearance in adults have ranged from
+      29.2 to 58.1 L/h and 6.7 to 12.8 L/h, respectively.
+    selection:
+      rule: upper_bound
+      rationale: pk_parsed.clearance.value Retained as an explicit legacy fixture
+        choice, not a jointly fitted or clinically qualified parameter set. 58.1 L/h
+        is the upper bound of the captured 29.2-58.1 L/h range; half-life 5 h is a
+        separate range midpoint.
   V_abs_L_at_70kg:
     source_id: source_3
     source_field: apparent_volume_of_distribution
@@ -85,7 +92,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: Antimicrobial Agents and Chemotherapy, lines 165-166 / Table 1
-    exact_quote: "the apparent volume of distribution of clarithromycin was 172 liters"
+    exact_quote: the apparent volume of distribution of clarithromycin was 172 liters
+    selection:
+      rule: recorded_point_value
+      rationale: pk_parsed.volume.value
   t_half_h:
     source_id: source_1
     source_field: terminal_half_life_range
@@ -109,4 +119,22 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: DailyMed label, Metabolism and Elimination section
-    exact_quote: "The elimination half-life of clarithromycin was about 3 hours to 4 hours"
+    exact_quote: The elimination half-life of clarithromycin was about 3 hours to
+      4 hours
+    selection:
+      rule: range_midpoint
+      rationale: midpoint of reported terminal half-life range (3 to 7 h) Retained
+        as an explicit legacy fixture choice, not a jointly fitted or clinically qualified
+        parameter set.
+simulation_validity:
+  status: not_assessed
+  reasons: []
+fixture_limitations:
+- code: dose_dependent_pk
+  statement: The label reports mildly nonlinear kinetics, with half-life about 3-4
+    h at 250 mg every 12 h and 5-7 h at 500 mg every 8-12 h. Fixed CL/V and the selected
+    5 h value do not reproduce dose dependence or the 14-OH metabolite; renal clearance
+    is comparatively dose independent.
+  source_id: source_1
+  source_locator: CLINICAL PHARMACOLOGY, Pharmacokinetics
+  checked_date: '2026-10-28'

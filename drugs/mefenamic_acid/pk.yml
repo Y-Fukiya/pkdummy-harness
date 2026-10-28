@@ -63,7 +63,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: DailyMed source_1, Table 1, Normal Healthy Adults (18 to 45 yr)
-    exact_quote: "Oral clearance (L/hr) 21.13"
+    exact_quote: Oral clearance (L/hr) 21.13
+    selection:
+      rule: recorded_point_value
+      rationale: pk_parsed.clearance.value
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: apparent_volume_Vz_over_F_in_normal_healthy_adults
@@ -86,7 +89,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: DailyMed source_1, Table 1, Normal Healthy Adults (18 to 45 yr)
-    exact_quote: "Apparent volume of distribution; Vz/F (L/kg) 1.06"
+    exact_quote: Apparent volume of distribution; Vz/F (L/kg) 1.06
+    selection:
+      rule: recorded_point_value
+      rationale: 1.06 L/kg * 70 kg
   t_half_h:
     source_id: source_1
     source_field: oral_half_life_in_normal_healthy_adults
@@ -106,3 +112,10 @@ value_provenance:
       adults. The midpoint is check-only and is not used to force CL/V agreement.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: range_midpoint
+      rationale: midpoint of reported 2-4 h range Retained as an explicit legacy fixture
+        choice, not a jointly fitted or clinically qualified parameter set.
+simulation_validity:
+  status: not_assessed
+  reasons: []

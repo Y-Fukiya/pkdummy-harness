@@ -1,0 +1,126 @@
+drug,parameter,rule,rationale,depends_on,raw_value,raw_unit,normalized_value,normalized_unit,source_id
+abciximab,CL_abs_L_per_h_at_70kg,recorded_point_value,183 mL/min * 60 min/h / 1000 mL/L,[],183,mL/min,10.98,L/h,source_2
+abciximab,V_abs_L_at_70kg,recorded_point_value,pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs,[],1.44,L/kg,100.8,L,source_6
+abciximab,t_half_h,range_midpoint,"((20 min + 30 min) / 2) / 60 min/h Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],20-30,min,0.4166666666666667,h,source_5
+aciclovir,CL_abs_L_per_h_at_70kg,recorded_point_value,327 mL/min/1.73 m2 * 60 min/h / 1000 mL/L,[],327,mL/min/1.73 m2,19.62,L/h,source_4
+aciclovir,V_abs_L_at_70kg,recorded_point_value,(2/3) L/kg * 70 kg,[],0.6666666666666666,L/kg,46.666666666666664,L,source_5
+aciclovir,bioavailability_frac,lower_bound,"lower bound of reported average oral bioavailability range (10% to 20%) Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],10-20,percent,0.1,fraction,source_1
+aciclovir,t_half_h,lower_bound,"lower bound of reported adult half-life range (2.5 to 3.3 h) Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],2.5-3.3,h,2.5,h,source_1
+albuterol,CL_abs_L_per_h_at_70kg,recorded_point_value,480 mL/min * 60 min/h / 1000 mL/L,[],480,mL/min,28.8,L/h,source_1
+albuterol,V_abs_L_at_70kg,derived_value,CL_abs_L_per_h_at_70kg * t_half_h / ln(2),"[""CL_abs_L_per_h_at_70kg"", ""t_half_h""]",480,mL/min with t1/2 3.86 h,160.38152230554428,L,source_1
+albuterol,t_half_h,recorded_point_value,pk_parsed.half_life_h,[],3.86,h,3.86,h,source_1
+alfentanil,CL_abs_L_per_h_at_70kg,recorded_point_value,5 mL/kg/min * 70 kg * 60 min/h / 1000 mL/L,[],5.0,mL/kg/min,21.0,L/h,source_1
+alfentanil,V_abs_L_at_70kg,upper_bound,"upper bound of reported apparent volume range (1 L/kg) * 70 kg Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],0.4-1.0,L/kg,70.0,L,source_1
+alfentanil,t_half_h,range_midpoint,"mean of reported 90-111 min range / 60 min/h Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],90-111,min,1.675,h,source_1
+alprazolam,CL_abs_L_per_h_at_70kg,upper_bound,"1.5 mL/min/kg * 60 min/h / 1000 mL/L * 70 kg Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set. Existing source summary selects the upper bound; half-life uses a separate midpoint.",[],1.5,mL/min/kg,6.3,L/h,source_1
+alprazolam,V_abs_L_at_70kg,upper_bound,"1.3 L/kg * 70 kg Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set. Existing source summary selects the upper bound; half-life uses a separate midpoint.",[],1.3,L/kg,91.0,L,source_1
+alprazolam,t_half_h,range_midpoint,"midpoint of reported 9-16 h range Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],9-16,h,12.5,h,source_1
+amikacin,CL_abs_L_per_h_at_70kg,recorded_point_value,100 mL/min * 60 min/h / 1000 mL/L,[],100.0,mL/min,6.0,L/h,source_1
+amikacin,V_abs_L_at_70kg,recorded_point_value,pk_parsed.volume.value,[],24.0,L,24.0,L,source_1
+amikacin,t_half_h,legacy_fixture_value,"reported ""slightly over 2 hours"" retained as 2.0 h fixture value Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],slightly over 2,h,2.0,h,source_1
+apixaban,CL_abs_L_per_h_at_70kg,recorded_point_value,reported value,[],3.3,L/h,3.3,L/h,source_1
+apixaban,V_abs_L_at_70kg,recorded_point_value,reported value,[],21,L,21,L,source_1
+apixaban,t_half_h,recorded_point_value,pk_parsed.half_life_h,[],12.0,h,12.0,h,source_1
+apixaban,bioavailability_frac,recorded_point_value,50 / 100,[],50,percent,0.5,fraction,source_1
+atazanavir,CL_abs_L_per_h_at_70kg,recorded_point_value,pk_parsed.clearance.value,[],12.9,L/h,12.9,L/h,source_2
+atazanavir,V_abs_L_at_70kg,recorded_point_value,pk_parsed.volume.value,[],88.3,L,88.3,L,source_2
+atazanavir,t_half_h,recorded_point_value,pk_parsed.half_life_h,[],4.6,h,4.6,h,source_2
+buprenorphine,CL_abs_L_per_h_at_70kg,recorded_point_value,source_2 reported IV clearance,[],54.0,L/h,54.0,L/h,source_2
+buprenorphine,V_abs_L_at_70kg,recorded_point_value,source_2 reported IV Vd,[],806.0,L,806.0,L,source_2
+buprenorphine,t_half_h,derived_value,ln(2) * V / CL = ln(2) * 806 L / 54 L/h,"[""CL_abs_L_per_h_at_70kg"", ""V_abs_L_at_70kg""]",54.0,L/h,10.345863472802147,h,source_2
+carbamazepine,CL_abs_L_per_h_at_70kg,recorded_point_value,80 mL/min * 60 min/h / 1000 mL/L,[],80,mL/min,4.8,L/h,source_1
+carbamazepine,V_abs_L_at_70kg,derived_value,CL_apparent_L_per_h_at_70kg * half_life_h / ln(2),"[""CL_abs_L_per_h_at_70kg"", ""t_half_h""]",80,mL/min,100.41157484587185,L,source_1
+carbamazepine,t_half_h,range_midpoint,"(12 h + 17 h) / 2 Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],12-17,h,14.5,h,source_1
+cda1,CL_abs_L_per_h_at_70kg,recorded_point_value,0.0014 mL/min/kg * 60 min/h / 1000 mL/L * 70 kg,[],0.0014,mL/min/kg,0.00588,L/h,source_2
+cda1,V_abs_L_at_70kg,recorded_point_value,0.070 L/kg * 70 kg,[],0.07,L/kg,4.9,L,source_2
+cda1,t_half_h,range_midpoint,"fixture midpoint 28.55 days * 24 h/day Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],25.3-31.8,days,685.2,h,source_1
+cimetidine,CL_abs_L_per_h_at_70kg,recorded_point_value,495 mL/min * 60 min/h / 1000 mL/L,[],495,mL/min,29.7,L/h,source_2
+cimetidine,V_abs_L_at_70kg,recorded_point_value,pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs,[],0.8,L/kg,56.0,L,source_2
+cimetidine,bioavailability_frac,recorded_point_value,60 percent / 100,[],60,percent,0.6,fraction,source_2
+cimetidine,t_half_h,recorded_point_value,pk_parsed.half_life_h,[],2.0,h,2.0,h,source_1
+clarithromycin,CL_abs_L_per_h_at_70kg,upper_bound,"pk_parsed.clearance.value Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set. 58.1 L/h is the upper bound of the captured 29.2-58.1 L/h range; half-life 5 h is a separate range midpoint.",[],58.1,L/h,58.1,L/h,source_2
+clarithromycin,V_abs_L_at_70kg,recorded_point_value,pk_parsed.volume.value,[],172.0,L,172.0,L,source_3
+clarithromycin,t_half_h,range_midpoint,"midpoint of reported terminal half-life range (3 to 7 h) Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],3-7,h,5.0,h,source_1
+dapagliflozin,CL_abs_L_per_h_at_70kg,recorded_point_value,207 mL/min * 60 min/h / 1000 mL/L,[],207,mL/min,12.42,L/h,source_1
+dapagliflozin,V_abs_L_at_70kg,recorded_point_value,FDA source_1 Table 24 reported Vss,[],118,L,118.0,L,source_1
+dapagliflozin,bioavailability_frac,recorded_point_value,77.8 percent / 100,[],77.8,percent,0.78,fraction,source_1
+dapagliflozin,t_half_h,recorded_point_value,FDA source_1 reported oral terminal t1/2,[],12.9,h,12.9,h,source_1
+efavirenz,CL_abs_L_per_h_at_70kg,recorded_point_value,source_2 reported typical oral CL/F,[],13.9,L/h,13.9,L/h,source_2
+efavirenz,V_abs_L_at_70kg,derived_value,CL_apparent_L_per_h_at_70kg * half_life_h / ln(2),"[""CL_abs_L_per_h_at_70kg"", ""t_half_h""]",13.9,L/h,1163.1007419646824,L,source_2
+efavirenz,t_half_h,legacy_fixture_value,"single-dose range is retained; current 58 h is the fixture representative Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set. 58 h is not the midpoint (64 h) of 52-76 h.",[],52-76,h,58.0,h,source_1
+erythromycin,CL_abs_L_per_h_at_70kg,recorded_point_value,0.53 L/h/kg * 70 kg,[],0.53,L/h/kg,37.1,L/h,source_1
+erythromycin,V_abs_L_at_70kg,derived_value,CL_abs_L_per_h_at_70kg * t_half_h / ln(2),"[""CL_abs_L_per_h_at_70kg"", ""t_half_h""]",0.53 and 2.30,L/h/kg and h,123.10516783905524,L,source_1
+erythromycin,t_half_h,recorded_point_value,pk_parsed.half_life_h,[],2.3,h,2.3,h,source_1
+ethinylestradiol,CL_abs_L_per_h_at_70kg,recorded_point_value,pk_parsed.clearance.value,[],25.7,L/h,25.7,L/h,source_1
+ethinylestradiol,V_abs_L_at_70kg,derived_value,CL_abs_L_per_h_at_70kg * t_half_h / ln(2),"[""CL_abs_L_per_h_at_70kg"", ""t_half_h""]",25.7 and 17.05,L/h and h,632.1673264919305,L,source_1
+ethinylestradiol,t_half_h,range_midpoint,"midpoint of reported 16.5-17.6 h range Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],16.5-17.6,h,17.05,h,source_1
+felodipine,CL_abs_L_per_h_at_70kg,upper_bound,"upper bound of reported clearance range (1.5 L/min) * 60 min/h Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],1-1.5,L/min,90.0,L/h,source_2
+felodipine,V_abs_L_at_70kg,recorded_point_value,pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs,[],10.0,L/kg,700.0,L,source_2
+felodipine,bioavailability_frac,recorded_point_value,15 percent / 100,[],15,percent,0.15,fraction,source_2
+felodipine,t_half_h,legacy_fixture_value,"fixture midpoint of local 24-25 h range, source-confirmed as approximately 25 h Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set. The source reports approximately 25 h, not an exact 24.5 h; 24-25 h is the older local summary.",[],approximately 25,h,24.5,h,source_2
+fluconazole,CL_abs_L_per_h_at_70kg,recorded_point_value,0.23 mL/min/kg * 60 min/h / 1000 mL/L * 70 kg,[],0.23,mL/min/kg,0.966,L/h,source_1
+fluconazole,V_abs_L_at_70kg,derived_value,CL_abs_L_per_h_at_70kg * t_half_h / ln(2),"[""CL_abs_L_per_h_at_70kg"", ""t_half_h""]",0.23 and 30.0,mL/min/kg and h,41.80930228496216,L,source_1
+fluconazole,t_half_h,recorded_point_value,pk_parsed.half_life_h,[],30.0,h,30.0,h,source_1
+fluvoxamine,CL_abs_L_per_h_at_70kg,derived_value,(25 L/kg * 70 kg) * ln(2) / 18.5 h,"[""V_abs_L_at_70kg"", ""t_half_h""]",25.0,L/kg,65.56797653945428,L/h,source_1
+fluvoxamine,V_abs_L_at_70kg,recorded_point_value,25 L/kg * 70 kg,[],25.0,L/kg,1750.0,L,source_1
+fluvoxamine,t_half_h,range_midpoint_mixed_contexts,"(9 h + 28 h) / 2 Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],9-28,h,18.5,h,source_1
+inulin,CL_abs_L_per_h_at_70kg,recorded_point_value,93.5 mL/min * 60 min/h / 1000 mL/L,[],93.5,mL/min,5.61,L/h,source_3
+inulin,V_abs_L_at_70kg,recorded_point_value,source_3 reports Vss approximately 13 L/70 kg,[],13.0,L/70 kg,13.0,L,source_3
+inulin,t_half_h,derived_value,ln(2) * 13 L / 5.61 L/h,"[""CL_abs_L_per_h_at_70kg"", ""V_abs_L_at_70kg""]",1.6062234130622617,h,1.6062234130622617,h,source_3
+itraconazole,CL_abs_L_per_h_at_70kg,recorded_point_value,278 mL/min * 60 min/h / 1000 mL/L,[],278.0,mL/min,16.68,L/h,source_1
+itraconazole,V_abs_L_at_70kg,censored_lower_bound,"lower bound of reported apparent volume (>700 L) Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],>700,L,700.0,L,source_1
+itraconazole,bioavailability_frac,recorded_point_value,55 percent / 100,[],55,percent,0.55,fraction,source_1
+itraconazole,t_half_h,range_midpoint,"midpoint of reported single-dose terminal half-life range (16 to 28 h) Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],16-28,h,22.0,h,source_1
+mefenamic_acid,CL_abs_L_per_h_at_70kg,recorded_point_value,pk_parsed.clearance.value,[],21.13,L/h,21.13,L/h,source_1
+mefenamic_acid,V_abs_L_at_70kg,recorded_point_value,1.06 L/kg * 70 kg,[],1.06,L/kg,74.2,L,source_1
+mefenamic_acid,t_half_h,range_midpoint,"midpoint of reported 2-4 h range Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],2-4,h,3.0,h,source_1
+metoprolol,CL_abs_L_per_h_at_70kg,recorded_point_value,0.8 L/min * 60 min/h,[],0.8,L/min,48.0,L/h,source_2
+metoprolol,V_abs_L_at_70kg,derived_value,CL_abs_L_per_h_at_70kg * half_life_h / ln(2),"[""CL_abs_L_per_h_at_70kg"", ""t_half_h""]",346.2468098133512,L,346.2468098133512,L,source_1
+metoprolol,bioavailability_frac,recorded_point_value,50 percent / 100,[],50,percent,0.5,fraction,source_1
+metoprolol,t_half_h,range_midpoint,"(3 h + 7 h) / 2 Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],5.0,h,5.0,h,source_1
+mexiletine,CL_abs_L_per_h_at_70kg,derived_value,(7 L/kg * 70 kg) * ln(2) / 11 h,"[""V_abs_L_at_70kg"", ""t_half_h""]",7.0,L/kg,30.87655622494302,L/h,source_1
+mexiletine,V_abs_L_at_70kg,upper_bound,"7 L/kg * 70 kg Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],7.0,L/kg,490.0,L,source_1
+mexiletine,t_half_h,range_midpoint,"(10 h + 12 h) / 2 Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],10-12,h,11.0,h,source_1
+moclobemide,CL_abs_L_per_h_at_70kg,recorded_point_value,source_5 first IV infusion clearance,[],39.4,L/h,39.4,L/h,source_5
+moclobemide,V_abs_L_at_70kg,recorded_point_value,source_5 first IV infusion Vss,[],84.3,L,84.3,L,source_5
+moclobemide,t_half_h,recorded_point_value,source_5 first IV infusion elimination half-life,[],1.6,h,1.6,h,source_5
+moclobemide,bioavailability_frac,recorded_point_value,source_5 first oral dose absolute bioavailability,[],0.56,fraction,0.56,fraction,source_5
+montelukast,CL_abs_L_per_h_at_70kg,recorded_point_value,30.8 mL/min * 60 min/h / 1000 mL/L,[],30.8,mL/min,1.8479999999999999,L/h,source_1
+montelukast,V_abs_L_at_70kg,recorded_point_value,pk_parsed.volume.value,[],9.7,L,9.7,L,source_1
+montelukast,t_half_h,recorded_point_value,pk_parsed.half_life_h,[],6.7,h,6.7,h,source_1
+montelukast,bioavailability_frac,recorded_point_value,61 / 100,[],61,percent,0.61,fraction,source_1
+motavizumab_medi_524,CL_abs_L_per_h_at_70kg,range_midpoint,"midpoint of 165-326 mL/day * 1 L/1000 mL / 24 h/day Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],165-326,mL/day,0.010229166666666666,L/h,source_1
+motavizumab_medi_524,V_abs_L_at_70kg,range_midpoint,"midpoint of reported 5.2-9.5 L range Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],5.2-9.5,L,7.35,L,source_1
+motavizumab_medi_524,t_half_h,range_midpoint,"midpoint of reported 19-34 days * 24 h/day Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],19-34,days,636.0,h,source_1
+motavizumab_yte,CL_abs_L_per_h_at_70kg,range_midpoint,"midpoint of 43-68 mL/day * 1 L/1000 mL / 24 h/day Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],43-68,mL/day,0.0022916666666666667,L/h,source_1
+motavizumab_yte,V_abs_L_at_70kg,derived_value,CL_abs_L_per_h_at_70kg * t_half_h / ln(2),"[""CL_abs_L_per_h_at_70kg"", ""t_half_h""]",55 and 85,mL/day and days,6.744599316155904,L,source_1
+motavizumab_yte,t_half_h,range_midpoint,"midpoint of reported 70-100 days * 24 h/day Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],70-100,days,2040,h,source_1
+omeprazole,CL_abs_L_per_h_at_70kg,recorded_point_value,624 mL/min * 60 min/h / 1000 mL/L,[],624,mL/min,37.44,L/h,source_4
+omeprazole,V_abs_L_at_70kg,recorded_point_value,0.23 L/kg * 70 kg,[],0.23,L/kg,16.1,L,source_4
+omeprazole,bioavailability_frac,range_midpoint,midpoint of healthy-subject label range (30% to 40%) at 20-40 mg,[],30-40,percent,0.35,fraction,source_2
+omeprazole,t_half_h,legacy_fixture_value,"fixture value retained within reported plasma half-life range (0.5 to 1 h) Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],0.5-1.0,h,0.75,h,source_2
+raltegravir,CL_abs_L_per_h_at_70kg,recorded_point_value,source_1 reported oral CL/F,[],60.2,L/h,60.2,L/h,source_1
+raltegravir,V_abs_L_at_70kg,derived_value,CL_abs_L_per_h_at_70kg * half_life_h / ln(2),"[""CL_abs_L_per_h_at_70kg"", ""t_half_h""]",677.4318833998217,L,677.4318833998217,L,source_1
+raltegravir,t_half_h,recorded_point_value,source_2 reported geometric-mean apparent plasma half-life,[],7.8,h,7.8,h,source_2
+sildenafil,CL_abs_L_per_h_at_70kg,recorded_point_value,reported value,[],41,L/h,41,L/h,source_7
+sildenafil,V_abs_L_at_70kg,recorded_point_value,reported value,[],105,L,105,L,source_7
+sildenafil,t_half_h,range_midpoint,"midpoint of reported 3-5 h range Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],3-5,h,4.0,h,source_7
+sildenafil,bioavailability_frac,recorded_point_value,41 / 100,[],41,percent,0.41,fraction,source_7
+sufentanil,CL_abs_L_per_h_at_70kg,recorded_point_value,pk_parsed.clearance.value,[],108,L/h,108.0,L/h,source_1
+sufentanil,V_abs_L_at_70kg,derived_value,CL_apparent / (ln(2) / terminal_half_life),"[""CL_abs_L_per_h_at_70kg"", ""t_half_h""]",108,L/h,2087.868263174508,L,source_1
+sufentanil,t_half_h,recorded_point_value,pk_parsed.half_life_h,[],13.4,h,13.4,h,source_1
+sufentanil,bioavailability_frac,recorded_point_value,53 / 100,[],53,percent,0.53,fraction,source_1
+tefibazumab,CL_abs_L_per_h_at_70kg,recorded_point_value,12 mL/h / 1000 mL/L,[],12,mL/h,0.012,L/h,source_1
+tefibazumab,V_abs_L_at_70kg,recorded_point_value,source_1 reported IV volume of distribution,[],7.3,L,7.3,L,source_1
+tefibazumab,t_half_h,range_midpoint,"((17 days + 18 days) / 2) * 24 h/day Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],17-18,days,420.0,h,source_1
+tizanidine,CL_abs_L_per_h_at_70kg,derived_value,2.4 L/kg * 70 kg * ln(2) / 2.5 h,"[""V_abs_L_at_70kg"", ""t_half_h""]",46.579490533628324,L/h,46.579490533628324,L/h,source_1
+tizanidine,V_abs_L_at_70kg,recorded_point_value,2.4 L/kg * 70 kg,[],2.4,L/kg,168.0,L,source_1
+tizanidine,bioavailability_frac,recorded_point_value,40 percent / 100,[],40,percent,0.4,fraction,source_1
+tizanidine,t_half_h,recorded_point_value,pk_parsed.half_life_h,[],2.5,h,2.5,h,source_1
+triazolam,CL_abs_L_per_h_at_70kg,recorded_point_value,526 mL/min * 60 min/h / 1000 mL/L,[],526,mL/min,31.56,L/h,source_3
+triazolam,V_abs_L_at_70kg,derived_value,CL_apparent / (ln(2) / selected_fixture_half_life),"[""CL_abs_L_per_h_at_70kg"", ""t_half_h""]",31.56,L/h,159.36009421659492,L,source_3
+triazolam,t_half_h,range_midpoint,"midpoint of DailyMed reported range (1.5 to 5.5 h) Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],1.5-5.5,h,3.5,h,source_1
+verapamil,CL_abs_L_per_h_at_70kg,recorded_point_value,500.64 mL/min * 60 min/h / 1000 mL/L,[],500.64,mL/min,30.0384,L/h,source_3
+verapamil,V_abs_L_at_70kg,recorded_point_value,2.51 L/kg * 70 kg,[],2.51,L/kg,175.7,L,source_3
+verapamil,bioavailability_frac,recorded_point_value,22.47 percent / 100,[],22.47,percent,0.2247,fraction,source_3
+verapamil,t_half_h,range_midpoint,"midpoint of reported single-dose terminal half-life range (2.8 to 7.4 h) Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set.",[],2.8-7.4,h,5.1,h,source_1

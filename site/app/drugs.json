@@ -5,7 +5,32 @@
   "drugs": [
     {
       "slug": "abciximab",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 0.4166666666666667,
+          "implied_h": 6.363318378910972,
+          "ratio": 15.271964109386333,
+          "threshold_fold": 1.5,
+          "hold_candidate": true,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::abciximab",
       "name": "Abciximab",
       "route": "iv",
@@ -150,7 +175,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed source_2, Abstract, Results",
-          "exact_quote": "Abciximab steady-state clearance in healthy participants was 183 +/- 72 ml/min"
+          "exact_quote": "Abciximab steady-state clearance in healthy participants was 183 +/- 72 ml/min",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "183 mL/min * 60 min/h / 1000 mL/L"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_6",
@@ -173,7 +202,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "Wiley conference abstract source_6, Results",
-          "exact_quote": "Steady state volume of distribution of Abx was 1.44 L/kg"
+          "exact_quote": "Steady state volume of distribution of Abx was 1.44 L/kg",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs"
+          }
         },
         "t_half_h": {
           "source_id": "source_5",
@@ -196,11 +229,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed source_5, Abstract",
-          "exact_quote": "a short plasma half-life (20-30 min)"
+          "exact_quote": "a short plasma half-life (20-30 min)",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "((20 min + 30 min) / 2) / 60 min/h Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "abciximab_dose100mg_iv_single",
           "route": "iv",
           "regimen": "single",
@@ -492,7 +531,40 @@
     },
     {
       "slug": "aciclovir",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 2.5,
+          "implied_h": 1.6486681155010587,
+          "ratio": 0.6594672462004235,
+          "threshold_fold": 1.5,
+          "hold_candidate": true,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [
+        {
+          "code": "dose_dependent_bioavailability",
+          "statement": "Oral bioavailability decreases with dose, and plasma concentrations rise less than proportionally across the 200, 400 and 800 mg repeated-dose comparisons. Fixed F1=0.1 does not reproduce this dose dependence.",
+          "source_id": "source_1",
+          "source_locator": "CLINICAL PHARMACOLOGY, Pharmacokinetics, Tables 1-2",
+          "checked_date": "2026-10-28"
+        }
+      ],
       "id": "osp::aciclovir",
       "name": "Aciclovir",
       "route": "po",
@@ -622,7 +694,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "DailyMed injection label, Clinical Pharmacology, Table 2, normal renal function (CrCl >80 mL/min/1.73 m2)",
-          "exact_quote": "Total Body Clearance ... 327"
+          "exact_quote": "Total Body Clearance ... 327",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "327 mL/min/1.73 m2 * 60 min/h / 1000 mL/L"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_5",
@@ -645,7 +721,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract",
-          "exact_quote": "The volume of distribution at steady state is about two-thirds of the body weight."
+          "exact_quote": "The volume of distribution at steady state is about two-thirds of the body weight.",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "(2/3) L/kg * 70 kg"
+          }
         },
         "bioavailability_frac": {
           "source_id": "source_1",
@@ -669,7 +749,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "Clinical Pharmacology, Pharmacokinetics, Table 1",
-          "exact_quote": "Average oral bioavailability 10% to 20%"
+          "exact_quote": "Average oral bioavailability 10% to 20%",
+          "selection": {
+            "rule": "lower_bound",
+            "rationale": "lower bound of reported average oral bioavailability range (10% to 20%) Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -692,11 +776,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed tablet label, Clinical Pharmacology, Table 1",
-          "exact_quote": "Plasma elimination half-life 2.5 to 3.3 hr"
+          "exact_quote": "Plasma elimination half-life 2.5 to 3.3 hr",
+          "selection": {
+            "rule": "lower_bound",
+            "rationale": "lower bound of reported adult half-life range (2.5 to 3.3 h) Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "aciclovir_dose100mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -988,7 +1078,33 @@
     },
     {
       "slug": "albuterol",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 3.86,
+          "implied_h": 3.8599999999999994,
+          "ratio": 0.9999999999999999,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": true
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 1.0,
+              "infusion_h": 1.0
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "OSP_albuterol",
       "name": "Albuterol",
       "route": "iv",
@@ -1069,7 +1185,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "PubMed abstract",
-          "exact_quote": "With intravenous administration, total plasma clearance was 480 +/- 123 ml min-1"
+          "exact_quote": "With intravenous administration, total plasma clearance was 480 +/- 123 ml min-1",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "480 mL/min * 60 min/h / 1000 mL/L"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -1092,7 +1212,15 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract",
-          "exact_quote": "apparent volume of distribution was 156 +/- 381"
+          "exact_quote": "apparent volume of distribution was 156 +/- 381",
+          "selection": {
+            "rule": "derived_value",
+            "rationale": "CL_abs_L_per_h_at_70kg * t_half_h / ln(2)",
+            "depends_on": [
+              "CL_abs_L_per_h_at_70kg",
+              "t_half_h"
+            ]
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -1113,11 +1241,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract",
-          "exact_quote": "elimination half-life was 3.86 +/- 0.83 h"
+          "exact_quote": "elimination half-life was 3.86 +/- 0.83 h",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.half_life_h"
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "albuterol_dose1mg_iv_single",
           "route": "iv",
           "regimen": "single",
@@ -1384,7 +1518,32 @@
     },
     {
       "slug": "alfentanil",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 1.675,
+          "implied_h": 2.3104906018664844,
+          "ratio": 1.3793973742486474,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::alfentanil",
       "name": "Alfentanil",
       "route": "iv",
@@ -1460,7 +1619,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "DailyMed label, Clinical Pharmacology, pharmacokinetics",
-          "exact_quote": "average plasma clearance of 5 mL/kg/min"
+          "exact_quote": "average plasma clearance of 5 mL/kg/min",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "5 mL/kg/min * 70 kg * 60 min/h / 1000 mL/L"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -1484,7 +1647,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "DailyMed label, Clinical Pharmacology, pharmacokinetics",
-          "exact_quote": "apparent volume of distribution of 0.4 to 1 L/kg"
+          "exact_quote": "apparent volume of distribution of 0.4 to 1 L/kg",
+          "selection": {
+            "rule": "upper_bound",
+            "rationale": "upper bound of reported apparent volume range (1 L/kg) * 70 kg Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -1505,11 +1672,17 @@
           "reviewer_status": "checked",
           "reviewer_note": "DailyMed source_1 reports terminal elimination half-life of 90 to 111 minutes. Canonical t_half_h uses the midpoint converted to hours and remains a check target only. CL and V are not jointly calibrated to match terminal half-life in this deterministic one-compartment fixture.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "mean of reported 90-111 min range / 60 min/h Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "alfentanil_dose100mg_iv_single",
           "route": "iv",
           "regimen": "single",
@@ -1788,7 +1961,32 @@
     },
     {
       "slug": "alprazolam",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 12.5,
+          "implied_h": 10.012125941421433,
+          "ratio": 0.8009700753137146,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::alprazolam",
       "name": "Alprazolam",
       "route": "po",
@@ -1879,7 +2077,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "PubMed abstract",
-          "exact_quote": "clearance of 0.7 to 1.5 ml/min/kg"
+          "exact_quote": "clearance of 0.7 to 1.5 ml/min/kg",
+          "selection": {
+            "rule": "upper_bound",
+            "rationale": "1.5 mL/min/kg * 60 min/h / 1000 mL/L * 70 kg Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set. Existing source summary selects the upper bound; half-life uses a separate midpoint."
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -1903,7 +2105,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "PubMed abstract",
-          "exact_quote": "volume of distribution of 0.8 to 1.3 L/kg"
+          "exact_quote": "volume of distribution of 0.8 to 1.3 L/kg",
+          "selection": {
+            "rule": "upper_bound",
+            "rationale": "1.3 L/kg * 70 kg Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set. Existing source summary selects the upper bound; half-life uses a separate midpoint."
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -1924,11 +2130,17 @@
           "reviewer_status": "checked",
           "reviewer_note": "PubMed source_1 reports an oral alprazolam elimination half-life of 9 to 16 h. The fixture midpoint remains a check target and is not used to force CL/F or V/F agreement.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "midpoint of reported 9-16 h range Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "alprazolam_dose100mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -2221,7 +2433,32 @@
     },
     {
       "slug": "amikacin",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 2.0,
+          "implied_h": 2.772588722239781,
+          "ratio": 1.3862943611198906,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::amikacin",
       "name": "Amikacin",
       "route": "iv",
@@ -2295,7 +2532,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "DailyMed label, Clinical Pharmacology, General",
-          "exact_quote": "mean serum clearance rate is about 100 mL/min"
+          "exact_quote": "mean serum clearance rate is about 100 mL/min",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "100 mL/min * 60 min/h / 1000 mL/L"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -2316,7 +2557,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "DailyMed label, Clinical Pharmacology, General",
-          "exact_quote": "mean total apparent volume of distribution of 24 liters"
+          "exact_quote": "mean total apparent volume of distribution of 24 liters",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.volume.value"
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -2337,11 +2582,17 @@
           "reviewer_status": "checked",
           "reviewer_note": "DailyMed source_1 reports serum half-life in normal adult volunteers as slightly over 2 h. Canonical t_half_h retains the fixture-rounded value and remains a check target only. CL and V are not jointly calibrated to match terminal half-life in this deterministic one-compartment fixture.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "legacy_fixture_value",
+            "rationale": "reported \"slightly over 2 hours\" retained as 2.0 h fixture value Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "amikacin_dose100mg_iv_single",
           "route": "iv",
           "regimen": "single",
@@ -2621,6 +2872,7 @@
     {
       "slug": "apixaban",
       "simulation_validity": {
+        "source_correction_date": "2026-10-28",
         "status": "clinical_hold",
         "review_date": "2026-10-28",
         "reasons": [
@@ -2629,6 +2881,28 @@
           "Source agreement does not validate the clinical model. KA, lag, IIV and residual errors remain generic fixture assumptions."
         ]
       },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 12.0,
+          "implied_h": 4.410936603563289,
+          "ratio": 0.36757805029694074,
+          "threshold_fold": 1.5,
+          "hold_candidate": true,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 10.0
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "OSP_apixaban",
       "name": "Apixaban",
       "route": "po",
@@ -2697,7 +2971,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "Clinical Pharmacology, Pharmacokinetics",
-          "exact_quote": "total clearance of approximately 3.3 L/hour"
+          "exact_quote": "total clearance of approximately 3.3 L/hour",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "reported value"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -2718,7 +2996,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "Clinical Pharmacology, Pharmacokinetics",
-          "exact_quote": "approximately 21 liters"
+          "exact_quote": "approximately 21 liters",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "reported value"
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -2739,7 +3021,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed label, Clinical Pharmacology, Elimination",
-          "exact_quote": "apparent half-life of approximately 12 hours following oral administration"
+          "exact_quote": "apparent half-life of approximately 12 hours following oral administration",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.half_life_h"
+          }
         },
         "bioavailability_frac": {
           "source_id": "source_1",
@@ -2762,11 +3048,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "Clinical Pharmacology, Pharmacokinetics",
-          "exact_quote": "approximately 50%"
+          "exact_quote": "approximately 50%",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "50 / 100"
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "apixaban_dose10mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -3059,7 +3351,32 @@
     },
     {
       "slug": "atazanavir",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 4.6,
+          "implied_h": 4.744565584763036,
+          "ratio": 1.0314273010354427,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::atazanavir",
       "name": "Atazanavir",
       "route": "po",
@@ -3143,7 +3460,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "PMC source_2, Table 3, Population pharmacokinetic parameter estimates",
-          "exact_quote": "CL/F (liters/h) 12.9"
+          "exact_quote": "CL/F (liters/h) 12.9",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.clearance.value"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_2",
@@ -3166,7 +3487,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "PMC source_2, Table 3, Population pharmacokinetic parameter estimates",
-          "exact_quote": "V/F (liters) 88.3"
+          "exact_quote": "V/F (liters) 88.3",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.volume.value"
+          }
         },
         "t_half_h": {
           "source_id": "source_2",
@@ -3189,11 +3514,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PMC source_2, Results, covariate effect of ritonavir",
-          "exact_quote": "increasing the ATV elimination half-life from 4.6 h to 8.8 h"
+          "exact_quote": "increasing the ATV elimination half-life from 4.6 h to 8.8 h",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.half_life_h"
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "atazanavir_dose100mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -3481,7 +3812,33 @@
     },
     {
       "slug": "buprenorphine",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 10.345863472802147,
+          "implied_h": 10.345863472802147,
+          "ratio": 1.0,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": true
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 0.3,
+              "infusion_h": 1.0
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "OSP_buprenorphine",
       "name": "Buprenorphine",
       "route": "iv",
@@ -3551,7 +3908,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PMC source_2, Results and Table 1, mean intravenous buprenorphine PK parameters",
-          "exact_quote": "Mean ± SE buprenorphine clearance ... 54.0 ± 1.7 L/h"
+          "exact_quote": "Mean ± SE buprenorphine clearance ... 54.0 ± 1.7 L/h",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "source_2 reported IV clearance"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_2",
@@ -3574,7 +3935,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PMC source_2, Results and Table 1, mean intravenous buprenorphine PK parameters",
-          "exact_quote": "volume of distribution were ... 806.4 ± 38.2 L"
+          "exact_quote": "volume of distribution were ... 806.4 ± 38.2 L",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "source_2 reported IV Vd"
+          }
         },
         "t_half_h": {
           "source_id": "source_2",
@@ -3595,11 +3960,21 @@
           "reviewer_status": "checked",
           "reviewer_note": "The raw summary explicitly says the half-life is derived from V/CL. This is therefore a fixture-derived check, not an independently observed terminal half-life.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "derived_value",
+            "rationale": "ln(2) * V / CL = ln(2) * 806 L / 54 L/h",
+            "depends_on": [
+              "CL_abs_L_per_h_at_70kg",
+              "V_abs_L_at_70kg"
+            ]
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "buprenorphine_dose0.3mg_iv_single",
           "route": "iv",
           "regimen": "single",
@@ -3860,7 +4235,40 @@
     },
     {
       "slug": "carbamazepine",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 14.5,
+          "implied_h": 14.5,
+          "ratio": 1.0,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": true
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 200.0
+            }
+          }
+        }
+      },
+      "fixture_limitations": [
+        {
+          "code": "autoinduction",
+          "statement": "Autoinduction completes after 3-5 weeks of a fixed regimen. Initial half-life 25-65 h shortens to 12-17 h with repeated dosing. The selected steady-state clearance and 14.5 h half-life do not represent an untreated subject receiving a first dose.",
+          "source_id": "source_2",
+          "source_locator": "CLINICAL PHARMACOLOGY, Pharmacokinetics",
+          "checked_date": "2026-10-28"
+        }
+      ],
       "id": "OSP_carbamazepine",
       "name": "Carbamazepine",
       "route": "po",
@@ -3872,6 +4280,14 @@
           "index": 1,
           "kind": "DailyMed",
           "identifier": "52f0f753-a70c-4572-a85c-97ea7a2601a9"
+        },
+        {
+          "id": "source_2",
+          "display_id": "source_2",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1fc170d7-db1a-486d-8c10-faa6e3da3b1e",
+          "index": 2,
+          "kind": "DailyMed",
+          "identifier": "1fc170d7-db1a-486d-8c10-faa6e3da3b1e"
         }
       ],
       "raw": {
@@ -3931,7 +4347,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed label, Pharmacokinetics, repeated dosing",
-          "exact_quote": "The apparent oral clearance following a single dose was 25 ± 5 mL/min and following multiple dosing was 80 ± 30 mL/min"
+          "exact_quote": "The apparent oral clearance following a single dose was 25 ± 5 mL/min and following multiple dosing was 80 ± 30 mL/min",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "80 mL/min * 60 min/h / 1000 mL/L"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -3956,7 +4376,15 @@
           "reviewer_status": "checked",
           "reviewer_note": "The one-compartment V is derived from the label's oral apparent clearance and the midpoint of the reported 12-17 h half-life range; no directly reported V is claimed.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "derived_value",
+            "rationale": "CL_apparent_L_per_h_at_70kg * half_life_h / ln(2)",
+            "depends_on": [
+              "CL_abs_L_per_h_at_70kg",
+              "t_half_h"
+            ]
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -3977,11 +4405,17 @@
           "reviewer_status": "checked",
           "reviewer_note": "DailyMed source_1 reports a 12-17 h range. The canonical 14.5 h is a midpoint fixture and is not a directly observed mean.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "(12 h + 17 h) / 2 Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "carbamazepine_dose200mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -4275,7 +4709,32 @@
     },
     {
       "slug": "cda1",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 685.2,
+          "implied_h": 577.622650466621,
+          "ratio": 0.8429986142244906,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::cda1",
       "name": "CDA1",
       "route": "iv",
@@ -4379,7 +4838,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "PMC source_2, Table 2, CL column, 1.0 mg/kg cohort",
-          "exact_quote": "0.0014 (0.0010, 0.0019)"
+          "exact_quote": "0.0014 (0.0010, 0.0019)",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "0.0014 mL/min/kg * 60 min/h / 1000 mL/L * 70 kg"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_2",
@@ -4403,7 +4866,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "PMC source_2, Table 2, Vd column, 0.3 mg/kg cohort",
-          "exact_quote": "0.070 (0.064, 0.081)"
+          "exact_quote": "0.070 (0.064, 0.081)",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "0.070 L/kg * 70 kg"
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -4426,11 +4893,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract",
-          "exact_quote": "geometric mean values of the half-life of CDA1 ranged between 25.3 and 31.8 days"
+          "exact_quote": "geometric mean values of the half-life of CDA1 ranged between 25.3 and 31.8 days",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "fixture midpoint 28.55 days * 24 h/day Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "cda1_dose100mg_iv_single",
           "route": "iv",
           "regimen": "single",
@@ -4715,7 +5188,32 @@
     },
     {
       "slug": "cimetidine",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 2.0,
+          "implied_h": 1.306944178833567,
+          "ratio": 0.6534720894167835,
+          "threshold_fold": 1.5,
+          "hold_candidate": true,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::cimetidine",
       "name": "Cimetidine",
       "route": "po",
@@ -4799,7 +5297,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "PubMed abstract",
-          "exact_quote": "the plasma clearance value of 495 ml/min"
+          "exact_quote": "the plasma clearance value of 495 ml/min",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "495 mL/min * 60 min/h / 1000 mL/L"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_2",
@@ -4822,7 +5324,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "PubMed abstract",
-          "exact_quote": "The volume of distribution at steady-state was about 80% of body weight"
+          "exact_quote": "The volume of distribution at steady-state was about 80% of body weight",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs"
+          }
         },
         "bioavailability_frac": {
           "source_id": "source_2",
@@ -4846,7 +5352,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract",
-          "exact_quote": "Bioavailability was not complete, but was about 60%"
+          "exact_quote": "Bioavailability was not complete, but was about 60%",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "60 percent / 100"
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -4867,11 +5377,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed label, Pharmacokinetics section",
-          "exact_quote": "The half-life of cimetidine is approximately 2 hours."
+          "exact_quote": "The half-life of cimetidine is approximately 2 hours.",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.half_life_h"
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "cimetidine_dose100mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -5172,7 +5688,40 @@
     },
     {
       "slug": "clarithromycin",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 5.0,
+          "implied_h": 2.0520019803151563,
+          "ratio": 0.41040039606303125,
+          "threshold_fold": 1.5,
+          "hold_candidate": true,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [
+        {
+          "code": "dose_dependent_pk",
+          "statement": "The label reports mildly nonlinear kinetics, with half-life about 3-4 h at 250 mg every 12 h and 5-7 h at 500 mg every 8-12 h. Fixed CL/V and the selected 5 h value do not reproduce dose dependence or the 14-OH metabolite; renal clearance is comparatively dose independent.",
+          "source_id": "source_1",
+          "source_locator": "CLINICAL PHARMACOLOGY, Pharmacokinetics",
+          "checked_date": "2026-10-28"
+        }
+      ],
       "id": "osp::clarithromycin",
       "name": "Clarithromycin",
       "route": "po",
@@ -5273,7 +5822,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "PubMed abstract",
-          "exact_quote": "total body clearance and renal clearance in adults have ranged from 29.2 to 58.1 L/h and 6.7 to 12.8 L/h, respectively."
+          "exact_quote": "total body clearance and renal clearance in adults have ranged from 29.2 to 58.1 L/h and 6.7 to 12.8 L/h, respectively.",
+          "selection": {
+            "rule": "upper_bound",
+            "rationale": "pk_parsed.clearance.value Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set. 58.1 L/h is the upper bound of the captured 29.2-58.1 L/h range; half-life 5 h is a separate range midpoint."
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_3",
@@ -5294,7 +5847,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "Antimicrobial Agents and Chemotherapy, lines 165-166 / Table 1",
-          "exact_quote": "the apparent volume of distribution of clarithromycin was 172 liters"
+          "exact_quote": "the apparent volume of distribution of clarithromycin was 172 liters",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.volume.value"
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -5317,11 +5874,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed label, Metabolism and Elimination section",
-          "exact_quote": "The elimination half-life of clarithromycin was about 3 hours to 4 hours"
+          "exact_quote": "The elimination half-life of clarithromycin was about 3 hours to 4 hours",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "midpoint of reported terminal half-life range (3 to 7 h) Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "clarithromycin_dose100mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -5610,7 +6173,32 @@
     },
     {
       "slug": "dapagliflozin",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 12.9,
+          "implied_h": 6.585456304836839,
+          "ratio": 0.5105004887470418,
+          "threshold_fold": 1.5,
+          "hold_candidate": true,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 10.0
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "OSP_dapagliflozin",
       "name": "Dapagliflozin",
       "route": "po",
@@ -5680,7 +6268,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "Clinical Pharmacology Review PDF, Table 24 (p. 74)",
-          "exact_quote": "CL (mL/min) ... Geom. Mean (CV %) NA 207 (23)"
+          "exact_quote": "CL (mL/min) ... Geom. Mean (CV %) NA 207 (23)",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "207 mL/min * 60 min/h / 1000 mL/L"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -5703,7 +6295,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "Clinical Pharmacology Review PDF, p. 44",
-          "exact_quote": "After IV administration the volume of distribution of dapagliflozin is 118 L."
+          "exact_quote": "After IV administration the volume of distribution of dapagliflozin is 118 L.",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "FDA source_1 Table 24 reported Vss"
+          }
         },
         "bioavailability_frac": {
           "source_id": "source_1",
@@ -5727,7 +6323,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "Clinical Pharmacology Review PDF, section 2.8.5, Table 24 (p. 74)",
-          "exact_quote": "The absolute bioavailability was 78%"
+          "exact_quote": "The absolute bioavailability was 78%",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "77.8 percent / 100"
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -5750,11 +6350,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "Clinical Pharmacology Review PDF, Table 1 (p. 18)",
-          "exact_quote": "T1/2, hour ... 12.9 (5.54)"
+          "exact_quote": "T1/2, hour ... 12.9 (5.54)",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "FDA source_1 reported oral terminal t1/2"
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "dapagliflozin_dose10mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -6053,7 +6659,47 @@
     },
     {
       "slug": "efavirenz",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 58.0,
+          "implied_h": 58.0,
+          "ratio": 1.0,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": true
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [
+        {
+          "code": "autoinduction_and_mixed_dosing_context",
+          "statement": "The label reports metabolic autoinduction and half-life 52-76 h after a single dose versus 40-55 h after multiple doses. The retained 58 h is a legacy selection within the single-dose range, not its midpoint.",
+          "source_id": "source_1",
+          "source_locator": "12.3 Metabolism and Elimination",
+          "checked_date": "2026-10-28"
+        },
+        {
+          "code": "mixed_population_parameters",
+          "statement": "CL/F=13.9 L/h comes from 89 HIV patients treated with 600 mg once daily. Combining it with the selected single-dose half-life to derive V/F mixes populations and dosing stages; this fixture does not reproduce that PopPK study.",
+          "source_id": "source_2",
+          "source_locator": "Abstract, Methodology and Results",
+          "checked_date": "2026-10-28"
+        }
+      ],
       "id": "osp::efavirenz",
       "name": "Efavirenz",
       "route": "po",
@@ -6159,7 +6805,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed source_2, Abstract, Results",
-          "exact_quote": "Typical oral clearance (CL/F) was 13.9 L/h"
+          "exact_quote": "Typical oral clearance (CL/F) was 13.9 L/h",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "source_2 reported typical oral CL/F"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_2",
@@ -6181,7 +6831,15 @@
           "reviewer_status": "checked",
           "reviewer_note": "V is derived from the reported oral CL/F and the repository's single-dose half-life representative; it is not a directly reported efavirenz V/F value.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "derived_value",
+            "rationale": "CL_apparent_L_per_h_at_70kg * half_life_h / ln(2)",
+            "depends_on": [
+              "CL_abs_L_per_h_at_70kg",
+              "t_half_h"
+            ]
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -6206,11 +6864,17 @@
           "reviewer_status": "checked",
           "reviewer_note": "DailyMed source_1 distinguishes single-dose terminal half-life 52-76 h from multiple-dose 40-55 h. The fixture uses 58 h for the single-dose context and must not be generalized to repeated dosing.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "legacy_fixture_value",
+            "rationale": "single-dose range is retained; current 58 h is the fixture representative Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set. 58 h is not the midpoint (64 h) of 52-76 h."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "efavirenz_dose100mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -6504,7 +7168,33 @@
     },
     {
       "slug": "erythromycin",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 2.3,
+          "implied_h": 2.3,
+          "ratio": 1.0,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": true
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 125.0,
+              "infusion_h": 1.0
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "OSP_erythromycin",
       "name": "Erythromycin",
       "route": "iv",
@@ -6572,7 +7262,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "PMC source_1, Table 2, Healthy controls after 125 mg IV infusion",
-          "exact_quote": "CL (l/h/kg) | 0.53 ± 0.13"
+          "exact_quote": "CL (l/h/kg) | 0.53 ± 0.13",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "0.53 L/h/kg * 70 kg"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -6593,7 +7287,15 @@
           "reviewer_status": "checked",
           "reviewer_note": "The source reports Vss 0.74 +/- 0.19 L/kg, whereas the committed V is explicitly derived from CL and half-life for the one-compartment fixture. These are not interchangeable volume definitions.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "derived_value",
+            "rationale": "CL_abs_L_per_h_at_70kg * t_half_h / ln(2)",
+            "depends_on": [
+              "CL_abs_L_per_h_at_70kg",
+              "t_half_h"
+            ]
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -6614,11 +7316,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PMC source_1, Table 2, Healthy controls after 125 mg IV infusion",
-          "exact_quote": "t1/2 (h) | 2.30 ± 1.03"
+          "exact_quote": "t1/2 (h) | 2.30 ± 1.03",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.half_life_h"
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "erythromycin_dose125mg_iv_single",
           "route": "iv",
           "regimen": "single",
@@ -6888,7 +7596,32 @@
     },
     {
       "slug": "ethinylestradiol",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 17.05,
+          "implied_h": 17.05,
+          "ratio": 1.0,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": true
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::ethinylestradiol",
       "name": "Ethinylestradiol",
       "route": "po",
@@ -6977,7 +7710,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "DailyMed label, Clinical Pharmacology, Table I, Ethinyl Estradiol day 1",
-          "exact_quote": "CL/F L/h 25.7 (9.1)"
+          "exact_quote": "CL/F L/h 25.7 (9.1)",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.clearance.value"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -6999,7 +7736,15 @@
           "reviewer_status": "checked",
           "reviewer_note": "The cited label reports CL/F and half-life but not the fixture's exact V/F. The committed V is explicitly derived from those inputs and must not be presented as a directly reported volume.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "derived_value",
+            "rationale": "CL_abs_L_per_h_at_70kg * t_half_h / ln(2)",
+            "depends_on": [
+              "CL_abs_L_per_h_at_70kg",
+              "t_half_h"
+            ]
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -7020,11 +7765,17 @@
           "reviewer_status": "checked",
           "reviewer_note": "DailyMed source_1 reports a 16.5 to 17.6 h half-life range in the referenced oral table. The midpoint is check-only and is not used to force CL/V agreement.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "midpoint of reported 16.5-17.6 h range Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "ethinylestradiol_dose100mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -7318,7 +8069,42 @@
     },
     {
       "slug": "felodipine",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "clinical_hold",
+        "reasons": [
+          "The source reports blood clearance, but this fixture projects plasma concentrations without a verified blood-to-plasma conversion."
+        ]
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 24.5,
+          "implied_h": 5.391144737688464,
+          "ratio": 0.22004672398728423,
+          "threshold_fold": 1.5,
+          "hold_candidate": true,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [
+        {
+          "code": "blood_plasma_matrix_unresolved",
+          "statement": "The source review reports total blood clearance 1-1.5 L/min, whereas the fixture is interpreted as plasma concentration. The retained 90 L/h is the upper blood-clearance bound, not a verified plasma clearance. No blood/plasma ratio has been established for conversion.",
+          "source_id": "source_2",
+          "source_locator": "Abstract, total clearance from blood and three-phase plasma decline",
+          "checked_date": "2026-10-28"
+        }
+      ],
       "id": "osp::felodipine",
       "name": "Felodipine",
       "route": "po",
@@ -7420,7 +8206,9 @@
             "method": "unit_conversion",
             "formula": "upper bound of reported clearance range (1.5 L/min) * 60 min/h",
             "assumptions": {
-              "range_summary": "upper_bound"
+              "range_summary": "upper_bound",
+              "clearance_matrix": "blood",
+              "plasma_conversion": "not_established"
             }
           },
           "role": "simulation_parameter",
@@ -7429,7 +8217,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "PubMed abstract",
-          "exact_quote": "Mean total clearance from the blood is 1 to 1.5 L/min"
+          "exact_quote": "Mean total clearance from the blood is 1 to 1.5 L/min",
+          "selection": {
+            "rule": "upper_bound",
+            "rationale": "upper bound of reported clearance range (1.5 L/min) * 60 min/h Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_2",
@@ -7452,7 +8244,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "PubMed abstract",
-          "exact_quote": "The volume of distribution of felodipine is about 10 L/kg"
+          "exact_quote": "The volume of distribution of felodipine is about 10 L/kg",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs"
+          }
         },
         "bioavailability_frac": {
           "source_id": "source_2",
@@ -7476,7 +8272,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract",
-          "exact_quote": "the amount reaching the systemic circulation is reduced to about 15%"
+          "exact_quote": "the amount reaching the systemic circulation is reduced to about 15%",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "15 percent / 100"
+          }
         },
         "t_half_h": {
           "source_id": "source_2",
@@ -7500,11 +8300,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract",
-          "exact_quote": "The mean elimination half-life of felodipine is approximately 25h."
+          "exact_quote": "The mean elimination half-life of felodipine is approximately 25h.",
+          "selection": {
+            "rule": "legacy_fixture_value",
+            "rationale": "fixture midpoint of local 24-25 h range, source-confirmed as approximately 25 h Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set. The source reports approximately 25 h, not an exact 24.5 h; 24-25 h is the older local summary."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "felodipine_dose100mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -7796,7 +8602,33 @@
     },
     {
       "slug": "fluconazole",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 30.0,
+          "implied_h": 29.999999999999996,
+          "ratio": 0.9999999999999999,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": true
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 200.0,
+              "infusion_h": 1.0
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "OSP_fluconazole",
       "name": "Fluconazole",
       "route": "iv",
@@ -7864,7 +8696,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "DailyMed label, Clinical Pharmacology, Pharmacokinetics and Metabolism",
-          "exact_quote": "Mean body clearance in adults is reported to be 0.23 (17%) mL/min/kg"
+          "exact_quote": "Mean body clearance in adults is reported to be 0.23 (17%) mL/min/kg",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "0.23 mL/min/kg * 60 min/h / 1000 mL/L * 70 kg"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -7885,7 +8721,15 @@
           "reviewer_status": "checked",
           "reviewer_note": "The label states that fluconazole Vd approximates total body water but does not supply the fixture's exact V. The committed V is explicitly derived from the checked CL and half-life for the one-compartment fixture.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "derived_value",
+            "rationale": "CL_abs_L_per_h_at_70kg * t_half_h / ln(2)",
+            "depends_on": [
+              "CL_abs_L_per_h_at_70kg",
+              "t_half_h"
+            ]
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -7906,11 +8750,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed label, Clinical Pharmacology, Pharmacokinetics and Metabolism",
-          "exact_quote": "terminal plasma elimination half-life of approximately 30 hours"
+          "exact_quote": "terminal plasma elimination half-life of approximately 30 hours",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.half_life_h"
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "fluconazole_dose200mg_iv_single",
           "route": "iv",
           "regimen": "single",
@@ -8180,7 +9030,40 @@
     },
     {
       "slug": "fluvoxamine",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 18.5,
+          "implied_h": 18.5,
+          "ratio": 1.0,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": true
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [
+        {
+          "code": "nonlinear_exposure",
+          "statement": "In 30 healthy volunteers given 100, 200 or 300 mg/day for 10 days, concentrations rose more than proportionally with dose. The fixed linear fixture cannot reproduce this nonlinearity. The label does not establish CYP2D6 saturation as its cause.",
+          "source_id": "source_1",
+          "source_locator": "12.3 Absorption; 7.1 CYP2D6 metabolism",
+          "checked_date": "2026-10-28"
+        }
+      ],
       "id": "osp::fluvoxamine",
       "name": "Fluvoxamine",
       "route": "po",
@@ -8334,7 +9217,15 @@
           "reviewer_status": "checked",
           "reviewer_note": "Source_1 reports mean apparent V 25 L/kg; the repository's apparent CL is derived with the midpoint of the broader 9-28 h multi-context summary. This CL is a fixture value, not a directly reported clearance.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "derived_value",
+            "rationale": "(25 L/kg * 70 kg) * ln(2) / 18.5 h",
+            "depends_on": [
+              "V_abs_L_at_70kg",
+              "t_half_h"
+            ]
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -8357,7 +9248,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed source_1, Distribution/Protein Binding",
-          "exact_quote": "The mean apparent volume of distribution for fluvoxamine is approximately 25 L/kg"
+          "exact_quote": "The mean apparent volume of distribution for fluvoxamine is approximately 25 L/kg",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "25 L/kg * 70 kg"
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -8379,11 +9274,17 @@
           "reviewer_status": "checked",
           "reviewer_note": "The 9-28 h value is a multi-context summary; source_1 reports context-specific half-lives rather than a single universal mean. The midpoint is retained only as a fixture check.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "range_midpoint_mixed_contexts",
+            "rationale": "(9 h + 28 h) / 2 Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "fluvoxamine_dose100mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -8677,7 +9578,32 @@
     },
     {
       "slug": "inulin",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 1.6062234130622617,
+          "implied_h": 1.6062234130622617,
+          "ratio": 1.0,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": true
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::inulin",
       "name": "Inulin",
       "route": "iv",
@@ -8770,7 +9696,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PMC article, Results / clearance estimates",
-          "exact_quote": "93.5 (9.2) and 102.6 (19.6) ml min−1"
+          "exact_quote": "93.5 (9.2) and 102.6 (19.6) ml min−1",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "93.5 mL/min * 60 min/h / 1000 mL/L"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_3",
@@ -8793,7 +9723,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PMC article, Discussion",
-          "exact_quote": "averaging 13l 70 kg−1"
+          "exact_quote": "averaging 13l 70 kg−1",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "source_3 reports Vss approximately 13 L/70 kg"
+          }
         },
         "t_half_h": {
           "source_id": "source_3",
@@ -8817,11 +9751,21 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PMC article, Abstract / Results",
-          "exact_quote": "Inulin disposition kinetics were best described by a tri-exponential model."
+          "exact_quote": "Inulin disposition kinetics were best described by a tri-exponential model.",
+          "selection": {
+            "rule": "derived_value",
+            "rationale": "ln(2) * 13 L / 5.61 L/h",
+            "depends_on": [
+              "CL_abs_L_per_h_at_70kg",
+              "V_abs_L_at_70kg"
+            ]
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "inulin_dose100mg_iv_single",
           "route": "iv",
           "regimen": "single",
@@ -9097,7 +10041,32 @@
     },
     {
       "slug": "itraconazole",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 22.0,
+          "implied_h": 29.08891045515358,
+          "ratio": 1.3222232025069809,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::itraconazole",
       "name": "Itraconazole",
       "route": "po",
@@ -9173,7 +10142,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "DailyMed label, Clinical Pharmacology, Pharmacokinetics",
-          "exact_quote": "Itraconazole mean total plasma clearance following intravenous administration is 278 mL/min."
+          "exact_quote": "Itraconazole mean total plasma clearance following intravenous administration is 278 mL/min.",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "278 mL/min * 60 min/h / 1000 mL/L"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -9196,7 +10169,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "DailyMed label, Clinical Pharmacology, Distribution",
-          "exact_quote": "a large apparent volume in the body (>700 L)"
+          "exact_quote": "a large apparent volume in the body (>700 L)",
+          "selection": {
+            "rule": "censored_lower_bound",
+            "rationale": "lower bound of reported apparent volume (>700 L) Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         },
         "bioavailability_frac": {
           "source_id": "source_1",
@@ -9220,7 +10197,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed label, Clinical Pharmacology, Absorption",
-          "exact_quote": "The observed absolute oral bioavailability of itraconazole is about 55%."
+          "exact_quote": "The observed absolute oral bioavailability of itraconazole is about 55%.",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "55 percent / 100"
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -9243,11 +10224,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed label, Clinical Pharmacology, Pharmacokinetics",
-          "exact_quote": "The terminal half-life of itraconazole generally ranges from 16 to 28 hours after single dose"
+          "exact_quote": "The terminal half-life of itraconazole generally ranges from 16 to 28 hours after single dose",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "midpoint of reported single-dose terminal half-life range (16 to 28 h) Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "itraconazole_dose100mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -9548,7 +10535,32 @@
     },
     {
       "slug": "mefenamic_acid",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 3.0,
+          "implied_h": 2.4340520964291503,
+          "ratio": 0.8113506988097168,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::mefenamic_acid",
       "name": "Mefenamic acid",
       "route": "po",
@@ -9632,7 +10644,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "DailyMed source_1, Table 1, Normal Healthy Adults (18 to 45 yr)",
-          "exact_quote": "Oral clearance (L/hr) 21.13"
+          "exact_quote": "Oral clearance (L/hr) 21.13",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.clearance.value"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -9656,7 +10672,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "DailyMed source_1, Table 1, Normal Healthy Adults (18 to 45 yr)",
-          "exact_quote": "Apparent volume of distribution; Vz/F (L/kg) 1.06"
+          "exact_quote": "Apparent volume of distribution; Vz/F (L/kg) 1.06",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "1.06 L/kg * 70 kg"
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -9677,11 +10697,17 @@
           "reviewer_status": "checked",
           "reviewer_note": "DailyMed source_1 reports a 2 to 4 h half-life in normal healthy adults. The midpoint is check-only and is not used to force CL/V agreement.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "midpoint of reported 2-4 h range Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "mefenamic_acid_dose100mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -9972,7 +10998,32 @@
     },
     {
       "slug": "metoprolol",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 5.0,
+          "implied_h": 4.999999999999999,
+          "ratio": 0.9999999999999998,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": true
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::metoprolol",
       "name": "Metoprolol",
       "route": "po",
@@ -10063,7 +11114,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract",
-          "exact_quote": "Total body clearance in the healthy subjects was 0.8 +/- 0.1 L/min"
+          "exact_quote": "Total body clearance in the healthy subjects was 0.8 +/- 0.1 L/min",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "0.8 L/min * 60 min/h"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -10090,7 +11145,15 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed label, Clinical Pharmacokinetics, Distribution",
-          "exact_quote": "Vd 3.2-5.6 L/kg"
+          "exact_quote": "Vd 3.2-5.6 L/kg",
+          "selection": {
+            "rule": "derived_value",
+            "rationale": "CL_abs_L_per_h_at_70kg * half_life_h / ln(2)",
+            "depends_on": [
+              "CL_abs_L_per_h_at_70kg",
+              "t_half_h"
+            ]
+          }
         },
         "bioavailability_frac": {
           "source_id": "source_1",
@@ -10114,7 +11177,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed label, Clinical Pharmacokinetics, Absorption",
-          "exact_quote": "conventional metoprolol tablets, however, approximate 50% of levels following intravenous administration"
+          "exact_quote": "conventional metoprolol tablets, however, approximate 50% of levels following intravenous administration",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "50 percent / 100"
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -10137,11 +11204,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed label, Clinical Pharmacokinetics, Elimination",
-          "exact_quote": "the plasma half-life ranges from approximately 3 to 7 hours"
+          "exact_quote": "the plasma half-life ranges from approximately 3 to 7 hours",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "(3 h + 7 h) / 2 Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "metoprolol_dose100mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -10431,7 +11504,32 @@
     },
     {
       "slug": "mexiletine",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 11.0,
+          "implied_h": 11.0,
+          "ratio": 1.0,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": true
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::mexiletine",
       "name": "Mexiletine",
       "route": "po",
@@ -10537,7 +11635,15 @@
           "reviewer_status": "checked",
           "reviewer_note": "Source_1 supplies the apparent volume range and oral half-life range; CL/F is derived for the one-compartment fixture and is not a directly reported clearance.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "derived_value",
+            "rationale": "(7 L/kg * 70 kg) * ln(2) / 11 h",
+            "depends_on": [
+              "V_abs_L_at_70kg",
+              "t_half_h"
+            ]
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -10565,7 +11671,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed source_1, Abstract",
-          "exact_quote": "Its volume of distribution is large and varies from 5 to 9 L/kg in healthy individuals"
+          "exact_quote": "Its volume of distribution is large and varies from 5 to 9 L/kg in healthy individuals",
+          "selection": {
+            "rule": "upper_bound",
+            "rationale": "7 L/kg * 70 kg Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -10586,11 +11696,17 @@
           "reviewer_status": "checked",
           "reviewer_note": "DailyMed source_1 reports a 10-12 h range. The canonical 11 h is a midpoint fixture and is not a directly observed mean.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "(10 h + 12 h) / 2 Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "mexiletine_dose100mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -10884,7 +12000,32 @@
     },
     {
       "slug": "moclobemide",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 1.6,
+          "implied_h": 1.4830534853097308,
+          "ratio": 0.9269084283185817,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::moclobemide",
       "name": "Moclobemide",
       "route": "po",
@@ -11022,7 +12163,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract",
-          "exact_quote": "clearance, 39.4 (15%) ... L/hr"
+          "exact_quote": "clearance, 39.4 (15%) ... L/hr",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "source_5 first IV infusion clearance"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_5",
@@ -11045,7 +12190,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract",
-          "exact_quote": "volume of distribution at steady state, 84.3 (11%) ... L"
+          "exact_quote": "volume of distribution at steady state, 84.3 (11%) ... L",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "source_5 first IV infusion Vss"
+          }
         },
         "t_half_h": {
           "source_id": "source_5",
@@ -11068,7 +12217,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract",
-          "exact_quote": "elimination half-life, 1.60 (15%) ... hours"
+          "exact_quote": "elimination half-life, 1.60 (15%) ... hours",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "source_5 first IV infusion elimination half-life"
+          }
         },
         "bioavailability_frac": {
           "source_id": "source_5",
@@ -11092,11 +12245,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract",
-          "exact_quote": "The absolute oral bioavailability increased from 0.56 after the first oral dose"
+          "exact_quote": "The absolute oral bioavailability increased from 0.56 after the first oral dose",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "source_5 first oral dose absolute bioavailability"
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "moclobemide_dose100mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -11397,6 +12556,7 @@
     {
       "slug": "montelukast",
       "simulation_validity": {
+        "source_correction_date": "2026-10-28",
         "status": "clinical_hold",
         "review_date": "2026-10-28",
         "reasons": [
@@ -11405,6 +12565,28 @@
           "The retained100 mg oral arm is a computational stress test, not the cited10 mg oral or7 mg IV scenario. The generated body-weight distribution does not reconstruct the elderly cohort. KA, lag, IIV and residual errors remain generic fixture assumptions."
         ]
       },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 6.7,
+          "implied_h": 3.6382725386533923,
+          "ratio": 0.5430257520378198,
+          "threshold_fold": 1.5,
+          "hold_candidate": true,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::montelukast",
       "name": "Montelukast",
       "route": "po",
@@ -11500,7 +12682,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "PubMed abstract, elderly IV paragraph",
-          "exact_quote": "30.8 mL min-1"
+          "exact_quote": "30.8 mL min-1",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "30.8 mL/min * 60 min/h / 1000 mL/L"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -11521,7 +12707,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "PubMed abstract, elderly IV paragraph",
-          "exact_quote": "9.7 L"
+          "exact_quote": "9.7 L",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.volume.value"
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -11542,7 +12732,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract, elderly IV paragraph",
-          "exact_quote": "6.7 h"
+          "exact_quote": "6.7 h",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.half_life_h"
+          }
         },
         "bioavailability_frac": {
           "source_id": "source_1",
@@ -11566,11 +12760,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract, oral bioavailability paragraph",
-          "exact_quote": "the bioavailability of montelukast in healthy elderly averaged 61%"
+          "exact_quote": "the bioavailability of montelukast in healthy elderly averaged 61%",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "61 / 100"
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "montelukast_dose100mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -11867,7 +13067,32 @@
     },
     {
       "slug": "motavizumab_medi_524",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 636.0,
+          "implied_h": 498.0495423656796,
+          "ratio": 0.7830967647259113,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::motavizumab_medi_524",
       "name": "Motavizumab (MEDI-524)",
       "route": "iv",
@@ -11947,7 +13172,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PMC source_1, Results, Pharmacokinetics",
-          "exact_quote": "165 to 326 ml/day"
+          "exact_quote": "165 to 326 ml/day",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "midpoint of 165-326 mL/day * 1 L/1000 mL / 24 h/day Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -11968,7 +13197,11 @@
           "reviewer_status": "checked",
           "reviewer_note": "Source_1 reports motavizumab Vss values of 5.2 to 9.5 L across IV dose cohorts. The fixture uses the midpoint and should not be interpreted as a dose-independent Vss.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "midpoint of reported 5.2-9.5 L range Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -11991,11 +13224,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PMC source_1, Results, Pharmacokinetics",
-          "exact_quote": "from 19 to 34 days for motavizumab"
+          "exact_quote": "from 19 to 34 days for motavizumab",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "midpoint of reported 19-34 days * 24 h/day Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "motavizumab_medi_524_dose100mg_iv_single",
           "route": "iv",
           "regimen": "single",
@@ -12264,7 +13503,33 @@
     },
     {
       "slug": "motavizumab_yte",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 2040.0,
+          "implied_h": 2040.0,
+          "ratio": 1.0,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": true
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100.0,
+              "infusion_h": 1.0
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "OSP_motavizumab_yte",
       "name": "Motavizumab-YTE",
       "route": "iv",
@@ -12332,7 +13597,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PMC source_1, Results, Pharmacokinetics",
-          "exact_quote": "43 to 68 ml/day"
+          "exact_quote": "43 to 68 ml/day",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "midpoint of 43-68 mL/day * 1 L/1000 mL / 24 h/day Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -12353,7 +13622,15 @@
           "reviewer_status": "checked",
           "reviewer_note": "The source provides dose-specific Vss values of 4.6 to 8.3 L; this fixture explicitly derives V from its selected midpoint CL and half-life instead. It must not be presented as the directly reported Vss.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "derived_value",
+            "rationale": "CL_abs_L_per_h_at_70kg * t_half_h / ln(2)",
+            "depends_on": [
+              "CL_abs_L_per_h_at_70kg",
+              "t_half_h"
+            ]
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -12376,11 +13653,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PMC source_1, Results, Pharmacokinetics",
-          "exact_quote": "70 to 100 days for mota-YTE"
+          "exact_quote": "70 to 100 days for mota-YTE",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "midpoint of reported 70-100 days * 24 h/day Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "motavizumab_yte_dose100mg_iv_single",
           "route": "iv",
           "regimen": "single",
@@ -12651,6 +13934,7 @@
     {
       "slug": "omeprazole",
       "simulation_validity": {
+        "source_correction_date": "2026-10-28",
         "status": "clinical_hold",
         "review_date": "2026-10-28",
         "reasons": [
@@ -12659,6 +13943,28 @@
           "Legacy pk_raw volume 0.4 L/kg is retained as the original capture; the adopted source_4 IV Vss is 0.23 L/kg. KA, lag, IIV and residual errors remain generic fixture assumptions."
         ]
       },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 0.75,
+          "implied_h": 0.29806809847796795,
+          "ratio": 0.39742413130395726,
+          "threshold_fold": 1.5,
+          "hold_candidate": true,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::omeprazole",
       "name": "Omeprazole",
       "route": "po",
@@ -12777,7 +14083,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "PubMed abstract",
-          "exact_quote": "the median systemic plasma clearance was 624 ml/min"
+          "exact_quote": "the median systemic plasma clearance was 624 ml/min",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "624 mL/min * 60 min/h / 1000 mL/L"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_4",
@@ -12800,7 +14110,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract",
-          "exact_quote": "Mean Vss was 0.23 +/- 0.04 L/kg."
+          "exact_quote": "Mean Vss was 0.23 +/- 0.04 L/kg.",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "0.23 L/kg * 70 kg"
+          }
         },
         "bioavailability_frac": {
           "source_id": "source_2",
@@ -12825,7 +14139,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed label, Clinical Pharmacology, Pharmacokinetics, Absorption",
-          "exact_quote": "Absolute bioavailability (compared with intravenous administration) is about 30-40% at doses of 20-40 mg"
+          "exact_quote": "Absolute bioavailability (compared with intravenous administration) is about 30-40% at doses of 20-40 mg",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "midpoint of healthy-subject label range (30% to 40%) at 20-40 mg"
+          }
         },
         "t_half_h": {
           "source_id": "source_2",
@@ -12848,11 +14166,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed label, Clinical Pharmacology, Pharmacokinetics",
-          "exact_quote": "In healthy subjects the plasma half-life is 0.5 to 1 hour"
+          "exact_quote": "In healthy subjects the plasma half-life is 0.5 to 1 hour",
+          "selection": {
+            "rule": "legacy_fixture_value",
+            "rationale": "fixture value retained within reported plasma half-life range (0.5 to 1 h) Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "omeprazole_dose100mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -13158,7 +14482,32 @@
     },
     {
       "slug": "raltegravir",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 7.8,
+          "implied_h": 7.8,
+          "ratio": 1.0,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": true
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 400.0
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "OSP_raltegravir",
       "name": "Raltegravir",
       "route": "po",
@@ -13238,7 +14587,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract",
-          "exact_quote": "The apparent plasma raltegravir half-life was 7.8 (5.5 to 11.3) h"
+          "exact_quote": "The apparent plasma raltegravir half-life was 7.8 (5.5 to 11.3) h",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "source_1 reported oral CL/F"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -13259,7 +14612,15 @@
           "reviewer_status": "checked",
           "reviewer_note": "Source_1 supports the apparent CL/F context but does not report the committed one-compartment V/F. This value is retained only as a deterministic fixture derivation and must not be presented as a directly observed distribution volume.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "derived_value",
+            "rationale": "CL_abs_L_per_h_at_70kg * half_life_h / ln(2)",
+            "depends_on": [
+              "CL_abs_L_per_h_at_70kg",
+              "t_half_h"
+            ]
+          }
         },
         "t_half_h": {
           "source_id": "source_2",
@@ -13286,11 +14647,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed source_2, Abstract",
-          "exact_quote": "The apparent plasma raltegravir half-life was 7.8 (5.5 to 11.3) h"
+          "exact_quote": "The apparent plasma raltegravir half-life was 7.8 (5.5 to 11.3) h",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "source_2 reported geometric-mean apparent plasma half-life"
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "raltegravir_dose400mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -13591,6 +14958,7 @@
     {
       "slug": "sildenafil",
       "simulation_validity": {
+        "source_correction_date": "2026-10-28",
         "status": "clinical_hold",
         "review_date": "2026-10-28",
         "reasons": [
@@ -13599,6 +14967,28 @@
           "The retained100 mg oral dose is within the cited recommended-dose range, but Vss mapping, KA, lag, IIV and residual errors remain fixture approximations and do not establish clinical model validity."
         ]
       },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 4.0,
+          "implied_h": 1.7751330233852256,
+          "ratio": 0.4437832558463064,
+          "threshold_fold": 1.5,
+          "hold_candidate": true,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::sildenafil",
       "name": "Sildenafil",
       "route": "po",
@@ -13726,7 +15116,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "EMA product information section 5.2",
-          "exact_quote": "total body clearance of sildenafil is 41 L/h"
+          "exact_quote": "total body clearance of sildenafil is 41 L/h",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "reported value"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_7",
@@ -13747,7 +15141,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "EMA product information section 5.2",
-          "exact_quote": "105 L"
+          "exact_quote": "105 L",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "reported value"
+          }
         },
         "t_half_h": {
           "source_id": "source_7",
@@ -13769,7 +15167,11 @@
           "reviewer_note": "EMA source_7 section5.2 reports terminal half-life3–5 h. The4 h midpoint is a check-only fixture choice and is not used to infer CL.",
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
-          "source_locator": "EMA product information section5.2"
+          "source_locator": "EMA product information section5.2",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "midpoint of reported 3-5 h range Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         },
         "bioavailability_frac": {
           "source_id": "source_7",
@@ -13790,11 +15192,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "EMA product information section 5.2",
-          "exact_quote": "41%"
+          "exact_quote": "41%",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "41 / 100"
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "sildenafil_dose100mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -14098,7 +15506,32 @@
     },
     {
       "slug": "sufentanil",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 13.4,
+          "implied_h": 13.399999999999999,
+          "ratio": 0.9999999999999999,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": true
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 0.03
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "OSP_sufentanil",
       "name": "Sufentanil",
       "route": "sl",
@@ -14165,7 +15598,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "DailyMed DSUVIA, section 12.3, Elimination",
-          "exact_quote": "mean apparent plasma clearance is 108 L/hour"
+          "exact_quote": "mean apparent plasma clearance is 108 L/hour",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.clearance.value"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -14187,7 +15624,15 @@
           "reviewer_status": "checked",
           "reviewer_note": "Volume is not directly reported in the cited label; it is a transparent one-compartment fixture derivation from the label apparent CL and terminal half-life and must not be presented as an observed Vd.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "derived_value",
+            "rationale": "CL_apparent / (ln(2) / terminal_half_life)",
+            "depends_on": [
+              "CL_abs_L_per_h_at_70kg",
+              "t_half_h"
+            ]
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -14208,7 +15653,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed DSUVIA, section 12.3, Elimination",
-          "exact_quote": "mean terminal half-life is 13.4 hours"
+          "exact_quote": "mean terminal half-life is 13.4 hours",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.half_life_h"
+          }
         },
         "bioavailability_frac": {
           "source_id": "source_1",
@@ -14227,11 +15676,17 @@
           "reviewer_status": "checked",
           "reviewer_note": "DailyMed DSUVIA section 12.3 reports approximately 53% bioavailability relative to a one-minute IV infusion of 30 mcg.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "not_applicable"
+          "fixture_limitation_status": "not_applicable",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "53 / 100"
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "sufentanil_dose0.03mg_sl_single",
           "route": "sl",
           "regimen": "single",
@@ -14557,7 +16012,32 @@
     },
     {
       "slug": "tefibazumab",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 420.0,
+          "implied_h": 421.6645348406334,
+          "ratio": 1.0039631781919842,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::tefibazumab",
       "name": "Tefibazumab",
       "route": "iv",
@@ -14639,7 +16119,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PMC source_1, Abstract",
-          "exact_quote": "average clearance was 12 ml/h for both dose groups"
+          "exact_quote": "average clearance was 12 ml/h for both dose groups",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "12 mL/h / 1000 mL/L"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -14662,7 +16146,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PMC source_1, Abstract",
-          "exact_quote": "average volume of distribution was 7.3 liters"
+          "exact_quote": "average volume of distribution was 7.3 liters",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "source_1 reported IV volume of distribution"
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -14684,11 +16172,17 @@
           "reviewer_status": "checked",
           "reviewer_note": "Source_1 reports a 17-18 day terminal half-life range. The canonical 420 h is the midpoint converted to hours and remains a check target.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "((17 days + 18 days) / 2) * 24 h/day Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "tefibazumab_dose100mg_iv_single",
           "route": "iv",
           "regimen": "single",
@@ -14957,7 +16451,32 @@
     },
     {
       "slug": "tizanidine",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 2.5,
+          "implied_h": 2.5,
+          "ratio": 1.0,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": true
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::tizanidine",
       "name": "Tizanidine",
       "route": "po",
@@ -15040,7 +16559,15 @@
           "reviewer_status": "checked",
           "reviewer_note": "Source_1 does not report this CL. It is a deterministic cross-route derivation used only to keep the one-compartment fixture executable; it requires independent clinical CL evidence before use for dosing or inference.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "derived_value",
+            "rationale": "2.4 L/kg * 70 kg * ln(2) / 2.5 h",
+            "depends_on": [
+              "V_abs_L_at_70kg",
+              "t_half_h"
+            ]
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
@@ -15064,7 +16591,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed label, Clinical Pharmacokinetics, Absorption and Distribution",
-          "exact_quote": "mean steady state volume of distribution of 2.4 L/kg"
+          "exact_quote": "mean steady state volume of distribution of 2.4 L/kg",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "2.4 L/kg * 70 kg"
+          }
         },
         "bioavailability_frac": {
           "source_id": "source_1",
@@ -15089,7 +16620,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed label, Clinical Pharmacokinetics, Absorption and Distribution",
-          "exact_quote": "The absolute oral bioavailability of tizanidine is approximately 40%"
+          "exact_quote": "The absolute oral bioavailability of tizanidine is approximately 40%",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "40 percent / 100"
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -15112,11 +16647,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed label, Clinical Pharmacokinetics, Metabolism and Excretion",
-          "exact_quote": "Tizanidine has a half-life of approximately 2.5 hours"
+          "exact_quote": "Tizanidine has a half-life of approximately 2.5 hours",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "pk_parsed.half_life_h"
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "tizanidine_dose100mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -15410,6 +16951,7 @@
     {
       "slug": "triazolam",
       "simulation_validity": {
+        "source_correction_date": "2026-10-28",
         "status": "clinical_hold",
         "review_date": "2026-10-28",
         "reasons": [
@@ -15417,6 +16959,28 @@
           "No numeric PK parameter changes were made in this correction. Apparent CL and derived one-compartment volume remain a fixture and do not establish clinical model validity."
         ]
       },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 3.5,
+          "implied_h": 3.5,
+          "ratio": 1.0,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": true
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [],
       "id": "osp::triazolam",
       "name": "Triazolam",
       "route": "po",
@@ -15521,7 +17085,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "PMC source_3, Abstract",
-          "exact_quote": "oral clearance, 526 +/- 38 (175-1892) ml min-1"
+          "exact_quote": "oral clearance, 526 +/- 38 (175-1892) ml min-1",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "526 mL/min * 60 min/h / 1000 mL/L"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_3",
@@ -15546,7 +17114,15 @@
           "reviewer_status": "checked",
           "reviewer_note": "Volume is not directly reported in the canonical sources. It is a transparent one-compartment fixture derivation from the source-mapped oral clearance in source_3 and the selected midpoint of the DailyMed half-life range in source_1; it must not be presented as an observed Vd.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "derived_value",
+            "rationale": "CL_apparent / (ln(2) / selected_fixture_half_life)",
+            "depends_on": [
+              "CL_abs_L_per_h_at_70kg",
+              "t_half_h"
+            ]
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -15567,11 +17143,17 @@
           "reviewer_status": "checked",
           "reviewer_note": "DailyMed source_1 reports mean plasma elimination half-life of 1.5 to 5.5 h. The canonical value retains the midpoint as a check-only fixture target; it is not used to recalibrate CL or V.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "midpoint of DailyMed reported range (1.5 to 5.5 h) Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "triazolam_dose100mg_po_single",
           "route": "po",
           "regimen": "single",
@@ -15869,7 +17451,47 @@
     },
     {
       "slug": "verapamil",
-      "simulation_validity": {},
+      "simulation_validity": {
+        "status": "not_assessed",
+        "reasons": []
+      },
+      "fixture_assessment": {
+        "half_life_check": {
+          "evaluated": true,
+          "reported_h": 5.1,
+          "implied_h": 4.054342429170076,
+          "ratio": 0.7949691037588384,
+          "threshold_fold": 1.5,
+          "hold_candidate": false,
+          "circular": false
+        },
+        "dose_context": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
+          "arms": {
+            "A": {
+              "n": 100,
+              "dose_mg": 100
+            }
+          }
+        }
+      },
+      "fixture_limitations": [
+        {
+          "code": "first_pass_and_repeat_dosing",
+          "statement": "The label describes extensive first-pass metabolism, a nonlinear dose-concentration relationship and a longer half-life with repeated dosing. A single fixed CL/V/F does not express these changes.",
+          "source_id": "source_1",
+          "source_locator": "CLINICAL PHARMACOLOGY, Pharmacokinetics and metabolism",
+          "checked_date": "2026-10-28"
+        },
+        {
+          "code": "stereoselective_first_pass",
+          "statement": "Human data demonstrate stereoselective first-pass metabolism. This racemic single-compartment fixture does not separate R/S enantiomers or their different oral disposition.",
+          "source_id": "source_4",
+          "source_locator": "Abstract",
+          "checked_date": "2026-10-28"
+        }
+      ],
       "id": "osp::verapamil",
       "name": "Verapamil",
       "route": "po",
@@ -15897,6 +17519,14 @@
           "index": 3,
           "kind": "PubMed",
           "identifier": "432439"
+        },
+        {
+          "id": "source_4",
+          "display_id": "source_4",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/6508982/",
+          "index": 4,
+          "kind": "PubMed",
+          "identifier": "6508982"
         }
       ],
       "raw": {
@@ -15963,7 +17593,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract",
-          "exact_quote": "body clearance (C1b) showed 500.64 ml/min"
+          "exact_quote": "body clearance (C1b) showed 500.64 ml/min",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "500.64 mL/min * 60 min/h / 1000 mL/L"
+          }
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_3",
@@ -15986,7 +17620,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract",
-          "exact_quote": "The apparent volume of distribution [Vd (area)] showed 2.51 1/kg"
+          "exact_quote": "The apparent volume of distribution [Vd (area)] showed 2.51 1/kg",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "2.51 L/kg * 70 kg"
+          }
         },
         "bioavailability_frac": {
           "source_id": "source_3",
@@ -16011,7 +17649,11 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract, oral administration paragraph",
-          "exact_quote": "The bioavailability was only 22.47% on an average."
+          "exact_quote": "The bioavailability was only 22.47% on an average.",
+          "selection": {
+            "rule": "recorded_point_value",
+            "rationale": "22.47 percent / 100"
+          }
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -16034,11 +17676,17 @@
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed label, Pharmacokinetics and metabolism",
-          "exact_quote": "The mean elimination half-life in single-dose studies ranged from 2.8 to 7.4 hours."
+          "exact_quote": "The mean elimination half-life in single-dose studies ranged from 2.8 to 7.4 hours.",
+          "selection": {
+            "rule": "range_midpoint",
+            "rationale": "midpoint of reported single-dose terminal half-life range (2.8 to 7.4 h) Retained as an explicit legacy fixture choice, not a jointly fitted or clinically qualified parameter set."
+          }
         }
       },
       "targets": {
         "scenario": {
+          "purpose": "computational_stress_test",
+          "clinical_dose_verified": false,
           "id": "verapamil_dose100mg_po_single",
           "route": "po",
           "regimen": "single",

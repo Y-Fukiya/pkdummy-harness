@@ -54,7 +54,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: PMC source_1, Table 2, Healthy controls after 125 mg IV infusion
-    exact_quote: "CL (l/h/kg) | 0.53 ± 0.13"
+    exact_quote: CL (l/h/kg) | 0.53 ± 0.13
+    selection:
+      rule: recorded_point_value
+      rationale: 0.53 L/h/kg * 70 kg
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: one_compartment_volume_derived_from_iv_clearance_and_half_life
@@ -75,6 +78,12 @@ value_provenance:
       These are not interchangeable volume definitions.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: derived_value
+      rationale: CL_abs_L_per_h_at_70kg * t_half_h / ln(2)
+      depends_on:
+      - CL_abs_L_per_h_at_70kg
+      - t_half_h
   t_half_h:
     source_id: source_1
     source_field: healthy_control_terminal_half_life_after_iv_infusion
@@ -95,4 +104,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PMC source_1, Table 2, Healthy controls after 125 mg IV infusion
-    exact_quote: "t1/2 (h) | 2.30 ± 1.03"
+    exact_quote: t1/2 (h) | 2.30 ± 1.03
+    selection:
+      rule: recorded_point_value
+      rationale: pk_parsed.half_life_h
+simulation_validity:
+  status: not_assessed
+  reasons: []

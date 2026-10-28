@@ -74,6 +74,12 @@ value_provenance:
       reported clearance.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: derived_value
+      rationale: (7 L/kg * 70 kg) * ln(2) / 11 h
+      depends_on:
+      - V_abs_L_at_70kg
+      - t_half_h
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: oral_apparent_volume_of_distribution_range
@@ -99,7 +105,12 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed source_1, Abstract
-    exact_quote: "Its volume of distribution is large and varies from 5 to 9 L/kg in healthy individuals"
+    exact_quote: Its volume of distribution is large and varies from 5 to 9 L/kg in
+      healthy individuals
+    selection:
+      rule: upper_bound
+      rationale: 7 L/kg * 70 kg Retained as an explicit legacy fixture choice, not
+        a jointly fitted or clinically qualified parameter set.
   t_half_h:
     source_id: source_1
     source_field: oral_half_life_range
@@ -119,3 +130,10 @@ value_provenance:
       a midpoint fixture and is not a directly observed mean.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: range_midpoint
+      rationale: (10 h + 12 h) / 2 Retained as an explicit legacy fixture choice,
+        not a jointly fitted or clinically qualified parameter set.
+simulation_validity:
+  status: not_assessed
+  reasons: []

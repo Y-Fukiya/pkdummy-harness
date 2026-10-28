@@ -55,7 +55,12 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PMC source_1, Results, Pharmacokinetics
-    exact_quote: "43 to 68 ml/day"
+    exact_quote: 43 to 68 ml/day
+    selection:
+      rule: range_midpoint
+      rationale: midpoint of 43-68 mL/day * 1 L/1000 mL / 24 h/day Retained as an
+        explicit legacy fixture choice, not a jointly fitted or clinically qualified
+        parameter set.
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: motavizumab_YTE_one_compartment_volume_derived_from_clearance_and_half_life
@@ -76,6 +81,12 @@ value_provenance:
       It must not be presented as the directly reported Vss.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: derived_value
+      rationale: CL_abs_L_per_h_at_70kg * t_half_h / ln(2)
+      depends_on:
+      - CL_abs_L_per_h_at_70kg
+      - t_half_h
   t_half_h:
     source_id: source_1
     source_field: motavizumab_YTE_serum_half_life_range
@@ -97,4 +108,12 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PMC source_1, Results, Pharmacokinetics
-    exact_quote: "70 to 100 days for mota-YTE"
+    exact_quote: 70 to 100 days for mota-YTE
+    selection:
+      rule: range_midpoint
+      rationale: midpoint of reported 70-100 days * 24 h/day Retained as an explicit
+        legacy fixture choice, not a jointly fitted or clinically qualified parameter
+        set.
+simulation_validity:
+  status: not_assessed
+  reasons: []

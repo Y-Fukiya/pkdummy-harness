@@ -55,7 +55,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: DailyMed DSUVIA, section 12.3, Elimination
-    exact_quote: "mean apparent plasma clearance is 108 L/hour"
+    exact_quote: mean apparent plasma clearance is 108 L/hour
+    selection:
+      rule: recorded_point_value
+      rationale: pk_parsed.clearance.value
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: one_compartment_volume_derived_from_label_CL_and_terminal_half_life
@@ -77,6 +80,12 @@ value_provenance:
       and must not be presented as an observed Vd.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: derived_value
+      rationale: CL_apparent / (ln(2) / terminal_half_life)
+      depends_on:
+      - CL_abs_L_per_h_at_70kg
+      - t_half_h
   t_half_h:
     source_id: source_1
     source_field: mean_terminal_half_life_single_dose
@@ -97,7 +106,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: DailyMed DSUVIA, section 12.3, Elimination
-    exact_quote: "mean terminal half-life is 13.4 hours"
+    exact_quote: mean terminal half-life is 13.4 hours
+    selection:
+      rule: recorded_point_value
+      rationale: pk_parsed.half_life_h
   bioavailability_frac:
     source_id: source_1
     source_field: single_sublingual_absolute_bioavailability
@@ -116,3 +128,9 @@ value_provenance:
       relative to a one-minute IV infusion of 30 mcg.
     source_review_status: checked
     fixture_limitation_status: not_applicable
+    selection:
+      rule: recorded_point_value
+      rationale: 53 / 100
+simulation_validity:
+  status: not_assessed
+  reasons: []

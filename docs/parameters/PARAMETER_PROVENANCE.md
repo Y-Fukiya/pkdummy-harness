@@ -7,6 +7,8 @@ title: 全パラメータと出典
 
 この一覧は `drugs/*/pk.yml`、`targets.yml`、`spec_pk1_*.yml` を読み取り、値の由来を確認するための監査用出力です。ソースURLが存在することだけでは、URL内のどの記載が特定の値に対応するかを証明しません。`reference_status` を必ず確認してください。
 
+全投与設定は計算用ストレス試験です。CSVのclinical_assessmentは臨床モデル評価、hold_candidateは半減期の自動候補で、どちらも出典照合済み表示とは別です。execution_armsは実行specの投与量で、常用量の案内ではありません。
+
 ## 読み方
 
 - `value_level_metadata`: `pk.yml.value_provenance` に解決済みsource_idがあり、source_review_status=checked。
@@ -33,7 +35,7 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `apixaban` | po | `spec_pk1_oral.yml` | 1 | 21 | 7 | source_urls_present |
 | `atazanavir` | po | `spec_pk1_oral.yml` | 2 | 18 | 7 | source_urls_present |
 | `buprenorphine` | iv | `spec_pk1_iv.yml` | 1 | 17 | 7 | source_urls_present |
-| `carbamazepine` | po | `spec_pk1_oral.yml` | 1 | 21 | 7 | source_urls_present |
+| `carbamazepine` | po | `spec_pk1_oral.yml` | 2 | 21 | 7 | source_urls_present |
 | `cda1` | iv | `spec_pk1_iv.yml` | 2 | 17 | 7 | source_urls_present |
 | `cimetidine` | po | `spec_pk1_oral.yml` | 2 | 21 | 7 | source_urls_present |
 | `clarithromycin` | po | `spec_pk1_oral.yml` | 3 | 21 | 7 | source_urls_present |
@@ -60,7 +62,7 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `tefibazumab` | iv | `spec_pk1_iv.yml` | 1 | 17 | 7 | source_urls_present |
 | `tizanidine` | po | `spec_pk1_oral.yml` | 1 | 21 | 7 | source_urls_present |
 | `triazolam` | po | `spec_pk1_oral.yml` | 4 | 21 | 7 | source_urls_present |
-| `verapamil` | po | `spec_pk1_oral.yml` | 3 | 21 | 7 | source_urls_present |
+| `verapamil` | po | `spec_pk1_oral.yml` | 4 | 21 | 7 | source_urls_present |
 
 ## 値単位の確認一覧
 
@@ -638,6 +640,7 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `atazanavir` | `source_2` | https://pmc.ncbi.nlm.nih.gov/articles/PMC1635184/ |
 | `buprenorphine` | `source_2` | https://pmc.ncbi.nlm.nih.gov/articles/PMC3663890/ |
 | `carbamazepine` | `source_1` | https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=52f0f753-a70c-4572-a85c-97ea7a2601a9 |
+| `carbamazepine` | `source_2` | https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1fc170d7-db1a-486d-8c10-faa6e3da3b1e |
 | `cda1` | `source_1` | https://pubmed.ncbi.nlm.nih.gov/18502001/ |
 | `cda1` | `source_2` | https://pmc.ncbi.nlm.nih.gov/articles/PMC2628753/ |
 | `cimetidine` | `source_1` | https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=496e258d-a5fd-42da-9a86-73afc8be359b |
@@ -703,3 +706,4 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `verapamil` | `source_1` | https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c9d71191-b32a-44f9-bc5a-283a06884c82 |
 | `verapamil` | `source_2` | https://pubchem.ncbi.nlm.nih.gov/compound/Verapamil |
 | `verapamil` | `source_3` | https://pubmed.ncbi.nlm.nih.gov/432439/ |
+| `verapamil` | `source_4` | https://pubmed.ncbi.nlm.nih.gov/6508982/ |

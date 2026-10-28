@@ -10,7 +10,8 @@ pk_raw:
   half_life: 2 hours
   clearance: 500 mL/min
   volume_of_distribution: 0.8 L/kg
-  bioavailability: about 60% in the selected ulcer-patient IV/oral study; 60-70% retained as broader context
+  bioavailability: about 60% in the selected ulcer-patient IV/oral study; 60-70% retained
+    as broader context
   elimination_route: 腎排泄
 pk_parsed:
   half_life_h: 2.0
@@ -68,7 +69,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: PubMed abstract
-    exact_quote: "the plasma clearance value of 495 ml/min"
+    exact_quote: the plasma clearance value of 495 ml/min
+    selection:
+      rule: recorded_point_value
+      rationale: 495 mL/min * 60 min/h / 1000 mL/L
   V_abs_L_at_70kg:
     source_id: source_2
     source_field: apparent_volume_of_distribution_at_steady_state
@@ -91,7 +95,11 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: PubMed abstract
-    exact_quote: "The volume of distribution at steady-state was about 80% of body weight"
+    exact_quote: The volume of distribution at steady-state was about 80% of body
+      weight
+    selection:
+      rule: recorded_point_value
+      rationale: pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs
   bioavailability_frac:
     source_id: source_2
     source_field: absolute_oral_bioavailability
@@ -108,11 +116,17 @@ value_provenance:
         dose_context: 200 mg IV and oral
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: PubMed source_2 reports about 60% absolute bioavailability in 6 gastric and 6 duodenal ulcer patients aged 28 to 64 years after 200 mg IV and oral dosing. The selected F follows this primary-study context; the broader 60-70% summary is not treated as a single observed value.
+    reviewer_note: PubMed source_2 reports about 60% absolute bioavailability in 6
+      gastric and 6 duodenal ulcer patients aged 28 to 64 years after 200 mg IV and
+      oral dosing. The selected F follows this primary-study context; the broader
+      60-70% summary is not treated as a single observed value.
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed abstract
-    exact_quote: "Bioavailability was not complete, but was about 60%"
+    exact_quote: Bioavailability was not complete, but was about 60%
+    selection:
+      rule: recorded_point_value
+      rationale: 60 percent / 100
   t_half_h:
     source_id: source_1
     source_field: terminal_half_life
@@ -134,4 +148,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: DailyMed label, Pharmacokinetics section
-    exact_quote: "The half-life of cimetidine is approximately 2 hours."
+    exact_quote: The half-life of cimetidine is approximately 2 hours.
+    selection:
+      rule: recorded_point_value
+      rationale: pk_parsed.half_life_h
+simulation_validity:
+  status: not_assessed
+  reasons: []
