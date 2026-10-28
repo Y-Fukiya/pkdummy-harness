@@ -2,7 +2,8 @@ id: OSP_buprenorphine
 name: Buprenorphine
 route_inferred: iv
 sources:
-- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3498427/
+- id: source_2
+  url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3663890/
 pk_raw:
   text: 'IV study: clearance 54 L/h; Vd 806 L. One-comp half-life derived from V/CL.'
 pk_parsed:
@@ -16,6 +17,11 @@ pk_parsed:
   bioavailability_frac: 1.0
   clearance_basis: systemic
   volume_basis: systemic
+  clearance_basis_source: primary_source_reviewed
+  clearance_basis_note: Source_1 is an IV pharmacokinetic study and the raw summary
+    explicitly identifies CL and Vd as IV/systemic values. The canonical half-life
+    is the one-compartment CL/V derivation, not an independently reported terminal
+    half-life.
   weight_ref_kg_for_abs: 70.0
 derived:
   ke_1_per_h: 0.06699751861042183
@@ -31,3 +37,69 @@ derived:
     with systemic CL/V.'
   - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
     typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: source_2
+    source_field: IV_clearance
+    value_basis: literature_reported
+    raw_value: 54.0
+    raw_unit: L/h
+    normalized_value: 54.0
+    normalized_unit: L/h
+    conversion:
+      method: direct
+      formula: source_2 reported IV clearance
+      assumptions:
+        route_context: IV
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: Source_2 reports IV clearance 54 L/h. It is retained as systemic
+      CL without an oral bioavailability correction.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PMC source_2, Results and Table 1, mean intravenous buprenorphine
+      PK parameters
+    exact_quote: "Mean ± SE buprenorphine clearance ... 54.0 ± 1.7 L/h"
+  V_abs_L_at_70kg:
+    source_id: source_2
+    source_field: IV_volume_of_distribution
+    value_basis: literature_reported
+    raw_value: 806.0
+    raw_unit: L
+    normalized_value: 806.0
+    normalized_unit: L
+    conversion:
+      method: direct
+      formula: source_2 reported IV Vd
+      assumptions:
+        route_context: IV
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: Source_2 reports IV Vd 806 L. The deterministic fixture retains
+      the reported systemic volume and does not claim that it replaces the source
+      model structure.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PMC source_2, Results and Table 1, mean intravenous buprenorphine
+      PK parameters
+    exact_quote: "volume of distribution were ... 806.4 ± 38.2 L"
+  t_half_h:
+    source_id: source_2
+    source_field: one_compartment_half_life_derived_from_IV_CL_and_V
+    value_basis: derived_from_reported
+    raw_value: 54.0
+    raw_unit: L/h
+    normalized_value: 10.345863472802147
+    normalized_unit: h
+    conversion:
+      method: derived_formula
+      formula: ln(2) * V / CL = ln(2) * 806 L / 54 L/h
+      assumptions:
+        source_reported_values_are_IV_systemic: true
+    role: check_only
+    reviewer_status: checked
+    reviewer_note: The raw summary explicitly says the half-life is derived from V/CL.
+      This is therefore a fixture-derived check, not an independently observed terminal
+      half-life.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged

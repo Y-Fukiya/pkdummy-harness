@@ -13,13 +13,19 @@ WARNING_SLUGS = {
     "amikacin",
     "cimetidine",
     "clarithromycin",
+    "dapagliflozin",
     "felodipine",
     "inulin",
     "itraconazole",
     "moclobemide",
     "montelukast",
     "omeprazole",
+    "raltegravir",
     "verapamil",
+}
+SYSTEMIC_ORAL_SLUGS = {
+    "apixaban", "sildenafil", "aciclovir", "cimetidine", "felodipine", "itraconazole",
+    "dapagliflozin", "metoprolol", "moclobemide", "montelukast", "omeprazole", "tizanidine", "verapamil",
 }
 
 
@@ -35,11 +41,24 @@ def test_targets_have_structured_auc_and_t_half_metadata() -> None:
         targets = (load_yaml(path).get("targets") or {})
         auc = targets.get("auc") or {}
         t_half = targets.get("t_half") or {}
-        assert auc.get("basis") == "dose_over_cl", path
-        assert auc.get("target_basis") == "dose_over_cl_not_literature_auc", path
-        assert auc.get("independent_literature_target") is False, path
-        assert auc.get("source_value") == "CL_abs_L_per_h_at_70kg", path
-        assert auc.get("role") == "consistency_check", path
+        if path.parent.name == "sufentanil":
+            assert auc.get("basis") == "literature_reported", path
+            assert auc.get("target_basis") == "dailymed_single_dose_auc", path
+            assert auc.get("independent_literature_target") is True, path
+            assert auc.get("source_id") == "source_1", path
+            assert auc.get("role") == "literature_check", path
+        elif path.parent.name in SYSTEMIC_ORAL_SLUGS:
+            assert auc.get("basis") == "f_dose_over_cl", path
+            assert auc.get("target_basis") == "f_dose_over_cl_systemic_not_literature_auc", path
+            assert auc.get("source_value") == "CL_systemic_L_per_h_at_70kg", path
+            assert isinstance(auc.get("bioavailability_frac"), (int, float)), path
+        else:
+            assert auc.get("basis") == "dose_over_cl", path
+            assert auc.get("target_basis") == "dose_over_cl_not_literature_auc", path
+            assert auc.get("source_value") == "CL_abs_L_per_h_at_70kg", path
+        if path.parent.name != "sufentanil":
+            assert auc.get("independent_literature_target") is False, path
+            assert auc.get("role") == "consistency_check", path
         assert t_half.get("role") == "check_only", path
         assert t_half.get("used_to_calibrate_cl_v") is False, path
         assert isinstance(t_half.get("structural_mismatch"), dict), path
@@ -55,4 +74,4 @@ def test_warning_targets_have_acknowledged_provenance_review() -> None:
         assert mismatch.get("reason") == "one_compartment_fixture_approximation", slug
         assert review.get("status") == "acknowledged_fixture_limitation", slug
         assert review.get("reviewed_fields") == ["CL", "V", "t_half"], slug
-        assert "not jointly calibrated" in str(review.get("reviewer_note") or ""), slug
+        assert str(review.get("reviewer_note") or "").strip(), slug

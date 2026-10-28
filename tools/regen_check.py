@@ -50,7 +50,7 @@ def build_index_text(root: Path) -> str:
         derived = pk.get("derived", {}) or {}
         route = pk.get("route_inferred")
 
-        spec_file = f"drugs/{slug}/" + ("spec_pk1_oral.yml" if route == "po" else "spec_pk1_iv.yml")
+        spec_file = f"drugs/{slug}/" + ("spec_pk1_oral.yml" if route in {"po", "sl"} else "spec_pk1_iv.yml")
         rows.append({
             "drug": pk.get("name"),
             "slug": slug,

@@ -2,7 +2,8 @@ id: osp::tefibazumab
 name: Tefibazumab
 route_inferred: iv
 sources:
-- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC1610062/
+- id: source_1
+  url: https://pmc.ncbi.nlm.nih.gov/articles/PMC1610062/
 pk_raw:
   half_life: 17-18 days
   clearance: 12 ml/h
@@ -27,6 +28,10 @@ pk_parsed:
   weight_ref_kg_for_abs: 70.0
   clearance_basis: systemic
   volume_basis: systemic
+  clearance_basis_source: primary_source_reviewed
+  clearance_basis_note: Source_1 reports IV clearance 12 mL/h, volume 7.3 L, and terminal
+    half-life 17-18 days in the studied cohort; all canonical values retain the IV/systemic
+    context.
 derived:
   ke_1_per_h: 0.0016438356164383563
   CL_abs_L_per_h_at_70kg: 0.012
@@ -41,3 +46,67 @@ derived:
     with systemic CL/V.'
   - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
     typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: source_1
+    source_field: IV_clearance
+    value_basis: literature_reported
+    raw_value: 12
+    raw_unit: mL/h
+    normalized_value: 0.012
+    normalized_unit: L/h
+    conversion:
+      method: unit_conversion
+      formula: 12 mL/h / 1000 mL/L
+      assumptions:
+        route_context: IV
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: Source_1 reports IV clearance 12 mL/h in the studied cohort. It
+      is used as systemic CL without oral bioavailability correction.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PMC source_1, Abstract
+    exact_quote: "average clearance was 12 ml/h for both dose groups"
+  V_abs_L_at_70kg:
+    source_id: source_1
+    source_field: IV_volume_of_distribution
+    value_basis: literature_reported
+    raw_value: 7.3
+    raw_unit: L
+    normalized_value: 7.3
+    normalized_unit: L
+    conversion:
+      method: direct
+      formula: source_1 reported IV volume of distribution
+      assumptions:
+        route_context: IV
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: Source_1 reports IV volume of distribution 7.3 L in the studied
+      cohort. The one-compartment fixture does not claim this is a full multicompartment
+      distribution description.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PMC source_1, Abstract
+    exact_quote: "average volume of distribution was 7.3 liters"
+  t_half_h:
+    source_id: source_1
+    source_field: IV_terminal_half_life_range
+    value_basis: derived_from_reported
+    raw_value: 17-18
+    raw_unit: days
+    normalized_value: 420.0
+    normalized_unit: h
+    conversion:
+      method: derived_formula
+      formula: ((17 days + 18 days) / 2) * 24 h/day
+      assumptions:
+        range_summary: midpoint
+        route_context: IV
+    role: check_only
+    reviewer_status: checked
+    reviewer_note: Source_1 reports a 17-18 day terminal half-life range. The canonical
+      420 h is the midpoint converted to hours and remains a check target.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged

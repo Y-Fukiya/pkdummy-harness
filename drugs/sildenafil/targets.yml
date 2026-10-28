@@ -11,42 +11,49 @@ scenario:
 targets:
   auc:
     type: AUC0-inf
-    value: 5495.981108148432
+    value: 1000.0
     unit: ng*h/mL
-    summary: geometric_mean
+    summary: fixture_consistency_check
     variability:
       type: gcv_percent
       value: 35
-    basis: dose_over_cl
-    target_basis: dose_over_cl_not_literature_auc
+    basis: f_dose_over_cl
+    target_basis: f_dose_over_cl_systemic_not_literature_auc
     independent_literature_target: false
-    source_value: CL_abs_L_per_h_at_70kg
+    source_value: CL_systemic_L_per_h_at_70kg
     role: consistency_check
+    bioavailability_frac: 0.41
   t_half:
     phase: terminal
     value: 4.0
     unit: h
-    summary: arithmetic_mean
+    summary: range_midpoint_fixture
     variability:
       type: sd
       value: 1.0
     role: check_only
     used_to_calibrate_cl_v: false
     structural_mismatch:
-      acknowledged: false
-      reason: null
+      acknowledged: true
+      reason: one_compartment_fixture_approximation
 notes:
-- AUC is computed as Dose/CL (assuming CL is apparent CL/F for oral, and systemic
-  CL for IV).
-- Variability fields are placeholders unless you replace them with drug-specific PopPK
-  values.
-- 'AUC target provenance: computed as Dose/CL from the extracted CL used by this fixture.
-  It is an integration consistency check, not an independent literature AUC or clinical
-  validity claim. To validate against a literature AUC, replace targets.auc.value/unit/summary
-  and add the source, raw text, unit conversion, and derivation note.'
-- 'Parameter-pair policy: spec theta uses CL and V from pk.yml derived absolute values
-  as the independent simulation parameters. The literature t_half is retained as a
-  target/check and is not used to recalibrate CL or V automatically.'
-- '1-compartment attainability label: no CL/V/t_half warning is currently flagged
-  by validate_library at the repository threshold. This is still a workflow-fixture
-  label, not evidence of clinical model validity.'
+- Variability fields are placeholders unless you replace them with drug-specific PopPK values.
+- 'Parameter-pair policy: spec theta uses CL and V from pk.yml derived absolute values as the independent
+  simulation parameters. The literature t_half is retained as a target/check and is not used to recalibrate
+  CL or V automatically.'
+- AUC is computed as F*Dose/CL_systemic and is a fixture consistency check, not an independent literature
+  AUC.
+- Systemic CL41 L/h and Vss105 L are reported in EMA source_7. The previous CL18.195113489698564 L/h was
+  inferred from V and a midpoint half-life and is superseded, not treated as a reported CL/F.
+- F1=0.41 is the reported mean absolute oral bioavailability. The terminal half-life4 h is only the midpoint
+  of the reported3–5 h range; CL/Vss does not reproduce this terminal phase in a one-compartment model.
+- The retained100 mg oral dose is within the cited recommended-dose range, but Vss mapping, KA, lag, IIV
+  and residual errors remain fixture approximations and do not establish clinical model validity.
+provenance_review:
+  status: acknowledged_fixture_limitation
+  reviewer_note: The reported half-life remains check-only. CL and Vss are not recalibrated to force the
+    terminal half-life into a one-compartment model.
+  reviewed_fields:
+  - CL
+  - V
+  - t_half

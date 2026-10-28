@@ -25,6 +25,8 @@ def normalize_route(route: Any) -> str:
     r = str(route or "").strip().lower()
     if r in {"po", "oral", "p.o.", "per os"} or r.startswith("oral"):
         return "po"
+    if r in {"sl", "s.l.", "sublingual"} or r.startswith("subling"):
+        return "sl"
     if r in {"iv", "i.v.", "intravenous"} or r.startswith("iv") or r.startswith("intraven"):
         return "iv"
     return r
@@ -47,7 +49,7 @@ def main() -> int:
         derived = pk.get("derived", {}) or {}
         route = normalize_route(pk.get("route_inferred"))
 
-        spec_file = f"drugs/{slug}/" + ("spec_pk1_oral.yml" if route == "po" else "spec_pk1_iv.yml")
+        spec_file = f"drugs/{slug}/" + ("spec_pk1_oral.yml" if route in {"po", "sl"} else "spec_pk1_iv.yml")
         rows.append({
             "drug": pk.get("name"),
             "slug": slug,
@@ -77,7 +79,7 @@ def main() -> int:
     ]
 
     with out.open("w", encoding="utf-8", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=fieldnames)
+        w = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
         w.writeheader()
         w.writerows(rows)
 

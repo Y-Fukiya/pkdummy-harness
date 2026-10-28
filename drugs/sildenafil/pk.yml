@@ -2,48 +2,151 @@ id: osp::sildenafil
 name: Sildenafil
 route_inferred: po
 sources:
-- url: https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=7086e222-0f2b-4c02-84c0-4f8635c90993
-- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC1874251/
-- url: https://www.accessdata.fda.gov/drugsatfda_docs/label/2007/020895s027lbl.pdf
-- url: https://en.wikipedia.org/wiki/Sildenafil
-- url: https://go.drugbank.com/drugs/DB00203
-- url: https://labeling.pfizer.com/ShowLabeling.aspx?id=14610
+- id: source_1
+  url: https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=7086e222-0f2b-4c02-84c0-4f8635c90993
+- id: source_2
+  url: https://pmc.ncbi.nlm.nih.gov/articles/PMC1874251/
+- id: source_3
+  url: https://www.accessdata.fda.gov/drugsatfda_docs/label/2007/020895s027lbl.pdf
+- id: source_4
+  url: https://en.wikipedia.org/wiki/Sildenafil
+- id: source_5
+  url: https://go.drugbank.com/drugs/DB00203
+- id: source_6
+  url: https://labeling.pfizer.com/ShowLabeling.aspx?id=14610
+- id: source_7
+  url: https://www.ema.europa.eu/en/documents/product-information/viagra-epar-product-information_en.pdf
 pk_raw:
   half_life: 3-5 hours
-  clearance: null
+  clearance: 41 L/h (total body clearance; EMA source_7 section5.2)
   volume_of_distribution: 105 L
   bioavailability: 41% (25-63%)
-  elimination_route: 糞便 (~80%), 尿 (~13%)
+  elimination_route: Hepatic metabolism (mainly CYP3A4, minor CYP2C9); metabolites recovered predominantly
+    in feces (~80%) and urine (~13%).
 pk_parsed:
   half_life_h: 4.0
   half_life_h_range:
   - 3.0
   - 5.0
   clearance:
-    value: 18.195113489698564
+    value: 41.0
     unit: L/h
-    derived_from: volume and half_life_h assuming ke=ln(2)/t1/2
   volume:
     value: 105.0
     unit: L
-  bioavailability_frac: 0.44
+  bioavailability_frac: 0.41
   bioavailability_frac_range:
   - 0.25
   - 0.63
   weight_ref_kg_for_abs: 70.0
-  clearance_basis: apparent
-  volume_basis: apparent
+  clearance_basis: systemic
+  volume_basis: systemic
+  clearance_basis_source: primary_source_reviewed
+  clearance_basis_note: EMA source_7 section5.2 reports total body CL41 L/h, Vss105 L and mean absolute
+    oral F41%; Vss is not V/F.
 derived:
-  ke_1_per_h: 0.17328679513998632
-  CL_abs_L_per_h_at_70kg: 18.195113489698564
+  ke_1_per_h: 0.3904761904761905
+  CL_abs_L_per_h_at_70kg: 41.0
   V_abs_L_at_70kg: 105.0
-  CL_apparent_L_per_h_at_70kg: 18.195113489698564
-  V_apparent_L_at_70kg: 105.0
-  CL_systemic_L_per_h_at_70kg: 8.005849935467369
-  V_systemic_L_at_70kg: 46.2
+  CL_apparent_L_per_h_at_70kg: 100.0
+  V_apparent_L_at_70kg: 256.0975609756098
+  CL_systemic_L_per_h_at_70kg: 41.0
+  V_systemic_L_at_70kg: 105.0
   notes:
-  - Systemic CL/V were derived as (apparent CL/V) * F (assumes values are CL/F, V/F).
-  - 'Basis detected/selected: apparent (CL/F, V/F). Model default can use CL_abs/V_abs
-    as apparent and set F1=1.'
-  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
-    typically report systemic parameters.'
+  - Apparent CL/V were derived as (systemic CL/V) / F.
+  - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability with systemic
+    CL/V.'
+  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels typically report systemic
+    parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: source_7
+    source_field: total_body_clearance
+    value_basis: label_reported
+    raw_value: 41
+    raw_unit: L/h
+    normalized_value: 41
+    normalized_unit: L/h
+    conversion:
+      method: direct
+      formula: reported value
+      assumptions: {}
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: EMA source_7 section5.2 reports total body clearance41 L/h. No CL is inferred from
+      Vss and terminal half-life.
+    source_review_status: checked
+    fixture_limitation_status: not_applicable
+    source_locator: EMA product information section 5.2
+    exact_quote: total body clearance of sildenafil is 41 L/h
+  V_abs_L_at_70kg:
+    source_id: source_7
+    source_field: steady_state_volume_Vss
+    value_basis: label_reported
+    raw_value: 105
+    raw_unit: L
+    normalized_value: 105
+    normalized_unit: L
+    conversion:
+      method: direct
+      formula: reported value
+      assumptions: {}
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: EMA source_7 section5.2 reports steady-state volume105 L. Vss is used as the one-compartment
+      fixture volume, with structural limitations retained.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: EMA product information section 5.2
+    exact_quote: 105 L
+  t_half_h:
+    source_id: source_7
+    source_field: terminal_half_life_range
+    value_basis: derived_from_reported
+    raw_value: 3-5
+    raw_unit: h
+    normalized_value: 4.0
+    normalized_unit: h
+    conversion:
+      method: derived_formula
+      formula: midpoint of reported 3-5 h range
+      assumptions:
+        range_summary: midpoint
+    role: check_only
+    reviewer_status: checked
+    reviewer_note: EMA source_7 section5.2 reports terminal half-life3–5 h. The4 h midpoint is a check-only
+      fixture choice and is not used to infer CL.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: EMA product information section5.2
+  bioavailability_frac:
+    source_id: source_7
+    source_field: mean_absolute_oral_bioavailability
+    value_basis: label_reported
+    raw_value: 41
+    raw_unit: percent
+    normalized_value: 0.41
+    normalized_unit: fraction
+    conversion:
+      method: unit_conversion
+      formula: 41 / 100
+      assumptions: {}
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: Mean F41% is the reported estimate. It replaces the fixture midpoint44% of the25–63%
+      range.
+    source_review_status: checked
+    fixture_limitation_status: not_applicable
+    source_locator: EMA product information section 5.2
+    exact_quote: 41%
+simulation_validity:
+  status: clinical_hold
+  review_date: '2026-10-28'
+  reasons:
+  - Systemic CL41 L/h and Vss105 L are reported in EMA source_7. The previous CL18.195113489698564 L/h
+    was inferred from V and a midpoint half-life and is superseded, not treated as a reported CL/F.
+  - F1=0.41 is the reported mean absolute oral bioavailability. The terminal half-life4 h is only the
+    midpoint of the reported3–5 h range; CL/Vss does not reproduce this terminal phase in a one-compartment
+    model.
+  - The retained100 mg oral dose is within the cited recommended-dose range, but Vss mapping, KA, lag,
+    IIV and residual errors remain fixture approximations and do not establish clinical model validity.

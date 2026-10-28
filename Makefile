@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: all validate test regen-check derived-drift-check calibrated-profiles-check lint regen-index-check codex-check cli-check examples-check downstream-check site-adapter-check external-validation-probe doctor acceptance-check release-check harness-check index excluded-summary clean
+.PHONY: all validate test regen-check derived-drift-check calibrated-profiles-check parameter-contract-check lint regen-index-check codex-check cli-check examples-check downstream-check site-adapter-check external-validation-probe doctor acceptance-check release-check harness-check index excluded-summary clean
 
 all: harness-check
 
@@ -23,6 +23,9 @@ derived-drift-check:
 
 calibrated-profiles-check:
 	$(PYTHON) tools/make_calibrated_oral_spec.py . --check
+
+parameter-contract-check:
+	$(PYTHON) tools/check_parameter_contract.py .
 
 regen-index-check:
 	$(PYTHON) tools/regen_index_check.py .
@@ -58,7 +61,7 @@ release-check: acceptance-check
 	$(PYTHON) -m tools.pk_fixture_cli --help
 	$(PYTHON) -m tools.pk_fixture_cli doctor --json
 
-harness-check: clean validate test regen-check derived-drift-check calibrated-profiles-check cli-check examples-check downstream-check site-adapter-check external-validation-probe
+harness-check: clean validate parameter-contract-check test regen-check derived-drift-check calibrated-profiles-check cli-check examples-check downstream-check site-adapter-check external-validation-probe
 	$(MAKE) clean
 	$(PYTHON) tools/codex_harness_check.py .
 

@@ -60,6 +60,8 @@ value_provenance:
       to force agreement with terminal half-life.
     source_review_status: checked
     fixture_limitation_status: not_applicable
+    source_locator: DailyMed label, Clinical Pharmacology, pharmacokinetics
+    exact_quote: "average plasma clearance of 5 mL/kg/min"
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: apparent_volume_of_distribution_range
@@ -81,6 +83,8 @@ value_provenance:
       is not recalibrated to force agreement with terminal half-life.
     source_review_status: checked
     fixture_limitation_status: not_applicable
+    source_locator: DailyMed label, Clinical Pharmacology, pharmacokinetics
+    exact_quote: "apparent volume of distribution of 0.4 to 1 L/kg"
   t_half_h:
     source_id: source_1
     source_field: terminal_elimination_half_life_range

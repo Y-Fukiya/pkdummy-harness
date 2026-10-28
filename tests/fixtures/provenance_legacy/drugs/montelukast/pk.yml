@@ -1,0 +1,107 @@
+id: osp::montelukast
+name: Montelukast
+route_inferred: po
+sources:
+- id: source_1
+  url: https://pubmed.ncbi.nlm.nih.gov/9429741/
+pk_raw:
+  half_life: 6.7 hours
+  clearance: 30.8 mL/min
+  volume_of_distribution: 9.7 L
+  bioavailability: 61-62%
+  elimination_route: 胆汁排泄
+pk_parsed:
+  half_life_h: 6.7
+  half_life_h_range:
+  - 6.7
+  - 6.7
+  clearance:
+    value: 1.8479999999999999
+    unit: L/h
+  volume:
+    value: 9.7
+    unit: L
+  bioavailability_frac: 0.615
+  weight_ref_kg_for_abs: 70.0
+  clearance_basis: systemic
+  volume_basis: systemic
+  clearance_basis_source: unit_inferred
+  clearance_basis_note: 'clearance_basis set to systemic: source clearance is reported
+    in a mL/min-family unit (systemic plasma/renal clearance), not apparent CL/F.
+    Inferred from the source unit, not verified against full label text. NOTE: the
+    spec simulates a self-consistent fixture profile and is not calibrated to systemic-CL
+    + F (clinical exposure would use CL_apparent or F1=bioavailability); these remain
+    fixture values, not clinical PK.'
+derived:
+  ke_1_per_h: 0.19051546391752577
+  CL_abs_L_per_h_at_70kg: 1.8479999999999999
+  V_abs_L_at_70kg: 9.7
+  CL_apparent_L_per_h_at_70kg: 3.004878048780488
+  V_apparent_L_at_70kg: 15.772357723577235
+  CL_systemic_L_per_h_at_70kg: 1.8479999999999999
+  V_systemic_L_at_70kg: 9.7
+  notes:
+  - Apparent CL/V were derived as (systemic CL/V) / F.
+  - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability
+    with systemic CL/V.'
+  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
+    typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: source_1
+    source_field: plasma_clearance
+    value_basis: literature_reported
+    raw_value: 30.8
+    raw_unit: mL/min
+    normalized_value: 1.8479999999999999
+    normalized_unit: L/h
+    conversion:
+      method: unit_conversion
+      formula: 30.8 mL/min * 60 min/h / 1000 mL/L
+      assumptions: {}
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: PubMed source_1 reports mean plasma clearance of 30.8 mL/min after
+      intravenous dosing. Clearance is used as a deterministic fixture model parameter
+      and is not recalibrated to force agreement with terminal half-life.
+    source_review_status: checked
+    fixture_limitation_status: not_applicable
+  V_abs_L_at_70kg:
+    source_id: source_1
+    source_field: volume_of_distribution
+    value_basis: literature_reported
+    raw_value: 9.7
+    raw_unit: L
+    normalized_value: 9.7
+    normalized_unit: L
+    conversion:
+      method: direct
+      formula: pk_parsed.volume.value
+      assumptions: {}
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: PubMed source_1 reports mean volume of distribution of 9.7 L after
+      intravenous dosing. Volume is retained as the one-compartment fixture volume
+      and is not recalibrated to force agreement with terminal half-life.
+    source_review_status: checked
+    fixture_limitation_status: not_applicable
+  t_half_h:
+    source_id: source_1
+    source_field: terminal_half_life
+    value_basis: literature_reported
+    raw_value: 6.7
+    raw_unit: h
+    normalized_value: 6.7
+    normalized_unit: h
+    conversion:
+      method: direct
+      formula: pk_parsed.half_life_h
+      assumptions: {}
+    role: check_only
+    reviewer_status: checked
+    reviewer_note: PubMed source_1 reports mean terminal half-life of 6.7 h after
+      intravenous dosing. Canonical t_half_h remains a check target only. CL and V
+      are not jointly calibrated to match terminal half-life in this deterministic
+      one-compartment fixture.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged

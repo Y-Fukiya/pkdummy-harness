@@ -1,0 +1,112 @@
+id: osp::itraconazole
+name: Itraconazole
+route_inferred: po
+sources:
+- id: source_1
+  url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b1274d78-1096-4ae3-8299-a2e94eaa0ea5
+pk_raw:
+  half_life: 16-28 hours (single dose), 34-42 hours (repeated dosing)
+  clearance: 278 mL/min
+  volume_of_distribution: '>700 L'
+  bioavailability: 55%
+  elimination_route: 肝代謝, 腎排泄, 糞便排泄
+pk_parsed:
+  half_life_h: 22.0
+  half_life_h_range:
+  - 16.0
+  - 28.0
+  clearance:
+    value: 16.68
+    unit: L/h
+  volume:
+    value: 700.0
+    unit: L
+  bioavailability_frac: 0.55
+  weight_ref_kg_for_abs: 70.0
+  clearance_basis: systemic
+  volume_basis: systemic
+  clearance_basis_source: unit_inferred
+  clearance_basis_note: 'clearance_basis set to systemic: source clearance is reported
+    in a mL/min-family unit (systemic plasma/renal clearance), not apparent CL/F.
+    Inferred from the source unit, not verified against full label text. NOTE: the
+    spec simulates a self-consistent fixture profile and is not calibrated to systemic-CL
+    + F (clinical exposure would use CL_apparent or F1=bioavailability); these remain
+    fixture values, not clinical PK.'
+derived:
+  ke_1_per_h: 0.023828571428571428
+  CL_abs_L_per_h_at_70kg: 16.68
+  V_abs_L_at_70kg: 700.0
+  CL_apparent_L_per_h_at_70kg: 30.327272727272724
+  V_apparent_L_at_70kg: 1272.7272727272725
+  CL_systemic_L_per_h_at_70kg: 16.68
+  V_systemic_L_at_70kg: 700.0
+  notes:
+  - Apparent CL/V were derived as (systemic CL/V) / F.
+  - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability
+    with systemic CL/V.'
+  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
+    typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: source_1
+    source_field: mean_total_plasma_clearance_iv
+    value_basis: label_reported
+    raw_value: 278.0
+    raw_unit: mL/min
+    normalized_value: 16.68
+    normalized_unit: L/h
+    conversion:
+      method: unit_conversion
+      formula: 278 mL/min * 60 min/h / 1000 mL/L
+      assumptions: {}
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: DailyMed source_1 reports mean total plasma clearance following
+      intravenous administration as 278 mL/min. Clearance is used as a deterministic
+      fixture model parameter and is not recalibrated to force agreement with terminal
+      half-life.
+    source_review_status: checked
+    fixture_limitation_status: not_applicable
+  V_abs_L_at_70kg:
+    source_id: source_1
+    source_field: large_apparent_volume_of_distribution
+    value_basis: derived_from_reported
+    raw_value: '>700'
+    raw_unit: L
+    normalized_value: 700.0
+    normalized_unit: L
+    conversion:
+      method: derived_formula
+      formula: lower bound of reported apparent volume (>700 L)
+      assumptions:
+        censored_value: lower_bound
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: DailyMed source_1 reports itraconazole is distributed in a large
+      apparent volume greater than 700 L. Canonical V_abs_L_at_70kg retains the lower-bound
+      fixture value and is not recalibrated to force agreement with terminal half-life.
+    source_review_status: checked
+    fixture_limitation_status: not_applicable
+  t_half_h:
+    source_id: source_1
+    source_field: terminal_half_life_single_dose_range
+    value_basis: derived_from_reported
+    raw_value: 16-28
+    raw_unit: h
+    normalized_value: 22.0
+    normalized_unit: h
+    conversion:
+      method: derived_formula
+      formula: midpoint of reported single-dose terminal half-life range (16 to 28
+        h)
+      assumptions:
+        range_summary: midpoint
+    role: check_only
+    reviewer_status: checked
+    reviewer_note: DailyMed source_1 reports itraconazole terminal half-life of 16
+      to 28 h after single dose and 34 to 42 h with repeated dosing. Canonical t_half_h
+      retains the single-dose midpoint and remains a check target only. CL and V are
+      not jointly calibrated to match terminal half-life in this deterministic one-compartment
+      fixture.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged

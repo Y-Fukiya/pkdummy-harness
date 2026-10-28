@@ -24,12 +24,12 @@ targets:
     role: consistency_check
   t_half:
     phase: terminal
-    value: 656.4000000000001
+    value: 685.2
     unit: h
     summary: arithmetic_mean
     variability:
       type: sd
-      value: 164.10000000000002
+      value: 171.3
     role: check_only
     used_to_calibrate_cl_v: false
     structural_mismatch:

@@ -42,28 +42,29 @@ def _ensure_dir(p: Path) -> None:
     p.mkdir(parents=True, exist_ok=True)
 
 def normalize_route(route: str) -> str:
-    """Return repository route code: 'po' or 'iv'."""
+    """Return repository route code: po, sl, or iv."""
     r = (route or "").strip().lower()
     if r in {"po", "oral", "p.o.", "per os"} or r.startswith("oral"):
         return "po"
+    if r in {"sl", "s.l.", "sublingual"} or r.startswith("subling"):
+        return "sl"
     if r in {"iv", "i.v.", "intravenous"} or r.startswith("iv") or r.startswith("intraven"):
         return "iv"
-    raise ValueError(f"Unsupported route: {route!r}; expected oral/po or iv")
+    raise ValueError(f"Unsupported route: {route!r}; expected oral/po, sublingual/sl, or iv")
 
 def _cl_to_abs(cl: Dict[str, Any], wt_kg: float) -> float:
     if cl["unit"] == "L/h":
         return float(cl["value"])
     if cl["unit"] == "L/h/kg":
         return float(cl["value"]) * wt_kg
-    # unknown: assume already L/h
-    return float(cl["value"])
+    raise ValueError(f"Unsupported normalized clearance unit: {cl['unit']!r}; expected L/h or L/h/kg")
 
 def _v_to_abs(v: Dict[str, Any], wt_kg: float) -> float:
     if v["unit"] == "L":
         return float(v["value"])
     if v["unit"] == "L/kg":
         return float(v["value"]) * wt_kg
-    return float(v["value"])
+    raise ValueError(f"Unsupported normalized volume unit: {v['unit']!r}; expected L or L/kg")
 
 def derive_quantities(pk_parsed: Dict[str, Any], wt_kg: float = 70.0) -> Dict[str, Any]:
     notes: List[str] = []
@@ -153,18 +154,43 @@ def make_targets_yml(
     dose_mg: float,
     half_life_h: Optional[float],
     cl_for_auc_L_per_h: float,
+    *,
+    clearance_basis: str = "apparent",
+    bioavailability_frac: Optional[float] = None,
 ) -> Dict[str, Any]:
     route_code = normalize_route(route)
-    auc = compute_auc_ng_h_per_ml(dose_mg, cl_for_auc_L_per_h)
+    basis = str(clearance_basis or "apparent").strip().lower()
+    f = float(bioavailability_frac) if bioavailability_frac is not None else None
+    if route_code == "po" and basis == "systemic":
+        if f is None or not 0 < f <= 1:
+            raise ValueError("Systemic-basis oral targets require bioavailability_frac in (0, 1].")
+        auc = compute_auc_ng_h_per_ml(dose_mg * f, cl_for_auc_L_per_h)
+        auc_basis = "f_dose_over_cl"
+        target_basis = "f_dose_over_cl_systemic_not_literature_auc"
+        source_value = "CL_systemic_L_per_h_at_70kg"
+        auc_summary = "fixture_consistency_check"
+    else:
+        auc = compute_auc_ng_h_per_ml(dose_mg, cl_for_auc_L_per_h)
+        auc_basis = "dose_over_cl"
+        target_basis = "dose_over_cl_not_literature_auc"
+        source_value = "CL_abs_L_per_h_at_70kg"
+        auc_summary = "geometric_mean"
     targets = {
         "auc": {
             "type": "AUC0-inf",
             "value": float(auc),
             "unit": "ng*h/mL",
-            "summary": "geometric_mean",
+            "summary": auc_summary,
             "variability": {"type": "gcv_percent", "value": 35},
+            "basis": auc_basis,
+            "target_basis": target_basis,
+            "independent_literature_target": False,
+            "source_value": source_value,
+            "role": "consistency_check",
         }
     }
+    if f is not None:
+        targets["auc"]["bioavailability_frac"] = f
     if half_life_h is not None:
         targets["t_half"] = {
             "phase": "terminal",
@@ -183,7 +209,7 @@ def make_targets_yml(
         },
         "targets": targets,
         "notes": [
-            "AUC is computed as Dose/CL using the extracted CL. For oral, this is often apparent CL/F unless you explicitly choose systemic parameters.",
+            "AUC is a fixture integration-consistency target, not an independent literature AUC. For oral apparent CL/F, use Dose/CL_apparent; for oral systemic CL, use F*Dose/CL_systemic.",
             "Variability fields are placeholders unless you replace them with drug-specific PopPK values.",
         ],
     }
@@ -207,7 +233,19 @@ def make_spec_oral(
     dose_mg: float,
     wt_kg: float = 70.0,
     subject_source: Optional[Dict[str, Any]] = None,
+    *,
+    clearance_basis: str = "apparent",
+    bioavailability_frac: Optional[float] = None,
 ) -> Dict[str, Any]:
+    basis = str(clearance_basis or "apparent").strip().lower()
+    if basis == "systemic":
+        if bioavailability_frac is None or not 0 < float(bioavailability_frac) <= 1:
+            raise ValueError("Systemic-basis oral specs require bioavailability_frac in (0, 1].")
+        f1 = float(bioavailability_frac)
+        basis_note = "Systemic CL/V parameterization: theta.F1 is the extracted bioavailability; exposure is F*Dose/CL_systemic."
+    else:
+        f1 = 1.0
+        basis_note = "Apparent CL/F,V/F parameterization: theta.F1=1; exposure is Dose/CL_apparent."
     return {
         "version": 0.1,
         "study": {
@@ -224,9 +262,10 @@ def make_spec_oral(
         "model": {
             "template": "pk1_oral_ode",
             "units": {"conc": "ng/mL", "mult": 1000},
-            "theta": {"CL": float(cl_L_per_h), "V": float(v_L), "KA": 1.2, "F1": 1.0, "ALAG1": 0.5},
+            "theta": {"CL": float(cl_L_per_h), "V": float(v_L), "KA": 1.2, "F1": f1, "ALAG1": 0.5},
             "notes": [
-                "Default assumes CL and V from sources are apparent (CL/F, V/F). Set theta.F1 to your chosen bioavailability AND adjust CL/V accordingly if your sources report systemic CL/V."
+                basis_note,
+                "Do not interpret this deterministic one-compartment fixture as a clinically validated model; source population, formulation, renal/hepatic status, and absorption conditions remain part of the evidence review."
             ],
         },
         "iiv": {"eta": {"CL": 0.09, "V": 0.04, "KA": 0.16}, "corr": False},
@@ -300,14 +339,45 @@ def generate_drug_folder(
     if cl_L_per_h is None or v_L is None:
         raise ValueError("Cannot generate spec: missing CL or V (even after rescue).")
 
-    if route_code == "po":
-        spec = make_spec_oral(name, cl_L_per_h, v_L, dose_mg, wt_kg, subject_source)
+    if route_code in {"po", "sl"}:
+        spec = make_spec_oral(
+            name,
+            cl_L_per_h,
+            v_L,
+            dose_mg,
+            wt_kg,
+            subject_source,
+            clearance_basis=pk_parsed.get("clearance_basis", "apparent"),
+            bioavailability_frac=pk_parsed.get("bioavailability_frac"),
+        )
+        if route_code == "sl":
+            spec["regimen"]["route"] = "sublingual"
+            spec["model"]["notes"].insert(
+                0,
+                "Sublingual route is represented by the same first-order extravascular depot as this workflow fixture; it is not interchangeable with GI oral absorption and is not clinically validated.",
+            )
         write_yaml(ddir / "spec_pk1_oral.yml", spec)
-        targets = make_targets_yml(name, route=route_code, dose_mg=dose_mg, half_life_h=pk_parsed.get("half_life_h"), cl_for_auc_L_per_h=cl_L_per_h)
+        targets = make_targets_yml(
+            name,
+            route=route_code,
+            dose_mg=dose_mg,
+            half_life_h=pk_parsed.get("half_life_h"),
+            cl_for_auc_L_per_h=cl_L_per_h,
+            clearance_basis=pk_parsed.get("clearance_basis", "apparent"),
+            bioavailability_frac=pk_parsed.get("bioavailability_frac"),
+        )
     else:
         spec = make_spec_iv(name, cl_L_per_h, v_L, dose_mg, wt_kg, subject_source)
         write_yaml(ddir / "spec_pk1_iv.yml", spec)
-        targets = make_targets_yml(name, route=route_code, dose_mg=dose_mg, half_life_h=pk_parsed.get("half_life_h"), cl_for_auc_L_per_h=cl_L_per_h)
+        targets = make_targets_yml(
+            name,
+            route=route_code,
+            dose_mg=dose_mg,
+            half_life_h=pk_parsed.get("half_life_h"),
+            cl_for_auc_L_per_h=cl_L_per_h,
+            clearance_basis=pk_parsed.get("clearance_basis", "systemic"),
+            bioavailability_frac=pk_parsed.get("bioavailability_frac"),
+        )
 
     write_yaml(ddir / "targets.yml", targets)
     return ddir

@@ -3,10 +3,6 @@ name: Docs Pages
 on:
   push:
     branches: [main]
-    paths:
-      - "docs/**"
-      - "README.md"
-      - ".github/workflows/pages.yml"
   workflow_dispatch:
 
 permissions:
@@ -23,6 +19,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install canonical data dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Validate library and target arithmetic
+        run: make validate
+      - name: Check canonical inputs and committed atlas snapshot
+        run: python tools/check_parameter_contract.py .
+      - name: Regenerate atlas data from this checkout
+        run: python tools/build_docs_site.py
+      - name: Regenerate parameter tables and downloads
+        run: python tools/export_parameter_docs.py
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Install locked site dependencies
+        working-directory: site
+        run: npm ci
+      - name: Remove obsolete generated atlas assets
+        run: rm -rf docs/parameters/atlas-assets
+      - name: Build parameter atlas from canonical inputs
+        working-directory: site
+        run: npm run build:pages
       - uses: actions/configure-pages@v5
       - uses: actions/jekyll-build-pages@v1
         with:

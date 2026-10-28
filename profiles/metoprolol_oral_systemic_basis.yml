@@ -1,0 +1,78 @@
+version: 0.1
+study:
+  id: OSP_metoprolol_Fcorrected
+  title: Metoprolol (template from label/PopPK summary)
+population:
+  n: 100
+  covariates:
+    wt_kg:
+      dist: lognormal
+      median: 70.0
+      cv: 0.25
+      min: 40
+      max: 120
+regimen:
+  route: oral
+  units:
+    dose: mg
+  arms:
+    A:
+      n: 100
+      dose_mg: 100
+sampling:
+  t_end_h: 72.0
+  dt_h: 0.5
+  include_t0: true
+model:
+  template: pk1_oral_ode
+  units:
+    conc: ng/mL
+    mult: 1000
+  theta:
+    CL: 48.0
+    V: 346.2468098133512
+    KA: 1.2
+    F1: 0.5
+    ALAG1: 0.5
+  notes:
+  - CL and V are parameterized as systemic values; theta.F1=0.5 represents the label's
+    approximate oral bioavailability.
+  - The CL is an IV/systemic value summarized in source_2, while V is a one-compartment
+    fixture derivation constrained by the source_1 Vd range. This is not a clinical
+    model validation.
+  - 'Demo theta policy: CL and V are the independent simulation parameters for this
+    1-compartment fixture. t_half is checked downstream and is not used to recalibrate
+    theta.'
+  - 'F-corrected profile: theta.F1 set to label bioavailability and theta.CL kept
+    as the systemic clearance, so simulated exposure is F*Dose/CL_systemic. This is
+    a parameterization consistent with the systemic basis; it is still a fixture template,
+    not a clinically validated PK model.'
+iiv:
+  eta:
+    CL: 0.09
+    V: 0.04
+    KA: 0.16
+  corr: false
+residual:
+  type: prop+add
+  prop: 0.25
+  add: 0.0
+output:
+  out_dir: outputs
+  seed: 20260217
+  write:
+    raw_csv: true
+    nonmem_csv: true
+    summary_md: true
+meta:
+  sources:
+  - https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=cbc32a80-717b-4cf2-b76a-6d03a3720419
+  - https://pubmed.ncbi.nlm.nih.gov/6102500/
+  pk_summary_raw:
+    half_life: 3-7 hours
+    clearance: 48 L/h
+    volume: null
+    bioavailability: 約50%
+    elimination: 肝代謝
+  profile: oral_systemic_basis_Fcorrected
+  derived_from: drugs/metoprolol/spec_pk1_oral.yml

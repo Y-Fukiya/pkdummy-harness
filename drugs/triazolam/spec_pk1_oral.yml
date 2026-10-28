@@ -35,12 +35,16 @@ model:
     F1: 1.0
     ALAG1: 0.5
   notes:
-  - Default assumes CL and V from sources are apparent (CL/F, V/F). Set theta.F1 to
-    your chosen bioavailability AND adjust CL/V accordingly if your sources report
-    systemic CL/V.
+  - 'Apparent CL/F,V/F parameterization: theta.F1=1; exposure is Dose/CL_apparent.'
   - 'Demo theta policy: CL and V are the independent simulation parameters for this
     1-compartment fixture. t_half is checked downstream and is not used to recalibrate
     theta.'
+  - DailyMed source_4 section12.3 distinguishes CYP3A-mediated metabolism and glucuronide
+    formation from the subsequent urinary excretion of metabolites. Urinary recovery
+    does not mean renal clearance of unchanged triazolam.
+  - No numeric PK parameter changes were made in this correction. Apparent CL and
+    derived one-compartment volume remain a fixture and do not establish clinical
+    model validity.
 iiv:
   eta:
     CL: 0.09
@@ -63,9 +67,12 @@ meta:
   - https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ce6ddb53-89ca-4edf-a519-553d34ce7938
   - https://go.drugbank.com/drugs/DB00897
   - https://pmc.ncbi.nlm.nih.gov/articles/PMC1401197/
+  - https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5add318e-11b9-42f8-b052-0d8cebb32fcf
   pk_summary_raw:
     half_life: 1.5-5.5 hours
     clearance: 526 mL/min
     volume: null
     bioavailability: 44%
-    elimination: 腎排泄
+    elimination: Hepatic CYP3A-mediated hydroxylation, then glucuronide conjugation;
+      urinary excretion mainly as metabolites, with only small amounts of unchanged
+      triazolam.

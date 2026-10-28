@@ -24,7 +24,7 @@ targets:
     role: consistency_check
   t_half:
     phase: terminal
-    value: 10.9
+    value: 7.8
     unit: h
     summary: arithmetic_mean
     variability:
@@ -33,8 +33,8 @@ targets:
     role: check_only
     used_to_calibrate_cl_v: false
     structural_mismatch:
-      acknowledged: false
-      reason: null
+      acknowledged: true
+      reason: one_compartment_fixture_approximation
 notes:
 - AUC is computed as Dose/CL using the extracted CL. For oral, this is often apparent
   CL/F unless you explicitly choose systemic parameters.
@@ -47,6 +47,13 @@ notes:
 - 'Parameter-pair policy: spec theta uses CL and V from pk.yml derived absolute values
   as the independent simulation parameters. The literature t_half is retained as a
   target/check and is not used to recalibrate CL or V automatically.'
-- '1-compartment attainability label: no CL/V/t_half warning is currently flagged
-  by validate_library at the repository threshold. This is still a workflow-fixture
-  label, not evidence of clinical model validity.'
+- 'Known 1-compartment attainability issue: source_1 is a two-compartment population
+  PK analysis, while this repository derives a one-compartment V from CL/F and the
+  selected terminal half-life. The mismatch is explicit and fixture-only.'
+provenance_review:
+  status: acknowledged_fixture_limitation
+  reviewer_note: Source_1 reports a multicompartment oral CL/F context; the committed one-compartment V is a transparent derivation and is not jointly calibrated as a clinical model.
+  reviewed_fields:
+  - CL
+  - V
+  - t_half

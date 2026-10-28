@@ -59,6 +59,8 @@ value_provenance:
       model parameter and is not recalibrated to force agreement with terminal half-life.
     source_review_status: checked
     fixture_limitation_status: not_applicable
+    source_locator: DailyMed label, Clinical Pharmacology, General
+    exact_quote: "mean serum clearance rate is about 100 mL/min"
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: apparent_volume_of_distribution
@@ -78,6 +80,8 @@ value_provenance:
       volume and is not recalibrated to force agreement with terminal half-life.
     source_review_status: checked
     fixture_limitation_status: not_applicable
+    source_locator: DailyMed label, Clinical Pharmacology, General
+    exact_quote: "mean total apparent volume of distribution of 24 liters"
   t_half_h:
     source_id: source_1
     source_field: serum_half_life_normal_adult_volunteers

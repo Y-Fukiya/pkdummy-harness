@@ -11,16 +11,17 @@ scenario:
 targets:
   auc:
     type: AUC0-inf
-    value: 805.1529790660226
+    value: 628.0193236714976
     unit: ng*h/mL
     summary: geometric_mean
     variability:
       type: gcv_percent
       value: 35
-    basis: dose_over_cl
-    target_basis: dose_over_cl_not_literature_auc
+    basis: f_dose_over_cl
+    target_basis: f_dose_over_cl_systemic_not_literature_auc
+    bioavailability_frac: 0.78
     independent_literature_target: false
-    source_value: CL_abs_L_per_h_at_70kg
+    source_value: CL_systemic_L_per_h_at_70kg
     role: consistency_check
   t_half:
     phase: terminal
@@ -33,20 +34,28 @@ targets:
     role: check_only
     used_to_calibrate_cl_v: false
     structural_mismatch:
-      acknowledged: false
-      reason: null
+      acknowledged: true
+      reason: one_compartment_fixture_approximation
 notes:
-- AUC is computed as Dose/CL using the extracted CL. For oral, this is often apparent
-  CL/F unless you explicitly choose systemic parameters.
+- AUC is computed as F*Dose/CL_systemic because source_1 reports systemic IV clearance
+  and oral bioavailability separately.
 - Variability fields are placeholders unless you replace them with drug-specific PopPK
   values.
 - 'AUC target provenance: computed as Dose/CL from the extracted CL used by this fixture.
   It is an integration consistency check, not an independent literature AUC or clinical
   validity claim. To validate against a literature AUC, replace targets.auc.value/unit/summary
   and add the source, raw text, unit conversion, and derivation note.'
-- 'Parameter-pair policy: spec theta uses CL and V from pk.yml derived absolute values
-  as the independent simulation parameters. The literature t_half is retained as a
-  target/check and is not used to recalibrate CL or V automatically.'
-- '1-compartment attainability label: no CL/V/t_half warning is currently flagged
-  by validate_library at the repository threshold. This is still a workflow-fixture
-  label, not evidence of clinical model validity.'
+- 'Parameter-pair policy: spec theta uses systemic CL and V from pk.yml as the independent
+  simulation parameters. The literature t_half is retained as a target/check and is not
+  used to recalibrate CL or V automatically.'
+- 'Known 1-compartment attainability issue: the FDA source describes IV Vss and an oral
+  terminal half-life in different PK contexts, and CL/V does not reproduce that terminal
+  half-life. The mismatch is retained as an explicit fixture limitation, not silently
+  recalibrated.'
+provenance_review:
+  status: acknowledged_fixture_limitation
+  reviewer_note: The FDA CL/V pair is retained as source-reviewed systemic parameters, but the one-compartment fixture is not jointly calibrated to reproduce the oral terminal half-life.
+  reviewed_fields:
+  - CL
+  - V
+  - t_half

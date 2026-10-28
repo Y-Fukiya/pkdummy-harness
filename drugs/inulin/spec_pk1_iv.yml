@@ -29,8 +29,8 @@ model:
     conc: ng/mL
     mult: 1000
   theta:
-    CL: 7.2
-    V: 16.0
+    CL: 5.61
+    V: 13.0
   notes:
   - 'Demo theta policy: CL and V are the independent simulation parameters for this
     1-compartment fixture. t_half is checked downstream and is not used to recalibrate

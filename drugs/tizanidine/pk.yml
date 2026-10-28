@@ -2,7 +2,8 @@ id: osp::tizanidine
 name: Tizanidine
 route_inferred: po
 sources:
-- url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=043d9e51-bfa2-4add-9058-5ece332f7e99
+- id: source_1
+  url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=043d9e51-bfa2-4add-9058-5ece332f7e99
 pk_raw:
   half_life: 2.5 hours
   clearance: null
@@ -17,7 +18,7 @@ pk_parsed:
   clearance:
     value: 46.579490533628324
     unit: L/h
-    derived_from: volume and half_life_h assuming ke=ln(2)/t1/2
+    derived_from: IV steady-state volume and oral half-life assuming ke=ln(2)/t1/2
   volume:
     value: 2.4
     unit: L/kg
@@ -26,19 +27,115 @@ pk_parsed:
   - 0.4
   - 0.4
   weight_ref_kg_for_abs: 70.0
-  clearance_basis: apparent
-  volume_basis: apparent
+  clearance_basis: systemic
+  volume_basis: systemic
+  clearance_basis_source: primary_source_reviewed
+  clearance_basis_note: Source_1 reports oral F approximately 40% and mean Vss 2.4
+    L/kg after IV administration. The repository therefore treats V as systemic. CL
+    is not directly reported in source_1; the committed CL is a cross-route fixture
+    derivation from IV Vss and the oral terminal half-life, and is not a clinical
+    systemic-clearance estimate.
 derived:
   ke_1_per_h: 0.2772588722239781
   CL_abs_L_per_h_at_70kg: 46.579490533628324
   V_abs_L_at_70kg: 168.0
-  CL_apparent_L_per_h_at_70kg: 46.579490533628324
-  V_apparent_L_at_70kg: 168.0
-  CL_systemic_L_per_h_at_70kg: 18.63179621345133
-  V_systemic_L_at_70kg: 67.2
+  CL_apparent_L_per_h_at_70kg: 116.4487263340708
+  V_apparent_L_at_70kg: 420.0
+  CL_systemic_L_per_h_at_70kg: 46.579490533628324
+  V_systemic_L_at_70kg: 168.0
   notes:
-  - Systemic CL/V were derived as (apparent CL/V) * F (assumes values are CL/F, V/F).
-  - 'Basis detected/selected: apparent (CL/F, V/F). Model default can use CL_abs/V_abs
-    as apparent and set F1=1.'
+  - Apparent CL/V were derived as (systemic CL/V) / F.
+  - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability
+    with systemic CL/V.'
   - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
     typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: source_1
+    source_field: fixture_CL_from_IV_Vss_and_oral_half_life
+    value_basis: derived_from_reported
+    raw_value: 46.579490533628324
+    raw_unit: L/h
+    normalized_value: 46.579490533628324
+    normalized_unit: L/h
+    conversion:
+      method: derived_formula
+      formula: 2.4 L/kg * 70 kg * ln(2) / 2.5 h
+      assumptions:
+        V_context: IV mean steady_state_volume
+        half_life_context: oral terminal half_life
+        cross_route_derivation: true
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: Source_1 does not report this CL. It is a deterministic cross-route
+      derivation used only to keep the one-compartment fixture executable; it requires
+      independent clinical CL evidence before use for dosing or inference.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+  V_abs_L_at_70kg:
+    source_id: source_1
+    source_field: IV_mean_steady_state_volume
+    value_basis: literature_reported
+    raw_value: 2.4
+    raw_unit: L/kg
+    normalized_value: 168.0
+    normalized_unit: L
+    conversion:
+      method: body_weight_scaled
+      formula: 2.4 L/kg * 70 kg
+      assumptions:
+        weight_ref_kg_for_abs: 70.0
+        route_context: IV
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: DailyMed source_1 reports mean steady-state volume 2.4 L/kg following
+      IV administration in healthy adults. It is not an oral V/F estimate.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: DailyMed label, Clinical Pharmacokinetics, Absorption and Distribution
+    exact_quote: "mean steady state volume of distribution of 2.4 L/kg"
+  bioavailability_frac:
+    source_id: source_1
+    source_field: absolute_oral_bioavailability
+    value_basis: literature_reported
+    raw_value: 40
+    raw_unit: percent
+    normalized_value: 0.4
+    normalized_unit: fraction
+    conversion:
+      method: unit_conversion
+      formula: 40 percent / 100
+      assumptions:
+        population_context: healthy_adult_volunteers
+        formulation_context: oral_tizanidine
+        first_pass_metabolism: extensive
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: DailyMed source_1 reports approximately 40% absolute oral bioavailability with CV 24% due to extensive first-pass hepatic metabolism. The same label reports IV Vss separately; the current CL remains a fixture derivation and is not claimed as observed.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: DailyMed label, Clinical Pharmacokinetics, Absorption and Distribution
+    exact_quote: "The absolute oral bioavailability of tizanidine is approximately 40%"
+  t_half_h:
+    source_id: source_1
+    source_field: oral_terminal_half_life
+    value_basis: label_reported
+    raw_value: 2.5
+    raw_unit: h
+    normalized_value: 2.5
+    normalized_unit: h
+    conversion:
+      method: direct
+      formula: pk_parsed.half_life_h
+      assumptions:
+        oral_formulation_context: fasted_or_general_label_context
+    role: check_only
+    reviewer_status: checked
+    reviewer_note: DailyMed source_1 reports an oral half-life of approximately 2.5
+      h in the label's metabolism and excretion section. The value is retained as
+      a check target and is not used to claim a jointly validated one-compartment
+      model.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: DailyMed label, Clinical Pharmacokinetics, Metabolism and Excretion
+    exact_quote: "Tizanidine has a half-life of approximately 2.5 hours"

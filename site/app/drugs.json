@@ -5,6 +5,7 @@
   "drugs": [
     {
       "slug": "abciximab",
+      "simulation_validity": {},
       "id": "osp::abciximab",
       "name": "Abciximab",
       "route": "iv",
@@ -23,7 +24,23 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/11907493/",
           "index": 2,
           "kind": "PubMed",
-          "identifier": "11907493"
+          "identifier": "11907493",
+          "bibliography": {
+            "pmid": "11907493",
+            "title": "Pharmacodynamics of abciximab during angioplasty: comparison to healthy subjects.",
+            "journal": "Clinical pharmacology and therapeutics",
+            "pubdate": "2002 Mar",
+            "authors": [
+              "Abernethy DR",
+              "Pezzullo J",
+              "Mascelli MA",
+              "Frederick B",
+              "Kleiman NS",
+              "Freedman J"
+            ],
+            "doi": "10.1067/mcp.2002.121775",
+            "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/11907493/"
+          }
         },
         {
           "id": "source_3",
@@ -47,7 +64,19 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/14618072/",
           "index": 5,
           "kind": "PubMed",
-          "identifier": "14618072"
+          "identifier": "14618072",
+          "bibliography": {
+            "pmid": "14618072",
+            "title": "Comparative pharmacology of GP IIb/IIIa antagonists.",
+            "journal": "Journal of thrombosis and thrombolysis",
+            "pubdate": "2003 Apr",
+            "authors": [
+              "Schrör K",
+              "Weber AA"
+            ],
+            "doi": "10.1023/b:thro.0000003308.63022.8d",
+            "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/14618072/"
+          }
         },
         {
           "id": "source_6",
@@ -332,7 +361,23 @@
               "url": "https://pubmed.ncbi.nlm.nih.gov/11907493/",
               "index": 2,
               "kind": "PubMed",
-              "identifier": "11907493"
+              "identifier": "11907493",
+              "bibliography": {
+                "pmid": "11907493",
+                "title": "Pharmacodynamics of abciximab during angioplasty: comparison to healthy subjects.",
+                "journal": "Clinical pharmacology and therapeutics",
+                "pubdate": "2002 Mar",
+                "authors": [
+                  "Abernethy DR",
+                  "Pezzullo J",
+                  "Mascelli MA",
+                  "Frederick B",
+                  "Kleiman NS",
+                  "Freedman J"
+                ],
+                "doi": "10.1067/mcp.2002.121775",
+                "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/11907493/"
+              }
             },
             "claim_status": "unconfirmed",
             "source_fit_status": "unreviewed",
@@ -447,6 +492,7 @@
     },
     {
       "slug": "aciclovir",
+      "simulation_validity": {},
       "id": "osp::aciclovir",
       "name": "Aciclovir",
       "route": "po",
@@ -465,7 +511,19 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/6355048/",
           "index": 2,
           "kind": "PubMed",
-          "identifier": "6355048"
+          "identifier": "6355048",
+          "bibliography": {
+            "pmid": "6355048",
+            "title": "Pharmacokinetics of acyclovir after intravenous and oral administration.",
+            "journal": "The Journal of antimicrobial chemotherapy",
+            "pubdate": "1983 Sep",
+            "authors": [
+              "de Miranda P",
+              "Blum MR"
+            ],
+            "doi": "10.1093/jac/12.suppl_b.29",
+            "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/6355048/"
+          }
         },
         {
           "id": "source_3",
@@ -930,6 +988,7 @@
     },
     {
       "slug": "albuterol",
+      "simulation_validity": {},
       "id": "OSP_albuterol",
       "name": "Albuterol",
       "route": "iv",
@@ -940,7 +999,22 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/3790406/",
           "index": 1,
           "kind": "PubMed",
-          "identifier": "3790406"
+          "identifier": "3790406",
+          "bibliography": {
+            "pmid": "3790406",
+            "title": "Pharmacokinetics of intravenous and oral salbutamol and its sulphate conjugate",
+            "journal": "British journal of clinical pharmacology",
+            "pubdate": "1986 Nov",
+            "authors": [
+              "Morgan DJ",
+              "Paull JD",
+              "Richmond BH",
+              "Wilson-Evered E",
+              "Ziccone SP"
+            ],
+            "doi": "10.1111/j.1365-2125.1986.tb02939.x",
+            "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/3790406/"
+          }
         }
       ],
       "raw": {
@@ -1310,6 +1384,7 @@
     },
     {
       "slug": "alfentanil",
+      "simulation_validity": {},
       "id": "osp::alfentanil",
       "name": "Alfentanil",
       "route": "iv",
@@ -1713,6 +1788,7 @@
     },
     {
       "slug": "alprazolam",
+      "simulation_validity": {},
       "id": "osp::alprazolam",
       "name": "Alprazolam",
       "route": "po",
@@ -1723,7 +1799,19 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/8513649/",
           "index": 1,
           "kind": "PubMed",
-          "identifier": "8513649"
+          "identifier": "8513649",
+          "bibliography": {
+            "pmid": "8513649",
+            "title": "Clinical pharmacokinetics of alprazolam. Therapeutic implications.",
+            "journal": "Clinical pharmacokinetics",
+            "pubdate": "1993 Jun",
+            "authors": [
+              "Greenblatt DJ",
+              "Wright CE"
+            ],
+            "doi": "10.2165/00003088-199324060-00003",
+            "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/8513649/"
+          }
         }
       ],
       "raw": {
@@ -2133,6 +2221,7 @@
     },
     {
       "slug": "amikacin",
+      "simulation_validity": {},
       "id": "osp::amikacin",
       "name": "Amikacin",
       "route": "iv",
@@ -2531,6 +2620,15 @@
     },
     {
       "slug": "apixaban",
+      "simulation_validity": {
+        "status": "clinical_hold",
+        "review_date": "2026-10-28",
+        "reasons": [
+          "The prior pk_raw text includes a mistaken fixture interpretation of total CL as apparent CL/F. That historical interpretation is superseded by the source_1 total/systemic CL and Vss definitions.",
+          "Use systemic CL3.3 L/h, reported Vss21 L and F1=0.5. Mapping Vss to one-compartment V is approximate; reported oral apparent half-life12 h remains check-only and is not used to derive V or establish an absorption-limited mechanism.",
+          "Source agreement does not validate the clinical model. KA, lag, IIV and residual errors remain generic fixture assumptions."
+        ]
+      },
       "id": "OSP_apixaban",
       "name": "Apixaban",
       "route": "po",
@@ -2554,32 +2652,35 @@
           "unit": "L/h"
         },
         "volume": {
-          "value": 57.130723619202946,
-          "unit": "L"
+          "value": 21.0,
+          "unit": "L",
+          "definition": "reported_IV_Vss_used_as_one_compartment_fixture_volume"
         },
         "bioavailability_frac": 0.5,
-        "clearance_basis": "apparent",
-        "volume_basis": "apparent",
-        "weight_ref_kg_for_abs": 70.0
+        "clearance_basis": "systemic",
+        "volume_basis": "systemic",
+        "weight_ref_kg_for_abs": 70.0,
+        "clearance_basis_source": "primary_source_reviewed",
+        "clearance_basis_note": "DailyMed source_1 section 12.3 reports total clearance 3.3 L/h and Vss21 L, not CL/F or V/F. Oral F is approximately50%."
       },
       "derived": {
-        "ke_1_per_h": 0.05776226504666211,
+        "ke_1_per_h": 0.15714285714285714,
         "CL_abs_L_per_h_at_70kg": 3.3,
-        "V_abs_L_at_70kg": 57.130723619202946,
-        "CL_apparent_L_per_h_at_70kg": 3.3,
-        "V_apparent_L_at_70kg": 57.130723619202946,
-        "CL_systemic_L_per_h_at_70kg": 1.65,
-        "V_systemic_L_at_70kg": 28.565361809601473,
+        "V_abs_L_at_70kg": 21.0,
+        "CL_apparent_L_per_h_at_70kg": 6.6,
+        "V_apparent_L_at_70kg": 42.0,
+        "CL_systemic_L_per_h_at_70kg": 3.3,
+        "V_systemic_L_at_70kg": 21.0,
         "notes": [
-          "Systemic CL/V were derived as (apparent CL/V) * F (assumes values are CL/F, V/F).",
-          "Basis detected/selected: apparent (CL/F, V/F). Model default can use CL_abs/V_abs as apparent and set F1=1.",
+          "Apparent CL/V were derived as (systemic CL/V) / F.",
+          "Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability with systemic CL/V.",
           "Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels typically report systemic parameters."
         ]
       },
       "provenance": {
         "CL_abs_L_per_h_at_70kg": {
           "source_id": "source_1",
-          "source_field": "total_clearance_after_oral_administration",
+          "source_field": "total_systemic_clearance",
           "value_basis": "label_reported",
           "raw_value": 3.3,
           "raw_unit": "L/h",
@@ -2587,38 +2688,37 @@
           "normalized_unit": "L/h",
           "conversion": {
             "method": "direct",
-            "formula": "pk_parsed.clearance.value",
+            "formula": "reported value",
             "assumptions": {}
           },
           "role": "simulation_parameter",
           "reviewer_status": "checked",
-          "reviewer_note": "DailyMed source_1 reports total clearance of approximately 3.3 L/hour and an apparent half-life after oral administration. The fixture treats the reported oral value as apparent CL/F.",
+          "reviewer_note": "Source_1 section12.3 reports total CL. Its oral apparent half-life does not make this CL an apparent CL/F.",
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
-          "source_locator": "DailyMed label, Clinical Pharmacology, Elimination",
+          "source_locator": "Clinical Pharmacology, Pharmacokinetics",
           "exact_quote": "total clearance of approximately 3.3 L/hour"
         },
         "V_abs_L_at_70kg": {
           "source_id": "source_1",
-          "source_field": "apparent_volume_derived_from_label_clearance_and_half_life",
-          "value_basis": "fixture_derived",
-          "raw_value": "3.3 and 12.0",
-          "raw_unit": "L/h and h",
-          "normalized_value": 57.130723619202946,
+          "source_field": "steady_state_volume_Vss",
+          "value_basis": "label_reported",
+          "raw_value": 21,
+          "raw_unit": "L",
+          "normalized_value": 21,
           "normalized_unit": "L",
           "conversion": {
-            "method": "derived_formula",
-            "formula": "CL_abs_L_per_h_at_70kg * t_half_h / ln(2)",
-            "assumptions": {
-              "model": "one_compartment_fixture",
-              "basis": "apparent_V_over_F"
-            }
+            "method": "direct",
+            "formula": "reported value",
+            "assumptions": {}
           },
           "role": "simulation_parameter",
           "reviewer_status": "checked",
-          "reviewer_note": "DailyMed source_1 supports the apparent clearance and apparent half-life used as inputs; the committed V is a one-compartment apparent V/F derivation, not a directly reported Vd.",
+          "reviewer_note": "Source_1 reports Vss21 L. Using IV Vss as the volume in a one-compartment oral fixture is an approximation; it is not terminal Vz.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "source_locator": "Clinical Pharmacology, Pharmacokinetics",
+          "exact_quote": "approximately 21 liters"
         },
         "t_half_h": {
           "source_id": "source_1",
@@ -2640,6 +2740,29 @@
           "fixture_limitation_status": "acknowledged",
           "source_locator": "DailyMed label, Clinical Pharmacology, Elimination",
           "exact_quote": "apparent half-life of approximately 12 hours following oral administration"
+        },
+        "bioavailability_frac": {
+          "source_id": "source_1",
+          "source_field": "absolute_bioavailability_up_to_10mg",
+          "value_basis": "label_reported",
+          "raw_value": 50,
+          "raw_unit": "percent",
+          "normalized_value": 0.5,
+          "normalized_unit": "fraction",
+          "conversion": {
+            "method": "unit_conversion",
+            "formula": "50 / 100",
+            "assumptions": {
+              "dose_context": "up to 10 mg oral"
+            }
+          },
+          "role": "simulation_parameter",
+          "reviewer_status": "checked",
+          "reviewer_note": "Source_1 section12.3 reports approximate absolute F50% for doses up to10 mg.",
+          "source_review_status": "checked",
+          "fixture_limitation_status": "not_applicable",
+          "source_locator": "Clinical Pharmacology, Pharmacokinetics",
+          "exact_quote": "approximately 50%"
         }
       },
       "targets": {
@@ -2659,24 +2782,25 @@
         "targets": {
           "auc": {
             "type": "AUC0-inf",
-            "value": 3030.3030303030305,
+            "value": 1515.1515151515152,
             "unit": "ng*h/mL",
-            "summary": "geometric_mean",
+            "summary": "fixture_consistency_check",
             "variability": {
               "type": "gcv_percent",
               "value": 35
             },
-            "basis": "dose_over_cl",
-            "target_basis": "dose_over_cl_not_literature_auc",
+            "basis": "f_dose_over_cl",
+            "target_basis": "f_dose_over_cl_systemic_not_literature_auc",
             "independent_literature_target": false,
-            "source_value": "CL_abs_L_per_h_at_70kg",
-            "role": "consistency_check"
+            "source_value": "CL_systemic_L_per_h_at_70kg",
+            "role": "consistency_check",
+            "bioavailability_frac": 0.5
           },
           "t_half": {
-            "phase": "terminal",
+            "phase": "apparent_after_oral",
             "value": 12.0,
             "unit": "h",
-            "summary": "arithmetic_mean",
+            "summary": "reported_approximate",
             "variability": {
               "type": "sd",
               "value": 1.0
@@ -2684,18 +2808,28 @@
             "role": "check_only",
             "used_to_calibrate_cl_v": false,
             "structural_mismatch": {
-              "acknowledged": false,
-              "reason": null
+              "acknowledged": true,
+              "reason": "one_compartment_fixture_approximation"
             }
           }
         },
         "notes": [
-          "AUC is computed as Dose/CL using the extracted CL. For oral, this is often apparent CL/F unless you explicitly choose systemic parameters.",
           "Variability fields are placeholders unless you replace them with drug-specific PopPK values.",
-          "AUC target provenance: computed as Dose/CL from the extracted CL used by this fixture. It is an integration consistency check, not an independent literature AUC or clinical validity claim. To validate against a literature AUC, replace targets.auc.value/unit/summary and add the source, raw text, unit conversion, and derivation note.",
           "Parameter-pair policy: spec theta uses CL and V from pk.yml derived absolute values as the independent simulation parameters. The literature t_half is retained as a target/check and is not used to recalibrate CL or V automatically.",
-          "1-compartment attainability label: no CL/V/t_half warning is currently flagged by validate_library at the repository threshold. This is still a workflow-fixture label, not evidence of clinical model validity."
-        ]
+          "AUC is computed as F*Dose/CL_systemic and is a fixture consistency check, not an independent literature AUC.",
+          "The prior pk_raw text includes a mistaken fixture interpretation of total CL as apparent CL/F. That historical interpretation is superseded by the source_1 total/systemic CL and Vss definitions.",
+          "Use systemic CL3.3 L/h, reported Vss21 L and F1=0.5. Mapping Vss to one-compartment V is approximate; reported oral apparent half-life12 h remains check-only and is not used to derive V or establish an absorption-limited mechanism.",
+          "Source agreement does not validate the clinical model. KA, lag, IIV and residual errors remain generic fixture assumptions."
+        ],
+        "provenance_review": {
+          "status": "acknowledged_fixture_limitation",
+          "reviewer_note": "The reported half-life remains check-only. CL and Vss are not recalibrated to force the terminal half-life into a one-compartment model.",
+          "reviewed_fields": [
+            "CL",
+            "V",
+            "t_half"
+          ]
+        }
       },
       "spec": {
         "file": "spec_pk1_oral.yml",
@@ -2740,14 +2874,17 @@
           },
           "theta": {
             "CL": 3.3,
-            "V": 57.130723619202946,
+            "V": 21.0,
             "KA": 1.2,
-            "F1": 1.0,
+            "F1": 0.5,
             "ALAG1": 0.5
           },
           "notes": [
-            "Default assumes CL and V from sources are apparent (CL/F, V/F). Set theta.F1 to your chosen bioavailability AND adjust CL/V accordingly if your sources report systemic CL/V.",
-            "Demo theta policy: CL and V are the independent simulation parameters for this 1-compartment fixture. t_half is checked downstream and is not used to recalibrate theta."
+            "Systemic CL/V parameterization: theta.F1 is the selected bioavailability; exposure is F*Dose/CL_systemic.",
+            "Demo theta policy: CL and V are the independent simulation parameters for this 1-compartment fixture. t_half is checked downstream and is not used to recalibrate theta.",
+            "The prior pk_raw text includes a mistaken fixture interpretation of total CL as apparent CL/F. That historical interpretation is superseded by the source_1 total/systemic CL and Vss definitions.",
+            "Use systemic CL3.3 L/h, reported Vss21 L and F1=0.5. Mapping Vss to one-compartment V is approximate; reported oral apparent half-life12 h remains check-only and is not used to derive V or establish an absorption-limited mechanism.",
+            "Source agreement does not validate the clinical model. KA, lag, IIV and residual errors remain generic fixture assumptions."
           ]
         },
         "iiv": {
@@ -2765,15 +2902,15 @@
         }
       },
       "review": {
-        "provenance_field_count": 3,
+        "provenance_field_count": 4,
         "needs_review_count": 0,
         "evidence_claim_count": 5,
         "evidence_unresolved_count": 0,
-        "evidence_citation_gap_count": 1,
+        "evidence_citation_gap_count": 0,
         "strict_status": "PASS",
         "open_review_count": 0,
         "known_limitation_count": 1,
-        "structural_mismatch_acknowledged": false
+        "structural_mismatch_acknowledged": true
       },
       "pharmacology": {
         "status": "curated",
@@ -2823,20 +2960,20 @@
         "schema_version": "0.1",
         "summary": {
           "claim_count": 5,
-          "checked_summary_count": 1,
-          "fixture_check_count": 2,
+          "checked_summary_count": 0,
+          "fixture_check_count": 1,
           "unresolved_count": 0,
-          "value_verified_count": 2,
-          "exact_quote_count": 2,
-          "source_locator_count": 2,
-          "citation_gap_count": 1
+          "value_verified_count": 4,
+          "exact_quote_count": 4,
+          "source_locator_count": 4,
+          "citation_gap_count": 0
         },
         "claims": [
           {
             "claim_id": "apixaban-CL_abs_L_per_h_at_70kg",
             "claim_type": "pk_parameter",
-            "parameter": "total_clearance_after_oral_administration",
-            "source_field": "total_clearance_after_oral_administration",
+            "parameter": "total_systemic_clearance",
+            "source_field": "total_systemic_clearance",
             "source_id": "source_1",
             "raw_value": 3.3,
             "normalized_value": 3.3,
@@ -2844,30 +2981,27 @@
             "evidence_status": "checked_summary",
             "evidence_level": "value_verified",
             "fixture_derived": false,
-            "evidence_summary": "DailyMed source_1 reports total clearance of approximately 3.3 L/hour and an apparent half-life after oral administration. The fixture treats the reported oral value as apparent CL/F.",
+            "evidence_summary": "Source_1 section12.3 reports total CL. Its oral apparent half-life does not make this CL an apparent CL/F.",
             "exact_quote": "total clearance of approximately 3.3 L/hour",
-            "source_locator": "DailyMed label, Clinical Pharmacology, Elimination",
+            "source_locator": "Clinical Pharmacology, Pharmacokinetics",
             "missing": []
           },
           {
             "claim_id": "apixaban-V_abs_L_at_70kg",
             "claim_type": "pk_parameter",
-            "parameter": "apparent_volume_derived_from_label_clearance_and_half_life",
-            "source_field": "apparent_volume_derived_from_label_clearance_and_half_life",
+            "parameter": "steady_state_volume_Vss",
+            "source_field": "steady_state_volume_Vss",
             "source_id": "source_1",
-            "raw_value": "3.3 and 12.0",
-            "normalized_value": 57.130723619202946,
+            "raw_value": 21,
+            "normalized_value": 21,
             "normalized_unit": "L",
             "evidence_status": "checked_summary",
-            "evidence_level": "summary_only",
-            "fixture_derived": true,
-            "evidence_summary": "DailyMed source_1 supports the apparent clearance and apparent half-life used as inputs; the committed V is a one-compartment apparent V/F derivation, not a directly reported Vd.",
-            "exact_quote": null,
-            "source_locator": null,
-            "missing": [
-              "source_locator",
-              "exact_quote"
-            ]
+            "evidence_level": "value_verified",
+            "fixture_derived": false,
+            "evidence_summary": "Source_1 reports Vss21 L. Using IV Vss as the volume in a one-compartment oral fixture is an approximation; it is not terminal Vz.",
+            "exact_quote": "approximately 21 liters",
+            "source_locator": "Clinical Pharmacology, Pharmacokinetics",
+            "missing": []
           },
           {
             "claim_id": "apixaban-t_half_h",
@@ -2887,20 +3021,20 @@
             "missing": []
           },
           {
-            "claim_id": "apixaban-bioavailability_frac-fixture-context",
-            "claim_type": "fixture_assumption",
+            "claim_id": "apixaban-bioavailability_frac",
+            "claim_type": "pk_parameter",
             "parameter": "bioavailability",
-            "source_field": "pk_parsed.bioavailability_frac",
-            "source_id": null,
-            "raw_value": 0.5,
+            "source_field": "absolute_bioavailability_up_to_10mg",
+            "source_id": "source_1",
+            "raw_value": 50,
             "normalized_value": 0.5,
             "normalized_unit": "fraction",
-            "evidence_status": "fixture_check",
-            "evidence_level": "fixture_check",
-            "fixture_derived": true,
-            "evidence_summary": "The parsed F value is contextual only because CL/V are apparent CL/F and V/F; the simulation convention uses F1=1 and does not claim an observed absolute bioavailability.",
-            "exact_quote": null,
-            "source_locator": null,
+            "evidence_status": "checked_summary",
+            "evidence_level": "value_verified",
+            "fixture_derived": false,
+            "evidence_summary": "Source_1 section12.3 reports approximate absolute F50% for doses up to10 mg.",
+            "exact_quote": "approximately 50%",
+            "source_locator": "Clinical Pharmacology, Pharmacokinetics",
             "missing": []
           },
           {
@@ -2909,8 +3043,8 @@
             "parameter": "AUC0-inf target",
             "source_field": "targets.auc",
             "source_id": null,
-            "raw_value": 3030.3030303030305,
-            "normalized_value": 3030.3030303030305,
+            "raw_value": 1515.1515151515152,
+            "normalized_value": 1515.1515151515152,
             "normalized_unit": "ng*h/mL",
             "evidence_status": "fixture_check",
             "evidence_level": "fixture_check",
@@ -2925,6 +3059,7 @@
     },
     {
       "slug": "atazanavir",
+      "simulation_validity": {},
       "id": "osp::atazanavir",
       "name": "Atazanavir",
       "route": "po",
@@ -3346,6 +3481,7 @@
     },
     {
       "slug": "buprenorphine",
+      "simulation_validity": {},
       "id": "OSP_buprenorphine",
       "name": "Buprenorphine",
       "route": "iv",
@@ -3724,6 +3860,7 @@
     },
     {
       "slug": "carbamazepine",
+      "simulation_validity": {},
       "id": "OSP_carbamazepine",
       "name": "Carbamazepine",
       "route": "po",
@@ -4138,6 +4275,7 @@
     },
     {
       "slug": "cda1",
+      "simulation_validity": {},
       "id": "osp::cda1",
       "name": "CDA1",
       "route": "iv",
@@ -4148,7 +4286,26 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/18502001/",
           "index": 1,
           "kind": "PubMed",
-          "identifier": "18502001"
+          "identifier": "18502001",
+          "bibliography": {
+            "pmid": "18502001",
+            "title": "Open-label, dose escalation phase I study in healthy volunteers to evaluate the safety and pharmacokinetics of a human monoclonal antibody to Clostridium difficile toxin A.",
+            "journal": "Vaccine",
+            "pubdate": "2008 Jun 25",
+            "authors": [
+              "Taylor CP",
+              "Tummala S",
+              "Molrine D",
+              "Davidson L",
+              "Farrell RJ",
+              "Lembo A",
+              "Hibberd PL",
+              "Lowy I",
+              "Kelly CP"
+            ],
+            "doi": "10.1016/j.vaccine.2008.04.042",
+            "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/18502001/"
+          }
         },
         {
           "id": "source_2",
@@ -4424,7 +4581,26 @@
               "url": "https://pubmed.ncbi.nlm.nih.gov/18502001/",
               "index": 1,
               "kind": "PubMed",
-              "identifier": "18502001"
+              "identifier": "18502001",
+              "bibliography": {
+                "pmid": "18502001",
+                "title": "Open-label, dose escalation phase I study in healthy volunteers to evaluate the safety and pharmacokinetics of a human monoclonal antibody to Clostridium difficile toxin A.",
+                "journal": "Vaccine",
+                "pubdate": "2008 Jun 25",
+                "authors": [
+                  "Taylor CP",
+                  "Tummala S",
+                  "Molrine D",
+                  "Davidson L",
+                  "Farrell RJ",
+                  "Lembo A",
+                  "Hibberd PL",
+                  "Lowy I",
+                  "Kelly CP"
+                ],
+                "doi": "10.1016/j.vaccine.2008.04.042",
+                "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/18502001/"
+              }
             },
             "claim_status": "investigational_unconfirmed",
             "source_fit_status": "unreviewed",
@@ -4539,6 +4715,7 @@
     },
     {
       "slug": "cimetidine",
+      "simulation_validity": {},
       "id": "osp::cimetidine",
       "name": "Cimetidine",
       "route": "po",
@@ -4995,6 +5172,7 @@
     },
     {
       "slug": "clarithromycin",
+      "simulation_validity": {},
       "id": "osp::clarithromycin",
       "name": "Clarithromycin",
       "route": "po",
@@ -5013,7 +5191,18 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/10589373/",
           "index": 2,
           "kind": "PubMed",
-          "identifier": "10589373"
+          "identifier": "10589373",
+          "bibliography": {
+            "pmid": "10589373",
+            "title": "Clinical pharmacokinetics of clarithromycin.",
+            "journal": "Clinical pharmacokinetics",
+            "pubdate": "1999 Nov",
+            "authors": [
+              "Rodvold KA"
+            ],
+            "doi": "10.2165/00003088-199937050-00003",
+            "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/10589373/"
+          }
         },
         {
           "id": "source_3",
@@ -5421,6 +5610,7 @@
     },
     {
       "slug": "dapagliflozin",
+      "simulation_validity": {},
       "id": "OSP_dapagliflozin",
       "name": "Dapagliflozin",
       "route": "po",
@@ -5863,6 +6053,7 @@
     },
     {
       "slug": "efavirenz",
+      "simulation_validity": {},
       "id": "osp::efavirenz",
       "name": "Efavirenz",
       "route": "po",
@@ -5881,7 +6072,25 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/40851704/",
           "index": 2,
           "kind": "PubMed",
-          "identifier": "40851704"
+          "identifier": "40851704",
+          "bibliography": {
+            "pmid": "40851704",
+            "title": "Population Pharmacokinetic-Pharmacogenetic (PopPK-PGx) Model of Efavirenz in HIV-1-Infected Patients.",
+            "journal": "Cureus",
+            "pubdate": "2025 Jul",
+            "authors": [
+              "Vucicevic K",
+              "Michalickova D",
+              "Obradovic B",
+              "Ranin J",
+              "Jevtovic D",
+              "Lukic R",
+              "Owen A",
+              "Dragovic G"
+            ],
+            "doi": "10.7759/cureus.88533",
+            "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/40851704/"
+          }
         }
       ],
       "raw": {
@@ -6295,6 +6504,7 @@
     },
     {
       "slug": "erythromycin",
+      "simulation_validity": {},
       "id": "OSP_erythromycin",
       "name": "Erythromycin",
       "route": "iv",
@@ -6678,6 +6888,7 @@
     },
     {
       "slug": "ethinylestradiol",
+      "simulation_validity": {},
       "id": "osp::ethinylestradiol",
       "name": "Ethinylestradiol",
       "route": "po",
@@ -7107,6 +7318,7 @@
     },
     {
       "slug": "felodipine",
+      "simulation_validity": {},
       "id": "osp::felodipine",
       "name": "Felodipine",
       "route": "po",
@@ -7117,7 +7329,19 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/1782737/",
           "index": 1,
           "kind": "PubMed",
-          "identifier": "1782737"
+          "identifier": "1782737",
+          "bibliography": {
+            "pmid": "1782737",
+            "title": "Felodipine clinical pharmacokinetics.",
+            "journal": "Clinical pharmacokinetics",
+            "pubdate": "1991 Dec",
+            "authors": [
+              "Dunselman PH",
+              "Edgar B"
+            ],
+            "doi": "10.2165/00003088-199121060-00003",
+            "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/1782737/"
+          }
         },
         {
           "id": "source_2",
@@ -7125,7 +7349,20 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/3327676/",
           "index": 2,
           "kind": "PubMed",
-          "identifier": "3327676"
+          "identifier": "3327676",
+          "bibliography": {
+            "pmid": "3327676",
+            "title": "Clinical pharmacokinetics of felodipine. A summary.",
+            "journal": "Drugs",
+            "pubdate": "1987",
+            "authors": [
+              "Edgar B",
+              "Lundborg P",
+              "Regårdh CG"
+            ],
+            "doi": "10.2165/00003495-198700343-00005",
+            "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/3327676/"
+          }
         }
       ],
       "raw": {
@@ -7559,6 +7796,7 @@
     },
     {
       "slug": "fluconazole",
+      "simulation_validity": {},
       "id": "OSP_fluconazole",
       "name": "Fluconazole",
       "route": "iv",
@@ -7942,6 +8180,7 @@
     },
     {
       "slug": "fluvoxamine",
+      "simulation_validity": {},
       "id": "osp::fluvoxamine",
       "name": "Fluvoxamine",
       "route": "po",
@@ -8000,7 +8239,19 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/9184622/",
           "index": 7,
           "kind": "PubMed",
-          "identifier": "9184622"
+          "identifier": "9184622",
+          "bibliography": {
+            "pmid": "9184622",
+            "title": "Clinical pharmacokinetics of fluvoxamine: applications to dosage regimen design.",
+            "journal": "The Journal of clinical psychiatry",
+            "pubdate": "1997",
+            "authors": [
+              "DeVane CL",
+              "Gill HS"
+            ],
+            "doi": null,
+            "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/9184622/"
+          }
         },
         {
           "id": "source_8",
@@ -8426,6 +8677,7 @@
     },
     {
       "slug": "inulin",
+      "simulation_validity": {},
       "id": "osp::inulin",
       "name": "Inulin",
       "route": "iv",
@@ -8845,6 +9097,7 @@
     },
     {
       "slug": "itraconazole",
+      "simulation_validity": {},
       "id": "osp::itraconazole",
       "name": "Itraconazole",
       "route": "po",
@@ -9295,6 +9548,7 @@
     },
     {
       "slug": "mefenamic_acid",
+      "simulation_validity": {},
       "id": "osp::mefenamic_acid",
       "name": "Mefenamic acid",
       "route": "po",
@@ -9718,6 +9972,7 @@
     },
     {
       "slug": "metoprolol",
+      "simulation_validity": {},
       "id": "osp::metoprolol",
       "name": "Metoprolol",
       "route": "po",
@@ -10176,6 +10431,7 @@
     },
     {
       "slug": "mexiletine",
+      "simulation_validity": {},
       "id": "osp::mexiletine",
       "name": "Mexiletine",
       "route": "po",
@@ -10194,7 +10450,19 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/10589372/",
           "index": 2,
           "kind": "PubMed",
-          "identifier": "10589372"
+          "identifier": "10589372",
+          "bibliography": {
+            "pmid": "10589372",
+            "title": "Clinical pharmacokinetics of mexiletine.",
+            "journal": "Clinical pharmacokinetics",
+            "pubdate": "1999 Nov",
+            "authors": [
+              "Labbé L",
+              "Turgeon J"
+            ],
+            "doi": "10.2165/00003088-199937050-00002",
+            "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/10589372/"
+          }
         }
       ],
       "raw": {
@@ -10616,6 +10884,7 @@
     },
     {
       "slug": "moclobemide",
+      "simulation_validity": {},
       "id": "osp::moclobemide",
       "name": "Moclobemide",
       "route": "po",
@@ -10634,7 +10903,23 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/2248087/",
           "index": 2,
           "kind": "PubMed",
-          "identifier": "2248087"
+          "identifier": "2248087",
+          "bibliography": {
+            "pmid": "2248087",
+            "title": "Pharmacokinetics of moclobemide after single and multiple oral dosing with 150 milligrams 3 times daily for 15 days.",
+            "journal": "Acta psychiatrica Scandinavica. Supplementum",
+            "pubdate": "1990",
+            "authors": [
+              "Guentert TW",
+              "Tucker G",
+              "Korn A",
+              "Pfefen JP",
+              "Haefelfinger P",
+              "Schoerlin MP"
+            ],
+            "doi": "10.1111/j.1600-0447.1990.tb05345.x",
+            "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/2248087/"
+          }
         },
         {
           "id": "source_3",
@@ -10642,7 +10927,19 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/8582117/",
           "index": 3,
           "kind": "PubMed",
-          "identifier": "8582117"
+          "identifier": "8582117",
+          "bibliography": {
+            "pmid": "8582117",
+            "title": "Clinical pharmacokinetics of the monoamine oxidase-A inhibitor moclobemide.",
+            "journal": "Clinical pharmacokinetics",
+            "pubdate": "1995 Nov",
+            "authors": [
+              "Mayersohn M",
+              "Guentert TW"
+            ],
+            "doi": "10.2165/00003088-199529050-00002",
+            "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/8582117/"
+          }
         },
         {
           "id": "source_4",
@@ -11099,6 +11396,15 @@
     },
     {
       "slug": "montelukast",
+      "simulation_validity": {
+        "status": "clinical_hold",
+        "review_date": "2026-10-28",
+        "reasons": [
+          "Parameter-source population is healthy elderly volunteers, N=12, from source_1. CL30.8 mL/min, Vss9.7 L and terminal half-life6.7 h followed7 mg IV over5 min. These are not the general healthy-young-adult label values.",
+          "F1=0.61 is the elderly mean after10 mg oral; the prior0.615 mixed elderly61% with a previously measured young-subject62%. Do not replace elderly CL/t_half with a different population label value.",
+          "The retained100 mg oral arm is a computational stress test, not the cited10 mg oral or7 mg IV scenario. The generated body-weight distribution does not reconstruct the elderly cohort. KA, lag, IIV and residual errors remain generic fixture assumptions."
+        ]
+      },
       "id": "osp::montelukast",
       "name": "Montelukast",
       "route": "po",
@@ -11109,7 +11415,27 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/9429741/",
           "index": 1,
           "kind": "PubMed",
-          "identifier": "9429741"
+          "identifier": "9429741",
+          "bibliography": {
+            "pmid": "9429741",
+            "title": "Pharmacokinetics and bioavailability of montelukast sodium (MK-0476) in healthy young and elderly volunteers.",
+            "journal": "Biopharmaceutics & drug disposition",
+            "pubdate": "1997 Dec",
+            "authors": [
+              "Zhao JJ",
+              "Rogers JD",
+              "Holland SD",
+              "Larson P",
+              "Amin RD",
+              "Haesen R",
+              "Freeman A",
+              "Seiberling M",
+              "Merz M",
+              "Cheng H"
+            ],
+            "doi": "10.1002/(sici)1099-081x(199712)18:9<769::aid-bdd60>3.0.co;2-k",
+            "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/9429741/"
+          }
         }
       ],
       "raw": {
@@ -11133,7 +11459,7 @@
           "value": 9.7,
           "unit": "L"
         },
-        "bioavailability_frac": 0.615,
+        "bioavailability_frac": 0.61,
         "weight_ref_kg_for_abs": 70.0,
         "clearance_basis": "systemic",
         "volume_basis": "systemic",
@@ -11144,8 +11470,8 @@
         "ke_1_per_h": 0.19051546391752577,
         "CL_abs_L_per_h_at_70kg": 1.8479999999999999,
         "V_abs_L_at_70kg": 9.7,
-        "CL_apparent_L_per_h_at_70kg": 3.004878048780488,
-        "V_apparent_L_at_70kg": 15.772357723577235,
+        "CL_apparent_L_per_h_at_70kg": 3.029508196721311,
+        "V_apparent_L_at_70kg": 15.901639344262295,
         "CL_systemic_L_per_h_at_70kg": 1.8479999999999999,
         "V_systemic_L_at_70kg": 9.7,
         "notes": [
@@ -11220,27 +11546,27 @@
         },
         "bioavailability_frac": {
           "source_id": "source_1",
-          "source_field": "absolute_oral_bioavailability_10mg",
-          "value_basis": "derived_from_reported",
-          "raw_value": "61-62",
+          "source_field": "elderly_absolute_oral_bioavailability_10mg",
+          "value_basis": "literature_reported",
+          "raw_value": 61,
           "raw_unit": "percent",
-          "normalized_value": 0.615,
+          "normalized_value": 0.61,
           "normalized_unit": "fraction",
           "conversion": {
-            "method": "derived_formula",
-            "formula": "midpoint of healthy elderly and healthy young oral bioavailability (61% and 62%)",
+            "method": "unit_conversion",
+            "formula": "61 / 100",
             "assumptions": {
-              "population_context": "healthy_young_and_elderly_volunteers",
-              "dose_context": "10 mg oral after 7 days at 10 mg/day"
+              "population_context": "healthy_elderly_volunteers",
+              "dose_context": "10 mg oral, single-dose bioavailability comparison"
             }
           },
           "role": "simulation_parameter",
           "reviewer_status": "checked",
-          "reviewer_note": "PubMed source_1 reports 61% in healthy elderly subjects and 62% previously determined in healthy young subjects after a 10 mg oral dose. The canonical 0.615 is the midpoint fixture value and is not a new observed estimate.",
+          "reviewer_note": "Source_1 reports mean oral F61% in healthy elderly subjects after10 mg. This matches the elderly population of the IV CL, Vss and half-life values. The separately reported young-subject62% is not averaged into this value.",
           "source_review_status": "checked",
           "fixture_limitation_status": "acknowledged",
           "source_locator": "PubMed abstract, oral bioavailability paragraph",
-          "exact_quote": "the bioavailability of montelukast in healthy elderly averaged 61%, very close to that (62%)"
+          "exact_quote": "the bioavailability of montelukast in healthy elderly averaged 61%"
         }
       },
       "targets": {
@@ -11254,13 +11580,14 @@
           },
           "population": {
             "species": "human",
-            "group": "adult_healthy"
+            "group": "elderly_healthy",
+            "parameter_source": "source_1, elderly IV and oral comparison"
           }
         },
         "targets": {
           "auc": {
             "type": "AUC0-inf",
-            "value": 33279.22077922078,
+            "value": 33008.658008658014,
             "unit": "ng*h/mL",
             "summary": "fixture_consistency_check",
             "variability": {
@@ -11271,7 +11598,7 @@
             "target_basis": "f_dose_over_cl_systemic_not_literature_auc",
             "independent_literature_target": false,
             "source_value": "CL_systemic_L_per_h_at_70kg",
-            "bioavailability_frac": 0.615,
+            "bioavailability_frac": 0.61,
             "role": "consistency_check"
           },
           "t_half": {
@@ -11292,15 +11619,17 @@
           }
         },
         "notes": [
-          "AUC is computed as F*Dose/CL_systemic for this systemic-basis oral fixture; it is not an independent literature AUC.",
           "Variability fields are placeholders unless you replace them with drug-specific PopPK values.",
-          "AUC target provenance: computed as Dose/CL from the extracted CL used by this fixture. It is an integration consistency check, not an independent literature AUC or clinical validity claim. To validate against a literature AUC, replace targets.auc.value/unit/summary and add the source, raw text, unit conversion, and derivation note.",
           "Parameter-pair policy: spec theta uses CL and V from pk.yml derived absolute values as the independent simulation parameters. The literature t_half is retained as a target/check and is not used to recalibrate CL or V automatically.",
-          "Known 1-compartment attainability issue: CL/V-implied t_half differs from pk_parsed.half_life_h beyond the library warning threshold. t_half WARN/FAILED in demo validation may be expected and this drug can be used as a stress-test fixture."
+          "Known 1-compartment attainability issue: CL/V-implied t_half differs from pk_parsed.half_life_h beyond the library warning threshold. t_half WARN/FAILED in demo validation may be expected and this drug can be used as a stress-test fixture.",
+          "AUC is computed as F*Dose/CL_systemic and is a fixture consistency check, not an independent literature AUC.",
+          "Parameter-source population is healthy elderly volunteers, N=12, from source_1. CL30.8 mL/min, Vss9.7 L and terminal half-life6.7 h followed7 mg IV over5 min. These are not the general healthy-young-adult label values.",
+          "F1=0.61 is the elderly mean after10 mg oral; the prior0.615 mixed elderly61% with a previously measured young-subject62%. Do not replace elderly CL/t_half with a different population label value.",
+          "The retained100 mg oral arm is a computational stress test, not the cited10 mg oral or7 mg IV scenario. The generated body-weight distribution does not reconstruct the elderly cohort. KA, lag, IIV and residual errors remain generic fixture assumptions."
         ],
         "provenance_review": {
           "status": "acknowledged_fixture_limitation",
-          "reviewer_note": "t_half is retained as a check target only. CL/V are used for one-compartment fixture generation and are not jointly calibrated to match literature terminal half-life.",
+          "reviewer_note": "The reported half-life remains check-only. CL and Vss are not recalibrated to force the terminal half-life into a one-compartment model.",
           "reviewed_fields": [
             "CL",
             "V",
@@ -11324,7 +11653,8 @@
               "min": 40,
               "max": 120
             }
-          }
+          },
+          "parameter_source_group": "elderly_healthy"
         },
         "regimen": {
           "route": "oral",
@@ -11353,15 +11683,16 @@
             "CL": 1.8479999999999999,
             "V": 9.7,
             "KA": 1.2,
-            "F1": 0.615,
+            "F1": 0.61,
             "ALAG1": 0.5
           },
           "notes": [
-            {
-              "Systemic CL/V parameterization": "theta.F1 is the extracted bioavailability; exposure is F*Dose/CL_systemic."
-            },
+            "Systemic CL/V parameterization: theta.F1 is the selected bioavailability; exposure is F*Dose/CL_systemic.",
             "Demo theta policy: CL and V are the independent simulation parameters for this 1-compartment fixture. t_half is checked downstream and is not used to recalibrate theta.",
-            "Known stress-test label: library validation flags CL/V/t_half structural mismatch for this drug, so terminal t_half WARN/FAILED can be expected in demo validation."
+            "Known stress-test label: library validation flags CL/V/t_half structural mismatch for this drug, so terminal t_half WARN/FAILED can be expected in demo validation.",
+            "Parameter-source population is healthy elderly volunteers, N=12, from source_1. CL30.8 mL/min, Vss9.7 L and terminal half-life6.7 h followed7 mg IV over5 min. These are not the general healthy-young-adult label values.",
+            "F1=0.61 is the elderly mean after10 mg oral; the prior0.615 mixed elderly61% with a previously measured young-subject62%. Do not replace elderly CL/t_half with a different population label value.",
+            "The retained100 mg oral arm is a computational stress test, not the cited10 mg oral or7 mg IV scenario. The generated body-weight distribution does not reconstruct the elderly cohort. KA, lag, IIV and residual errors remain generic fixture assumptions."
           ]
         },
         "iiv": {
@@ -11386,7 +11717,7 @@
         "evidence_citation_gap_count": 0,
         "strict_status": "PASS",
         "open_review_count": 0,
-        "known_limitation_count": 2,
+        "known_limitation_count": 1,
         "structural_mismatch_acknowledged": true
       },
       "pharmacology": {
@@ -11437,10 +11768,10 @@
         "schema_version": "0.1",
         "summary": {
           "claim_count": 5,
-          "checked_summary_count": 1,
+          "checked_summary_count": 0,
           "fixture_check_count": 1,
           "unresolved_count": 0,
-          "value_verified_count": 3,
+          "value_verified_count": 4,
           "exact_quote_count": 4,
           "source_locator_count": 4,
           "citation_gap_count": 0
@@ -11501,16 +11832,16 @@
             "claim_id": "montelukast-bioavailability_frac",
             "claim_type": "pk_parameter",
             "parameter": "bioavailability",
-            "source_field": "absolute_oral_bioavailability_10mg",
+            "source_field": "elderly_absolute_oral_bioavailability_10mg",
             "source_id": "source_1",
-            "raw_value": "61-62",
-            "normalized_value": 0.615,
+            "raw_value": 61,
+            "normalized_value": 0.61,
             "normalized_unit": "fraction",
             "evidence_status": "checked_summary",
-            "evidence_level": "summary_only",
-            "fixture_derived": true,
-            "evidence_summary": "PubMed source_1 reports 61% in healthy elderly subjects and 62% previously determined in healthy young subjects after a 10 mg oral dose. The canonical 0.615 is the midpoint fixture value and is not a new observed estimate.",
-            "exact_quote": "the bioavailability of montelukast in healthy elderly averaged 61%, very close to that (62%)",
+            "evidence_level": "value_verified",
+            "fixture_derived": false,
+            "evidence_summary": "Source_1 reports mean oral F61% in healthy elderly subjects after10 mg. This matches the elderly population of the IV CL, Vss and half-life values. The separately reported young-subject62% is not averaged into this value.",
+            "exact_quote": "the bioavailability of montelukast in healthy elderly averaged 61%",
             "source_locator": "PubMed abstract, oral bioavailability paragraph",
             "missing": []
           },
@@ -11520,8 +11851,8 @@
             "parameter": "AUC0-inf target",
             "source_field": "targets.auc",
             "source_id": null,
-            "raw_value": 33279.22077922078,
-            "normalized_value": 33279.22077922078,
+            "raw_value": 33008.658008658014,
+            "normalized_value": 33008.658008658014,
             "normalized_unit": "ng*h/mL",
             "evidence_status": "fixture_check",
             "evidence_level": "fixture_check",
@@ -11536,6 +11867,7 @@
     },
     {
       "slug": "motavizumab_medi_524",
+      "simulation_validity": {},
       "id": "osp::motavizumab_medi_524",
       "name": "Motavizumab (MEDI-524)",
       "route": "iv",
@@ -11932,6 +12264,7 @@
     },
     {
       "slug": "motavizumab_yte",
+      "simulation_validity": {},
       "id": "OSP_motavizumab_yte",
       "name": "Motavizumab-YTE",
       "route": "iv",
@@ -12317,6 +12650,15 @@
     },
     {
       "slug": "omeprazole",
+      "simulation_validity": {
+        "status": "clinical_hold",
+        "review_date": "2026-10-28",
+        "reasons": [
+          "CL=37.44 L/h is 624 mL/min * 60/1000 from the source_4 median. V=16.1 L is the source_4 mean IV Vss 0.23 L/kg * 70 kg; median CL and mean Vss are different summary statistics.",
+          "F1=0.35 and half-life 0.75 h are midpoint fixture selections from the healthy-subject label ranges, not the PubMed study median F=39% or its IV half-life. The retained 100 mg dose is a stress-test fixture, not a validated 20 mg oral buffered-solution scenario.",
+          "Legacy pk_raw volume 0.4 L/kg is retained as the original capture; the adopted source_4 IV Vss is 0.23 L/kg. KA, lag, IIV and residual errors remain generic fixture assumptions."
+        ]
+      },
       "id": "osp::omeprazole",
       "name": "Omeprazole",
       "route": "po",
@@ -12351,7 +12693,22 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/2315973/",
           "index": 4,
           "kind": "PubMed",
-          "identifier": "2315973"
+          "identifier": "2315973",
+          "bibliography": {
+            "pmid": "2315973",
+            "title": "The pharmacokinetics of omeprazole in humans--a study of single intravenous and oral doses.",
+            "journal": "Therapeutic drug monitoring",
+            "pubdate": "1990 Mar",
+            "authors": [
+              "Regårdh CG",
+              "Andersson T",
+              "Lagerström PO",
+              "Lundborg P",
+              "Skånberg I"
+            ],
+            "doi": "10.1097/00007691-199003000-00010",
+            "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/2315973/"
+          }
         }
       ],
       "raw": {
@@ -12359,7 +12716,7 @@
         "clearance": "624 mL/min (range 59-828 mL/min)",
         "volume_of_distribution": "0.4 L/kg",
         "bioavailability": "about 30-40% at 20-40 mg in healthy subjects; 58% in young and 76% in elderly volunteers after a 40 mg buffered solution",
-        "elimination_route": "肝代謝 (CYP2C19, CYP3A4), 腎排泄 (77%), 糞便排泄 (胆汁分泌由来)"
+        "elimination_route": "Hepatic metabolism (CYP2C19, CYP3A4); about 77% recovered in urine as metabolites, with little if any unchanged drug; remaining dose recovered in feces."
       },
       "parsed": {
         "half_life_h": 0.75,
@@ -12368,7 +12725,7 @@
           1.0
         ],
         "clearance": {
-          "value": 43.56,
+          "value": 37.44,
           "unit": "L/h"
         },
         "volume": {
@@ -12384,15 +12741,15 @@
         "clearance_basis": "systemic",
         "volume_basis": "systemic",
         "clearance_basis_source": "primary_source_reviewed",
-        "clearance_basis_note": "Systemic basis reviewed against PubMed source_4 and the DailyMed label: the reviewed clearance is a systemic plasma clearance, while oral bioavailability is reported separately. The fixture uses systemic CL with F1=bioavailability; the canonical volume remains separately unresolved."
+        "clearance_basis_note": "Source_4 reports systemic plasma CL after IV administration. CL=37.44 L/h is the exact conversion of median 624 mL/min; oral F is separate."
       },
       "derived": {
-        "ke_1_per_h": 2.705590062111801,
-        "CL_abs_L_per_h_at_70kg": 43.56,
+        "ke_1_per_h": 2.3254658385093165,
+        "CL_abs_L_per_h_at_70kg": 37.44,
         "V_abs_L_at_70kg": 16.1,
-        "CL_apparent_L_per_h_at_70kg": 124.45714285714286,
-        "V_apparent_L_at_70kg": 46.0,
-        "CL_systemic_L_per_h_at_70kg": 43.56,
+        "CL_apparent_L_per_h_at_70kg": 106.97142857142858,
+        "V_apparent_L_at_70kg": 46.00000000000001,
+        "CL_systemic_L_per_h_at_70kg": 37.44,
         "V_systemic_L_at_70kg": 16.1,
         "notes": [
           "Apparent CL/V were derived as (systemic CL/V) / F.",
@@ -12407,7 +12764,7 @@
           "value_basis": "literature_reported",
           "raw_value": 624,
           "raw_unit": "mL/min",
-          "normalized_value": 43.56,
+          "normalized_value": 37.44,
           "normalized_unit": "L/h",
           "conversion": {
             "method": "unit_conversion",
@@ -12416,7 +12773,7 @@
           },
           "role": "simulation_parameter",
           "reviewer_status": "checked",
-          "reviewer_note": "PubMed source_4 reports median systemic plasma clearance of 624 mL/min in the reviewed clinical PK study. Clearance is used as a deterministic fixture parameter and is not recalibrated to force agreement with terminal half-life; the volume remains separately unresolved because the canonical 0.4 L/kg value is not directly mapped to this source.",
+          "reviewer_note": "PubMed source_4 reports median systemic plasma clearance 624 mL/min in eight young healthy subjects given 10 mg IV and 20 mg oral buffered solution. The exact unit conversion is 624*60/1000=37.44 L/h. The mean IV Vss and selected label F are not a jointly estimated oral parameter set.",
           "source_review_status": "checked",
           "fixture_limitation_status": "not_applicable",
           "source_locator": "PubMed abstract",
@@ -12511,7 +12868,7 @@
         "targets": {
           "auc": {
             "type": "AUC0-inf",
-            "value": 803.4894398530762,
+            "value": 934.8290598290599,
             "unit": "ng*h/mL",
             "summary": "fixture_consistency_check",
             "variability": {
@@ -12529,7 +12886,7 @@
             "phase": "terminal",
             "value": 0.75,
             "unit": "h",
-            "summary": "arithmetic_mean",
+            "summary": "range_midpoint_fixture",
             "variability": {
               "type": "sd",
               "value": 1.0
@@ -12543,16 +12900,18 @@
           }
         },
         "notes": [
-          "AUC is computed as F*Dose/CL_systemic for this systemic-basis oral fixture; it is not an independent literature AUC.",
           "F=0.35 is the midpoint of the healthy-subject 30-40% label range at 20-40 mg; the 100 mg scenario dose is a computational fixture and is not a clinical exposure claim.",
           "Variability fields are placeholders unless you replace them with drug-specific PopPK values.",
-          "AUC target provenance: computed as Dose/CL from the extracted CL used by this fixture. It is an integration consistency check, not an independent literature AUC or clinical validity claim. To validate against a literature AUC, replace targets.auc.value/unit/summary and add the source, raw text, unit conversion, and derivation note.",
           "Parameter-pair policy: spec theta uses CL and V from pk.yml derived absolute values as the independent simulation parameters. The literature t_half is retained as a target/check and is not used to recalibrate CL or V automatically.",
-          "Known 1-compartment attainability issue: CL/V-implied t_half differs from pk_parsed.half_life_h beyond the library warning threshold. t_half WARN/FAILED in demo validation may be expected and this drug can be used as a stress-test fixture."
+          "Known 1-compartment attainability issue: CL/V-implied t_half differs from pk_parsed.half_life_h beyond the library warning threshold. t_half WARN/FAILED in demo validation may be expected and this drug can be used as a stress-test fixture.",
+          "AUC is computed as F*Dose/CL_systemic and is a fixture consistency check, not an independent literature AUC.",
+          "CL=37.44 L/h is 624 mL/min * 60/1000 from the source_4 median. V=16.1 L is the source_4 mean IV Vss 0.23 L/kg * 70 kg; median CL and mean Vss are different summary statistics.",
+          "F1=0.35 and half-life 0.75 h are midpoint fixture selections from the healthy-subject label ranges, not the PubMed study median F=39% or its IV half-life. The retained 100 mg dose is a stress-test fixture, not a validated 20 mg oral buffered-solution scenario.",
+          "Legacy pk_raw volume 0.4 L/kg is retained as the original capture; the adopted source_4 IV Vss is 0.23 L/kg. KA, lag, IIV and residual errors remain generic fixture assumptions."
         ],
         "provenance_review": {
           "status": "acknowledged_fixture_limitation",
-          "reviewer_note": "t_half is retained as a check target only. CL/V are used for one-compartment fixture generation and are not jointly calibrated to match literature terminal half-life.",
+          "reviewer_note": "The reported half-life remains check-only. CL and Vss are not recalibrated to force the terminal half-life into a one-compartment model.",
           "reviewed_fields": [
             "CL",
             "V",
@@ -12602,19 +12961,20 @@
             "mult": 1000
           },
           "theta": {
-            "CL": 43.56,
+            "CL": 37.44,
             "V": 16.1,
             "KA": 1.2,
             "F1": 0.35,
             "ALAG1": 0.5
           },
           "notes": [
-            {
-              "Systemic CL/V parameterization": "theta.F1 is the extracted bioavailability; exposure is F*Dose/CL_systemic."
-            },
+            "Systemic CL/V parameterization: theta.F1 is the selected bioavailability; exposure is F*Dose/CL_systemic.",
             "F1=0.35 is the midpoint of the healthy-subject 30-40% label range at 20-40 mg; the 100 mg arm is a fixture stress test, not a clinical dose-exposure assertion.",
             "Demo theta policy: CL and V are the independent simulation parameters for this 1-compartment fixture. t_half is checked downstream and is not used to recalibrate theta.",
-            "Known stress-test label: library validation flags CL/V/t_half structural mismatch for this drug, so terminal t_half WARN/FAILED can be expected in demo validation."
+            "Known stress-test label: library validation flags CL/V/t_half structural mismatch for this drug, so terminal t_half WARN/FAILED can be expected in demo validation.",
+            "CL=37.44 L/h is 624 mL/min * 60/1000 from the source_4 median. V=16.1 L is the source_4 mean IV Vss 0.23 L/kg * 70 kg; median CL and mean Vss are different summary statistics.",
+            "F1=0.35 and half-life 0.75 h are midpoint fixture selections from the healthy-subject label ranges, not the PubMed study median F=39% or its IV half-life. The retained 100 mg dose is a stress-test fixture, not a validated 20 mg oral buffered-solution scenario.",
+            "Legacy pk_raw volume 0.4 L/kg is retained as the original capture; the adopted source_4 IV Vss is 0.23 L/kg. KA, lag, IIV and residual errors remain generic fixture assumptions."
           ]
         },
         "iiv": {
@@ -12715,12 +13075,12 @@
             "source_field": "median_systemic_plasma_clearance",
             "source_id": "source_4",
             "raw_value": 624,
-            "normalized_value": 43.56,
+            "normalized_value": 37.44,
             "normalized_unit": "L/h",
             "evidence_status": "checked_summary",
             "evidence_level": "value_verified",
             "fixture_derived": false,
-            "evidence_summary": "PubMed source_4 reports median systemic plasma clearance of 624 mL/min in the reviewed clinical PK study. Clearance is used as a deterministic fixture parameter and is not recalibrated to force agreement with terminal half-life; the volume remains separately unresolved because the canonical 0.4 L/kg value is not directly mapped to this source.",
+            "evidence_summary": "PubMed source_4 reports median systemic plasma clearance 624 mL/min in eight young healthy subjects given 10 mg IV and 20 mg oral buffered solution. The exact unit conversion is 624*60/1000=37.44 L/h. The mean IV Vss and selected label F are not a jointly estimated oral parameter set.",
             "exact_quote": "the median systemic plasma clearance was 624 ml/min",
             "source_locator": "PubMed abstract",
             "missing": []
@@ -12782,8 +13142,8 @@
             "parameter": "AUC0-inf target",
             "source_field": "targets.auc",
             "source_id": null,
-            "raw_value": 803.4894398530762,
-            "normalized_value": 803.4894398530762,
+            "raw_value": 934.8290598290599,
+            "normalized_value": 934.8290598290599,
             "normalized_unit": "ng*h/mL",
             "evidence_status": "fixture_check",
             "evidence_level": "fixture_check",
@@ -12798,6 +13158,7 @@
     },
     {
       "slug": "raltegravir",
+      "simulation_validity": {},
       "id": "OSP_raltegravir",
       "name": "Raltegravir",
       "route": "po",
@@ -13229,6 +13590,15 @@
     },
     {
       "slug": "sildenafil",
+      "simulation_validity": {
+        "status": "clinical_hold",
+        "review_date": "2026-10-28",
+        "reasons": [
+          "Systemic CL41 L/h and Vss105 L are reported in EMA source_7. The previous CL18.195113489698564 L/h was inferred from V and a midpoint half-life and is superseded, not treated as a reported CL/F.",
+          "F1=0.41 is the reported mean absolute oral bioavailability. The terminal half-life4 h is only the midpoint of the reported3–5 h range; CL/Vss does not reproduce this terminal phase in a one-compartment model.",
+          "The retained100 mg oral dose is within the cited recommended-dose range, but Vss mapping, KA, lag, IIV and residual errors remain fixture approximations and do not establish clinical model validity."
+        ]
+      },
       "id": "osp::sildenafil",
       "name": "Sildenafil",
       "route": "po",
@@ -13280,14 +13650,22 @@
           "index": 6,
           "kind": "labeling.pfizer.com",
           "identifier": null
+        },
+        {
+          "id": "source_7",
+          "display_id": "source_7",
+          "url": "https://www.ema.europa.eu/en/documents/product-information/viagra-epar-product-information_en.pdf",
+          "index": 7,
+          "kind": "www.ema.europa.eu",
+          "identifier": null
         }
       ],
       "raw": {
         "half_life": "3-5 hours",
-        "clearance": null,
+        "clearance": "41 L/h (total body clearance; EMA source_7 section5.2)",
         "volume_of_distribution": "105 L",
         "bioavailability": "41% (25-63%)",
-        "elimination_route": "糞便 (~80%), 尿 (~13%)"
+        "elimination_route": "Hepatic metabolism (mainly CYP3A4, minor CYP2C9); metabolites recovered predominantly in feces (~80%) and urine (~13%)."
       },
       "parsed": {
         "half_life_h": 4.0,
@@ -13296,85 +13674,84 @@
           5.0
         ],
         "clearance": {
-          "value": 18.195113489698564,
-          "unit": "L/h",
-          "derived_from": "volume and half_life_h assuming ke=ln(2)/t1/2"
+          "value": 41.0,
+          "unit": "L/h"
         },
         "volume": {
           "value": 105.0,
           "unit": "L"
         },
-        "bioavailability_frac": 0.44,
+        "bioavailability_frac": 0.41,
         "bioavailability_frac_range": [
           0.25,
           0.63
         ],
         "weight_ref_kg_for_abs": 70.0,
-        "clearance_basis": "apparent",
-        "volume_basis": "apparent"
+        "clearance_basis": "systemic",
+        "volume_basis": "systemic",
+        "clearance_basis_source": "primary_source_reviewed",
+        "clearance_basis_note": "EMA source_7 section5.2 reports total body CL41 L/h, Vss105 L and mean absolute oral F41%; Vss is not V/F."
       },
       "derived": {
-        "ke_1_per_h": 0.17328679513998632,
-        "CL_abs_L_per_h_at_70kg": 18.195113489698564,
+        "ke_1_per_h": 0.3904761904761905,
+        "CL_abs_L_per_h_at_70kg": 41.0,
         "V_abs_L_at_70kg": 105.0,
-        "CL_apparent_L_per_h_at_70kg": 18.195113489698564,
-        "V_apparent_L_at_70kg": 105.0,
-        "CL_systemic_L_per_h_at_70kg": 8.005849935467369,
-        "V_systemic_L_at_70kg": 46.2,
+        "CL_apparent_L_per_h_at_70kg": 100.0,
+        "V_apparent_L_at_70kg": 256.0975609756098,
+        "CL_systemic_L_per_h_at_70kg": 41.0,
+        "V_systemic_L_at_70kg": 105.0,
         "notes": [
-          "Systemic CL/V were derived as (apparent CL/V) * F (assumes values are CL/F, V/F).",
-          "Basis detected/selected: apparent (CL/F, V/F). Model default can use CL_abs/V_abs as apparent and set F1=1.",
+          "Apparent CL/V were derived as (systemic CL/V) / F.",
+          "Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability with systemic CL/V.",
           "Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels typically report systemic parameters."
         ]
       },
       "provenance": {
         "CL_abs_L_per_h_at_70kg": {
-          "source_id": "source_2",
-          "source_field": "one_compartment_apparent_clearance_derived_from_volume_and_half_life",
-          "value_basis": "fixture_derived",
-          "raw_value": "105 and 4.0",
-          "raw_unit": "L and h",
-          "normalized_value": 18.195113489698564,
+          "source_id": "source_7",
+          "source_field": "total_body_clearance",
+          "value_basis": "label_reported",
+          "raw_value": 41,
+          "raw_unit": "L/h",
+          "normalized_value": 41,
           "normalized_unit": "L/h",
           "conversion": {
-            "method": "derived_formula",
-            "formula": "V_abs_L_at_70kg * ln(2) / t_half_h",
-            "assumptions": {
-              "model": "one_compartment_fixture"
-            }
+            "method": "direct",
+            "formula": "reported value",
+            "assumptions": {}
           },
           "role": "simulation_parameter",
           "reviewer_status": "checked",
-          "reviewer_note": "Source_2 supports the apparent V and half-life range but does not supply the committed exact CL. The fixture CL is explicitly derived and is not equivalent to a population CL/F estimate from another study.",
+          "reviewer_note": "EMA source_7 section5.2 reports total body clearance41 L/h. No CL is inferred from Vss and terminal half-life.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "not_applicable",
+          "source_locator": "EMA product information section 5.2",
+          "exact_quote": "total body clearance of sildenafil is 41 L/h"
         },
         "V_abs_L_at_70kg": {
-          "source_id": "source_3",
-          "source_field": "apparent_steady_state_volume",
-          "value_basis": "literature_reported",
+          "source_id": "source_7",
+          "source_field": "steady_state_volume_Vss",
+          "value_basis": "label_reported",
           "raw_value": 105,
           "raw_unit": "L",
-          "normalized_value": 105.0,
+          "normalized_value": 105,
           "normalized_unit": "L",
           "conversion": {
             "method": "direct",
-            "formula": "pk_parsed.volume.value",
-            "assumptions": {
-              "basis": "apparent_V_over_F"
-            }
+            "formula": "reported value",
+            "assumptions": {}
           },
           "role": "simulation_parameter",
           "reviewer_status": "checked",
-          "reviewer_note": "The FDA clinical review in source_3 reports an apparent steady-state volume of 105 L for sildenafil. The fixture retains this apparent value.",
+          "reviewer_note": "EMA source_7 section5.2 reports steady-state volume105 L. Vss is used as the one-compartment fixture volume, with structural limitations retained.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "not_applicable",
-          "source_locator": "FDA clinical review source_3, Clinical Pharmacology, single-dose PK",
-          "exact_quote": "Sildenafil's apparent steady-state volume of distribution was estimated to be 105 L"
+          "fixture_limitation_status": "acknowledged",
+          "source_locator": "EMA product information section 5.2",
+          "exact_quote": "105 L"
         },
         "t_half_h": {
-          "source_id": "source_2",
-          "source_field": "oral_terminal_half_life_range",
+          "source_id": "source_7",
+          "source_field": "terminal_half_life_range",
           "value_basis": "derived_from_reported",
           "raw_value": "3-5",
           "raw_unit": "h",
@@ -13389,9 +13766,31 @@
           },
           "role": "check_only",
           "reviewer_status": "checked",
-          "reviewer_note": "Source_2 reports an oral terminal half-life of 3 to 5 h. The midpoint is check-only and is not used to force the derived CL to a literature value.",
+          "reviewer_note": "EMA source_7 section5.2 reports terminal half-life3–5 h. The4 h midpoint is a check-only fixture choice and is not used to infer CL.",
           "source_review_status": "checked",
-          "fixture_limitation_status": "acknowledged"
+          "fixture_limitation_status": "acknowledged",
+          "source_locator": "EMA product information section5.2"
+        },
+        "bioavailability_frac": {
+          "source_id": "source_7",
+          "source_field": "mean_absolute_oral_bioavailability",
+          "value_basis": "label_reported",
+          "raw_value": 41,
+          "raw_unit": "percent",
+          "normalized_value": 0.41,
+          "normalized_unit": "fraction",
+          "conversion": {
+            "method": "unit_conversion",
+            "formula": "41 / 100",
+            "assumptions": {}
+          },
+          "role": "simulation_parameter",
+          "reviewer_status": "checked",
+          "reviewer_note": "Mean F41% is the reported estimate. It replaces the fixture midpoint44% of the25–63% range.",
+          "source_review_status": "checked",
+          "fixture_limitation_status": "not_applicable",
+          "source_locator": "EMA product information section 5.2",
+          "exact_quote": "41%"
         }
       },
       "targets": {
@@ -13411,24 +13810,25 @@
         "targets": {
           "auc": {
             "type": "AUC0-inf",
-            "value": 5495.981108148432,
+            "value": 1000.0,
             "unit": "ng*h/mL",
-            "summary": "geometric_mean",
+            "summary": "fixture_consistency_check",
             "variability": {
               "type": "gcv_percent",
               "value": 35
             },
-            "basis": "dose_over_cl",
-            "target_basis": "dose_over_cl_not_literature_auc",
+            "basis": "f_dose_over_cl",
+            "target_basis": "f_dose_over_cl_systemic_not_literature_auc",
             "independent_literature_target": false,
-            "source_value": "CL_abs_L_per_h_at_70kg",
-            "role": "consistency_check"
+            "source_value": "CL_systemic_L_per_h_at_70kg",
+            "role": "consistency_check",
+            "bioavailability_frac": 0.41
           },
           "t_half": {
             "phase": "terminal",
             "value": 4.0,
             "unit": "h",
-            "summary": "arithmetic_mean",
+            "summary": "range_midpoint_fixture",
             "variability": {
               "type": "sd",
               "value": 1.0
@@ -13436,18 +13836,28 @@
             "role": "check_only",
             "used_to_calibrate_cl_v": false,
             "structural_mismatch": {
-              "acknowledged": false,
-              "reason": null
+              "acknowledged": true,
+              "reason": "one_compartment_fixture_approximation"
             }
           }
         },
         "notes": [
-          "AUC is computed as Dose/CL (assuming CL is apparent CL/F for oral, and systemic CL for IV).",
           "Variability fields are placeholders unless you replace them with drug-specific PopPK values.",
-          "AUC target provenance: computed as Dose/CL from the extracted CL used by this fixture. It is an integration consistency check, not an independent literature AUC or clinical validity claim. To validate against a literature AUC, replace targets.auc.value/unit/summary and add the source, raw text, unit conversion, and derivation note.",
           "Parameter-pair policy: spec theta uses CL and V from pk.yml derived absolute values as the independent simulation parameters. The literature t_half is retained as a target/check and is not used to recalibrate CL or V automatically.",
-          "1-compartment attainability label: no CL/V/t_half warning is currently flagged by validate_library at the repository threshold. This is still a workflow-fixture label, not evidence of clinical model validity."
-        ]
+          "AUC is computed as F*Dose/CL_systemic and is a fixture consistency check, not an independent literature AUC.",
+          "Systemic CL41 L/h and Vss105 L are reported in EMA source_7. The previous CL18.195113489698564 L/h was inferred from V and a midpoint half-life and is superseded, not treated as a reported CL/F.",
+          "F1=0.41 is the reported mean absolute oral bioavailability. The terminal half-life4 h is only the midpoint of the reported3–5 h range; CL/Vss does not reproduce this terminal phase in a one-compartment model.",
+          "The retained100 mg oral dose is within the cited recommended-dose range, but Vss mapping, KA, lag, IIV and residual errors remain fixture approximations and do not establish clinical model validity."
+        ],
+        "provenance_review": {
+          "status": "acknowledged_fixture_limitation",
+          "reviewer_note": "The reported half-life remains check-only. CL and Vss are not recalibrated to force the terminal half-life into a one-compartment model.",
+          "reviewed_fields": [
+            "CL",
+            "V",
+            "t_half"
+          ]
+        }
       },
       "spec": {
         "file": "spec_pk1_oral.yml",
@@ -13491,15 +13901,18 @@
             "mult": 1000
           },
           "theta": {
-            "CL": 18.195113489698564,
+            "CL": 41.0,
             "V": 105.0,
             "KA": 1.2,
-            "F1": 1.0,
+            "F1": 0.41,
             "ALAG1": 0.5
           },
           "notes": [
-            "Default assumes CL and V from sources are apparent (CL/F, V/F). Set theta.F1 to your chosen bioavailability AND adjust CL/V accordingly if your sources report systemic CL/V.",
-            "Demo theta policy: CL and V are the independent simulation parameters for this 1-compartment fixture. t_half is checked downstream and is not used to recalibrate theta."
+            "Systemic CL/V parameterization: theta.F1 is the selected bioavailability; exposure is F*Dose/CL_systemic.",
+            "Demo theta policy: CL and V are the independent simulation parameters for this 1-compartment fixture. t_half is checked downstream and is not used to recalibrate theta.",
+            "Systemic CL41 L/h and Vss105 L are reported in EMA source_7. The previous CL18.195113489698564 L/h was inferred from V and a midpoint half-life and is superseded, not treated as a reported CL/F.",
+            "F1=0.41 is the reported mean absolute oral bioavailability. The terminal half-life4 h is only the midpoint of the reported3–5 h range; CL/Vss does not reproduce this terminal phase in a one-compartment model.",
+            "The retained100 mg oral dose is within the cited recommended-dose range, but Vss mapping, KA, lag, IIV and residual errors remain fixture approximations and do not establish clinical model validity."
           ]
         },
         "iiv": {
@@ -13517,15 +13930,15 @@
         }
       },
       "review": {
-        "provenance_field_count": 3,
+        "provenance_field_count": 4,
         "needs_review_count": 0,
         "evidence_claim_count": 5,
         "evidence_unresolved_count": 0,
-        "evidence_citation_gap_count": 2,
+        "evidence_citation_gap_count": 1,
         "strict_status": "PASS",
         "open_review_count": 0,
         "known_limitation_count": 2,
-        "structural_mismatch_acknowledged": false
+        "structural_mismatch_acknowledged": true
       },
       "pharmacology": {
         "status": "partial",
@@ -13584,87 +13997,83 @@
         "schema_version": "0.1",
         "summary": {
           "claim_count": 5,
-          "checked_summary_count": 2,
-          "fixture_check_count": 2,
+          "checked_summary_count": 1,
+          "fixture_check_count": 1,
           "unresolved_count": 0,
-          "value_verified_count": 1,
-          "exact_quote_count": 1,
-          "source_locator_count": 1,
-          "citation_gap_count": 2
+          "value_verified_count": 3,
+          "exact_quote_count": 3,
+          "source_locator_count": 4,
+          "citation_gap_count": 1
         },
         "claims": [
           {
             "claim_id": "sildenafil-CL_abs_L_per_h_at_70kg",
             "claim_type": "pk_parameter",
-            "parameter": "one_compartment_apparent_clearance_derived_from_volume_and_half_life",
-            "source_field": "one_compartment_apparent_clearance_derived_from_volume_and_half_life",
-            "source_id": "source_2",
-            "raw_value": "105 and 4.0",
-            "normalized_value": 18.195113489698564,
+            "parameter": "total_body_clearance",
+            "source_field": "total_body_clearance",
+            "source_id": "source_7",
+            "raw_value": 41,
+            "normalized_value": 41,
             "normalized_unit": "L/h",
             "evidence_status": "checked_summary",
-            "evidence_level": "summary_only",
-            "fixture_derived": true,
-            "evidence_summary": "Source_2 supports the apparent V and half-life range but does not supply the committed exact CL. The fixture CL is explicitly derived and is not equivalent to a population CL/F estimate from another study.",
-            "exact_quote": null,
-            "source_locator": null,
-            "missing": [
-              "source_locator",
-              "exact_quote"
-            ]
+            "evidence_level": "value_verified",
+            "fixture_derived": false,
+            "evidence_summary": "EMA source_7 section5.2 reports total body clearance41 L/h. No CL is inferred from Vss and terminal half-life.",
+            "exact_quote": "total body clearance of sildenafil is 41 L/h",
+            "source_locator": "EMA product information section 5.2",
+            "missing": []
           },
           {
             "claim_id": "sildenafil-V_abs_L_at_70kg",
             "claim_type": "pk_parameter",
-            "parameter": "apparent_steady_state_volume",
-            "source_field": "apparent_steady_state_volume",
-            "source_id": "source_3",
+            "parameter": "steady_state_volume_Vss",
+            "source_field": "steady_state_volume_Vss",
+            "source_id": "source_7",
             "raw_value": 105,
-            "normalized_value": 105.0,
+            "normalized_value": 105,
             "normalized_unit": "L",
             "evidence_status": "checked_summary",
             "evidence_level": "value_verified",
             "fixture_derived": false,
-            "evidence_summary": "The FDA clinical review in source_3 reports an apparent steady-state volume of 105 L for sildenafil. The fixture retains this apparent value.",
-            "exact_quote": "Sildenafil's apparent steady-state volume of distribution was estimated to be 105 L",
-            "source_locator": "FDA clinical review source_3, Clinical Pharmacology, single-dose PK",
+            "evidence_summary": "EMA source_7 section5.2 reports steady-state volume105 L. Vss is used as the one-compartment fixture volume, with structural limitations retained.",
+            "exact_quote": "105 L",
+            "source_locator": "EMA product information section 5.2",
             "missing": []
           },
           {
             "claim_id": "sildenafil-t_half_h",
             "claim_type": "pk_parameter",
-            "parameter": "oral_terminal_half_life_range",
-            "source_field": "oral_terminal_half_life_range",
-            "source_id": "source_2",
+            "parameter": "terminal_half_life_range",
+            "source_field": "terminal_half_life_range",
+            "source_id": "source_7",
             "raw_value": "3-5",
             "normalized_value": 4.0,
             "normalized_unit": "h",
             "evidence_status": "checked_summary",
             "evidence_level": "summary_only",
             "fixture_derived": true,
-            "evidence_summary": "Source_2 reports an oral terminal half-life of 3 to 5 h. The midpoint is check-only and is not used to force the derived CL to a literature value.",
+            "evidence_summary": "EMA source_7 section5.2 reports terminal half-life3–5 h. The4 h midpoint is a check-only fixture choice and is not used to infer CL.",
             "exact_quote": null,
-            "source_locator": null,
+            "source_locator": "EMA product information section5.2",
             "missing": [
-              "source_locator",
               "exact_quote"
             ]
           },
           {
-            "claim_id": "sildenafil-bioavailability_frac-fixture-context",
-            "claim_type": "fixture_assumption",
+            "claim_id": "sildenafil-bioavailability_frac",
+            "claim_type": "pk_parameter",
             "parameter": "bioavailability",
-            "source_field": "pk_parsed.bioavailability_frac",
-            "source_id": null,
-            "raw_value": 0.44,
-            "normalized_value": 0.44,
+            "source_field": "mean_absolute_oral_bioavailability",
+            "source_id": "source_7",
+            "raw_value": 41,
+            "normalized_value": 0.41,
             "normalized_unit": "fraction",
-            "evidence_status": "fixture_check",
-            "evidence_level": "fixture_check",
-            "fixture_derived": true,
-            "evidence_summary": "The parsed F value is contextual only because CL/V are apparent CL/F and V/F; the simulation convention uses F1=1 and does not claim an observed absolute bioavailability.",
-            "exact_quote": null,
-            "source_locator": null,
+            "evidence_status": "checked_summary",
+            "evidence_level": "value_verified",
+            "fixture_derived": false,
+            "evidence_summary": "Mean F41% is the reported estimate. It replaces the fixture midpoint44% of the25–63% range.",
+            "exact_quote": "41%",
+            "source_locator": "EMA product information section 5.2",
             "missing": []
           },
           {
@@ -13673,8 +14082,8 @@
             "parameter": "AUC0-inf target",
             "source_field": "targets.auc",
             "source_id": null,
-            "raw_value": 5495.981108148432,
-            "normalized_value": 5495.981108148432,
+            "raw_value": 1000.0,
+            "normalized_value": 1000.0,
             "normalized_unit": "ng*h/mL",
             "evidence_status": "fixture_check",
             "evidence_level": "fixture_check",
@@ -13689,6 +14098,7 @@
     },
     {
       "slug": "sufentanil",
+      "simulation_validity": {},
       "id": "OSP_sufentanil",
       "name": "Sufentanil",
       "route": "sl",
@@ -14147,6 +14557,7 @@
     },
     {
       "slug": "tefibazumab",
+      "simulation_validity": {},
       "id": "osp::tefibazumab",
       "name": "Tefibazumab",
       "route": "iv",
@@ -14546,6 +14957,7 @@
     },
     {
       "slug": "tizanidine",
+      "simulation_validity": {},
       "id": "osp::tizanidine",
       "name": "Tizanidine",
       "route": "po",
@@ -14997,6 +15409,14 @@
     },
     {
       "slug": "triazolam",
+      "simulation_validity": {
+        "status": "clinical_hold",
+        "review_date": "2026-10-28",
+        "reasons": [
+          "DailyMed source_4 section12.3 distinguishes CYP3A-mediated metabolism and glucuronide formation from the subsequent urinary excretion of metabolites. Urinary recovery does not mean renal clearance of unchanged triazolam.",
+          "No numeric PK parameter changes were made in this correction. Apparent CL and derived one-compartment volume remain a fixture and do not establish clinical model validity."
+        ]
+      },
       "id": "osp::triazolam",
       "name": "Triazolam",
       "route": "po",
@@ -15024,6 +15444,14 @@
           "index": 3,
           "kind": "pmc.ncbi.nlm.nih.gov",
           "identifier": null
+        },
+        {
+          "id": "source_4",
+          "display_id": "source_4",
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5add318e-11b9-42f8-b052-0d8cebb32fcf",
+          "index": 4,
+          "kind": "DailyMed",
+          "identifier": "5add318e-11b9-42f8-b052-0d8cebb32fcf"
         }
       ],
       "raw": {
@@ -15031,7 +15459,7 @@
         "clearance": "526 mL/min",
         "volume_of_distribution": null,
         "bioavailability": "44%",
-        "elimination_route": "腎排泄"
+        "elimination_route": "Hepatic CYP3A-mediated hydroxylation, then glucuronide conjugation; urinary excretion mainly as metabolites, with only small amounts of unchanged triazolam."
       },
       "parsed": {
         "half_life_h": 3.5,
@@ -15176,7 +15604,7 @@
             "phase": "terminal",
             "value": 3.5,
             "unit": "h",
-            "summary": "arithmetic_mean",
+            "summary": "range_midpoint_fixture",
             "variability": {
               "type": "sd",
               "value": 1.0
@@ -15194,7 +15622,9 @@
           "Variability fields are placeholders unless you replace them with drug-specific PopPK values.",
           "AUC target provenance: computed as Dose/CL_apparent from the extracted oral CL/F used by this fixture. It is an integration consistency check, not an independent literature AUC or clinical validity claim. To validate against a literature AUC, replace targets.auc.value/unit/summary and add the source, raw text, unit conversion, and derivation note.",
           "Parameter-pair policy: spec theta uses CL and V from pk.yml derived absolute values as the independent simulation parameters. The literature t_half is retained as a target/check and is not used to recalibrate CL or V automatically.",
-          "1-compartment attainability label: no CL/V/t_half warning is currently flagged by validate_library at the repository threshold. This is still a workflow-fixture label, not evidence of clinical model validity."
+          "1-compartment attainability label: no CL/V/t_half warning is currently flagged by validate_library at the repository threshold. This is still a workflow-fixture label, not evidence of clinical model validity.",
+          "DailyMed source_4 section12.3 distinguishes CYP3A-mediated metabolism and glucuronide formation from the subsequent urinary excretion of metabolites. Urinary recovery does not mean renal clearance of unchanged triazolam.",
+          "No numeric PK parameter changes were made in this correction. Apparent CL and derived one-compartment volume remain a fixture and do not establish clinical model validity."
         ]
       },
       "spec": {
@@ -15246,10 +15676,10 @@
             "ALAG1": 0.5
           },
           "notes": [
-            {
-              "Apparent CL/F,V/F parameterization": "theta.F1=1; exposure is Dose/CL_apparent."
-            },
-            "Demo theta policy: CL and V are the independent simulation parameters for this 1-compartment fixture. t_half is checked downstream and is not used to recalibrate theta."
+            "Apparent CL/F,V/F parameterization: theta.F1=1; exposure is Dose/CL_apparent.",
+            "Demo theta policy: CL and V are the independent simulation parameters for this 1-compartment fixture. t_half is checked downstream and is not used to recalibrate theta.",
+            "DailyMed source_4 section12.3 distinguishes CYP3A-mediated metabolism and glucuronide formation from the subsequent urinary excretion of metabolites. Urinary recovery does not mean renal clearance of unchanged triazolam.",
+            "No numeric PK parameter changes were made in this correction. Apparent CL and derived one-compartment volume remain a fixture and do not establish clinical model validity."
           ]
         },
         "iiv": {
@@ -15439,6 +15869,7 @@
     },
     {
       "slug": "verapamil",
+      "simulation_validity": {},
       "id": "osp::verapamil",
       "name": "Verapamil",
       "route": "po",

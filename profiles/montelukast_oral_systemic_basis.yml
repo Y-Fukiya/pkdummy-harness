@@ -11,6 +11,7 @@ population:
       cv: 0.25
       min: 40
       max: 120
+  parameter_source_group: elderly_healthy
 regimen:
   route: oral
   units:
@@ -32,17 +33,25 @@ model:
     CL: 1.8479999999999999
     V: 9.7
     KA: 1.2
-    F1: 0.615
+    F1: 0.61
     ALAG1: 0.5
   notes:
-  - Default assumes CL and V from sources are apparent (CL/F, V/F). Set theta.F1 to
-    your chosen bioavailability AND adjust CL/V accordingly if your sources report
-    systemic CL/V.
+  - 'Systemic CL/V parameterization: theta.F1 is the selected bioavailability; exposure
+    is F*Dose/CL_systemic.'
   - 'Demo theta policy: CL and V are the independent simulation parameters for this
     1-compartment fixture. t_half is checked downstream and is not used to recalibrate
     theta.'
   - 'Known stress-test label: library validation flags CL/V/t_half structural mismatch
     for this drug, so terminal t_half WARN/FAILED can be expected in demo validation.'
+  - Parameter-source population is healthy elderly volunteers, N=12, from source_1.
+    CL30.8 mL/min, Vss9.7 L and terminal half-life6.7 h followed7 mg IV over5 min.
+    These are not the general healthy-young-adult label values.
+  - F1=0.61 is the elderly mean after10 mg oral; the prior0.615 mixed elderly61% with
+    a previously measured young-subject62%. Do not replace elderly CL/t_half with
+    a different population label value.
+  - The retained100 mg oral arm is a computational stress test, not the cited10 mg
+    oral or7 mg IV scenario. The generated body-weight distribution does not reconstruct
+    the elderly cohort. KA, lag, IIV and residual errors remain generic fixture assumptions.
   - 'F-corrected profile: theta.F1 set to label bioavailability and theta.CL kept
     as the systemic clearance, so simulated exposure is F*Dose/CL_systemic. This is
     a parameterization consistent with the systemic basis; it is still a fixture template,

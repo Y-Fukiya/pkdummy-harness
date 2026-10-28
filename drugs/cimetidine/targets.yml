@@ -11,16 +11,17 @@ scenario:
 targets:
   auc:
     type: AUC0-inf
-    value: 3333.3333333333335
+    value: 2020.2020202020203
     unit: ng*h/mL
-    summary: geometric_mean
+    summary: fixture_consistency_check
     variability:
       type: gcv_percent
       value: 35
-    basis: dose_over_cl
-    target_basis: dose_over_cl_not_literature_auc
+    basis: f_dose_over_cl
+    target_basis: f_dose_over_cl_systemic_not_literature_auc
     independent_literature_target: false
-    source_value: CL_abs_L_per_h_at_70kg
+    source_value: CL_systemic_L_per_h_at_70kg
+    bioavailability_frac: 0.6
     role: consistency_check
   t_half:
     phase: terminal
@@ -36,8 +37,7 @@ targets:
       acknowledged: true
       reason: one_compartment_fixture_approximation
 notes:
-- AUC is computed as Dose/CL (assuming CL is apparent CL/F for oral, and systemic
-  CL for IV).
+- AUC is computed as F*Dose/CL_systemic for this systemic-basis oral fixture; it is not an independent literature AUC.
 - Variability fields are placeholders unless you replace them with drug-specific PopPK
   values.
 - 'AUC target provenance: computed as Dose/CL from the extracted CL used by this fixture.

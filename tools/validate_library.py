@@ -58,6 +58,8 @@ def normalize_route(route: Any) -> str:
     r = str(route or "").strip().lower()
     if r in {"po", "oral", "p.o.", "per os"} or r.startswith("oral"):
         return "po"
+    if r in {"sl", "s.l.", "sublingual"} or r.startswith("subling"):
+        return "sl"
     if r in {"iv", "i.v.", "intravenous"} or r.startswith("iv") or r.startswith("intraven"):
         return "iv"
     return r
@@ -136,7 +138,7 @@ def main() -> int:
         route = normalize_route(pk.get("route_inferred"))
 
         # Spec file existence
-        spec_name = "spec_pk1_oral.yml" if route == "po" else "spec_pk1_iv.yml"
+        spec_name = "spec_pk1_oral.yml" if route in {"po", "sl"} else "spec_pk1_iv.yml"
         spec_path = drug_dir / spec_name
         if not spec_path.exists():
             fail(f"{slug}: missing {spec_name}", issues)
@@ -186,7 +188,7 @@ def main() -> int:
                     warnings,
                 )
 
-        if route == "po" and isinstance(F, (int, float)):
+        if route in {"po", "sl"} and isinstance(F, (int, float)):
             basis = str(parsed.get("clearance_basis") or "apparent").strip().lower()
             basis_source = str(parsed.get("clearance_basis_source") or "").strip().lower()
             raw_cl = str(((pk.get("pk_raw") or {}).get("clearance")) or "")
@@ -227,6 +229,7 @@ def main() -> int:
                     )
                     if msg:
                         warn(msg, warnings)
+
         if route == "iv":
             if isinstance(CL_abs, (int, float)) and isinstance(CL_sys, (int, float)):
                 if not approx(float(CL_sys), float(CL_abs), tol=1e-9):
@@ -238,6 +241,16 @@ def main() -> int:
         # Spec theta matches (we expect CL/V to be abs values used in template)
         spec = load_yaml(spec_path)
         theta = (((spec.get("model") or {}).get("theta")) or {})
+        if route in {"po", "sl"} and isinstance(F, (int, float)):
+            basis = str(parsed.get("clearance_basis") or "apparent").strip().lower()
+            expected_f1 = float(F) if basis == "systemic" else 1.0
+            f1 = theta.get("F1")
+            if isinstance(f1, (int, float)) and not approx(float(f1), expected_f1, tol=1e-9):
+                fail(
+                    f"{slug}: oral theta.F1 is inconsistent with clearance_basis={basis!r} "
+                    f"(got {f1}, expected {expected_f1})",
+                    issues,
+                )
         if isinstance(CL_abs, (int, float)):
             cl = theta.get("CL")
             if isinstance(cl, (int, float)) and not approx(float(cl), float(CL_abs), tol=1e-6):
@@ -262,8 +275,22 @@ def main() -> int:
             # NOTE: This matches how v0.1 targets were generated.
             dose = (((targets.get("scenario") or {}).get("dose")) or {}).get("value")
             if isinstance(dose, (int, float)):
-                exp_auc = float(dose) * 1000.0 / float(CL_abs)
-                if not approx(float(auc_value), exp_auc, tol=1e-6):
+                auc_basis = str(auc.get("basis") or "dose_over_cl").strip().lower()
+                if auc_basis == "f_dose_over_cl":
+                    if route != "po" or not isinstance(F, (int, float)):
+                        fail(f"{slug}: f_dose_over_cl target requires oral route and bioavailability", issues)
+                        exp_auc = None
+                    else:
+                        exp_auc = float(dose) * 1000.0 * float(F) / float(CL_abs)
+                elif auc_basis == "dose_over_cl":
+                    exp_auc = float(dose) * 1000.0 / float(CL_abs)
+                else:
+                    exp_auc = None
+                    # Literature AUC targets are intentionally not reduced to
+                    # Dose/CL; they are checked against the simulated output by
+                    # the downstream validation workflow using their declared
+                    # unit and source metadata.
+                if exp_auc is not None and not approx(float(auc_value), exp_auc, tol=1e-6):
                     fail(f"{slug}: targets auc mismatch (got {auc_value}, expected {exp_auc})", issues)
 
         # INDEX.csv consistency (if exists)

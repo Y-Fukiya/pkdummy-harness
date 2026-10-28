@@ -2,8 +2,10 @@ id: osp::ethinylestradiol
 name: Ethinylestradiol
 route_inferred: po
 sources:
-- url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=142c4b90-c9ab-45ce-9172-f1ea7d366686
-- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC4285808/
+- id: source_1
+  url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=142c4b90-c9ab-45ce-9172-f1ea7d366686
+- id: source_2
+  url: https://pmc.ncbi.nlm.nih.gov/articles/PMC4285808/
 pk_raw:
   half_life: 16.5-17.6 hours
   clearance: 25.7 L/h
@@ -43,3 +45,66 @@ derived:
     as apparent and set F1=1.'
   - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
     typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: source_1
+    source_field: oral_CL_over_F_in_ethinyl_estradiol_tablet
+    value_basis: literature_reported
+    raw_value: 25.7
+    raw_unit: L/h
+    normalized_value: 25.7
+    normalized_unit: L/h
+    conversion:
+      method: direct
+      formula: pk_parsed.clearance.value
+      assumptions:
+        basis: CL_over_F
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: DailyMed source_1 reports ethinyl estradiol CL/F of 25.7 L/h in
+      the clinical pharmacology table. The fixture retains it as apparent oral clearance.
+    source_review_status: checked
+    fixture_limitation_status: not_applicable
+    source_locator: DailyMed label, Clinical Pharmacology, Table I, Ethinyl Estradiol day 1
+    exact_quote: "CL/F L/h 25.7 (9.1)"
+  V_abs_L_at_70kg:
+    source_id: source_1
+    source_field: one_compartment_apparent_volume_derived_from_CL_over_F_and_half_life
+    value_basis: fixture_derived
+    raw_value: 25.7 and 17.05
+    raw_unit: L/h and h
+    normalized_value: 632.1673264919305
+    normalized_unit: L
+    conversion:
+      method: derived_formula
+      formula: CL_abs_L_per_h_at_70kg * t_half_h / ln(2)
+      assumptions:
+        model: one_compartment_fixture
+        basis: apparent_V_over_F
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: The cited label reports CL/F and half-life but not the fixture's
+      exact V/F. The committed V is explicitly derived from those inputs and must
+      not be presented as a directly reported volume.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+  t_half_h:
+    source_id: source_1
+    source_field: oral_elimination_half_life_in_ethinyl_estradiol_tablet
+    value_basis: derived_from_reported
+    raw_value: 16.5-17.6
+    raw_unit: h
+    normalized_value: 17.05
+    normalized_unit: h
+    conversion:
+      method: derived_formula
+      formula: midpoint of reported 16.5-17.6 h range
+      assumptions:
+        range_summary: midpoint
+    role: check_only
+    reviewer_status: checked
+    reviewer_note: DailyMed source_1 reports a 16.5 to 17.6 h half-life range in the
+      referenced oral table. The midpoint is check-only and is not used to force CL/V
+      agreement.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged

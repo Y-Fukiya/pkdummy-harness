@@ -1,0 +1,69 @@
+version: 0.1
+study:
+  id: OSP_dapagliflozin_Fcorrected
+  title: Dapagliflozin (template from label/PopPK source)
+population:
+  n: 100
+  covariates:
+    wt_kg:
+      dist: lognormal
+      median: 70.0
+      cv: 0.25
+      min: 40
+      max: 120
+regimen:
+  route: oral
+  units:
+    dose: mg
+  arms:
+    A:
+      n: 100
+      dose_mg: 10.0
+sampling:
+  t_end_h: 72.0
+  dt_h: 0.5
+  include_t0: true
+model:
+  template: pk1_oral_ode
+  units:
+    conc: ng/mL
+    mult: 1000
+  theta:
+    CL: 12.42
+    V: 118.0
+    KA: 1.2
+    F1: 0.78
+    ALAG1: 0.5
+  notes:
+  - CL and V are systemic values from the FDA IV microdose context; theta.F1=0.78
+    represents the reported oral bioavailability.
+  - The 1-compartment fixture uses Vss=118 L and ke=CL/V. The oral terminal half-life
+    12.9 h is retained as a check and is not used to recalibrate theta.
+  - 'Demo theta policy: CL and V are the independent simulation parameters for this
+    1-compartment fixture. t_half is checked downstream and is not used to recalibrate
+    theta.'
+  - 'F-corrected profile: theta.F1 set to label bioavailability and theta.CL kept
+    as the systemic clearance, so simulated exposure is F*Dose/CL_systemic. This is
+    a parameterization consistent with the systemic basis; it is still a fixture template,
+    not a clinically validated PK model.'
+iiv:
+  eta:
+    CL: 0.09
+    V: 0.04
+    KA: 0.16
+  corr: false
+residual:
+  type: prop+add
+  prop: 0.25
+  add: 0.0
+output:
+  include:
+  - IPRED
+  - DV
+  - CP
+  - AUC
+  format: csv
+meta:
+  generated_by: tools/template_gen.py
+  profile: oral_systemic_basis_Fcorrected
+  derived_from: drugs/dapagliflozin/spec_pk1_oral.yml

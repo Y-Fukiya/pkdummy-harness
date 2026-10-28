@@ -2,7 +2,8 @@ id: OSP_motavizumab_yte
 name: Motavizumab-YTE
 route_inferred: iv
 sources:
-- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3662602/
+- id: source_1
+  url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3837853/
 pk_raw:
   text: 'Phase 1: clearance ~43-68 mL/day (use 55 mL/day); t1/2 ~70-100 days (use
     85). One-comp V derived.'
@@ -32,3 +33,68 @@ derived:
     with systemic CL/V.'
   - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
     typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: source_1
+    source_field: motavizumab_YTE_serum_clearance_range
+    value_basis: derived_from_reported
+    raw_value: 43-68
+    raw_unit: mL/day
+    normalized_value: 0.0022916666666666667
+    normalized_unit: L/h
+    conversion:
+      method: unit_conversion
+      formula: midpoint of 43-68 mL/day * 1 L/1000 mL / 24 h/day
+      assumptions:
+        range_summary: midpoint
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: Source_1 reports motavizumab-YTE serum clearance of 43 to 68 mL/day
+      across IV dose cohorts. The fixture uses the midpoint and retains it as a dose-range
+      summary, not an individual estimate.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PMC source_1, Results, Pharmacokinetics
+    exact_quote: "43 to 68 ml/day"
+  V_abs_L_at_70kg:
+    source_id: source_1
+    source_field: motavizumab_YTE_one_compartment_volume_derived_from_clearance_and_half_life
+    value_basis: fixture_derived
+    raw_value: 55 and 85
+    raw_unit: mL/day and days
+    normalized_value: 6.744599316155904
+    normalized_unit: L
+    conversion:
+      method: derived_formula
+      formula: CL_abs_L_per_h_at_70kg * t_half_h / ln(2)
+      assumptions:
+        model: one_compartment_fixture
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: The source provides dose-specific Vss values of 4.6 to 8.3 L; this
+      fixture explicitly derives V from its selected midpoint CL and half-life instead.
+      It must not be presented as the directly reported Vss.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+  t_half_h:
+    source_id: source_1
+    source_field: motavizumab_YTE_serum_half_life_range
+    value_basis: derived_from_reported
+    raw_value: 70-100
+    raw_unit: days
+    normalized_value: 2040
+    normalized_unit: h
+    conversion:
+      method: unit_conversion
+      formula: midpoint of reported 70-100 days * 24 h/day
+      assumptions:
+        range_summary: midpoint
+    role: check_only
+    reviewer_status: checked
+    reviewer_note: Source_1 reports motavizumab-YTE half-lives of 70 to 100 days across
+      IV dose cohorts. The fixture midpoint remains a check target and is not used
+      to force CL/V agreement.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PMC source_1, Results, Pharmacokinetics
+    exact_quote: "70 to 100 days for mota-YTE"

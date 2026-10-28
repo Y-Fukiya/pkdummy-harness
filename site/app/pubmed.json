@@ -1,0 +1,253 @@
+{
+  "schema_version": "0.1",
+  "source": "NCBI PubMed E-utilities ESummary",
+  "retrieved_at": "2026-08-08T11:50:41.593621+00:00",
+  "records": {
+    "10589372": {
+      "pmid": "10589372",
+      "title": "Clinical pharmacokinetics of mexiletine.",
+      "journal": "Clinical pharmacokinetics",
+      "pubdate": "1999 Nov",
+      "authors": [
+        "Labbé L",
+        "Turgeon J"
+      ],
+      "doi": "10.2165/00003088-199937050-00002",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/10589372/"
+    },
+    "10589373": {
+      "pmid": "10589373",
+      "title": "Clinical pharmacokinetics of clarithromycin.",
+      "journal": "Clinical pharmacokinetics",
+      "pubdate": "1999 Nov",
+      "authors": [
+        "Rodvold KA"
+      ],
+      "doi": "10.2165/00003088-199937050-00003",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/10589373/"
+    },
+    "11907493": {
+      "pmid": "11907493",
+      "title": "Pharmacodynamics of abciximab during angioplasty: comparison to healthy subjects.",
+      "journal": "Clinical pharmacology and therapeutics",
+      "pubdate": "2002 Mar",
+      "authors": [
+        "Abernethy DR",
+        "Pezzullo J",
+        "Mascelli MA",
+        "Frederick B",
+        "Kleiman NS",
+        "Freedman J"
+      ],
+      "doi": "10.1067/mcp.2002.121775",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/11907493/"
+    },
+    "14618072": {
+      "pmid": "14618072",
+      "title": "Comparative pharmacology of GP IIb/IIIa antagonists.",
+      "journal": "Journal of thrombosis and thrombolysis",
+      "pubdate": "2003 Apr",
+      "authors": [
+        "Schrör K",
+        "Weber AA"
+      ],
+      "doi": "10.1023/b:thro.0000003308.63022.8d",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/14618072/"
+    },
+    "1782737": {
+      "pmid": "1782737",
+      "title": "Felodipine clinical pharmacokinetics.",
+      "journal": "Clinical pharmacokinetics",
+      "pubdate": "1991 Dec",
+      "authors": [
+        "Dunselman PH",
+        "Edgar B"
+      ],
+      "doi": "10.2165/00003088-199121060-00003",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/1782737/"
+    },
+    "18502001": {
+      "pmid": "18502001",
+      "title": "Open-label, dose escalation phase I study in healthy volunteers to evaluate the safety and pharmacokinetics of a human monoclonal antibody to Clostridium difficile toxin A.",
+      "journal": "Vaccine",
+      "pubdate": "2008 Jun 25",
+      "authors": [
+        "Taylor CP",
+        "Tummala S",
+        "Molrine D",
+        "Davidson L",
+        "Farrell RJ",
+        "Lembo A",
+        "Hibberd PL",
+        "Lowy I",
+        "Kelly CP"
+      ],
+      "doi": "10.1016/j.vaccine.2008.04.042",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/18502001/"
+    },
+    "2248087": {
+      "pmid": "2248087",
+      "title": "Pharmacokinetics of moclobemide after single and multiple oral dosing with 150 milligrams 3 times daily for 15 days.",
+      "journal": "Acta psychiatrica Scandinavica. Supplementum",
+      "pubdate": "1990",
+      "authors": [
+        "Guentert TW",
+        "Tucker G",
+        "Korn A",
+        "Pfefen JP",
+        "Haefelfinger P",
+        "Schoerlin MP"
+      ],
+      "doi": "10.1111/j.1600-0447.1990.tb05345.x",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/2248087/"
+    },
+    "2315973": {
+      "pmid": "2315973",
+      "title": "The pharmacokinetics of omeprazole in humans--a study of single intravenous and oral doses.",
+      "journal": "Therapeutic drug monitoring",
+      "pubdate": "1990 Mar",
+      "authors": [
+        "Regårdh CG",
+        "Andersson T",
+        "Lagerström PO",
+        "Lundborg P",
+        "Skånberg I"
+      ],
+      "doi": "10.1097/00007691-199003000-00010",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/2315973/"
+    },
+    "3790406": {
+      "pmid": "3790406",
+      "title": "Pharmacokinetics of intravenous and oral salbutamol and its sulphate conjugate",
+      "journal": "British journal of clinical pharmacology",
+      "pubdate": "1986 Nov",
+      "authors": [
+        "Morgan DJ",
+        "Paull JD",
+        "Richmond BH",
+        "Wilson-Evered E",
+        "Ziccone SP"
+      ],
+      "doi": "10.1111/j.1365-2125.1986.tb02939.x",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/3790406/"
+    },
+    "3327676": {
+      "pmid": "3327676",
+      "title": "Clinical pharmacokinetics of felodipine. A summary.",
+      "journal": "Drugs",
+      "pubdate": "1987",
+      "authors": [
+        "Edgar B",
+        "Lundborg P",
+        "Regårdh CG"
+      ],
+      "doi": "10.2165/00003495-198700343-00005",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/3327676/"
+    },
+    "35764772": {
+      "pmid": "35764772",
+      "title": "Clinical Pharmacokinetics of Metoprolol: A Systematic Review.",
+      "journal": "Clinical pharmacokinetics",
+      "pubdate": "2022 Aug",
+      "authors": [
+        "Zamir A",
+        "Hussain I",
+        "Ur Rehman A",
+        "Ashraf W",
+        "Imran I",
+        "Saeed H",
+        "Majeed A",
+        "Alqahtani F",
+        "Rasool MF"
+      ],
+      "doi": "10.1007/s40262-022-01145-y",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/35764772/"
+    },
+    "40851704": {
+      "pmid": "40851704",
+      "title": "Population Pharmacokinetic-Pharmacogenetic (PopPK-PGx) Model of Efavirenz in HIV-1-Infected Patients.",
+      "journal": "Cureus",
+      "pubdate": "2025 Jul",
+      "authors": [
+        "Vucicevic K",
+        "Michalickova D",
+        "Obradovic B",
+        "Ranin J",
+        "Jevtovic D",
+        "Lukic R",
+        "Owen A",
+        "Dragovic G"
+      ],
+      "doi": "10.7759/cureus.88533",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/40851704/"
+    },
+    "6355048": {
+      "pmid": "6355048",
+      "title": "Pharmacokinetics of acyclovir after intravenous and oral administration.",
+      "journal": "The Journal of antimicrobial chemotherapy",
+      "pubdate": "1983 Sep",
+      "authors": [
+        "de Miranda P",
+        "Blum MR"
+      ],
+      "doi": "10.1093/jac/12.suppl_b.29",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/6355048/"
+    },
+    "8513649": {
+      "pmid": "8513649",
+      "title": "Clinical pharmacokinetics of alprazolam. Therapeutic implications.",
+      "journal": "Clinical pharmacokinetics",
+      "pubdate": "1993 Jun",
+      "authors": [
+        "Greenblatt DJ",
+        "Wright CE"
+      ],
+      "doi": "10.2165/00003088-199324060-00003",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/8513649/"
+    },
+    "8582117": {
+      "pmid": "8582117",
+      "title": "Clinical pharmacokinetics of the monoamine oxidase-A inhibitor moclobemide.",
+      "journal": "Clinical pharmacokinetics",
+      "pubdate": "1995 Nov",
+      "authors": [
+        "Mayersohn M",
+        "Guentert TW"
+      ],
+      "doi": "10.2165/00003088-199529050-00002",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/8582117/"
+    },
+    "9184622": {
+      "pmid": "9184622",
+      "title": "Clinical pharmacokinetics of fluvoxamine: applications to dosage regimen design.",
+      "journal": "The Journal of clinical psychiatry",
+      "pubdate": "1997",
+      "authors": [
+        "DeVane CL",
+        "Gill HS"
+      ],
+      "doi": null,
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/9184622/"
+    },
+    "9429741": {
+      "pmid": "9429741",
+      "title": "Pharmacokinetics and bioavailability of montelukast sodium (MK-0476) in healthy young and elderly volunteers.",
+      "journal": "Biopharmaceutics & drug disposition",
+      "pubdate": "1997 Dec",
+      "authors": [
+        "Zhao JJ",
+        "Rogers JD",
+        "Holland SD",
+        "Larson P",
+        "Amin RD",
+        "Haesen R",
+        "Freeman A",
+        "Seiberling M",
+        "Merz M",
+        "Cheng H"
+      ],
+      "doi": "10.1002/(sici)1099-081x(199712)18:9<769::aid-bdd60>3.0.co;2-k",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/9429741/"
+    }
+  }
+}

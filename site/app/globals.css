@@ -342,3 +342,6 @@ code { color: #6d5c90; background: #f3f0f8; padding: 3px 5px; font-size: 10px; }
 .audit-contradiction { background: #fff0e9; color: #9c361a; }
 .audit-unverified { background: #fff6db; color: #74530c; }
 .audit-items a { display: block; overflow-wrap: anywhere; margin: 8px 0; }
+
+.correction-panel { border-top: 3px solid var(--teal); margin: 24px 0; }
+.correction-panel li { margin: 10px 0; line-height: 1.7; }

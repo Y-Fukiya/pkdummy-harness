@@ -14,7 +14,8 @@ from tools.check_value_provenance import (
 )
 
 
-ROOT = Path(__file__).resolve().parents[1]
+# Frozen pre-correction records exercise unresolved-source reporting branches.
+ROOT = Path(__file__).parent / "fixtures" / "provenance_legacy"
 
 
 def load_yaml(path: Path) -> dict:

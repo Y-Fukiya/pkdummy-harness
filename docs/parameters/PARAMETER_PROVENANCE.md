@@ -55,11 +55,11 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `motavizumab_yte` | iv | `spec_pk1_iv.yml` | 1 | 17 | 7 | source_urls_present |
 | `omeprazole` | po | `spec_pk1_oral.yml` | 4 | 21 | 7 | source_urls_present |
 | `raltegravir` | po | `spec_pk1_oral.yml` | 2 | 21 | 7 | source_urls_present |
-| `sildenafil` | po | `spec_pk1_oral.yml` | 6 | 21 | 7 | source_urls_present |
+| `sildenafil` | po | `spec_pk1_oral.yml` | 7 | 21 | 7 | source_urls_present |
 | `sufentanil` | sl | `spec_pk1_oral.yml` | 1 | 21 | 7 | source_urls_present |
 | `tefibazumab` | iv | `spec_pk1_iv.yml` | 1 | 17 | 7 | source_urls_present |
 | `tizanidine` | po | `spec_pk1_oral.yml` | 1 | 21 | 7 | source_urls_present |
-| `triazolam` | po | `spec_pk1_oral.yml` | 3 | 21 | 7 | source_urls_present |
+| `triazolam` | po | `spec_pk1_oral.yml` | 4 | 21 | 7 | source_urls_present |
 | `verapamil` | po | `spec_pk1_oral.yml` | 3 | 21 | 7 | source_urls_present |
 
 ## 値単位の確認一覧
@@ -81,7 +81,7 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `abciximab` | target | `targets.t_half` | 0.4166666666666667 h |   | unknown_needs_review | - | target_without_source_mapping |
 | `aciclovir` | model_parameter | `model.theta.ALAG1` | 0.5  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `aciclovir` | model_parameter | `model.theta.CL` | 19.62  | 19.62 L/h | derived_from_reported | source_4 | checked |
-| `aciclovir` | model_parameter | `model.theta.F1` | 0.1 fraction |   | fixture_policy | - | fixture_policy_apparent_parameters |
+| `aciclovir` | model_parameter | `model.theta.F1` | 0.1 fraction |   | fixture_policy | - | fixture_policy_systemic_parameters |
 | `aciclovir` | model_parameter | `model.theta.KA` | 1.2  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `aciclovir` | model_parameter | `model.theta.V` | 46.666666666666664  | 46.666666666666664 L | derived_from_reported | source_5 | checked |
 | `aciclovir` | pk_parameter | `CL_abs_L_per_h_at_70kg` | 19.62 L/h | 19.62 L/h | label_reported | source_4 | checked |
@@ -152,19 +152,19 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `amikacin` | target | `targets.t_half` | 2.0 h |   | unknown_needs_review | - | target_without_source_mapping |
 | `apixaban` | model_parameter | `model.theta.ALAG1` | 0.5  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `apixaban` | model_parameter | `model.theta.CL` | 3.3  | 3.3 L/h | derived_from_reported | source_1 | checked |
-| `apixaban` | model_parameter | `model.theta.F1` | 1.0 fraction |   | fixture_policy | - | fixture_policy_apparent_parameters |
+| `apixaban` | model_parameter | `model.theta.F1` | 0.5 fraction |   | fixture_policy | - | fixture_policy_systemic_parameters |
 | `apixaban` | model_parameter | `model.theta.KA` | 1.2  |   | fixture_policy | - | fixture_policy_no_external_source |
-| `apixaban` | model_parameter | `model.theta.V` | 57.130723619202946  | 57.130723619202946 L | derived_from_reported | source_1 | checked |
+| `apixaban` | model_parameter | `model.theta.V` | 21.0  | 21.0 L | derived_from_reported | source_1 | checked |
 | `apixaban` | pk_parameter | `CL_abs_L_per_h_at_70kg` | 3.3 L/h | 3.3 L/h | label_reported | source_1 | checked |
-| `apixaban` | pk_parameter | `CL_systemic_L_per_h_at_70kg` | 1.65 L/h |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
-| `apixaban` | pk_parameter | `V_abs_L_at_70kg` | 57.130723619202946 L | 57.130723619202946 L | fixture_derived | source_1 | checked |
-| `apixaban` | pk_parameter | `V_systemic_L_at_70kg` | 28.565361809601473 L |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
+| `apixaban` | pk_parameter | `CL_systemic_L_per_h_at_70kg` | 3.3 L/h |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
+| `apixaban` | pk_parameter | `V_abs_L_at_70kg` | 21.0 L | 21.0 L | label_reported | source_1 | checked |
+| `apixaban` | pk_parameter | `V_systemic_L_at_70kg` | 21.0 L |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
 | `apixaban` | pk_parameter | `bioavailability` | 0.5 fraction |   | - | - | source_url_present_not_parameter_mapped |
 | `apixaban` | pk_parameter | `clearance` | 3.3 L/h | 3.3 L/h | label_reported | source_1 | checked |
-| `apixaban` | pk_parameter | `ke_1_per_h` | 0.05776226504666211 1/h |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
+| `apixaban` | pk_parameter | `ke_1_per_h` | 0.15714285714285714 1/h |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
 | `apixaban` | pk_parameter | `t_half_h` | 12.0 h | 12.0 h | label_reported | source_1 | checked |
-| `apixaban` | pk_parameter | `volume` | 57.130723619202946 L | 57.130723619202946 L | fixture_derived | source_1 | checked |
-| `apixaban` | target | `targets.auc` | 3030.3030303030305 ng*h/mL |   | dose_over_cl | - | derived_target |
+| `apixaban` | pk_parameter | `volume` | 21.0 L | 21.0 L | label_reported | source_1 | checked |
+| `apixaban` | target | `targets.auc` | 1515.1515151515152 ng*h/mL |   | f_dose_over_cl | - | target_without_source_mapping |
 | `apixaban` | target | `targets.t_half` | 12.0 h |   | unknown_needs_review | - | target_without_source_mapping |
 | `atazanavir` | model_parameter | `model.theta.ALAG1` | 0.5  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `atazanavir` | model_parameter | `model.theta.CL` | 12.9  | 12.9 L/h | derived_from_reported | source_2 | checked |
@@ -223,7 +223,7 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `cda1` | target | `targets.t_half` | 685.2 h |   | unknown_needs_review | - | target_without_source_mapping |
 | `cimetidine` | model_parameter | `model.theta.ALAG1` | 0.5  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `cimetidine` | model_parameter | `model.theta.CL` | 29.7  | 29.7 L/h | derived_from_reported | source_2 | checked |
-| `cimetidine` | model_parameter | `model.theta.F1` | 0.6 fraction |   | fixture_policy | - | fixture_policy_apparent_parameters |
+| `cimetidine` | model_parameter | `model.theta.F1` | 0.6 fraction |   | fixture_policy | - | fixture_policy_systemic_parameters |
 | `cimetidine` | model_parameter | `model.theta.KA` | 1.2  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `cimetidine` | model_parameter | `model.theta.V` | 56.0  | 56.0 L | derived_from_reported | source_2 | checked |
 | `cimetidine` | pk_parameter | `CL_abs_L_per_h_at_70kg` | 29.7 L/h | 29.7 L/h | literature_reported | source_2 | checked |
@@ -255,7 +255,7 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `clarithromycin` | target | `targets.t_half` | 5.0 h |   | unknown_needs_review | - | target_without_source_mapping |
 | `dapagliflozin` | model_parameter | `model.theta.ALAG1` | 0.5  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `dapagliflozin` | model_parameter | `model.theta.CL` | 12.42  | 12.42 L/h | derived_from_reported | source_1 | checked |
-| `dapagliflozin` | model_parameter | `model.theta.F1` | 0.78 fraction |   | fixture_policy | - | fixture_policy_apparent_parameters |
+| `dapagliflozin` | model_parameter | `model.theta.F1` | 0.78 fraction |   | fixture_policy | - | fixture_policy_systemic_parameters |
 | `dapagliflozin` | model_parameter | `model.theta.KA` | 1.2  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `dapagliflozin` | model_parameter | `model.theta.V` | 118.0  | 118.0 L | derived_from_reported | source_1 | checked |
 | `dapagliflozin` | pk_parameter | `CL_abs_L_per_h_at_70kg` | 12.42 L/h | 12.42 L/h | literature_reported | source_1 | checked |
@@ -313,7 +313,7 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `ethinylestradiol` | target | `targets.t_half` | 17.05 h |   | unknown_needs_review | - | target_without_source_mapping |
 | `felodipine` | model_parameter | `model.theta.ALAG1` | 0.5  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `felodipine` | model_parameter | `model.theta.CL` | 90.0  | 90.0 L/h | derived_from_reported | source_2 | checked |
-| `felodipine` | model_parameter | `model.theta.F1` | 0.15 fraction |   | fixture_policy | - | fixture_policy_apparent_parameters |
+| `felodipine` | model_parameter | `model.theta.F1` | 0.15 fraction |   | fixture_policy | - | fixture_policy_systemic_parameters |
 | `felodipine` | model_parameter | `model.theta.KA` | 1.2  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `felodipine` | model_parameter | `model.theta.V` | 700.0  | 700.0 L | derived_from_reported | source_2 | checked |
 | `felodipine` | pk_parameter | `CL_abs_L_per_h_at_70kg` | 90.0 L/h | 90.0 L/h | derived_from_reported | source_2 | checked |
@@ -371,7 +371,7 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `inulin` | target | `targets.t_half` | 1.6062234130622617 h |   | unknown_needs_review | - | target_without_source_mapping |
 | `itraconazole` | model_parameter | `model.theta.ALAG1` | 0.5  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `itraconazole` | model_parameter | `model.theta.CL` | 16.68  | 16.68 L/h | derived_from_reported | source_1 | checked |
-| `itraconazole` | model_parameter | `model.theta.F1` | 0.55 fraction |   | fixture_policy | - | fixture_policy_apparent_parameters |
+| `itraconazole` | model_parameter | `model.theta.F1` | 0.55 fraction |   | fixture_policy | - | fixture_policy_systemic_parameters |
 | `itraconazole` | model_parameter | `model.theta.KA` | 1.2  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `itraconazole` | model_parameter | `model.theta.V` | 700.0  | 700.0 L | derived_from_reported | source_1 | checked |
 | `itraconazole` | pk_parameter | `CL_abs_L_per_h_at_70kg` | 16.68 L/h | 16.68 L/h | label_reported | source_1 | checked |
@@ -400,7 +400,7 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `mefenamic_acid` | target | `targets.t_half` | 3.0 h |   | unknown_needs_review | - | target_without_source_mapping |
 | `metoprolol` | model_parameter | `model.theta.ALAG1` | 0.5  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `metoprolol` | model_parameter | `model.theta.CL` | 48.0  | 48.0 L/h | derived_from_reported | source_2 | checked |
-| `metoprolol` | model_parameter | `model.theta.F1` | 0.5 fraction |   | fixture_policy | - | fixture_policy_apparent_parameters |
+| `metoprolol` | model_parameter | `model.theta.F1` | 0.5 fraction |   | fixture_policy | - | fixture_policy_systemic_parameters |
 | `metoprolol` | model_parameter | `model.theta.KA` | 1.2  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `metoprolol` | model_parameter | `model.theta.V` | 346.2468098133512  | 346.2468098133512 L | derived_from_reported | source_1 | checked |
 | `metoprolol` | pk_parameter | `CL_abs_L_per_h_at_70kg` | 48.0 L/h | 48.0 L/h | literature_reported | source_2 | checked |
@@ -432,7 +432,7 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `mexiletine` | target | `targets.t_half` | 11.0 h |   | unknown_needs_review | - | target_without_source_mapping |
 | `moclobemide` | model_parameter | `model.theta.ALAG1` | 0.5  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `moclobemide` | model_parameter | `model.theta.CL` | 39.4  | 39.4 L/h | derived_from_reported | source_5 | checked |
-| `moclobemide` | model_parameter | `model.theta.F1` | 0.56 fraction |   | fixture_policy | - | fixture_policy_apparent_parameters |
+| `moclobemide` | model_parameter | `model.theta.F1` | 0.56 fraction |   | fixture_policy | - | fixture_policy_systemic_parameters |
 | `moclobemide` | model_parameter | `model.theta.KA` | 1.2  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `moclobemide` | model_parameter | `model.theta.V` | 84.3  | 84.3 L | derived_from_reported | source_5 | checked |
 | `moclobemide` | pk_parameter | `CL_abs_L_per_h_at_70kg` | 39.4 L/h | 39.4 L/h | derived_from_reported | source_5 | checked |
@@ -448,19 +448,19 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `moclobemide` | target | `targets.t_half` | 1.6 h |   | unknown_needs_review | - | target_without_source_mapping |
 | `montelukast` | model_parameter | `model.theta.ALAG1` | 0.5  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `montelukast` | model_parameter | `model.theta.CL` | 1.8479999999999999  | 1.8479999999999999 L/h | derived_from_reported | source_1 | checked |
-| `montelukast` | model_parameter | `model.theta.F1` | 0.615 fraction |   | fixture_policy | - | fixture_policy_apparent_parameters |
+| `montelukast` | model_parameter | `model.theta.F1` | 0.61 fraction |   | fixture_policy | - | fixture_policy_systemic_parameters |
 | `montelukast` | model_parameter | `model.theta.KA` | 1.2  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `montelukast` | model_parameter | `model.theta.V` | 9.7  | 9.7 L | derived_from_reported | source_1 | checked |
 | `montelukast` | pk_parameter | `CL_abs_L_per_h_at_70kg` | 1.8479999999999999 L/h | 1.8479999999999999 L/h | literature_reported | source_1 | checked |
 | `montelukast` | pk_parameter | `CL_systemic_L_per_h_at_70kg` | 1.8479999999999999 L/h |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
 | `montelukast` | pk_parameter | `V_abs_L_at_70kg` | 9.7 L | 9.7 L | literature_reported | source_1 | checked |
 | `montelukast` | pk_parameter | `V_systemic_L_at_70kg` | 9.7 L |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
-| `montelukast` | pk_parameter | `bioavailability` | 0.615 fraction |   | - | - | source_url_present_not_parameter_mapped |
+| `montelukast` | pk_parameter | `bioavailability` | 0.61 fraction |   | - | - | source_url_present_not_parameter_mapped |
 | `montelukast` | pk_parameter | `clearance` | 1.8479999999999999 L/h | 1.8479999999999999 L/h | literature_reported | source_1 | checked |
 | `montelukast` | pk_parameter | `ke_1_per_h` | 0.19051546391752577 1/h |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
 | `montelukast` | pk_parameter | `t_half_h` | 6.7 h | 6.7 h | literature_reported | source_1 | checked |
 | `montelukast` | pk_parameter | `volume` | 9.7 L | 9.7 L | literature_reported | source_1 | checked |
-| `montelukast` | target | `targets.auc` | 33279.22077922078 ng*h/mL |   | f_dose_over_cl | - | target_without_source_mapping |
+| `montelukast` | target | `targets.auc` | 33008.658008658014 ng*h/mL |   | f_dose_over_cl | - | target_without_source_mapping |
 | `montelukast` | target | `targets.t_half` | 6.7 h |   | unknown_needs_review | - | target_without_source_mapping |
 | `motavizumab_medi_524` | model_parameter | `model.theta.CL` | 0.010229166666666666  | 0.010229166666666666 L/h | derived_from_reported | source_1 | checked |
 | `motavizumab_medi_524` | model_parameter | `model.theta.V` | 7.35  | 7.35 L | derived_from_reported | source_1 | checked |
@@ -489,20 +489,20 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `motavizumab_yte` | target | `targets.auc` | 43636363.63636363 ng*h/mL |   | dose_over_cl | - | derived_target |
 | `motavizumab_yte` | target | `targets.t_half` | 2040.0 h |   | unknown_needs_review | - | target_without_source_mapping |
 | `omeprazole` | model_parameter | `model.theta.ALAG1` | 0.5  |   | fixture_policy | - | fixture_policy_no_external_source |
-| `omeprazole` | model_parameter | `model.theta.CL` | 43.56  | 43.56 L/h | derived_from_reported | source_4 | checked |
-| `omeprazole` | model_parameter | `model.theta.F1` | 0.35 fraction |   | fixture_policy | - | fixture_policy_apparent_parameters |
+| `omeprazole` | model_parameter | `model.theta.CL` | 37.44  | 37.44 L/h | derived_from_reported | source_4 | checked |
+| `omeprazole` | model_parameter | `model.theta.F1` | 0.35 fraction |   | fixture_policy | - | fixture_policy_systemic_parameters |
 | `omeprazole` | model_parameter | `model.theta.KA` | 1.2  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `omeprazole` | model_parameter | `model.theta.V` | 16.1  | 16.1 L | derived_from_reported | source_4 | checked |
-| `omeprazole` | pk_parameter | `CL_abs_L_per_h_at_70kg` | 43.56 L/h | 43.56 L/h | literature_reported | source_4 | checked |
-| `omeprazole` | pk_parameter | `CL_systemic_L_per_h_at_70kg` | 43.56 L/h |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
+| `omeprazole` | pk_parameter | `CL_abs_L_per_h_at_70kg` | 37.44 L/h | 37.44 L/h | literature_reported | source_4 | checked |
+| `omeprazole` | pk_parameter | `CL_systemic_L_per_h_at_70kg` | 37.44 L/h |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
 | `omeprazole` | pk_parameter | `V_abs_L_at_70kg` | 16.1 L | 16.1 L | literature_reported | source_4 | checked |
 | `omeprazole` | pk_parameter | `V_systemic_L_at_70kg` | 16.1 L |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
 | `omeprazole` | pk_parameter | `bioavailability` | 0.35 fraction |   | - | - | source_url_present_not_parameter_mapped |
-| `omeprazole` | pk_parameter | `clearance` | 43.56 L/h | 43.56 L/h | literature_reported | source_4 | checked |
-| `omeprazole` | pk_parameter | `ke_1_per_h` | 2.705590062111801 1/h |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
+| `omeprazole` | pk_parameter | `clearance` | 37.44 L/h | 37.44 L/h | literature_reported | source_4 | checked |
+| `omeprazole` | pk_parameter | `ke_1_per_h` | 2.3254658385093165 1/h |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
 | `omeprazole` | pk_parameter | `t_half_h` | 0.75 h | 0.75 h | derived_from_reported | source_2 | checked |
 | `omeprazole` | pk_parameter | `volume` | 0.23 L/kg | 0.23 L/kg | literature_reported | source_4 | checked |
-| `omeprazole` | target | `targets.auc` | 803.4894398530762 ng*h/mL |   | f_dose_over_cl | - | target_without_source_mapping |
+| `omeprazole` | target | `targets.auc` | 934.8290598290599 ng*h/mL |   | f_dose_over_cl | - | target_without_source_mapping |
 | `omeprazole` | target | `targets.t_half` | 0.75 h |   | unknown_needs_review | - | target_without_source_mapping |
 | `raltegravir` | model_parameter | `model.theta.ALAG1` | 0.5  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `raltegravir` | model_parameter | `model.theta.CL` | 60.2  | 60.2 L/h | derived_from_reported | source_1 | checked |
@@ -521,24 +521,24 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `raltegravir` | target | `targets.auc` | 6644.518272425249 ng*h/mL |   | dose_over_cl | - | derived_target |
 | `raltegravir` | target | `targets.t_half` | 7.8 h |   | unknown_needs_review | - | target_without_source_mapping |
 | `sildenafil` | model_parameter | `model.theta.ALAG1` | 0.5  |   | fixture_policy | - | fixture_policy_no_external_source |
-| `sildenafil` | model_parameter | `model.theta.CL` | 18.195113489698564  | 18.195113489698564 L/h | derived_from_reported | source_2 | checked |
-| `sildenafil` | model_parameter | `model.theta.F1` | 1.0 fraction |   | fixture_policy | - | fixture_policy_apparent_parameters |
+| `sildenafil` | model_parameter | `model.theta.CL` | 41.0  | 41.0 L/h | derived_from_reported | source_7 | checked |
+| `sildenafil` | model_parameter | `model.theta.F1` | 0.41 fraction |   | fixture_policy | - | fixture_policy_systemic_parameters |
 | `sildenafil` | model_parameter | `model.theta.KA` | 1.2  |   | fixture_policy | - | fixture_policy_no_external_source |
-| `sildenafil` | model_parameter | `model.theta.V` | 105.0  | 105.0 L | derived_from_reported | source_3 | checked |
-| `sildenafil` | pk_parameter | `CL_abs_L_per_h_at_70kg` | 18.195113489698564 L/h | 18.195113489698564 L/h | fixture_derived | source_2 | checked |
-| `sildenafil` | pk_parameter | `CL_systemic_L_per_h_at_70kg` | 8.005849935467369 L/h |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
-| `sildenafil` | pk_parameter | `V_abs_L_at_70kg` | 105.0 L | 105.0 L | literature_reported | source_3 | checked |
-| `sildenafil` | pk_parameter | `V_systemic_L_at_70kg` | 46.2 L |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
-| `sildenafil` | pk_parameter | `bioavailability` | 0.44 fraction |   | - | - | source_url_present_not_parameter_mapped |
-| `sildenafil` | pk_parameter | `clearance` | 18.195113489698564 L/h | 18.195113489698564 L/h | fixture_derived | source_2 | checked |
-| `sildenafil` | pk_parameter | `ke_1_per_h` | 0.17328679513998632 1/h |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
-| `sildenafil` | pk_parameter | `t_half_h` | 4.0 h | 4.0 h | derived_from_reported | source_2 | checked |
-| `sildenafil` | pk_parameter | `volume` | 105.0 L | 105.0 L | literature_reported | source_3 | checked |
-| `sildenafil` | target | `targets.auc` | 5495.981108148432 ng*h/mL |   | dose_over_cl | - | derived_target |
+| `sildenafil` | model_parameter | `model.theta.V` | 105.0  | 105.0 L | derived_from_reported | source_7 | checked |
+| `sildenafil` | pk_parameter | `CL_abs_L_per_h_at_70kg` | 41.0 L/h | 41.0 L/h | label_reported | source_7 | checked |
+| `sildenafil` | pk_parameter | `CL_systemic_L_per_h_at_70kg` | 41.0 L/h |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
+| `sildenafil` | pk_parameter | `V_abs_L_at_70kg` | 105.0 L | 105.0 L | label_reported | source_7 | checked |
+| `sildenafil` | pk_parameter | `V_systemic_L_at_70kg` | 105.0 L |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
+| `sildenafil` | pk_parameter | `bioavailability` | 0.41 fraction |   | - | - | source_url_present_not_parameter_mapped |
+| `sildenafil` | pk_parameter | `clearance` | 41.0 L/h | 41.0 L/h | label_reported | source_7 | checked |
+| `sildenafil` | pk_parameter | `ke_1_per_h` | 0.3904761904761905 1/h |   | derived_from_reported | - | derived_from_pk_yml_source_fields |
+| `sildenafil` | pk_parameter | `t_half_h` | 4.0 h | 4.0 h | derived_from_reported | source_7 | checked |
+| `sildenafil` | pk_parameter | `volume` | 105.0 L | 105.0 L | label_reported | source_7 | checked |
+| `sildenafil` | target | `targets.auc` | 1000.0 ng*h/mL |   | f_dose_over_cl | - | target_without_source_mapping |
 | `sildenafil` | target | `targets.t_half` | 4.0 h |   | unknown_needs_review | - | target_without_source_mapping |
 | `sufentanil` | model_parameter | `model.theta.ALAG1` | 0.5  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `sufentanil` | model_parameter | `model.theta.CL` | 108.0  | 108.0 L/h | derived_from_reported | source_1 | checked |
-| `sufentanil` | model_parameter | `model.theta.F1` | 1.0 fraction |   | fixture_policy | - | fixture_policy_no_external_source |
+| `sufentanil` | model_parameter | `model.theta.F1` | 1.0 fraction |   | fixture_policy | - | fixture_policy_apparent_parameters |
 | `sufentanil` | model_parameter | `model.theta.KA` | 1.2  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `sufentanil` | model_parameter | `model.theta.V` | 2087.868263174508  | 2087.868263174508 L | derived_from_reported | source_1 | checked |
 | `sufentanil` | pk_parameter | `CL_abs_L_per_h_at_70kg` | 108.0 L/h | 108.0 L/h | label_reported | source_1 | checked |
@@ -567,7 +567,7 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `tefibazumab` | target | `targets.t_half` | 420.0 h |   | unknown_needs_review | - | target_without_source_mapping |
 | `tizanidine` | model_parameter | `model.theta.ALAG1` | 0.5  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `tizanidine` | model_parameter | `model.theta.CL` | 46.579490533628324  | 46.579490533628324 L/h | derived_from_reported | source_1 | checked |
-| `tizanidine` | model_parameter | `model.theta.F1` | 0.4 fraction |   | fixture_policy | - | fixture_policy_apparent_parameters |
+| `tizanidine` | model_parameter | `model.theta.F1` | 0.4 fraction |   | fixture_policy | - | fixture_policy_systemic_parameters |
 | `tizanidine` | model_parameter | `model.theta.KA` | 1.2  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `tizanidine` | model_parameter | `model.theta.V` | 168.0  | 168.0 L | derived_from_reported | source_1 | checked |
 | `tizanidine` | pk_parameter | `CL_abs_L_per_h_at_70kg` | 46.579490533628324 L/h | 46.579490533628324 L/h | derived_from_reported | source_1 | checked |
@@ -599,7 +599,7 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `triazolam` | target | `targets.t_half` | 3.5 h |   | unknown_needs_review | - | target_without_source_mapping |
 | `verapamil` | model_parameter | `model.theta.ALAG1` | 0.5  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `verapamil` | model_parameter | `model.theta.CL` | 30.0384  | 30.0384 L/h | derived_from_reported | source_3 | checked |
-| `verapamil` | model_parameter | `model.theta.F1` | 0.2247 fraction |   | fixture_policy | - | fixture_policy_apparent_parameters |
+| `verapamil` | model_parameter | `model.theta.F1` | 0.2247 fraction |   | fixture_policy | - | fixture_policy_systemic_parameters |
 | `verapamil` | model_parameter | `model.theta.KA` | 1.2  |   | fixture_policy | - | fixture_policy_no_external_source |
 | `verapamil` | model_parameter | `model.theta.V` | 175.7  | 175.7 L | derived_from_reported | source_3 | checked |
 | `verapamil` | pk_parameter | `CL_abs_L_per_h_at_70kg` | 30.0384 L/h | 30.0384 L/h | literature_reported | source_3 | checked |
@@ -692,12 +692,14 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `sildenafil` | `source_4` | https://en.wikipedia.org/wiki/Sildenafil |
 | `sildenafil` | `source_5` | https://go.drugbank.com/drugs/DB00203 |
 | `sildenafil` | `source_6` | https://labeling.pfizer.com/ShowLabeling.aspx?id=14610 |
+| `sildenafil` | `source_7` | https://www.ema.europa.eu/en/documents/product-information/viagra-epar-product-information_en.pdf |
 | `sufentanil` | `source_1` | https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8b580f3d-e3b5-4086-b093-87a980631147 |
 | `tefibazumab` | `source_1` | https://pmc.ncbi.nlm.nih.gov/articles/PMC1610062/ |
 | `tizanidine` | `source_1` | https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=043d9e51-bfa2-4add-9058-5ece332f7e99 |
 | `triazolam` | `source_1` | https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ce6ddb53-89ca-4edf-a519-553d34ce7938 |
 | `triazolam` | `source_2` | https://go.drugbank.com/drugs/DB00897 |
 | `triazolam` | `source_3` | https://pmc.ncbi.nlm.nih.gov/articles/PMC1401197/ |
+| `triazolam` | `source_4` | https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5add318e-11b9-42f8-b052-0d8cebb32fcf |
 | `verapamil` | `source_1` | https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c9d71191-b32a-44f9-bc5a-283a06884c82 |
 | `verapamil` | `source_2` | https://pubchem.ncbi.nlm.nih.gov/compound/Verapamil |
 | `verapamil` | `source_3` | https://pubmed.ncbi.nlm.nih.gov/432439/ |

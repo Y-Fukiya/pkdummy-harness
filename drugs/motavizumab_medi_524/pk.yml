@@ -2,7 +2,8 @@ id: osp::motavizumab_medi_524
 name: Motavizumab (MEDI-524)
 route_inferred: iv
 sources:
-- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3837853/
+- id: source_1
+  url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3837853/
 pk_raw:
   half_life: 19-34 days
   clearance: 165-326 mL/day
@@ -41,3 +42,68 @@ derived:
     with systemic CL/V.'
   - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
     typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: source_1
+    source_field: serum_clearance_range
+    value_basis: derived_from_reported
+    raw_value: 165-326
+    raw_unit: mL/day
+    normalized_value: 0.010229166666666666
+    normalized_unit: L/h
+    conversion:
+      method: unit_conversion
+      formula: midpoint of 165-326 mL/day * 1 L/1000 mL / 24 h/day
+      assumptions:
+        range_summary: midpoint
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: Source_1 reports motavizumab serum clearance of 165 to 326 mL/day
+      across the IV dose range. The fixture uses the range midpoint and retains the
+      value as a dose-range summary, not an individual estimate.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PMC source_1, Results, Pharmacokinetics
+    exact_quote: "165 to 326 ml/day"
+  V_abs_L_at_70kg:
+    source_id: source_1
+    source_field: serum_volume_of_distribution_range
+    value_basis: derived_from_reported
+    raw_value: 5.2-9.5
+    raw_unit: L
+    normalized_value: 7.35
+    normalized_unit: L
+    conversion:
+      method: derived_formula
+      formula: midpoint of reported 5.2-9.5 L range
+      assumptions:
+        range_summary: midpoint
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: Source_1 reports motavizumab Vss values of 5.2 to 9.5 L across
+      IV dose cohorts. The fixture uses the midpoint and should not be interpreted
+      as a dose-independent Vss.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+  t_half_h:
+    source_id: source_1
+    source_field: serum_half_life_range
+    value_basis: derived_from_reported
+    raw_value: 19-34
+    raw_unit: days
+    normalized_value: 636.0
+    normalized_unit: h
+    conversion:
+      method: unit_conversion
+      formula: midpoint of reported 19-34 days * 24 h/day
+      assumptions:
+        range_summary: midpoint
+    role: check_only
+    reviewer_status: checked
+    reviewer_note: Source_1 reports motavizumab half-lives of 19 to 34 days across
+      IV dose cohorts. The fixture midpoint remains a check target and is not used
+      to force CL/V agreement.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PMC source_1, Results, Pharmacokinetics
+    exact_quote: "from 19 to 34 days for motavizumab"

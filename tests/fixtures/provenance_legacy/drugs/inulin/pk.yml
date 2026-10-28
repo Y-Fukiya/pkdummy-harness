@@ -1,0 +1,128 @@
+id: osp::inulin
+name: Inulin
+route_inferred: iv
+sources:
+- id: source_1
+  url: https://go.drugbank.com/drugs/DB00638
+- id: source_2
+  url: https://www.sciencedirect.com/topics/immunology-and-microbiology/elimination-half-life
+pk_raw:
+  half_life: 2-4 hours
+  clearance: 7.2 L/hr
+  volume_of_distribution: 16 L
+  bioavailability: N/A (IV only)
+  elimination_route: 腎排泄
+pk_parsed:
+  half_life_h: 3.0
+  half_life_h_range:
+  - 2.0
+  - 4.0
+  clearance:
+    value: 7.2
+    unit: L/h
+  volume:
+    value: 16.0
+    unit: L
+  bioavailability_frac: 1.0
+  weight_ref_kg_for_abs: 70.0
+  clearance_basis: systemic
+  volume_basis: systemic
+derived:
+  ke_1_per_h: 0.45
+  CL_abs_L_per_h_at_70kg: 7.2
+  V_abs_L_at_70kg: 16.0
+  CL_apparent_L_per_h_at_70kg: 7.2
+  V_apparent_L_at_70kg: 16.0
+  CL_systemic_L_per_h_at_70kg: 7.2
+  V_systemic_L_at_70kg: 16.0
+  notes:
+  - Apparent CL/V were derived as (systemic CL/V) / F.
+  - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability
+    with systemic CL/V.'
+  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
+    typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: null
+    source_field: pk_parsed.clearance
+    value_basis: derived_from_reported
+    raw_value: 7.2
+    raw_unit: L/h
+    normalized_value: 7.2
+    normalized_unit: L/h
+    conversion:
+      method: direct
+      formula: pk_parsed.clearance.value
+      assumptions: {}
+    role: simulation_parameter
+    reviewer_status: needs_source_review
+    reviewer_note: Clearance is used as a deterministic fixture model parameter and
+      is not recalibrated to force agreement with terminal half-life. Existing source
+      URLs do not identify the exact value-level source for this parameter. This provenance
+      records the canonical parsed/derived fixture value and intentionally marks source
+      mapping for future review.
+    source_review_status: needs_source_review
+    fixture_limitation_status: not_applicable
+  V_abs_L_at_70kg:
+    source_id: null
+    source_field: pk_parsed.volume
+    value_basis: derived_from_reported
+    raw_value: 16.0
+    raw_unit: L
+    normalized_value: 16.0
+    normalized_unit: L
+    conversion:
+      method: direct
+      formula: pk_parsed.volume.value
+      assumptions: {}
+    role: simulation_parameter
+    reviewer_status: needs_source_review
+    reviewer_note: Volume is retained as the one-compartment fixture volume and is
+      not recalibrated to force agreement with terminal half-life. Existing source
+      URLs do not identify the exact value-level source for this parameter. This provenance
+      records the canonical parsed/derived fixture value and intentionally marks source
+      mapping for future review.
+    source_review_status: needs_source_review
+    fixture_limitation_status: not_applicable
+  t_half_h:
+    source_id: null
+    source_field: pk_parsed.half_life_h
+    value_basis: derived_from_reported
+    raw_value: 3.0
+    raw_unit: h
+    normalized_value: 3.0
+    normalized_unit: h
+    conversion:
+      method: direct
+      formula: pk_parsed.half_life_h
+      assumptions: {}
+    role: check_only
+    reviewer_status: acknowledged_fixture_limitation
+    reviewer_note: Half-life is retained as a check target only. CL and V are not
+      jointly calibrated to match terminal half-life in this deterministic one-compartment
+      fixture. Existing source URLs do not identify the exact value-level source for
+      this parameter. This provenance records the canonical parsed/derived fixture
+      value and intentionally marks source mapping for future review.
+    source_verification:
+      status: no_exact_public_source_match
+      reviewed_source_ids:
+      - source_1
+      - source_2
+      reviewed_external_queries:
+      - PubMed search: inulin pharmacokinetics human clearance half-life
+      - PubMed exact search: inulin half-life 2-4 hours clearance 7.2 L/hr
+      blocker: exact_value_not_found_in_public_primary_source
+      next_action: add_primary_source_or_replace_fixture_value
+      fixture_value_decision: retain_current_fixture_value_pending_primary_source
+      decision_reason: >
+        Retain the current 2-4 h fixture half-life for deterministic regression
+        continuity while keeping source_id null. This value must not be treated
+        as source-verified until a primary source exact match is added, or until
+        the fixture value is deliberately replaced with a source-verified value.
+      reviewer_note: Public unauthenticated DrugBank access did not expose exact
+        source text for source_1. The fetched ScienceDirect topic page for source_2
+        did not expose an exact inulin value. PubMed abstract searches did not identify
+        a public primary source matching the local 2-4 h inulin half-life range, so
+        source_id remains null instead of being inferred.
+    source_review_status: needs_source_review
+    fixture_limitation_status: acknowledged
