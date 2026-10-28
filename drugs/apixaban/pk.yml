@@ -5,8 +5,8 @@ sources:
 - id: source_1
   url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=095a08ac-cf0e-497e-a682-ddef38d6b29c
 pk_raw:
-  text: 'Label: total clearance ~3.3 L/h; half-life ~12 h; absolute bioavailability ~50%. Treat CL/V as
-    apparent (CL/F, V/F) for 1-comp template.'
+  text: 'Label: total clearance ~3.3 L/h; half-life ~12 h; absolute bioavailability
+    ~50%. Treat CL/V as apparent (CL/F, V/F) for 1-comp template.'
 pk_parsed:
   half_life_h: 12.0
   clearance:
@@ -21,8 +21,8 @@ pk_parsed:
   volume_basis: systemic
   weight_ref_kg_for_abs: 70.0
   clearance_basis_source: primary_source_reviewed
-  clearance_basis_note: DailyMed source_1 section 12.3 reports total clearance 3.3 L/h and Vss21 L, not
-    CL/F or V/F. Oral F is approximately50%.
+  clearance_basis_note: DailyMed source_1 section 12.3 reports total clearance 3.3
+    L/h and Vss21 L, not CL/F or V/F. Oral F is approximately50%.
 derived:
   ke_1_per_h: 0.15714285714285714
   CL_abs_L_per_h_at_70kg: 3.3
@@ -33,10 +33,10 @@ derived:
   V_systemic_L_at_70kg: 21.0
   notes:
   - Apparent CL/V were derived as (systemic CL/V) / F.
-  - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability with systemic
-    CL/V.'
-  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels typically report systemic
-    parameters.'
+  - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability
+    with systemic CL/V.'
+  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
+    typically report systemic parameters.'
 value_provenance:
   CL_abs_L_per_h_at_70kg:
     source_id: source_1
@@ -52,12 +52,15 @@ value_provenance:
       assumptions: {}
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: Source_1 section12.3 reports total CL. Its oral apparent half-life does not make this
-      CL an apparent CL/F.
+    reviewer_note: Source_1 section12.3 reports total CL. Its oral apparent half-life
+      does not make this CL an apparent CL/F.
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: Clinical Pharmacology, Pharmacokinetics
     exact_quote: total clearance of approximately 3.3 L/hour
+    selection:
+      rule: recorded_point_value
+      rationale: reported value
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: steady_state_volume_Vss
@@ -72,12 +75,15 @@ value_provenance:
       assumptions: {}
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: Source_1 reports Vss21 L. Using IV Vss as the volume in a one-compartment oral fixture
-      is an approximation; it is not terminal Vz.
+    reviewer_note: Source_1 reports Vss21 L. Using IV Vss as the volume in a one-compartment
+      oral fixture is an approximation; it is not terminal Vz.
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: Clinical Pharmacology, Pharmacokinetics
     exact_quote: approximately 21 liters
+    selection:
+      rule: recorded_point_value
+      rationale: reported value
   t_half_h:
     source_id: source_1
     source_field: apparent_half_life_after_oral_administration
@@ -92,12 +98,16 @@ value_provenance:
       assumptions: {}
     role: check_only
     reviewer_status: checked
-    reviewer_note: DailyMed source_1 reports an apparent half-life of approximately 12 hours following
-      oral administration. It remains a check target for the one-compartment fixture.
+    reviewer_note: DailyMed source_1 reports an apparent half-life of approximately
+      12 hours following oral administration. It remains a check target for the one-compartment
+      fixture.
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: DailyMed label, Clinical Pharmacology, Elimination
     exact_quote: apparent half-life of approximately 12 hours following oral administration
+    selection:
+      rule: recorded_point_value
+      rationale: pk_parsed.half_life_h
   bioavailability_frac:
     source_id: source_1
     source_field: absolute_bioavailability_up_to_10mg
@@ -113,19 +123,25 @@ value_provenance:
         dose_context: up to 10 mg oral
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: Source_1 section12.3 reports approximate absolute F50% for doses up to10 mg.
+    reviewer_note: Source_1 section12.3 reports approximate absolute F50% for doses
+      up to10 mg.
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: Clinical Pharmacology, Pharmacokinetics
     exact_quote: approximately 50%
+    selection:
+      rule: recorded_point_value
+      rationale: 50 / 100
 simulation_validity:
+  source_correction_date: '2026-10-28'
   status: clinical_hold
   review_date: '2026-10-28'
   reasons:
-  - The prior pk_raw text includes a mistaken fixture interpretation of total CL as apparent CL/F. That
-    historical interpretation is superseded by the source_1 total/systemic CL and Vss definitions.
-  - Use systemic CL3.3 L/h, reported Vss21 L and F1=0.5. Mapping Vss to one-compartment V is approximate;
-    reported oral apparent half-life12 h remains check-only and is not used to derive V or establish an
-    absorption-limited mechanism.
-  - Source agreement does not validate the clinical model. KA, lag, IIV and residual errors remain generic
-    fixture assumptions.
+  - The prior pk_raw text includes a mistaken fixture interpretation of total CL as
+    apparent CL/F. That historical interpretation is superseded by the source_1 total/systemic
+    CL and Vss definitions.
+  - Use systemic CL3.3 L/h, reported Vss21 L and F1=0.5. Mapping Vss to one-compartment
+    V is approximate; reported oral apparent half-life12 h remains check-only and
+    is not used to derive V or establish an absorption-limited mechanism.
+  - Source agreement does not validate the clinical model. KA, lag, IIV and residual
+    errors remain generic fixture assumptions.

@@ -8,7 +8,7 @@ Amikacin,amikacin,iv,2.0,6.0,24.0,1.0,drugs/amikacin/spec_pk1_iv.yml,drugs/amika
 Apixaban,apixaban,po,12.0,3.3,21.0,0.5,drugs/apixaban/spec_pk1_oral.yml,drugs/apixaban/pk.yml,1,drugs/apixaban/targets.yml
 Atazanavir,atazanavir,po,4.6,12.9,88.3,,drugs/atazanavir/spec_pk1_oral.yml,drugs/atazanavir/pk.yml,2,drugs/atazanavir/targets.yml
 Buprenorphine,buprenorphine,iv,10.345863472802147,54.0,806.0,1.0,drugs/buprenorphine/spec_pk1_iv.yml,drugs/buprenorphine/pk.yml,1,drugs/buprenorphine/targets.yml
-Carbamazepine,carbamazepine,po,14.5,4.8,100.41157484587185,1.0,drugs/carbamazepine/spec_pk1_oral.yml,drugs/carbamazepine/pk.yml,1,drugs/carbamazepine/targets.yml
+Carbamazepine,carbamazepine,po,14.5,4.8,100.41157484587185,1.0,drugs/carbamazepine/spec_pk1_oral.yml,drugs/carbamazepine/pk.yml,2,drugs/carbamazepine/targets.yml
 CDA1,cda1,iv,685.2,0.00588,4.9,1.0,drugs/cda1/spec_pk1_iv.yml,drugs/cda1/pk.yml,2,drugs/cda1/targets.yml
 Cimetidine,cimetidine,po,2.0,29.7,56.0,0.6,drugs/cimetidine/spec_pk1_oral.yml,drugs/cimetidine/pk.yml,2,drugs/cimetidine/targets.yml
 Clarithromycin,clarithromycin,po,5.0,58.1,172.0,0.525,drugs/clarithromycin/spec_pk1_oral.yml,drugs/clarithromycin/pk.yml,3,drugs/clarithromycin/targets.yml
@@ -35,4 +35,4 @@ Sufentanil,sufentanil,sl,13.4,108.0,2087.868263174508,0.53,drugs/sufentanil/spec
 Tefibazumab,tefibazumab,iv,420.0,0.012,7.3,1.0,drugs/tefibazumab/spec_pk1_iv.yml,drugs/tefibazumab/pk.yml,1,drugs/tefibazumab/targets.yml
 Tizanidine,tizanidine,po,2.5,46.579490533628324,168.0,0.4,drugs/tizanidine/spec_pk1_oral.yml,drugs/tizanidine/pk.yml,1,drugs/tizanidine/targets.yml
 Triazolam,triazolam,po,3.5,31.560000000000002,159.36009421659492,0.44,drugs/triazolam/spec_pk1_oral.yml,drugs/triazolam/pk.yml,4,drugs/triazolam/targets.yml
-Verapamil,verapamil,po,5.1,30.0384,175.7,0.2247,drugs/verapamil/spec_pk1_oral.yml,drugs/verapamil/pk.yml,3,drugs/verapamil/targets.yml
+Verapamil,verapamil,po,5.1,30.0384,175.7,0.2247,drugs/verapamil/spec_pk1_oral.yml,drugs/verapamil/pk.yml,4,drugs/verapamil/targets.yml

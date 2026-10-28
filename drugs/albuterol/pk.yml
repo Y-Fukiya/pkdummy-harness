@@ -54,7 +54,11 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: PubMed abstract
-    exact_quote: "With intravenous administration, total plasma clearance was 480 +/- 123 ml min-1"
+    exact_quote: With intravenous administration, total plasma clearance was 480 +/-
+      123 ml min-1
+    selection:
+      rule: recorded_point_value
+      rationale: 480 mL/min * 60 min/h / 1000 mL/L
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: one_compartment_volume_derived_from_clearance_and_half_life
@@ -76,7 +80,13 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed abstract
-    exact_quote: "apparent volume of distribution was 156 +/- 381"
+    exact_quote: apparent volume of distribution was 156 +/- 381
+    selection:
+      rule: derived_value
+      rationale: CL_abs_L_per_h_at_70kg * t_half_h / ln(2)
+      depends_on:
+      - CL_abs_L_per_h_at_70kg
+      - t_half_h
   t_half_h:
     source_id: source_1
     source_field: intravenous_elimination_half_life
@@ -96,4 +106,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed abstract
-    exact_quote: "elimination half-life was 3.86 +/- 0.83 h"
+    exact_quote: elimination half-life was 3.86 +/- 0.83 h
+    selection:
+      rule: recorded_point_value
+      rationale: pk_parsed.half_life_h
+simulation_validity:
+  status: not_assessed
+  reasons: []

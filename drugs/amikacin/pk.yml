@@ -60,7 +60,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: DailyMed label, Clinical Pharmacology, General
-    exact_quote: "mean serum clearance rate is about 100 mL/min"
+    exact_quote: mean serum clearance rate is about 100 mL/min
+    selection:
+      rule: recorded_point_value
+      rationale: 100 mL/min * 60 min/h / 1000 mL/L
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: apparent_volume_of_distribution
@@ -81,7 +84,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: DailyMed label, Clinical Pharmacology, General
-    exact_quote: "mean total apparent volume of distribution of 24 liters"
+    exact_quote: mean total apparent volume of distribution of 24 liters
+    selection:
+      rule: recorded_point_value
+      rationale: pk_parsed.volume.value
   t_half_h:
     source_id: source_1
     source_field: serum_half_life_normal_adult_volunteers
@@ -103,3 +109,11 @@ value_provenance:
       half-life in this deterministic one-compartment fixture.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: legacy_fixture_value
+      rationale: reported "slightly over 2 hours" retained as 2.0 h fixture value
+        Retained as an explicit legacy fixture choice, not a jointly fitted or clinically
+        qualified parameter set.
+simulation_validity:
+  status: not_assessed
+  reasons: []

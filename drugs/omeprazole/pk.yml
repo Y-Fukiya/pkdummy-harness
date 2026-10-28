@@ -14,10 +14,11 @@ pk_raw:
   half_life: 0.5-1 hours
   clearance: 624 mL/min (range 59-828 mL/min)
   volume_of_distribution: 0.4 L/kg
-  bioavailability: about 30-40% at 20-40 mg in healthy subjects; 58% in young and 76% in elderly volunteers
-    after a 40 mg buffered solution
-  elimination_route: Hepatic metabolism (CYP2C19, CYP3A4); about 77% recovered in urine as metabolites,
-    with little if any unchanged drug; remaining dose recovered in feces.
+  bioavailability: about 30-40% at 20-40 mg in healthy subjects; 58% in young and
+    76% in elderly volunteers after a 40 mg buffered solution
+  elimination_route: Hepatic metabolism (CYP2C19, CYP3A4); about 77% recovered in
+    urine as metabolites, with little if any unchanged drug; remaining dose recovered
+    in feces.
 pk_parsed:
   half_life_h: 0.75
   half_life_h_range:
@@ -37,8 +38,8 @@ pk_parsed:
   clearance_basis: systemic
   volume_basis: systemic
   clearance_basis_source: primary_source_reviewed
-  clearance_basis_note: Source_4 reports systemic plasma CL after IV administration. CL=37.44 L/h is the
-    exact conversion of median 624 mL/min; oral F is separate.
+  clearance_basis_note: Source_4 reports systemic plasma CL after IV administration.
+    CL=37.44 L/h is the exact conversion of median 624 mL/min; oral F is separate.
 derived:
   ke_1_per_h: 2.3254658385093165
   CL_abs_L_per_h_at_70kg: 37.44
@@ -49,10 +50,10 @@ derived:
   V_systemic_L_at_70kg: 16.1
   notes:
   - Apparent CL/V were derived as (systemic CL/V) / F.
-  - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability with systemic
-    CL/V.'
-  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels typically report systemic
-    parameters.'
+  - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability
+    with systemic CL/V.'
+  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
+    typically report systemic parameters.'
 value_provenance:
   CL_abs_L_per_h_at_70kg:
     source_id: source_4
@@ -68,13 +69,17 @@ value_provenance:
       assumptions: {}
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: PubMed source_4 reports median systemic plasma clearance 624 mL/min in eight young
-      healthy subjects given 10 mg IV and 20 mg oral buffered solution. The exact unit conversion is 624*60/1000=37.44
-      L/h. The mean IV Vss and selected label F are not a jointly estimated oral parameter set.
+    reviewer_note: PubMed source_4 reports median systemic plasma clearance 624 mL/min
+      in eight young healthy subjects given 10 mg IV and 20 mg oral buffered solution.
+      The exact unit conversion is 624*60/1000=37.44 L/h. The mean IV Vss and selected
+      label F are not a jointly estimated oral parameter set.
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: PubMed abstract
     exact_quote: the median systemic plasma clearance was 624 ml/min
+    selection:
+      rule: recorded_point_value
+      rationale: 624 mL/min * 60 min/h / 1000 mL/L
   V_abs_L_at_70kg:
     source_id: source_4
     source_field: IV_mean_Vss
@@ -90,12 +95,16 @@ value_provenance:
         weight_ref_kg_for_abs: 70.0
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: PubMed source_4 reports mean IV Vss 0.23 +/- 0.04 L/kg. The canonical value uses the
-      reported mean scaled to 70 kg; it is a systemic IV Vss and not an oral V/F estimate.
+    reviewer_note: PubMed source_4 reports mean IV Vss 0.23 +/- 0.04 L/kg. The canonical
+      value uses the reported mean scaled to 70 kg; it is a systemic IV Vss and not
+      an oral V/F estimate.
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed abstract
     exact_quote: Mean Vss was 0.23 +/- 0.04 L/kg.
+    selection:
+      rule: recorded_point_value
+      rationale: 0.23 L/kg * 70 kg
   bioavailability_frac:
     source_id: source_2
     source_field: absolute_oral_bioavailability_20_to_40mg
@@ -113,15 +122,18 @@ value_provenance:
         nonlinear_first_pass_effect: true
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: DailyMed source_2 reports absolute bioavailability of about 30-40% at 20-40 mg in healthy
-      subjects and notes that bioavailability increases slightly with repeated dosing. The canonical F=0.35
-      is a midpoint fixture for that dose/formulation context; it must not be extrapolated to the 100
-      mg demo dose or to hepatic impairment.
+    reviewer_note: DailyMed source_2 reports absolute bioavailability of about 30-40%
+      at 20-40 mg in healthy subjects and notes that bioavailability increases slightly
+      with repeated dosing. The canonical F=0.35 is a midpoint fixture for that dose/formulation
+      context; it must not be extrapolated to the 100 mg demo dose or to hepatic impairment.
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: DailyMed label, Clinical Pharmacology, Pharmacokinetics, Absorption
-    exact_quote: Absolute bioavailability (compared with intravenous administration) is about 30-40% at
-      doses of 20-40 mg
+    exact_quote: Absolute bioavailability (compared with intravenous administration)
+      is about 30-40% at doses of 20-40 mg
+    selection:
+      rule: range_midpoint
+      rationale: midpoint of healthy-subject label range (30% to 40%) at 20-40 mg
   t_half_h:
     source_id: source_2
     source_field: plasma_half_life_healthy_subjects
@@ -132,26 +144,37 @@ value_provenance:
     normalized_unit: h
     conversion:
       method: derived_formula
-      formula: fixture value retained within reported plasma half-life range (0.5 to 1 h)
+      formula: fixture value retained within reported plasma half-life range (0.5
+        to 1 h)
       assumptions:
         source_range_member: true
     role: check_only
     reviewer_status: checked
-    reviewer_note: DailyMed source_2 reports plasma half-life of 0.5 to 1 h in healthy subjects. Canonical
-      t_half_h is retained as a fixture value within that range and remains a check target only. CL and
-      V are not jointly calibrated to match terminal half-life in this deterministic one-compartment fixture.
+    reviewer_note: DailyMed source_2 reports plasma half-life of 0.5 to 1 h in healthy
+      subjects. Canonical t_half_h is retained as a fixture value within that range
+      and remains a check target only. CL and V are not jointly calibrated to match
+      terminal half-life in this deterministic one-compartment fixture.
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: DailyMed label, Clinical Pharmacology, Pharmacokinetics
     exact_quote: In healthy subjects the plasma half-life is 0.5 to 1 hour
+    selection:
+      rule: legacy_fixture_value
+      rationale: fixture value retained within reported plasma half-life range (0.5
+        to 1 h) Retained as an explicit legacy fixture choice, not a jointly fitted
+        or clinically qualified parameter set.
 simulation_validity:
+  source_correction_date: '2026-10-28'
   status: clinical_hold
   review_date: '2026-10-28'
   reasons:
-  - CL=37.44 L/h is 624 mL/min * 60/1000 from the source_4 median. V=16.1 L is the source_4 mean IV Vss
-    0.23 L/kg * 70 kg; median CL and mean Vss are different summary statistics.
-  - F1=0.35 and half-life 0.75 h are midpoint fixture selections from the healthy-subject label ranges,
-    not the PubMed study median F=39% or its IV half-life. The retained 100 mg dose is a stress-test fixture,
-    not a validated 20 mg oral buffered-solution scenario.
-  - Legacy pk_raw volume 0.4 L/kg is retained as the original capture; the adopted source_4 IV Vss is
-    0.23 L/kg. KA, lag, IIV and residual errors remain generic fixture assumptions.
+  - CL=37.44 L/h is 624 mL/min * 60/1000 from the source_4 median. V=16.1 L is the
+    source_4 mean IV Vss 0.23 L/kg * 70 kg; median CL and mean Vss are different summary
+    statistics.
+  - F1=0.35 and half-life 0.75 h are midpoint fixture selections from the healthy-subject
+    label ranges, not the PubMed study median F=39% or its IV half-life. The retained
+    100 mg dose is a stress-test fixture, not a validated 20 mg oral buffered-solution
+    scenario.
+  - Legacy pk_raw volume 0.4 L/kg is retained as the original capture; the adopted
+    source_4 IV Vss is 0.23 L/kg. KA, lag, IIV and residual errors remain generic
+    fixture assumptions.

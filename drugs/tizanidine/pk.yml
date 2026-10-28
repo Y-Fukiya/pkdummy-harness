@@ -72,6 +72,12 @@ value_provenance:
       independent clinical CL evidence before use for dosing or inference.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: derived_value
+      rationale: 2.4 L/kg * 70 kg * ln(2) / 2.5 h
+      depends_on:
+      - V_abs_L_at_70kg
+      - t_half_h
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: IV_mean_steady_state_volume
@@ -93,7 +99,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: DailyMed label, Clinical Pharmacokinetics, Absorption and Distribution
-    exact_quote: "mean steady state volume of distribution of 2.4 L/kg"
+    exact_quote: mean steady state volume of distribution of 2.4 L/kg
+    selection:
+      rule: recorded_point_value
+      rationale: 2.4 L/kg * 70 kg
   bioavailability_frac:
     source_id: source_1
     source_field: absolute_oral_bioavailability
@@ -111,11 +120,18 @@ value_provenance:
         first_pass_metabolism: extensive
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: DailyMed source_1 reports approximately 40% absolute oral bioavailability with CV 24% due to extensive first-pass hepatic metabolism. The same label reports IV Vss separately; the current CL remains a fixture derivation and is not claimed as observed.
+    reviewer_note: DailyMed source_1 reports approximately 40% absolute oral bioavailability
+      with CV 24% due to extensive first-pass hepatic metabolism. The same label reports
+      IV Vss separately; the current CL remains a fixture derivation and is not claimed
+      as observed.
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: DailyMed label, Clinical Pharmacokinetics, Absorption and Distribution
-    exact_quote: "The absolute oral bioavailability of tizanidine is approximately 40%"
+    exact_quote: The absolute oral bioavailability of tizanidine is approximately
+      40%
+    selection:
+      rule: recorded_point_value
+      rationale: 40 percent / 100
   t_half_h:
     source_id: source_1
     source_field: oral_terminal_half_life
@@ -138,4 +154,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: DailyMed label, Clinical Pharmacokinetics, Metabolism and Excretion
-    exact_quote: "Tizanidine has a half-life of approximately 2.5 hours"
+    exact_quote: Tizanidine has a half-life of approximately 2.5 hours
+    selection:
+      rule: recorded_point_value
+      rationale: pk_parsed.half_life_h
+simulation_validity:
+  status: not_assessed
+  reasons: []

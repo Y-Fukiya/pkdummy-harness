@@ -104,7 +104,12 @@ type Drug = {
   provenance: JsonObject;
   targets: JsonObject;
   spec: JsonObject;
-  simulation_validity?: { status: "clinical_hold"; reasons: string[] };
+  simulation_validity: { status: "not_assessed" | "clinical_hold"; reasons: string[]; source_correction_date?: string };
+  fixture_assessment: {
+    half_life_check: { evaluated: boolean; reported_h: number | null; implied_h: number | null; ratio: number | null; threshold_fold: number; hold_candidate: boolean | null; circular: boolean };
+    dose_context: { purpose: string; clinical_dose_verified: boolean; arms: Record<string, { dose_mg: number; n: number; infusion_h?: number }> };
+  };
+  fixture_limitations: { code: string; statement: string; source_id: string; source_locator: string }[];
   review: {
     provenance_field_count: number;
     needs_review_count: number;
@@ -423,26 +428,63 @@ function hasCitationGap(drug: Drug): boolean {
 }
 
 function statusForDrug(drug: Drug, lang: Language): string {
-  if (drug.simulation_validity?.status === "clinical_hold") return lang === "ja" ? "原典修正済み・臨床採用保留" : "Source corrected, clinical hold";
-  const audit = parameterAudit.drugs.find((entry) => entry.slug === drug.slug);
-  if (audit) {
-    const order = ["CONTRADICTION", "UNVERIFIED", "QUALIFIED", "FIXTURE_ASSUMPTION", "DERIVED", "VERIFIED_VALUE_ONLY"];
-    const verdict = order.find((key) => audit.parameters.some((entry) => entry.verdict === key))!;
-    return `${lang === "ja" ? "修正前監査" : "Prior audit"}: ${auditLabels[verdict][lang === "ja" ? 0 : 1]}`;
-  }
-  if (drug.review.provenance_field_count === 0) return copy[lang].notRecorded;
-  if (hasOpenReview(drug)) return copy[lang].needsReview;
-  if (hasCitationGap(drug)) return copy[lang].citationGap;
-  return copy[lang].reviewed;
+  if (drug.simulation_validity.status === "clinical_hold") return lang === "ja" ? "臨床モデル評価・保留" : "Clinical assessment: hold";
+  return drug.fixture_assessment.half_life_check.hold_candidate
+    ? (lang === "ja" ? "未評価・保留候補" : "Not assessed; hold candidate")
+    : (lang === "ja" ? "臨床モデル・未評価" : "Clinical model: not assessed");
 }
 
 function statusClass(drug: Drug): string {
-  const audit = parameterAudit.drugs.find((entry) => entry.slug === drug.slug);
-  if (audit) return audit.parameters.some((entry) => ["CONTRADICTION", "UNVERIFIED"].includes(entry.verdict)) ? "status warning" : "status context";
-  if (drug.review.provenance_field_count === 0) return "status muted";
-  if (hasOpenReview(drug)) return "status warning";
-  if (hasCitationGap(drug)) return "status context";
-  return "status good";
+  return drug.simulation_validity.status === "clinical_hold" || drug.fixture_assessment.half_life_check.hold_candidate
+    ? "status warning" : "status muted";
+}
+
+function doseLabel(drug: Drug): string {
+  return Object.entries(drug.fixture_assessment.dose_context.arms)
+    .map(([name, arm]) => `${name}: ${arm.dose_mg} mg${arm.infusion_h ? ` / ${arm.infusion_h} h` : ""}`).join(" · ");
+}
+
+function FixtureContext({ drug, lang }: { drug: Drug; lang: Language }) {
+  const check = drug.fixture_assessment.half_life_check;
+  const population = record(record(drug.targets.scenario).population);
+  return <section className="panel fixture-context" aria-label={lang === "ja" ? "計算用投与設定とモデル評価" : "Computational dose and model assessment"}>
+    <span className="eyebrow">COMPUTATIONAL FIXTURE</span>
+    <h2>{lang === "ja" ? "計算用投与設定・臨床用量未確認" : "Computational regimen; clinical dose not verified"}</h2>
+    <p className="fixture-dose"><strong>{doseLabel(drug)}</strong> · {routeLabel(drug.route, lang)}</p>
+    <p>{lang === "ja" ? "この投与設定は計算用ストレス試験です。常用量・推奨用量として照合していません。100 mgを含む実行量をそのまま表示しており、添付文書の用量案内ではありません。" : "This is a computational stress-test regimen. These actual execution doses, including 100 mg settings, have not been verified as usual or recommended clinical doses."}</p>
+    <p>{lang === "ja" ? "記録された集団コンテキスト" : "Recorded population context"}: {formatValue(population.group, lang)}. {lang === "ja" ? "このラベルは投与量の妥当性や同集団の臨床試験再現を保証しません。" : "This label does not validate the dose or establish reproduction of a clinical study in that population."}</p>
+    <h3>{statusForDrug(drug, lang)}</h3>
+    <ul>{drug.simulation_validity.reasons.map(reason => <li key={reason}>{reason}</li>)}</ul>
+    <p>{lang === "ja" ? "半減期スクリーニング" : "Half-life screen"}: {check.evaluated
+      ? `${lang === "ja" ? "CL/Vからの半減期 / 記録半減期" : "Implied / recorded half-life"} = ${check.ratio?.toFixed(3)} (${check.implied_h?.toFixed(3)} h / ${check.reported_h} h). ${check.hold_candidate ? (lang === "ja" ? "1.5倍閾値を超過・保留候補" : "Beyond the 1.5-fold threshold; hold candidate") : (lang === "ja" ? "閾値内・臨床妥当性は未判定" : "Within threshold; clinical validity not established")}`
+      : (lang === "ja" ? "評価不能・妥当とは判定しません" : "Not evaluable; no validity conclusion")}</p>
+    {check.circular && <p>{lang === "ja" ? "CL・V・半減期のいずれかを他の値から導出しています。比が1でも独立した整合性確認にはなりません。" : "At least one of CL, V and half-life is derived from the others. A ratio of 1 is not an independent validation."}</p>}
+    {drug.fixture_limitations.length > 0 && <><h3>{lang === "ja" ? "原典に基づく制約" : "Source-based limitations"}</h3><ul>{drug.fixture_limitations.map(limitation => {
+      const source = drug.sources.find(item => item.id === limitation.source_id);
+      return <li key={limitation.code}>{limitation.statement} {source?.url && <a href={source.url} target="_blank" rel="noreferrer">{limitation.source_id} ↗</a>} <small>{limitation.source_locator}</small></li>;
+    })}</ul></>}
+    <a href="/pkdummy-harness/fixture-governance/">{lang === "ja" ? "評価・投与設定・値の選択方針" : "Assessment, regimen and selection policy"} ↗</a>
+  </section>;
+}
+
+function SelectionPanel({ drug, lang }: { drug: Drug; lang: Language }) {
+  const labels: Record<string, [string, string]> = {
+    recorded_point_value: ["記録された点の値", "Recorded point value"],
+    range_midpoint: ["範囲の中点", "Range midpoint"],
+    range_midpoint_mixed_contexts: ["異なる条件を含む範囲の中点", "Midpoint across contexts"],
+    upper_bound: ["範囲上限", "Upper bound"], lower_bound: ["範囲下限", "Lower bound"],
+    censored_lower_bound: ["下限のみの値", "Censored lower bound"],
+    derived_value: ["計算による導出", "Derived value"], legacy_fixture_value: ["旧fixtureの選択値", "Legacy fixture choice"],
+  };
+  const parameters: Record<string, string> = { CL_abs_L_per_h_at_70kg: "CL", V_abs_L_at_70kg: "V", t_half_h: "t½", bioavailability_frac: "F" };
+  return <section className="panel" aria-label={lang === "ja" ? "値の選択ルール" : "Parameter selection rules"}>
+    <h2>{lang === "ja" ? "値の選択ルール" : "Parameter selection rules"}</h2>
+    <p>{lang === "ja" ? "原典の点推定・範囲からの選択・計算による導出を区別します。旧fixtureの選択を記録したもので、上下限や中点を臨床的な代表値として承認するものではありません。" : "Reported points, range selections and derived values are separate. Recording a legacy choice does not qualify an endpoint or midpoint as a clinical representative."}</p>
+    <div className="table-wrap"><table><thead><tr><th>{lang === "ja" ? "項目" : "Parameter"}</th><th>{lang === "ja" ? "採用ルール" : "Selection rule"}</th><th>{lang === "ja" ? "根拠・保留事項" : "Rationale and limitations"}</th></tr></thead><tbody>{Object.entries(drug.provenance).map(([field, value]) => {
+      const selection = record(record(value).selection);
+      return <tr key={field}><th>{parameters[field] ?? field}</th><td>{labels[String(selection.rule)]?.[lang === "ja" ? 0 : 1] ?? formatValue(selection.rule, lang)}</td><td>{formatValue(selection.rationale, lang)}</td></tr>;
+    })}</tbody></table></div>
+  </section>;
 }
 
 function pharmacologyStatusForDrug(drug: Drug, lang: Language): string {
@@ -529,7 +571,7 @@ function parameterRows(drug: Drug, lang: Language) {
   ];
   return entries.map((entry) => {
     const provenanceEntry = record(entry.prov);
-    const sourceStatus = provenanceEntry.source_review_status;
+    const sourceStatus = typeof provenanceEntry.source_review_status === "string" ? provenanceEntry.source_review_status : undefined;
     return {
       ...entry,
       status:
@@ -693,6 +735,7 @@ function DetailView({ drug, lang, onBack }: { drug: Drug; lang: Language; onBack
         <div className="detail-badges">
           <span className="route-badge">{routeLabel(drug.route, lang)}</span>
           <span className={statusClass(drug)}>{statusForDrug(drug, lang)}</span>
+          {drug.simulation_validity.source_correction_date && <span className="status context">{lang === "ja" ? "原典修正済み" : "Source corrected"}</span>}
         </div>
       </div>
 
@@ -719,13 +762,14 @@ function DetailView({ drug, lang, onBack }: { drug: Drug; lang: Language; onBack
         </div>
       </div>
 
-      {drug.simulation_validity?.status === "clinical_hold" && <section className="panel correction-panel" aria-label={lang === "ja" ? "現行パラメータの修正" : "Current parameter corrections"}>
+      {drug.simulation_validity.source_correction_date && <section className="panel correction-panel" aria-label={lang === "ja" ? "現行パラメータの修正" : "Current parameter corrections"}>
         <span className="eyebrow">SOURCE CORRECTIONS · 2026-10-28</span>
         <h2>{lang === "ja" ? "現行パラメータの修正と制約" : "Current corrections and limitations"}</h2>
         <p>{lang === "ja" ? "原典に基づく修正を実行spec・INDEX・表示データへ反映しています。原典値の照合と臨床モデルの妥当性確認は別です。" : "Source corrections are reflected in the execution spec, INDEX, and displayed data. Matching source values is separate from clinical model validation."}</p>
         <ul>{drug.simulation_validity.reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul>
         <a href={correctionReportUrl}>{lang === "ja" ? "修正値・換算式・原典を確認" : "Values, equations and source references"} ↗</a>
       </section>}
+      <FixtureContext drug={drug} lang={lang} />
       <AuditPanel slug={drug.slug} lang={lang} />
 
       <section className="panel decision-panel" id="about">
@@ -734,12 +778,12 @@ function DetailView({ drug, lang, onBack }: { drug: Drug; lang: Language; onBack
             <span className="eyebrow">INTERPRETATION SUMMARY</span>
             <h2>{lang === "ja" ? "この値をどう読むか" : "How to read this evidence"}</h2>
           </div>
-          <span className="decision-mark">CLINICAL HOLD</span>
+          <span className="decision-mark">{statusForDrug(drug, lang)}</span>
         </div>
         <p>
           {lang === "ja"
-            ? `このfixtureでは CL=${metricNumber(derived.CL_abs_L_per_h_at_70kg)} L/h と V=${metricNumber(derived.V_abs_L_at_70kg)} L を独立した1-compartmentパラメータとして扱います。文献t½ ${metricNumber(parsed.half_life_h)} hは下流のcheck-only targetであり、CL/Vを自動的に再較正しません。`
-            : `This fixture treats CL=${metricNumber(derived.CL_abs_L_per_h_at_70kg)} L/h and V=${metricNumber(derived.V_abs_L_at_70kg)} L as the independent one-compartment parameters. The reported t½ of ${metricNumber(parsed.half_life_h)} h remains a downstream check-only target and does not automatically recalibrate CL/V.`}
+            ? `このfixtureでは CL=${metricNumber(derived.CL_abs_L_per_h_at_70kg)} L/h と V=${metricNumber(derived.V_abs_L_at_70kg)} L を1-compartmentの採用定数として扱います。文献t½ ${metricNumber(parsed.half_life_h)} hは下流のcheck-only targetであり、CL/Vを自動的に再較正しません。`
+            : `This fixture treats CL=${metricNumber(derived.CL_abs_L_per_h_at_70kg)} L/h and V=${metricNumber(derived.V_abs_L_at_70kg)} L as the adopted one-compartment constants. The reported t½ of ${metricNumber(parsed.half_life_h)} h remains a downstream check-only target and does not automatically recalibrate CL/V.`}
         </p>
         <div className="decision-grid">
           <div>
@@ -757,6 +801,7 @@ function DetailView({ drug, lang, onBack }: { drug: Drug; lang: Language; onBack
         </div>
       </section>
 
+      <SelectionPanel drug={drug} lang={lang} />
       <section className="panel chain-panel">
         <div className="section-heading">
           <div>
@@ -765,12 +810,12 @@ function DetailView({ drug, lang, onBack }: { drug: Drug; lang: Language; onBack
           </div>
         </div>
         <div className="chain">
-          {[
+          {([
             ["01", t.raw, t.rawHint, drug.raw],
             ["02", t.parsed, t.parsedHint, drug.parsed],
             ["03", t.derived, t.derivedHint, drug.derived],
             ["04", t.model, t.modelHint, theta],
-          ].map(([step, title, hint, value]) => (
+          ] satisfies [string, string, string, JsonObject][]).map(([step, title, hint, value]) => (
             <div className="chain-step" key={String(step)}>
               <div className="chain-index">{step}</div>
               <div className="chain-copy">
@@ -988,6 +1033,12 @@ function Catalog({
         <p>{lang === "ja" ? "CL・V・F1・投与経路・INDEXと表示データの一致を公開前に検査しています。数値の整合性は臨床的な妥当性の証明ではありません。" : "CL, V, F1, route, INDEX and displayed data are checked together before publication. Numerical consistency does not establish clinical validity."}</p>
         <a href={correctionReportUrl}>{lang === "ja" ? "2026-10-28の原典修正と残る制約" : "2026-10-28 source corrections and remaining limitations"} ↗</a>
       </section>
+      <section className="panel fixture-context" aria-label={lang === "ja" ? "全薬剤の評価と投与設定" : "Library assessment and regimen context"}>
+        <h2>{lang === "ja" ? "全37剤の評価状態と計算用投与設定" : "Assessment and computational regimens for all 37 drugs"}</h2>
+        <p>{lang === "ja" ? "臨床モデル評価" : "Clinical model assessment"}: {bundle.drugs.filter(drug => drug.simulation_validity.status === "clinical_hold").length} {lang === "ja" ? "剤保留" : "on hold"} · {bundle.drugs.filter(drug => drug.simulation_validity.status === "not_assessed").length} {lang === "ja" ? "剤未評価" : "not assessed"}. {bundle.drugs.filter(drug => drug.fixture_assessment.half_life_check.hold_candidate).length} {lang === "ja" ? "剤が半減期の1.5倍スクリーニングで保留候補です。" : "drugs are hold candidates under the 1.5-fold half-life screen."}</p>
+        <p>{lang === "ja" ? "全剤の投与量は計算用ストレス試験の設定で、常用量として未確認です。adult_healthy等の集団名は投与量の妥当性を保証しません。各カード・詳細画面に実際の実行用量を表示しています。" : "All regimens are computational stress-test settings, with usual clinical doses unverified. Population labels such as adult_healthy do not validate the dose. Actual execution doses appear on each card and detail page."}</p>
+        <a href="/pkdummy-harness/fixture-governance/">{lang === "ja" ? "評価・用量・範囲選択の方針と原典" : "Assessment, dose and selection policy with sources"} ↗</a>
+      </section>
       <AuditPanel lang={lang} />
 
       <div className="metrics">
@@ -1031,7 +1082,7 @@ function Catalog({
               return (
                 <button className="drug-card" key={drug.slug} onClick={() => onOpen(drug.slug)} type="button">
                   <div className="drug-card-top"><span className="route-badge">{routeLabel(drug.route, lang)}</span><span className={statusClass(drug)}>{statusForDrug(drug, lang)}</span></div>
-                  <h3>{drug.name}</h3><p className="slug">{drug.slug}</p>
+                  <h3>{drug.name}</h3><p className="slug">{drug.slug}</p><p className="card-dose">{lang === "ja" ? "計算用・常用量未確認" : "Computational; usual dose not verified"} · {doseLabel(drug)}</p>
                   <div className={`pharmacology-card-status ${pharmacologyStatusClass(drug)}`}><span aria-hidden="true" />{pharmacologyStatusForDrug(drug, lang)}</div>
                   <div className="drug-card-values"><div><span>CL</span><strong>{metricNumber(derived.CL_abs_L_per_h_at_70kg)}</strong><small>L/h</small></div><div><span>V</span><strong>{metricNumber(derived.V_abs_L_at_70kg)}</strong><small>L</small></div><div><span>t½</span><strong>{metricNumber(parsed.half_life_h)}</strong><small>h</small></div></div>
                   <div className="drug-card-footer"><span>{drug.sources.length} {t.sourceCount} · {drug.evidence.summary.unresolved_count} {t.unresolvedEvidence}</span><span className="view-link">{lang === "ja" ? "根拠を見る" : "View evidence"} →</span></div>

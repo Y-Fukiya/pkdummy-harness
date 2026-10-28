@@ -75,7 +75,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed abstract
-    exact_quote: "clearance, 39.4 (15%) ... L/hr"
+    exact_quote: clearance, 39.4 (15%) ... L/hr
+    selection:
+      rule: recorded_point_value
+      rationale: source_5 first IV infusion clearance
   V_abs_L_at_70kg:
     source_id: source_5
     source_field: first_IV_infusion_Vss
@@ -97,7 +100,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed abstract
-    exact_quote: "volume of distribution at steady state, 84.3 (11%) ... L"
+    exact_quote: volume of distribution at steady state, 84.3 (11%) ... L
+    selection:
+      rule: recorded_point_value
+      rationale: source_5 first IV infusion Vss
   t_half_h:
     source_id: source_5
     source_field: first_IV_infusion_elimination_half_life
@@ -119,7 +125,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed abstract
-    exact_quote: "elimination half-life, 1.60 (15%) ... hours"
+    exact_quote: elimination half-life, 1.60 (15%) ... hours
+    selection:
+      rule: recorded_point_value
+      rationale: source_5 first IV infusion elimination half-life
   bioavailability_frac:
     source_id: source_5
     source_field: first_oral_dose_absolute_bioavailability
@@ -136,8 +145,18 @@ value_provenance:
         dosing_context: first oral dose before 15-day multiple dosing
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: PubMed source_5 reports first-dose absolute oral bioavailability of 0.56, increasing to 0.86 and 0.90 after the first and second weeks. The fixture intentionally selects the first oral dose and must not be generalized to steady state.
+    reviewer_note: PubMed source_5 reports first-dose absolute oral bioavailability
+      of 0.56, increasing to 0.86 and 0.90 after the first and second weeks. The fixture
+      intentionally selects the first oral dose and must not be generalized to steady
+      state.
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed abstract
-    exact_quote: "The absolute oral bioavailability increased from 0.56 after the first oral dose"
+    exact_quote: The absolute oral bioavailability increased from 0.56 after the first
+      oral dose
+    selection:
+      rule: recorded_point_value
+      rationale: source_5 first oral dose absolute bioavailability
+simulation_validity:
+  status: not_assessed
+  reasons: []

@@ -19,6 +19,7 @@ atazanavir,osp::atazanavir,source_1,source_1,https://dailymed.nlm.nih.gov/dailym
 atazanavir,osp::atazanavir,source_2,source_2,https://pmc.ncbi.nlm.nih.gov/articles/PMC1635184/,2
 buprenorphine,OSP_buprenorphine,source_2,source_2,https://pmc.ncbi.nlm.nih.gov/articles/PMC3663890/,1
 carbamazepine,OSP_carbamazepine,source_1,source_1,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=52f0f753-a70c-4572-a85c-97ea7a2601a9,1
+carbamazepine,OSP_carbamazepine,source_2,source_2,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1fc170d7-db1a-486d-8c10-faa6e3da3b1e,2
 cda1,osp::cda1,source_1,source_1,https://pubmed.ncbi.nlm.nih.gov/18502001/,1
 cda1,osp::cda1,source_2,source_2,https://pmc.ncbi.nlm.nih.gov/articles/PMC2628753/,2
 cimetidine,osp::cimetidine,source_1,source_1,https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=496e258d-a5fd-42da-9a86-73afc8be359b,1
@@ -84,3 +85,4 @@ triazolam,osp::triazolam,source_4,source_4,https://dailymed.nlm.nih.gov/dailymed
 verapamil,osp::verapamil,source_1,source_1,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c9d71191-b32a-44f9-bc5a-283a06884c82,1
 verapamil,osp::verapamil,source_2,source_2,https://pubchem.ncbi.nlm.nih.gov/compound/Verapamil,2
 verapamil,osp::verapamil,source_3,source_3,https://pubmed.ncbi.nlm.nih.gov/432439/,3
+verapamil,osp::verapamil,source_4,source_4,https://pubmed.ncbi.nlm.nih.gov/6508982/,4

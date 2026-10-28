@@ -4,6 +4,8 @@ route_inferred: po
 sources:
 - id: source_1
   url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=52f0f753-a70c-4572-a85c-97ea7a2601a9
+- id: source_2
+  url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1fc170d7-db1a-486d-8c10-faa6e3da3b1e
 pk_raw:
   text: 'Label: oral clearance ~80 mL/min at steady state; half-life 12-17 h. Use
     t1/2 14.5 h; one-comp V derived.'
@@ -59,7 +61,11 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: DailyMed label, Pharmacokinetics, repeated dosing
-    exact_quote: "The apparent oral clearance following a single dose was 25 ± 5 mL/min and following multiple dosing was 80 ± 30 mL/min"
+    exact_quote: The apparent oral clearance following a single dose was 25 ± 5 mL/min
+      and following multiple dosing was 80 ± 30 mL/min
+    selection:
+      rule: recorded_point_value
+      rationale: 80 mL/min * 60 min/h / 1000 mL/L
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: one_compartment_volume_derived_from_oral_CL_and_half_life
@@ -83,6 +89,12 @@ value_provenance:
       reported V is claimed.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: derived_value
+      rationale: CL_apparent_L_per_h_at_70kg * half_life_h / ln(2)
+      depends_on:
+      - CL_abs_L_per_h_at_70kg
+      - t_half_h
   t_half_h:
     source_id: source_1
     source_field: oral_half_life_range_at_steady_state
@@ -102,3 +114,18 @@ value_provenance:
       is a midpoint fixture and is not a directly observed mean.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: range_midpoint
+      rationale: (12 h + 17 h) / 2 Retained as an explicit legacy fixture choice,
+        not a jointly fitted or clinically qualified parameter set.
+simulation_validity:
+  status: not_assessed
+  reasons: []
+fixture_limitations:
+- code: autoinduction
+  statement: Autoinduction completes after 3-5 weeks of a fixed regimen. Initial half-life
+    25-65 h shortens to 12-17 h with repeated dosing. The selected steady-state clearance
+    and 14.5 h half-life do not represent an untreated subject receiving a first dose.
+  source_id: source_2
+  source_locator: CLINICAL PHARMACOLOGY, Pharmacokinetics
+  checked_date: '2026-10-28'

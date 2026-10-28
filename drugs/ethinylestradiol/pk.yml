@@ -65,8 +65,12 @@ value_provenance:
       the clinical pharmacology table. The fixture retains it as apparent oral clearance.
     source_review_status: checked
     fixture_limitation_status: not_applicable
-    source_locator: DailyMed label, Clinical Pharmacology, Table I, Ethinyl Estradiol day 1
-    exact_quote: "CL/F L/h 25.7 (9.1)"
+    source_locator: DailyMed label, Clinical Pharmacology, Table I, Ethinyl Estradiol
+      day 1
+    exact_quote: CL/F L/h 25.7 (9.1)
+    selection:
+      rule: recorded_point_value
+      rationale: pk_parsed.clearance.value
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: one_compartment_apparent_volume_derived_from_CL_over_F_and_half_life
@@ -88,6 +92,12 @@ value_provenance:
       not be presented as a directly reported volume.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: derived_value
+      rationale: CL_abs_L_per_h_at_70kg * t_half_h / ln(2)
+      depends_on:
+      - CL_abs_L_per_h_at_70kg
+      - t_half_h
   t_half_h:
     source_id: source_1
     source_field: oral_elimination_half_life_in_ethinyl_estradiol_tablet
@@ -108,3 +118,10 @@ value_provenance:
       agreement.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: range_midpoint
+      rationale: midpoint of reported 16.5-17.6 h range Retained as an explicit legacy
+        fixture choice, not a jointly fitted or clinically qualified parameter set.
+simulation_validity:
+  status: not_assessed
+  reasons: []

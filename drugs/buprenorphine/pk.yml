@@ -59,7 +59,10 @@ value_provenance:
     fixture_limitation_status: acknowledged
     source_locator: PMC source_2, Results and Table 1, mean intravenous buprenorphine
       PK parameters
-    exact_quote: "Mean ± SE buprenorphine clearance ... 54.0 ± 1.7 L/h"
+    exact_quote: Mean ± SE buprenorphine clearance ... 54.0 ± 1.7 L/h
+    selection:
+      rule: recorded_point_value
+      rationale: source_2 reported IV clearance
   V_abs_L_at_70kg:
     source_id: source_2
     source_field: IV_volume_of_distribution
@@ -82,7 +85,10 @@ value_provenance:
     fixture_limitation_status: acknowledged
     source_locator: PMC source_2, Results and Table 1, mean intravenous buprenorphine
       PK parameters
-    exact_quote: "volume of distribution were ... 806.4 ± 38.2 L"
+    exact_quote: volume of distribution were ... 806.4 ± 38.2 L
+    selection:
+      rule: recorded_point_value
+      rationale: source_2 reported IV Vd
   t_half_h:
     source_id: source_2
     source_field: one_compartment_half_life_derived_from_IV_CL_and_V
@@ -103,3 +109,12 @@ value_provenance:
       half-life.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: derived_value
+      rationale: ln(2) * V / CL = ln(2) * 806 L / 54 L/h
+      depends_on:
+      - CL_abs_L_per_h_at_70kg
+      - V_abs_L_at_70kg
+simulation_validity:
+  status: not_assessed
+  reasons: []

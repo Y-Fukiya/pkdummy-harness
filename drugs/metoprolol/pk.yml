@@ -66,11 +66,16 @@ value_provenance:
         route_context: IV
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: PubMed source_2 is a primary IV/oral study in healthy subjects and reports total body clearance of 0.8 +/- 0.1 L/min after 20 mg IV. The canonical value is the direct unit conversion to 48 L/h; it is not an oral CL/F value.
+    reviewer_note: PubMed source_2 is a primary IV/oral study in healthy subjects
+      and reports total body clearance of 0.8 +/- 0.1 L/min after 20 mg IV. The canonical
+      value is the direct unit conversion to 48 L/h; it is not an oral CL/F value.
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed abstract
-    exact_quote: "Total body clearance in the healthy subjects was 0.8 +/- 0.1 L/min"
+    exact_quote: Total body clearance in the healthy subjects was 0.8 +/- 0.1 L/min
+    selection:
+      rule: recorded_point_value
+      rationale: 0.8 L/min * 60 min/h
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: one_compartment_volume_from_systemic_CL_and_representative_half_life
@@ -95,7 +100,13 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: DailyMed label, Clinical Pharmacokinetics, Distribution
-    exact_quote: "Vd 3.2-5.6 L/kg"
+    exact_quote: Vd 3.2-5.6 L/kg
+    selection:
+      rule: derived_value
+      rationale: CL_abs_L_per_h_at_70kg * half_life_h / ln(2)
+      depends_on:
+      - CL_abs_L_per_h_at_70kg
+      - t_half_h
   bioavailability_frac:
     source_id: source_1
     source_field: conventional_oral_bioavailability_relative_to_iv
@@ -112,11 +123,18 @@ value_provenance:
         comparison: oral_peak_relative_to_iv_peak
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: DailyMed source_1 states that conventional oral metoprolol peak levels approximate 50% of IV levels, indicating about 50% first-pass metabolism. This is not the 77% relative bioavailability reported for the extended-release formulation in the same label; the fixture selects conventional oral F.
+    reviewer_note: DailyMed source_1 states that conventional oral metoprolol peak
+      levels approximate 50% of IV levels, indicating about 50% first-pass metabolism.
+      This is not the 77% relative bioavailability reported for the extended-release
+      formulation in the same label; the fixture selects conventional oral F.
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: DailyMed label, Clinical Pharmacokinetics, Absorption
-    exact_quote: "conventional metoprolol tablets, however, approximate 50% of levels following intravenous administration"
+    exact_quote: conventional metoprolol tablets, however, approximate 50% of levels
+      following intravenous administration
+    selection:
+      rule: recorded_point_value
+      rationale: 50 percent / 100
   t_half_h:
     source_id: source_1
     source_field: mean_elimination_half_life
@@ -139,4 +157,11 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: DailyMed label, Clinical Pharmacokinetics, Elimination
-    exact_quote: "the plasma half-life ranges from approximately 3 to 7 hours"
+    exact_quote: the plasma half-life ranges from approximately 3 to 7 hours
+    selection:
+      rule: range_midpoint
+      rationale: (3 h + 7 h) / 2 Retained as an explicit legacy fixture choice, not
+        a jointly fitted or clinically qualified parameter set.
+simulation_validity:
+  status: not_assessed
+  reasons: []

@@ -1,4 +1,6 @@
 scenario:
+  purpose: computational_stress_test
+  clinical_dose_verified: false
   id: fluconazole_dose200mg_iv_single
   route: iv
   regimen: single

@@ -86,6 +86,12 @@ value_provenance:
       This CL is a fixture value, not a directly reported clearance.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: derived_value
+      rationale: (25 L/kg * 70 kg) * ln(2) / 18.5 h
+      depends_on:
+      - V_abs_L_at_70kg
+      - t_half_h
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: mean_apparent_volume_of_distribution
@@ -106,7 +112,11 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: DailyMed source_1, Distribution/Protein Binding
-    exact_quote: "The mean apparent volume of distribution for fluvoxamine is approximately 25 L/kg"
+    exact_quote: The mean apparent volume of distribution for fluvoxamine is approximately
+      25 L/kg
+    selection:
+      rule: recorded_point_value
+      rationale: 25 L/kg * 70 kg
   t_half_h:
     source_id: source_1
     source_field: oral_half_life_multi_context_summary
@@ -129,3 +139,18 @@ value_provenance:
       as a fixture check.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: range_midpoint_mixed_contexts
+      rationale: (9 h + 28 h) / 2 Retained as an explicit legacy fixture choice, not
+        a jointly fitted or clinically qualified parameter set.
+simulation_validity:
+  status: not_assessed
+  reasons: []
+fixture_limitations:
+- code: nonlinear_exposure
+  statement: In 30 healthy volunteers given 100, 200 or 300 mg/day for 10 days, concentrations
+    rose more than proportionally with dose. The fixed linear fixture cannot reproduce
+    this nonlinearity. The label does not establish CYP2D6 saturation as its cause.
+  source_id: source_1
+  source_locator: 12.3 Absorption; 7.1 CYP2D6 metabolism
+  checked_date: '2026-10-28'

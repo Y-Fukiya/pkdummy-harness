@@ -1,4 +1,6 @@
 scenario:
+  purpose: computational_stress_test
+  clinical_dose_verified: false
   id: dapagliflozin_dose10mg_po_single
   route: po
   regimen: single

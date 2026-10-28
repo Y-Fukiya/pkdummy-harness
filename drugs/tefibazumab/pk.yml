@@ -67,7 +67,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PMC source_1, Abstract
-    exact_quote: "average clearance was 12 ml/h for both dose groups"
+    exact_quote: average clearance was 12 ml/h for both dose groups
+    selection:
+      rule: recorded_point_value
+      rationale: 12 mL/h / 1000 mL/L
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: IV_volume_of_distribution
@@ -89,7 +92,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PMC source_1, Abstract
-    exact_quote: "average volume of distribution was 7.3 liters"
+    exact_quote: average volume of distribution was 7.3 liters
+    selection:
+      rule: recorded_point_value
+      rationale: source_1 reported IV volume of distribution
   t_half_h:
     source_id: source_1
     source_field: IV_terminal_half_life_range
@@ -110,3 +116,10 @@ value_provenance:
       420 h is the midpoint converted to hours and remains a check target.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: range_midpoint
+      rationale: ((17 days + 18 days) / 2) * 24 h/day Retained as an explicit legacy
+        fixture choice, not a jointly fitted or clinically qualified parameter set.
+simulation_validity:
+  status: not_assessed
+  reasons: []

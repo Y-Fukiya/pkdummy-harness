@@ -53,7 +53,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: not_applicable
     source_locator: DailyMed label, Clinical Pharmacology, Pharmacokinetics and Metabolism
-    exact_quote: "Mean body clearance in adults is reported to be 0.23 (17%) mL/min/kg"
+    exact_quote: Mean body clearance in adults is reported to be 0.23 (17%) mL/min/kg
+    selection:
+      rule: recorded_point_value
+      rationale: 0.23 mL/min/kg * 60 min/h / 1000 mL/L * 70 kg
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: one_compartment_volume_derived_from_clearance_and_half_life
@@ -74,6 +77,12 @@ value_provenance:
       from the checked CL and half-life for the one-compartment fixture.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    selection:
+      rule: derived_value
+      rationale: CL_abs_L_per_h_at_70kg * t_half_h / ln(2)
+      depends_on:
+      - CL_abs_L_per_h_at_70kg
+      - t_half_h
   t_half_h:
     source_id: source_1
     source_field: terminal_plasma_half_life_in_normal_volunteers
@@ -94,4 +103,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: DailyMed label, Clinical Pharmacology, Pharmacokinetics and Metabolism
-    exact_quote: "terminal plasma elimination half-life of approximately 30 hours"
+    exact_quote: terminal plasma elimination half-life of approximately 30 hours
+    selection:
+      rule: recorded_point_value
+      rationale: pk_parsed.half_life_h
+simulation_validity:
+  status: not_assessed
+  reasons: []

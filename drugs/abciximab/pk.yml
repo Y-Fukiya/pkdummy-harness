@@ -72,7 +72,11 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed source_2, Abstract, Results
-    exact_quote: "Abciximab steady-state clearance in healthy participants was 183 +/- 72 ml/min"
+    exact_quote: Abciximab steady-state clearance in healthy participants was 183
+      +/- 72 ml/min
+    selection:
+      rule: recorded_point_value
+      rationale: 183 mL/min * 60 min/h / 1000 mL/L
   V_abs_L_at_70kg:
     source_id: source_6
     source_field: IV_volume_of_distribution_conference_abstract
@@ -95,7 +99,10 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: Wiley conference abstract source_6, Results
-    exact_quote: "Steady state volume of distribution of Abx was 1.44 L/kg"
+    exact_quote: Steady state volume of distribution of Abx was 1.44 L/kg
+    selection:
+      rule: recorded_point_value
+      rationale: pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs
   t_half_h:
     source_id: source_5
     source_field: short_plasma_half_life_range
@@ -118,4 +125,11 @@ value_provenance:
     source_review_status: checked
     fixture_limitation_status: acknowledged
     source_locator: PubMed source_5, Abstract
-    exact_quote: "a short plasma half-life (20-30 min)"
+    exact_quote: a short plasma half-life (20-30 min)
+    selection:
+      rule: range_midpoint
+      rationale: ((20 min + 30 min) / 2) / 60 min/h Retained as an explicit legacy
+        fixture choice, not a jointly fitted or clinically qualified parameter set.
+simulation_validity:
+  status: not_assessed
+  reasons: []

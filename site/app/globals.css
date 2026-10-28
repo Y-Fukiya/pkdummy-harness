@@ -345,3 +345,5 @@ code { color: #6d5c90; background: #f3f0f8; padding: 3px 5px; font-size: 10px; }
 
 .correction-panel { border-top: 3px solid var(--teal); margin: 24px 0; }
 .correction-panel li { margin: 10px 0; line-height: 1.7; }
+
+.fixture-context{border-top:3px solid var(--gold, #bd9044)} .fixture-dose{font-size:1.15rem} .card-dose{font-size:.75rem;line-height:1.6;color:var(--ink-muted,#56646d);margin:.6rem 0} .fixture-context li{margin:.7rem 0;line-height:1.8} .fixture-context small{color:var(--ink-muted,#56646d)}
