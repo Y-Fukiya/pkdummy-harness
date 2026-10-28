@@ -124,7 +124,8 @@ def test_mrgsolve_runner_oral_matches_closed_form_without_iiv_or_residual(tmp_pa
     dose = float(spec["regimen"]["arms"]["A"]["dose_mg"])
     ke = cl / v
     tau = 1.0 - float(spec["model"]["theta"]["ALAG1"])
-    expected = dose * ka / (v * (ka - ke)) * (math.exp(-ke * tau) - math.exp(-ka * tau)) * 1000.0
+    f1 = float(spec["model"]["theta"]["F1"])
+    expected = f1 * dose * ka / (v * (ka - ke)) * (math.exp(-ke * tau) - math.exp(-ka * tau)) * 1000.0
     assert float(row["CP"]) == pytest.approx(expected, rel=1e-6)
     assert float(row["DV"]) == pytest.approx(expected, rel=1e-6)
 

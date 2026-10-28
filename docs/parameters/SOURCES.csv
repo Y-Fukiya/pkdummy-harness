@@ -73,12 +73,14 @@ sildenafil,osp::sildenafil,source_3,source_3,https://www.accessdata.fda.gov/drug
 sildenafil,osp::sildenafil,source_4,source_4,https://en.wikipedia.org/wiki/Sildenafil,4
 sildenafil,osp::sildenafil,source_5,source_5,https://go.drugbank.com/drugs/DB00203,5
 sildenafil,osp::sildenafil,source_6,source_6,https://labeling.pfizer.com/ShowLabeling.aspx?id=14610,6
+sildenafil,osp::sildenafil,source_7,source_7,https://www.ema.europa.eu/en/documents/product-information/viagra-epar-product-information_en.pdf,7
 sufentanil,OSP_sufentanil,source_1,source_1,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8b580f3d-e3b5-4086-b093-87a980631147,1
 tefibazumab,osp::tefibazumab,source_1,source_1,https://pmc.ncbi.nlm.nih.gov/articles/PMC1610062/,1
 tizanidine,osp::tizanidine,source_1,source_1,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=043d9e51-bfa2-4add-9058-5ece332f7e99,1
 triazolam,osp::triazolam,source_1,source_1,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ce6ddb53-89ca-4edf-a519-553d34ce7938,1
 triazolam,osp::triazolam,source_2,source_2,https://go.drugbank.com/drugs/DB00897,2
 triazolam,osp::triazolam,source_3,source_3,https://pmc.ncbi.nlm.nih.gov/articles/PMC1401197/,3
+triazolam,osp::triazolam,source_4,source_4,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5add318e-11b9-42f8-b052-0d8cebb32fcf,4
 verapamil,osp::verapamil,source_1,source_1,https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c9d71191-b32a-44f9-bc5a-283a06884c82,1
 verapamil,osp::verapamil,source_2,source_2,https://pubchem.ncbi.nlm.nih.gov/compound/Verapamil,2
 verapamil,osp::verapamil,source_3,source_3,https://pubmed.ncbi.nlm.nih.gov/432439/,3

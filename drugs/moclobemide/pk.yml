@@ -10,104 +10,134 @@ sources:
   url: https://pubmed.ncbi.nlm.nih.gov/8582117/
 - id: source_4
   url: https://en.wikipedia.org/wiki/Moclobemide
+- id: source_5
+  url: https://pubmed.ncbi.nlm.nih.gov/3665338/
 pk_raw:
-  half_life: 1-2 hours
-  clearance: 30-78 L/h
-  volume_of_distribution: 1-1.5 L/kg
-  bioavailability: 56-90%
+  half_life: 1-2 hours; selected primary IV first-infusion value 1.60 h
+  clearance: 30-78 L/h; selected primary IV first-infusion value 39.4 L/h
+  volume_of_distribution: 1-1.5 L/kg; selected primary IV first-infusion Vss 84.3
+    L
+  bioavailability: 56-90%; selected first oral dose F 0.56
   elimination_route: 肝代謝+腎排泄
 pk_parsed:
-  half_life_h: 1.5
+  half_life_h: 1.6
   half_life_h_range:
   - 1.0
   - 2.0
   clearance:
-    value: 78.0
+    value: 39.4
     unit: L/h
   volume:
-    value: 1.5
-    unit: L/kg
-  bioavailability_frac: 0.73
+    value: 84.3
+    unit: L
+  bioavailability_frac: 0.56
   weight_ref_kg_for_abs: 70.0
-  clearance_basis: apparent
-  volume_basis: apparent
+  clearance_basis: systemic
+  volume_basis: systemic
+  clearance_basis_source: primary_source_reviewed
+  clearance_basis_note: Source_5 reports IV clearance 39.4 L/h, IV Vss 84.3 L, and
+    IV half-life 1.60 h after the first infusion; the same study reports first-dose
+    oral F 0.56. The oral fixture therefore uses systemic CL/V with F1=0.56, while
+    acknowledging the cross-route context.
 derived:
-  ke_1_per_h: 0.7428571428571429
-  CL_abs_L_per_h_at_70kg: 78.0
-  V_abs_L_at_70kg: 105.0
-  CL_apparent_L_per_h_at_70kg: 78.0
-  V_apparent_L_at_70kg: 105.0
-  CL_systemic_L_per_h_at_70kg: 56.94
-  V_systemic_L_at_70kg: 76.64999999999999
+  ke_1_per_h: 0.46737841043890865
+  CL_abs_L_per_h_at_70kg: 39.4
+  V_abs_L_at_70kg: 84.3
+  CL_apparent_L_per_h_at_70kg: 70.35714285714285
+  V_apparent_L_at_70kg: 150.53571428571428
+  CL_systemic_L_per_h_at_70kg: 39.4
+  V_systemic_L_at_70kg: 84.3
   notes:
-  - Systemic CL/V were derived as (apparent CL/V) * F (assumes values are CL/F, V/F).
-  - 'Basis detected/selected: apparent (CL/F, V/F). Model default can use CL_abs/V_abs
-    as apparent and set F1=1.'
+  - Apparent CL/V were derived as (systemic CL/V) / F.
+  - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability
+    with systemic CL/V.'
   - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
     typically report systemic parameters.'
 value_provenance:
   CL_abs_L_per_h_at_70kg:
-    source_id: null
-    source_field: pk_parsed.clearance
+    source_id: source_5
+    source_field: first_IV_infusion_clearance
     value_basis: derived_from_reported
-    raw_value: 78.0
+    raw_value: 39.4
     raw_unit: L/h
-    normalized_value: 78.0
+    normalized_value: 39.4
     normalized_unit: L/h
     conversion:
       method: direct
-      formula: pk_parsed.clearance.value
-      assumptions: {}
-    role: simulation_parameter
-    reviewer_status: needs_source_review
-    reviewer_note: Clearance is used as a deterministic fixture model parameter and
-      is not recalibrated to force agreement with terminal half-life. Existing source
-      URLs do not identify the exact value-level source for this parameter. This provenance
-      records the canonical parsed/derived fixture value and intentionally marks source
-      mapping for future review.
-    source_review_status: needs_source_review
-    fixture_limitation_status: not_applicable
-  V_abs_L_at_70kg:
-    source_id: null
-    source_field: pk_parsed.volume
-    value_basis: derived_from_reported
-    raw_value: 1.5
-    raw_unit: L/kg
-    normalized_value: 105.0
-    normalized_unit: L
-    conversion:
-      method: body_weight_scaled
-      formula: pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs
+      formula: source_5 first IV infusion clearance
       assumptions:
-        weight_ref_kg_for_abs: 70.0
+        route_context: IV_first_infusion
     role: simulation_parameter
-    reviewer_status: needs_source_review
-    reviewer_note: Volume is retained as the one-compartment fixture volume and is
-      not recalibrated to force agreement with terminal half-life. Existing source
-      URLs do not identify the exact value-level source for this parameter. This provenance
-      records the canonical parsed/derived fixture value and intentionally marks source
-      mapping for future review.
-    source_review_status: needs_source_review
-    fixture_limitation_status: not_applicable
-  t_half_h:
-    source_id: source_4
-    source_field: elimination_half_life
-    value_basis: derived_from_reported
-    raw_value: 1-2
-    raw_unit: h
-    normalized_value: 1.5
-    normalized_unit: h
-    conversion:
-      method: derived_formula
-      formula: midpoint of reported elimination half-life range (1 to 2 h)
-      assumptions:
-        range_summary: midpoint
-    role: check_only
     reviewer_status: checked
-    reviewer_note: Wikipedia source_4 reports moclobemide elimination half-life of
-      1 to 2 h, with longer values in elderly subjects. Canonical t_half_h retains
-      the adult range midpoint and remains a check target only. CL and V are not jointly
-      calibrated to match terminal half-life in this deterministic one-compartment
-      fixture.
+    reviewer_note: PubMed source_5 reports clearance 39.4 L/h after the first IV infusion
+      in normal subjects. It is systemic CL; the source also reports a lower value
+      after repeat exposure, so the selected context must not be generalized.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    source_locator: PubMed abstract
+    exact_quote: "clearance, 39.4 (15%) ... L/hr"
+  V_abs_L_at_70kg:
+    source_id: source_5
+    source_field: first_IV_infusion_Vss
+    value_basis: literature_reported
+    raw_value: 84.3
+    raw_unit: L
+    normalized_value: 84.3
+    normalized_unit: L
+    conversion:
+      method: direct
+      formula: source_5 first IV infusion Vss
+      assumptions:
+        route_context: IV_first_infusion
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: PubMed source_5 reports Vss 84.3 L after the first IV infusion.
+      The oral fixture retains this systemic volume only as a cross-route template
+      parameter.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PubMed abstract
+    exact_quote: "volume of distribution at steady state, 84.3 (11%) ... L"
+  t_half_h:
+    source_id: source_5
+    source_field: first_IV_infusion_elimination_half_life
+    value_basis: literature_reported
+    raw_value: 1.6
+    raw_unit: h
+    normalized_value: 1.6
+    normalized_unit: h
+    conversion:
+      method: direct
+      formula: source_5 first IV infusion elimination half-life
+      assumptions:
+        route_context: IV_first_infusion
+    role: check_only
+    reviewer_status: checked
+    reviewer_note: PubMed source_5 reports first-infusion elimination half-life 1.60
+      h. The oral fixture uses it as the selected source context and does not claim
+      equivalence across repeated dosing.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PubMed abstract
+    exact_quote: "elimination half-life, 1.60 (15%) ... hours"
+  bioavailability_frac:
+    source_id: source_5
+    source_field: first_oral_dose_absolute_bioavailability
+    value_basis: literature_reported
+    raw_value: 0.56
+    raw_unit: fraction
+    normalized_value: 0.56
+    normalized_unit: fraction
+    conversion:
+      method: direct
+      formula: source_5 first oral dose absolute bioavailability
+      assumptions:
+        population_context: 12 normal male subjects
+        dosing_context: first oral dose before 15-day multiple dosing
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: PubMed source_5 reports first-dose absolute oral bioavailability of 0.56, increasing to 0.86 and 0.90 after the first and second weeks. The fixture intentionally selects the first oral dose and must not be generalized to steady state.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PubMed abstract
+    exact_quote: "The absolute oral bioavailability increased from 0.56 after the first oral dose"

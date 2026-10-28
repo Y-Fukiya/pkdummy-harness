@@ -8,42 +8,54 @@ sources:
   url: https://pubmed.ncbi.nlm.nih.gov/6355048/
 - id: source_3
   url: https://www.sciencedirect.com/science/article/pii/S2590170220300339
+- id: source_4
+  url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=69a98000-adef-4323-89a7-09e035a257d4
+- id: source_5
+  url: https://pubmed.ncbi.nlm.nih.gov/7048912/
 pk_raw:
   half_life: 2.5 to 3.3 hours
   clearance: 327 mL/min/1.73 m2
-  volume_of_distribution: 0.6 L/kg
+  volume_of_distribution: about two-thirds of body weight at steady state (source_5);
+    legacy summary 0.6 L/kg retained as context
   bioavailability: 10% to 20%
   elimination_route: 腎排泄
 pk_parsed:
   half_life_h: 2.5
   half_life_h_range:
   - 2.5
-  - 2.5
+  - 3.3
   clearance:
     value: 19.62
     unit: L/h
   volume:
-    value: 0.6
+    value: 0.6666666666666666
     unit: L/kg
   bioavailability_frac: 0.1
   weight_ref_kg_for_abs: 70.0
+  normalization_reference:
+    type: body_surface_area
+    value: 1.73
+    unit: m2
+    mapping_to_70kg: not_applied
+    note: The reported clearance is normalized per 1.73 m2; the repository retains
+      the standard-adult value as a fixture reference and does not infer an individual
+      BSA from body weight.
   clearance_basis: systemic
   volume_basis: systemic
-  clearance_basis_source: unit_inferred
-  clearance_basis_note: 'clearance_basis set to systemic: source clearance is reported
-    in a mL/min-family unit (systemic plasma/renal clearance), not apparent CL/F.
-    Inferred from the source unit, not verified against full label text. NOTE: the
-    spec simulates a self-consistent fixture profile and is not calibrated to systemic-CL
-    + F (clinical exposure would use CL_apparent or F1=bioavailability); these remain
-    fixture values, not clinical PK.'
+  clearance_basis_source: primary_source_reviewed
+  clearance_basis_note: 'Systemic basis reviewed against DailyMed source_4: intravenous
+    acyclovir clearance is reported as 327 mL/min/1.73 m2. The repository retains
+    the standard-adult BSA-normalized value as a fixture reference and does not infer
+    an individual BSA from the 70 kg reference weight. The spec uses F1=bioavailability;
+    this remains a workflow fixture, not a clinical PK model.'
 derived:
-  ke_1_per_h: 0.4671428571428572
+  ke_1_per_h: 0.4204285714285715
   CL_abs_L_per_h_at_70kg: 19.62
-  V_abs_L_at_70kg: 42.0
+  V_abs_L_at_70kg: 46.666666666666664
   CL_apparent_L_per_h_at_70kg: 196.2
-  V_apparent_L_at_70kg: 420.0
+  V_apparent_L_at_70kg: 466.66666666666663
   CL_systemic_L_per_h_at_70kg: 19.62
-  V_systemic_L_at_70kg: 42.0
+  V_systemic_L_at_70kg: 46.666666666666664
   notes:
   - Apparent CL/V were derived as (systemic CL/V) / F.
   - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability
@@ -52,48 +64,74 @@ derived:
     typically report systemic parameters.'
 value_provenance:
   CL_abs_L_per_h_at_70kg:
-    source_id: null
-    source_field: pk_parsed.clearance
-    value_basis: derived_from_reported
-    raw_value: 19.62
-    raw_unit: L/h
+    source_id: source_4
+    source_field: total_body_clearance_normalized_to_1_73_m2
+    value_basis: label_reported
+    raw_value: 327
+    raw_unit: mL/min/1.73 m2
     normalized_value: 19.62
     normalized_unit: L/h
     conversion:
-      method: direct
-      formula: pk_parsed.clearance.value
-      assumptions: {}
+      method: unit_conversion
+      formula: 327 mL/min/1.73 m2 * 60 min/h / 1000 mL/L
+      assumptions:
+        bsa_reference_m2: 1.73
+        mapping_to_70kg: not_applied
     role: simulation_parameter
-    reviewer_status: needs_source_review
-    reviewer_note: Clearance is used as a deterministic fixture model parameter and
-      is not recalibrated to force agreement with terminal half-life. Existing source
-      URLs do not identify the exact value-level source for this parameter. This provenance
-      records the canonical parsed/derived fixture value and intentionally marks source
-      mapping for future review.
-    source_review_status: needs_source_review
+    reviewer_status: checked
+    reviewer_note: DailyMed source_4 reports total body clearance of 327 mL/min/1.73
+      m2 after intravenous administration. The normalized value is retained as the
+      standard-adult BSA reference; no individual BSA-to-70-kg conversion is applied.
+      Clearance is used as a deterministic fixture parameter and is not recalibrated
+      to force agreement with terminal half-life.
+    source_review_status: checked
     fixture_limitation_status: not_applicable
+    source_locator: DailyMed injection label, Clinical Pharmacology, Table 2, normal renal function (CrCl >80 mL/min/1.73 m2)
+    exact_quote: "Total Body Clearance ... 327"
   V_abs_L_at_70kg:
-    source_id: null
-    source_field: pk_parsed.volume
-    value_basis: derived_from_reported
-    raw_value: 0.6
+    source_id: source_5
+    source_field: IV_Vss_about_two_thirds_body_weight
+    value_basis: literature_reported
+    raw_value: 0.6666666666666666
     raw_unit: L/kg
-    normalized_value: 42.0
+    normalized_value: 46.666666666666664
     normalized_unit: L
     conversion:
       method: body_weight_scaled
-      formula: pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs
+      formula: (2/3) L/kg * 70 kg
       assumptions:
         weight_ref_kg_for_abs: 70.0
     role: simulation_parameter
-    reviewer_status: needs_source_review
-    reviewer_note: Volume is retained as the one-compartment fixture volume and is
-      not recalibrated to force agreement with terminal half-life. Existing source
-      URLs do not identify the exact value-level source for this parameter. This provenance
-      records the canonical parsed/derived fixture value and intentionally marks source
-      mapping for future review.
-    source_review_status: needs_source_review
-    fixture_limitation_status: not_applicable
+    reviewer_status: checked
+    reviewer_note: PubMed source_5 states that acyclovir Vss is about two-thirds of
+      body weight. The canonical value is the explicit 2/3 approximation scaled to
+      70 kg; source_5 also states that acyclovir disposition is best described by
+      a two-compartment model, so this V is only a one-compartment fixture input.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PubMed abstract
+    exact_quote: "The volume of distribution at steady state is about two-thirds of the body weight."
+  bioavailability_frac:
+    source_id: source_1
+    source_field: average_oral_bioavailability_range
+    value_basis: derived_from_reported
+    raw_value: 10-20
+    raw_unit: percent
+    normalized_value: 0.1
+    normalized_unit: fraction
+    conversion:
+      method: derived_formula
+      formula: lower bound of reported average oral bioavailability range (10% to 20%)
+      assumptions:
+        range_summary: lower_bound
+        dose_dependence: true
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: DailyMed source_1 reports average oral bioavailability of 10% to 20% and states that bioavailability decreases with increasing dose. The canonical F=0.1 is the lower-bound fixture value, not a dose-invariant clinical estimate.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: Clinical Pharmacology, Pharmacokinetics, Table 1
+    exact_quote: "Average oral bioavailability 10% to 20%"
   t_half_h:
     source_id: source_1
     source_field: adult_half_life_range_normal_renal_function
@@ -109,10 +147,12 @@ value_provenance:
         range_summary: lower_bound
     role: check_only
     reviewer_status: checked
-    reviewer_note: DailyMed source_1 reports adult half-life of 2.5 to 3.3 h in
-      subjects with normal renal function. Canonical t_half_h retains the fixture
-      lower bound of that source range and remains a check target only. CL and V are
-      not jointly calibrated to match terminal half-life in this deterministic one-compartment
+    reviewer_note: DailyMed source_1 reports adult half-life of 2.5 to 3.3 h in subjects
+      with normal renal function. Canonical t_half_h retains the fixture lower bound
+      of that source range and remains a check target only. CL and V are not jointly
+      calibrated to match terminal half-life in this deterministic one-compartment
       fixture.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    source_locator: DailyMed tablet label, Clinical Pharmacology, Table 1
+    exact_quote: "Plasma elimination half-life 2.5 to 3.3 hr"

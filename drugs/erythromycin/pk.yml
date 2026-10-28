@@ -2,7 +2,8 @@ id: OSP_erythromycin
 name: Erythromycin
 route_inferred: iv
 sources:
-- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3581054/
+- id: source_1
+  url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3581054/
 pk_raw:
   text: 'IV study: CL 0.53 L/h/kg; t1/2 2.30 h. One-comp V derived.'
 pk_parsed:
@@ -31,3 +32,67 @@ derived:
     with systemic CL/V.'
   - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
     typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: source_1
+    source_field: healthy_control_total_clearance_after_iv_infusion
+    value_basis: literature_reported
+    raw_value: 0.53
+    raw_unit: L/h/kg
+    normalized_value: 37.1
+    normalized_unit: L/h
+    conversion:
+      method: body_weight_scaled
+      formula: 0.53 L/h/kg * 70 kg
+      assumptions:
+        weight_ref_kg_for_abs: 70.0
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: Source_1 reports healthy-control erythromycin total clearance of
+      0.53 +/- 0.13 L/h/kg after IV infusion. The fixture retains the mean as systemic
+      CL.
+    source_review_status: checked
+    fixture_limitation_status: not_applicable
+    source_locator: PMC source_1, Table 2, Healthy controls after 125 mg IV infusion
+    exact_quote: "CL (l/h/kg) | 0.53 ± 0.13"
+  V_abs_L_at_70kg:
+    source_id: source_1
+    source_field: one_compartment_volume_derived_from_iv_clearance_and_half_life
+    value_basis: fixture_derived
+    raw_value: 0.53 and 2.30
+    raw_unit: L/h/kg and h
+    normalized_value: 123.10516783905524
+    normalized_unit: L
+    conversion:
+      method: derived_formula
+      formula: CL_abs_L_per_h_at_70kg * t_half_h / ln(2)
+      assumptions:
+        model: one_compartment_fixture
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: The source reports Vss 0.74 +/- 0.19 L/kg, whereas the committed
+      V is explicitly derived from CL and half-life for the one-compartment fixture.
+      These are not interchangeable volume definitions.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+  t_half_h:
+    source_id: source_1
+    source_field: healthy_control_terminal_half_life_after_iv_infusion
+    value_basis: literature_reported
+    raw_value: 2.3
+    raw_unit: h
+    normalized_value: 2.3
+    normalized_unit: h
+    conversion:
+      method: direct
+      formula: pk_parsed.half_life_h
+      assumptions: {}
+    role: check_only
+    reviewer_status: checked
+    reviewer_note: Source_1 reports healthy-control erythromycin half-life of 2.30
+      +/- 1.03 h after IV infusion. It remains a check target because the fixture
+      V is derived independently.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PMC source_1, Table 2, Healthy controls after 125 mg IV infusion
+    exact_quote: "t1/2 (h) | 2.30 ± 1.03"

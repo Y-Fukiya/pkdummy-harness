@@ -29,15 +29,16 @@ model:
     conc: ng/mL
     mult: 1000
   theta:
-    CL: 78.0
-    V: 105.0
+    CL: 39.4
+    V: 84.3
     KA: 1.2
-    F1: 1.0
+    F1: 0.56
     ALAG1: 0.5
   notes:
-  - Default assumes CL and V from sources are apparent (CL/F, V/F). Set theta.F1 to
-    your chosen bioavailability AND adjust CL/V accordingly if your sources report
-    systemic CL/V.
+  - CL and V are systemic values from the primary IV first-infusion context; theta.F1=0.56
+    represents the first-dose oral bioavailability reported in the same study.
+  - The source reports route- and exposure-dependent kinetics. This is a cross-route
+    fixture parameterization, not a clinical oral dosing model.
   - 'Demo theta policy: CL and V are the independent simulation parameters for this
     1-compartment fixture. t_half is checked downstream and is not used to recalibrate
     theta.'

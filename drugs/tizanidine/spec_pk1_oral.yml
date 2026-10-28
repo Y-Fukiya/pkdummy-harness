@@ -32,12 +32,14 @@ model:
     CL: 46.579490533628324
     V: 168.0
     KA: 1.2
-    F1: 1.0
+    F1: 0.4
     ALAG1: 0.5
   notes:
-  - Default assumes CL and V from sources are apparent (CL/F, V/F). Set theta.F1 to
-    your chosen bioavailability AND adjust CL/V accordingly if your sources report
-    systemic CL/V.
+  - CL and V are parameterized as systemic values for this fixture; theta.F1=0.4
+    represents the label's approximate oral bioavailability.
+  - "The CL is not directly reported: it is a cross-route fixture derivation from IV
+    Vss and oral half-life. It must not be used as a clinical dosing estimate without
+    independent clearance evidence."
   - 'Demo theta policy: CL and V are the independent simulation parameters for this
     1-compartment fixture. t_half is checked downstream and is not used to recalibrate
     theta.'

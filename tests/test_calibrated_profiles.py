@@ -1,8 +1,8 @@
-"""F-corrected oral profiles (systemic-basis drugs): drift lock + exposure check.
+"""Legacy F-corrected oral profiles: drift lock + exposure check.
 
-These profiles live under profiles/ (outside drugs/, so they never trip the
-"exactly one spec_pk1_*.yml per drug" rule). The only change vs the default spec
-is theta.F1 -> bioavailability, so simulated exposure becomes F*Dose/CL_systemic.
+The canonical drug specs now carry the same F-corrected parameterization. These
+profiles remain outside drugs/ for compatibility and must not regress to the old
+F1=1 systemic-CL parameterization.
 """
 
 from __future__ import annotations
@@ -18,12 +18,12 @@ from tools.validate_simulation import compute_subject_metrics, read_csv_rows
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_DRUGS = {
-    "aciclovir", "alprazolam", "cimetidine", "felodipine", "itraconazole",
-    "montelukast", "omeprazole", "triazolam", "verapamil",
+    "apixaban", "sildenafil", "aciclovir", "cimetidine", "felodipine", "itraconazole",
+    "dapagliflozin", "metoprolol", "moclobemide", "montelukast", "omeprazole", "tizanidine", "verapamil",
 }
 
 
-def test_eligible_set_is_the_nine_systemic_basis_oral_drugs() -> None:
+def test_eligible_set_is_the_eight_systemic_basis_oral_drugs() -> None:
     assert set(_eligible(ROOT)) == EXPECTED_DRUGS
 
 
@@ -42,7 +42,7 @@ def test_profile_only_changes_F1() -> None:
         profile = yaml.safe_load(_profile_path(ROOT, slug).read_text(encoding="utf-8"))
         f = yaml.safe_load((ROOT / "drugs" / slug / "pk.yml").read_text(encoding="utf-8"))["pk_parsed"]["bioavailability_frac"]
         dt, pt = default["model"]["theta"], profile["model"]["theta"]
-        assert pt["F1"] == float(f) and dt["F1"] == 1.0
+        assert pt["F1"] == float(f) and dt["F1"] == float(f)
         for k in ("CL", "V", "KA", "ALAG1"):
             assert dt.get(k) == pt.get(k)  # nothing else moved
 
@@ -67,9 +67,8 @@ def test_profile_exposure_equals_F_times_systemic(tmp_path: Path) -> None:
 
         auc_profile, auc_default = _auc(profile_path), _auc(default_path)
 
-        # Exact: F1 scales concentrations linearly, so the recalc AUC scales by F
-        # exactly (drug-independent; trapezoid bias cancels between the two specs).
-        assert math.isclose(auc_profile, f * auc_default, rel_tol=1e-9), slug
+        # The legacy profile and canonical spec must now be exposure-equivalent.
+        assert math.isclose(auc_profile, auc_default, rel_tol=1e-9), slug
 
         # Loose closed-form sanity: profile exposure ~ F * Dose / CL_systemic
         # (within the per-drug trapezoid bias of the dense grid).

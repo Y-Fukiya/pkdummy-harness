@@ -30,14 +30,15 @@ model:
     mult: 1000
   theta:
     CL: 12.42
-    V: 231.14571406114794
+    V: 118.0
     KA: 1.2
-    F1: 1.0
+    F1: 0.78
     ALAG1: 0.5
   notes:
-  - Default assumes CL and V from sources are apparent (CL/F, V/F). Set theta.F1 to
-    your chosen bioavailability AND adjust CL/V accordingly if your sources report
-    systemic CL/V.
+  - CL and V are systemic values from the FDA IV microdose context; theta.F1=0.78
+    represents the reported oral bioavailability.
+  - The 1-compartment fixture uses Vss=118 L and ke=CL/V. The oral terminal half-life
+    12.9 h is retained as a check and is not used to recalibrate theta.
   - 'Demo theta policy: CL and V are the independent simulation parameters for this
     1-compartment fixture. t_half is checked downstream and is not used to recalibrate
     theta.'

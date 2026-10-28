@@ -11,9 +11,9 @@ scenario:
 targets:
   auc:
     type: AUC0-inf
-    value: 3168.567807351077
+    value: 3168.5678073510776
     unit: ng*h/mL
-    summary: geometric_mean
+    summary: fixture_consistency_check
     variability:
       type: gcv_percent
       value: 35
@@ -26,7 +26,7 @@ targets:
     phase: terminal
     value: 3.5
     unit: h
-    summary: arithmetic_mean
+    summary: range_midpoint_fixture
     variability:
       type: sd
       value: 1.0
@@ -36,17 +36,21 @@ targets:
       acknowledged: false
       reason: null
 notes:
-- AUC is computed as Dose/CL (assuming CL is apparent CL/F for oral, and systemic
-  CL for IV).
-- Variability fields are placeholders unless you replace them with drug-specific PopPK
-  values.
-- 'AUC target provenance: computed as Dose/CL from the extracted CL used by this fixture.
-  It is an integration consistency check, not an independent literature AUC or clinical
-  validity claim. To validate against a literature AUC, replace targets.auc.value/unit/summary
-  and add the source, raw text, unit conversion, and derivation note.'
-- 'Parameter-pair policy: spec theta uses CL and V from pk.yml derived absolute values
-  as the independent simulation parameters. The literature t_half is retained as a
-  target/check and is not used to recalibrate CL or V automatically.'
-- '1-compartment attainability label: no CL/V/t_half warning is currently flagged
-  by validate_library at the repository threshold. This is still a workflow-fixture
-  label, not evidence of clinical model validity.'
+- AUC is computed as Dose/CL_apparent for this apparent-basis oral fixture; it is not an independent literature
+  AUC.
+- Variability fields are placeholders unless you replace them with drug-specific PopPK values.
+- 'AUC target provenance: computed as Dose/CL_apparent from the extracted oral CL/F used by this fixture.
+  It is an integration consistency check, not an independent literature AUC or clinical validity claim.
+  To validate against a literature AUC, replace targets.auc.value/unit/summary and add the source, raw
+  text, unit conversion, and derivation note.'
+- 'Parameter-pair policy: spec theta uses CL and V from pk.yml derived absolute values as the independent
+  simulation parameters. The literature t_half is retained as a target/check and is not used to recalibrate
+  CL or V automatically.'
+- '1-compartment attainability label: no CL/V/t_half warning is currently flagged by validate_library
+  at the repository threshold. This is still a workflow-fixture label, not evidence of clinical model
+  validity.'
+- DailyMed source_4 section12.3 distinguishes CYP3A-mediated metabolism and glucuronide formation from
+  the subsequent urinary excretion of metabolites. Urinary recovery does not mean renal clearance of unchanged
+  triazolam.
+- No numeric PK parameter changes were made in this correction. Apparent CL and derived one-compartment
+  volume remain a fixture and do not establish clinical model validity.

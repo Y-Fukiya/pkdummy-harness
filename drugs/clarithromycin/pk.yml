@@ -45,8 +45,8 @@ derived:
     typically report systemic parameters.'
 value_provenance:
   CL_abs_L_per_h_at_70kg:
-    source_id: null
-    source_field: pk_parsed.clearance
+    source_id: source_2
+    source_field: mean_total_body_clearance_in_adults
     value_basis: derived_from_reported
     raw_value: 58.1
     raw_unit: L/h
@@ -57,17 +57,17 @@ value_provenance:
       formula: pk_parsed.clearance.value
       assumptions: {}
     role: simulation_parameter
-    reviewer_status: needs_source_review
-    reviewer_note: Clearance is used as a deterministic fixture model parameter and
-      is not recalibrated to force agreement with terminal half-life. Existing source
-      URLs do not identify the exact value-level source for this parameter. This provenance
-      records the canonical parsed/derived fixture value and intentionally marks source
-      mapping for future review.
-    source_review_status: needs_source_review
+    reviewer_status: checked
+    reviewer_note: PubMed source_2 reports mean adult total body clearance of 29.2
+      to 58.1 L/h. The fixture uses the upper bound as apparent CL/F and does not
+      treat this range as an individual estimate.
+    source_review_status: checked
     fixture_limitation_status: not_applicable
+    source_locator: PubMed abstract
+    exact_quote: "total body clearance and renal clearance in adults have ranged from 29.2 to 58.1 L/h and 6.7 to 12.8 L/h, respectively."
   V_abs_L_at_70kg:
-    source_id: null
-    source_field: pk_parsed.volume
+    source_id: source_3
+    source_field: apparent_volume_of_distribution
     value_basis: derived_from_reported
     raw_value: 172.0
     raw_unit: L
@@ -78,14 +78,14 @@ value_provenance:
       formula: pk_parsed.volume.value
       assumptions: {}
     role: simulation_parameter
-    reviewer_status: needs_source_review
-    reviewer_note: Volume is retained as the one-compartment fixture volume and is
-      not recalibrated to force agreement with terminal half-life. Existing source
-      URLs do not identify the exact value-level source for this parameter. This provenance
-      records the canonical parsed/derived fixture value and intentionally marks source
-      mapping for future review.
-    source_review_status: needs_source_review
+    reviewer_status: checked
+    reviewer_note: The primary PK modeling article in source_3 reports an apparent
+      clarithromycin volume of distribution of 172 L. The fixture retains that apparent
+      value and does not recalibrate it to the half-life range.
+    source_review_status: checked
     fixture_limitation_status: not_applicable
+    source_locator: Antimicrobial Agents and Chemotherapy, lines 165-166 / Table 1
+    exact_quote: "the apparent volume of distribution of clarithromycin was 172 liters"
   t_half_h:
     source_id: source_1
     source_field: terminal_half_life_range
@@ -108,3 +108,5 @@ value_provenance:
       in this deterministic one-compartment fixture.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    source_locator: DailyMed label, Metabolism and Elimination section
+    exact_quote: "The elimination half-life of clarithromycin was about 3 hours to 4 hours"

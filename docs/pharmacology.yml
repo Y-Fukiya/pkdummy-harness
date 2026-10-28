@@ -1,0 +1,694 @@
+schema_version: "0.1"
+status_policy: "source_candidate claims are visible but are not treated as reviewed pharmacology evidence"
+claim_defaults:
+  claim_status: unconfirmed
+  source_fit_status: unreviewed
+  jurisdiction: unconfirmed
+  population_context: unconfirmed
+  route_or_formulation: unconfirmed
+  study_context: unconfirmed
+drugs:
+  abciximab:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: abciximab-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "GPIIb/IIIaインテグリンに結合し、フィブリノゲン架橋を阻害して血小板凝集を抑える。"
+          en: "Binds platelet integrin GPIIb/IIIa and inhibits fibrinogen bridging, reducing platelet aggregation."
+        source_id: source_2
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "PubMed原典候補を登録。逐語引用と引用箇所は薬理学レビューで確認する。"
+          en: "A PubMed primary-source candidate is registered; the verbatim excerpt and locator remain for pharmacology review."
+  aciclovir:
+    status: curated
+    review_stage: reviewed
+    claim_status: reviewed
+    source_fit_status: reviewed
+    jurisdiction: US
+    population_context: label pharmacology context
+    route_or_formulation: oral tablet
+    study_context: US DailyMed label
+    claims:
+      - claim_id: aciclovir-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "アシクロビル三リン酸がウイルスDNAポリメラーゼを競合的に阻害し、増殖中のDNA鎖を終結させる。"
+          en: "Acyclovir triphosphate competitively inhibits viral DNA polymerase and terminates the growing viral DNA chain."
+        source_id: source_1
+        evidence_status: reviewed
+        evidence_level: reviewed
+        claim_status: reviewed
+        source_fit_status: reviewed
+        jurisdiction: US
+        population_context: label pharmacology context
+        route_or_formulation: oral tablet
+        study_context: US DailyMed label
+        exact_quote: "1) competitive inhibition of viral DNA polymerase, 2) incorporation into and termination of the growing viral DNA chain"
+        source_locator: "DailyMed, Virology, Mechanism of Antiviral Action"
+        evidence_summary:
+          ja: "DailyMedの抗ウイルス作用節で、DNAポリメラーゼ阻害とDNA鎖終結の引用・locatorを確認済み。"
+          en: "The DailyMed antiviral-action section confirms the DNA-polymerase inhibition and DNA-chain termination excerpt and locator."
+  albuterol:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: albuterol-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "β2アドレナリン受容体を刺激し、気道平滑筋を弛緩させる。"
+          en: "Stimulates beta-2 adrenergic receptors and relaxes airway smooth muscle."
+        source_id: pharmacology_dailymed
+        source:
+          id: pharmacology_dailymed
+          display_id: DailyMed:mechanism
+          source_role: pharmacology
+          url: "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=40f3cdbc-c9ee-4a3c-8061-a44b9a1d035c&version=4"
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補へ差し替え。受容体作用と気道平滑筋作用の逐語引用は未確認。"
+          en: "Replaced with a DailyMed label candidate; verbatim receptor and bronchial-smooth-muscle excerpts remain unconfirmed."
+  alfentanil:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: alfentanil-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "μオピオイド受容体作動薬として鎮痛・鎮静を生じる。"
+          en: "Acts as a mu-opioid receptor agonist to produce analgesia and sedation."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補を登録。薬理学節の逐語引用は未確認。"
+          en: "A DailyMed label candidate is registered; a verbatim pharmacology-section excerpt is unconfirmed."
+  alprazolam:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: alprazolam-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "ベンゾジアゼピン系としてGABA_A受容体の抑制性作用を増強する。"
+          en: "As a benzodiazepine, enhances inhibitory GABA-A receptor signaling."
+        source_id: pharmacology_dailymed
+        source:
+          id: pharmacology_dailymed
+          display_id: DailyMed:mechanism
+          source_role: pharmacology
+          url: "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=8ef75d22-4a7c-48d5-a532-5a43b8593e7c&version=12"
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補へ差し替え。GABA-A作用の逐語引用は未確認。"
+          en: "Replaced with a DailyMed label candidate; the GABA-A receptor excerpt remains unconfirmed."
+  amikacin:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: amikacin-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "細菌リボソーム30Sサブユニットに結合し、タンパク質合成を阻害する。"
+          en: "Binds the bacterial 30S ribosomal subunit and inhibits protein synthesis."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補を登録。作用機序節の逐語引用は未確認。"
+          en: "A DailyMed label candidate is registered; the mechanism-section excerpt is unconfirmed."
+  apixaban:
+    status: curated
+    review_stage: reviewed
+    claim_status: reviewed
+    source_fit_status: reviewed
+    jurisdiction: US
+    population_context: label pharmacology context
+    route_or_formulation: oral film-coated tablet
+    study_context: US DailyMed label
+    claims:
+      - claim_id: apixaban-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "活性化第Xa因子を選択的に阻害する。"
+          en: "Selectively inhibits factor Xa."
+        source_id: source_1
+        evidence_status: reviewed
+        evidence_level: reviewed
+        claim_status: reviewed
+        source_fit_status: reviewed
+        jurisdiction: US
+        population_context: label pharmacology context
+        route_or_formulation: oral film-coated tablet
+        study_context: US DailyMed label
+        exact_quote: "Apixaban is a selective inhibitor of FXa."
+        source_locator: "DailyMed, 12.1 Mechanism of Action"
+        evidence_summary:
+          ja: "DailyMed 12.1で、FXa選択的阻害の引用・locator・経口錠剤文脈を確認済み。"
+          en: "DailyMed section 12.1 confirms the selective-FXa-inhibition excerpt, locator, and oral-tablet context."
+  atazanavir:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: atazanavir-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "HIV-1プロテアーゼを阻害し、ウイルスポリタンパク質の切断を妨げる。"
+          en: "Inhibits HIV-1 protease and prevents cleavage of viral polyproteins."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補を登録。抗ウイルス作用の逐語引用は未確認。"
+          en: "A DailyMed label candidate is registered; the antiviral-mechanism excerpt is unconfirmed."
+  buprenorphine:
+    status: curated
+    review_stage: reviewed
+    claim_status: reviewed
+    source_fit_status: reviewed
+    jurisdiction: US
+    population_context: opioid-dependence treatment label context
+    route_or_formulation: sublingual tablet
+    study_context: US DailyMed label
+    claims:
+      - claim_id: buprenorphine-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "舌下錠ではμオピオイド受容体の部分作動薬、κオピオイド受容体の拮抗薬として作用する。"
+          en: "In sublingual tablets, buprenorphine is a partial mu-opioid receptor agonist and kappa-opioid receptor antagonist."
+        source_id: pharmacology_dailymed
+        source:
+          id: pharmacology_dailymed
+          display_id: DailyMed:mechanism
+          source_role: pharmacology
+          url: "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=325532f0-276f-4689-97d6-cda879b4c758"
+        evidence_status: reviewed
+        evidence_level: reviewed
+        claim_status: reviewed
+        source_fit_status: reviewed
+        jurisdiction: US
+        population_context: opioid-dependence treatment label context
+        route_or_formulation: sublingual tablet
+        study_context: US DailyMed label
+        exact_quote: "Buprenorphine sublingual tablets contain buprenorphine, a partial agonist at the mu-opioid receptor and an antagonist at the kappa-opioid receptor."
+        source_locator: "DailyMed, 12.1 Mechanism of Action"
+        evidence_summary:
+          ja: "誤ったPMC出典を除外し、DailyMed 12.1で舌下錠のμ部分作動薬・κ拮抗薬プロファイルを確認済み。"
+          en: "The mismatched PMC record was removed; DailyMed 12.1 confirms the sublingual-tablet mu-partial-agonist and kappa-antagonist profile."
+  carbamazepine:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: carbamazepine-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "ラベル上の作用機序は完全には確立しておらず、多シナプス反応の抑制などが記載される。"
+          en: "The label states that its mechanism is not fully established and describes effects such as reduced polysynaptic responses."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補を登録。作用機序節の逐語引用は未確認。"
+          en: "A DailyMed label candidate is registered; the mechanism-section excerpt is unconfirmed."
+  cda1:
+    status: partial
+    review_stage: source_mapped
+    claim_status: investigational_unconfirmed
+    claims:
+      - claim_id: cda1-development-role
+        claim_type: development_role
+        statement:
+          ja: "C. difficile毒素Aを標的とするモノクローナル抗体で、毒素作用の中和を狙う開発品。"
+          en: "An investigational monoclonal antibody targeting C. difficile toxin A to neutralize toxin activity."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "PubMed原典候補を登録。開発段階と中和作用の逐語引用は未確認。"
+          en: "A PubMed primary-source candidate is registered; development status and neutralization excerpt are unconfirmed."
+  cimetidine:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: cimetidine-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "ヒスタミンH2受容体を遮断し、胃酸分泌を抑制する。"
+          en: "Blocks histamine H2 receptors and suppresses gastric acid secretion."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補を登録。薬理学節の逐語引用は未確認。"
+          en: "A DailyMed label candidate is registered; the pharmacology-section excerpt is unconfirmed."
+  clarithromycin:
+    status: curated
+    review_stage: reviewed
+    claim_status: reviewed
+    source_fit_status: reviewed
+    jurisdiction: US
+    population_context: label microbiology context
+    route_or_formulation: oral film-coated tablet
+    study_context: US DailyMed label
+    claims:
+      - claim_id: clarithromycin-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "細菌リボソーム50Sサブユニットに結合し、タンパク質合成を阻害する。"
+          en: "Binds the bacterial 50S ribosomal subunit and inhibits protein synthesis."
+        source_id: source_1
+        evidence_status: reviewed
+        evidence_level: reviewed
+        claim_status: reviewed
+        source_fit_status: reviewed
+        jurisdiction: US
+        population_context: label microbiology context
+        route_or_formulation: oral film-coated tablet
+        study_context: US DailyMed label
+        exact_quote: "Clarithromycin exerts its antibacterial action by binding to the 50S ribosomal subunit of susceptible bacteria resulting in inhibition of protein synthesis."
+        source_locator: "DailyMed, Microbiology"
+        evidence_summary:
+          ja: "DailyMedのMicrobiology節で、50S結合とタンパク質合成阻害の引用・locatorを確認済み。"
+          en: "The DailyMed Microbiology section confirms the 50S-binding and protein-synthesis-inhibition excerpt and locator."
+  dapagliflozin:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: dapagliflozin-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "腎近位尿細管のSGLT2を阻害し、尿中グルコース排泄を増加させる。"
+          en: "Inhibits renal proximal-tubule SGLT2 and increases urinary glucose excretion."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "FDA Clinical Pharmacology審査資料候補を登録。作用機序の逐語引用は未確認。"
+          en: "An FDA Clinical Pharmacology review candidate is registered; the mechanism excerpt is unconfirmed."
+  efavirenz:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: efavirenz-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "HIV-1逆転写酵素の非ヌクレオシド部位に結合し、酵素活性を阻害する。"
+          en: "Binds the non-nucleoside site of HIV-1 reverse transcriptase and inhibits its activity."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補を登録。抗ウイルス作用の逐語引用は未確認。"
+          en: "A DailyMed label candidate is registered; the antiviral-mechanism excerpt is unconfirmed."
+  erythromycin:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: erythromycin-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "細菌リボソーム50Sサブユニットに結合し、タンパク質合成を阻害する。"
+          en: "Binds the bacterial 50S ribosomal subunit and inhibits protein synthesis."
+        source_id: pharmacology_dailymed
+        source:
+          id: pharmacology_dailymed
+          display_id: DailyMed:mechanism
+          source_role: pharmacology
+          url: "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=a2dcb48a-212c-1b0c-ec35-ee2ade85847f&type=display"
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "PK研究ではなくDailyMedラベル候補へ差し替え。50S作用の逐語引用は未確認。"
+          en: "Replaced the PK study with a DailyMed label candidate; the 50S-mechanism excerpt remains unconfirmed."
+  ethinylestradiol:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: ethinylestradiol-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "配合経口避妊薬の製剤では、ゴナドトロピンを抑制して排卵を抑える成分として作用する。"
+          en: "In the combined oral-contraceptive formulation, contributes to gonadotropin suppression and ovulation inhibition."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補を登録。薬理学節の逐語引用は未確認。"
+          en: "A DailyMed label candidate is registered; the pharmacology-section excerpt is unconfirmed."
+  felodipine:
+    status: curated
+    review_stage: reviewed
+    claim_status: reviewed
+    source_fit_status: reviewed
+    jurisdiction: US
+    population_context: label pharmacology context
+    route_or_formulation: oral extended-release tablet
+    study_context: US DailyMed label
+    claims:
+      - claim_id: felodipine-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "血管平滑筋の電位依存性Ca++電流を遮断する。"
+          en: "Blocks voltage-dependent Ca++ currents in vascular smooth muscle."
+        source_id: pharmacology_dailymed
+        source:
+          id: pharmacology_dailymed
+          display_id: DailyMed:mechanism
+          source_role: pharmacology
+          url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0bef7cf2-012b-4804-ac93-0a8b333035db"
+        evidence_status: reviewed
+        evidence_level: reviewed
+        claim_status: reviewed
+        source_fit_status: reviewed
+        jurisdiction: US
+        population_context: label pharmacology context
+        route_or_formulation: oral extended-release tablet
+        study_context: US DailyMed label
+        exact_quote: "blocks voltage-dependent Ca++ currents in vascular smooth muscle"
+        source_locator: "DailyMed, Clinical Pharmacology, Mechanism of Action"
+        evidence_summary:
+          ja: "PKレビューを除外し、DailyMedのMechanism of Actionで血管平滑筋Ca++電流遮断の引用・locatorを確認済み。"
+          en: "The PK review was excluded; DailyMed Mechanism of Action confirms the vascular-smooth-muscle Ca++ current blockade excerpt and locator."
+  fluconazole:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: fluconazole-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "真菌のlanosterol 14α-demethylase（CYP51）を阻害し、エルゴステロール合成を妨げる。"
+          en: "Inhibits fungal lanosterol 14-alpha-demethylase (CYP51), impairing ergosterol synthesis."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補を登録。抗真菌作用の逐語引用は未確認。"
+          en: "A DailyMed label candidate is registered; the antifungal-mechanism excerpt is unconfirmed."
+  fluvoxamine:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: fluvoxamine-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "臨床的な作用機序は、特異的なセロトニン再取り込み阻害に関連すると推定される。"
+          en: "Its clinical mechanism is presumed to be linked to specific serotonin reuptake inhibition."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補を登録。作用機序節の逐語引用は未確認。"
+          en: "A DailyMed label candidate is registered; the mechanism-section excerpt is unconfirmed."
+  inulin:
+    status: partial
+    review_stage: source_mapped
+    claim_status: measurement_unconfirmed
+    claims:
+      - claim_id: inulin-measurement-role
+        claim_type: measurement_role
+        statement:
+          ja: "薬理作用を目的とする治療薬ではなく、糸球体濾過量の評価に用いる濾過マーカー。"
+          en: "Not a therapeutic pharmacologic agent; used as a filtration marker for assessing glomerular filtration rate."
+        source_id: source_3
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "PMC原典候補を登録。測定用途と薬理学的非作用の記載箇所は未確認。"
+          en: "A PMC primary-source candidate is registered; the measurement role and non-therapeutic context are unconfirmed."
+  itraconazole:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: itraconazole-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "真菌CYP51を阻害し、エルゴステロール生合成を抑制する。"
+          en: "Inhibits fungal CYP51 and suppresses ergosterol biosynthesis."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補を登録。抗真菌作用の逐語引用は未確認。"
+          en: "A DailyMed label candidate is registered; the antifungal-mechanism excerpt is unconfirmed."
+  mefenamic_acid:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: mefenamic_acid-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "COXを阻害してプロスタグランジン産生を減らし、NSAIDとして作用する。"
+          en: "Acts as an NSAID by inhibiting COX and reducing prostaglandin production."
+        source_id: source_2
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "FDAラベル候補を登録。作用機序の逐語引用は未確認。"
+          en: "An FDA label candidate is registered; the mechanism excerpt is unconfirmed."
+  metoprolol:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: metoprolol-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "主にβ1アドレナリン受容体を遮断し、心拍数と心筋収縮力を低下させる。"
+          en: "Primarily blocks beta-1 adrenergic receptors, lowering heart rate and myocardial contractility."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補を登録。薬力学節の逐語引用は未確認。"
+          en: "A DailyMed label candidate is registered; the pharmacodynamics excerpt is unconfirmed."
+  mexiletine:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: mexiletine-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "電位依存性ナトリウムチャネルを遮断し、心筋の異常な興奮伝導を抑える。"
+          en: "Blocks voltage-gated sodium channels and suppresses abnormal cardiac excitation and conduction."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補を登録。薬力学節の逐語引用は未確認。"
+          en: "A DailyMed label candidate is registered; the pharmacodynamics excerpt is unconfirmed."
+  moclobemide:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: moclobemide-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "可逆的かつ選択的にMAO-Aを阻害し、モノアミン分解を抑制する。"
+          en: "Reversibly and selectively inhibits MAO-A, reducing monoamine breakdown."
+        source_id: pharmacology_pubmed_1546143
+        source:
+          id: pharmacology_pubmed_1546143
+          display_id: PubMed:1546143
+          source_role: pharmacology
+          url: "https://pubmed.ncbi.nlm.nih.gov/1546143/"
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "PK研究ではなく薬理学原典候補（PubMed PMID 1546143）へ差し替え。MAO-A選択性の逐語引用は未確認。"
+          en: "Replaced the PK study with a pharmacology source candidate (PubMed PMID 1546143); the MAO-A-selectivity excerpt remains unconfirmed."
+  montelukast:
+    status: curated
+    review_stage: reviewed
+    claim_status: reviewed
+    source_fit_status: reviewed
+    jurisdiction: US
+    population_context: label pharmacology context
+    route_or_formulation: oral film-coated or chewable tablet
+    study_context: US DailyMed label
+    claims:
+      - claim_id: montelukast-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "CysLT1受容体に高い親和性と選択性で結合する。"
+          en: "Binds with high affinity and selectivity to the CysLT1 receptor."
+        source_id: pharmacology_dailymed
+        source:
+          id: pharmacology_dailymed
+          display_id: DailyMed:mechanism
+          source_role: pharmacology
+          url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9e375c07-70db-458c-9336-22a7037b0a5f"
+        evidence_status: reviewed
+        evidence_level: reviewed
+        claim_status: reviewed
+        source_fit_status: reviewed
+        jurisdiction: US
+        population_context: label pharmacology context
+        route_or_formulation: oral film-coated or chewable tablet
+        study_context: US DailyMed label
+        exact_quote: "Montelukast is an orally active compound that binds with high affinity and selectivity to the CysLT1 receptor"
+        source_locator: "DailyMed, 12.1 Mechanism of Action"
+        evidence_summary:
+          ja: "PK研究を除外し、DailyMed 12.1でCysLT1への高親和性・選択性結合の引用・locatorを確認済み。"
+          en: "The PK study was excluded; DailyMed 12.1 confirms the high-affinity, selective CysLT1-binding excerpt and locator."
+  motavizumab_medi_524:
+    status: partial
+    review_stage: source_mapped
+    claim_status: investigational_unconfirmed
+    claims:
+      - claim_id: motavizumab_medi_524-development-role
+        claim_type: development_role
+        statement:
+          ja: "RSV Fタンパク質を標的とする中和モノクローナル抗体の開発品。"
+          en: "An investigational neutralizing monoclonal antibody targeting the RSV F protein."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "PMC原典候補を登録。標的と開発段階の逐語引用は未確認。"
+          en: "A PMC primary-source candidate is registered; target and development-stage excerpts are unconfirmed."
+  motavizumab_yte:
+    status: partial
+    review_stage: source_mapped
+    claim_status: investigational_unconfirmed
+    claims:
+      - claim_id: motavizumab_yte-development-role
+        claim_type: development_role
+        statement:
+          ja: "YTE Fc改変による半減期延長を意図した、RSV Fタンパク質標的抗体の開発品。"
+          en: "An investigational RSV F-targeting antibody with YTE Fc engineering intended to extend half-life."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "PMC原典候補を登録。YTE改変と作用機序の逐語引用は未確認。"
+          en: "A PMC primary-source candidate is registered; the YTE-engineering and mechanism excerpts are unconfirmed."
+  omeprazole:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: omeprazole-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "胃壁細胞のH+/K+-ATPaseを不可逆的に阻害し、胃酸分泌を抑える。"
+          en: "Irreversibly inhibits the gastric parietal-cell H+/K+-ATPase and suppresses acid secretion."
+        source_id: source_2
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補を登録。作用機序節の逐語引用は未確認。"
+          en: "A DailyMed label candidate is registered; the mechanism-section excerpt is unconfirmed."
+  raltegravir:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: raltegravir-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "HIVインテグラーゼのstrand transferを阻害し、ウイルスDNAの宿主ゲノムへの組込みを妨げる。"
+          en: "Inhibits HIV integrase strand transfer and prevents integration of viral DNA into the host genome."
+        source_id: pharmacology_dailymed
+        source:
+          id: pharmacology_dailymed
+          display_id: DailyMed:mechanism
+          source_role: pharmacology
+          url: "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=46ef8e2e-ae63-6a3c-e054-00144ff8d46c&version=8"
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "PK研究ではなくDailyMedラベル候補へ差し替え。strand-transfer阻害の逐語引用は未確認。"
+          en: "Replaced the PK study with a DailyMed label candidate; the strand-transfer inhibition excerpt remains unconfirmed."
+  sildenafil:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: sildenafil-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "PDE5を阻害してcGMP分解を減らし、NO-cGMP経路を増強する。"
+          en: "Inhibits PDE5, reducing cGMP breakdown and potentiating the NO-cGMP pathway."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補を登録。薬力学節の逐語引用は未確認。"
+          en: "A DailyMed label candidate is registered; the pharmacodynamics excerpt is unconfirmed."
+  sufentanil:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: sufentanil-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "μオピオイド受容体作動薬として強力な鎮痛を生じる。"
+          en: "Acts at mu-opioid receptors to produce potent analgesia."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補を登録。薬理学節の逐語引用は未確認。"
+          en: "A DailyMed label candidate is registered; the pharmacology-section excerpt is unconfirmed."
+  tefibazumab:
+    status: partial
+    review_stage: source_mapped
+    claim_status: investigational_unconfirmed
+    claims:
+      - claim_id: tefibazumab-development-role
+        claim_type: development_role
+        statement:
+          ja: "S. aureusのclumping factor Aを標的とするモノクローナル抗体の開発品。"
+          en: "An investigational monoclonal antibody targeting Staphylococcus aureus clumping factor A."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "PMC原典候補を登録。標的と開発段階の逐語引用は未確認。"
+          en: "A PMC primary-source candidate is registered; target and development-stage excerpts are unconfirmed."
+  tizanidine:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: tizanidine-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "中枢性α2アドレナリン受容体作動薬として脊髄反射性の筋緊張を抑える。"
+          en: "Acts as a central alpha-2 adrenergic agonist to reduce spinal reflex-mediated muscle tone."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補を登録。作用機序節の逐語引用は未確認。"
+          en: "A DailyMed label candidate is registered; the mechanism-section excerpt is unconfirmed."
+  triazolam:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: triazolam-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "ベンゾジアゼピン系としてGABA_A受容体の抑制性作用を増強する。"
+          en: "As a benzodiazepine, enhances inhibitory GABA-A receptor signaling."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補を登録。薬理学節の逐語引用は未確認。"
+          en: "A DailyMed label candidate is registered; the pharmacology-section excerpt is unconfirmed."
+  verapamil:
+    status: partial
+    review_stage: source_mapped
+    claims:
+      - claim_id: verapamil-mechanism
+        claim_type: mechanism
+        statement:
+          ja: "L型カルシウムチャネルを阻害し、心筋・血管平滑筋の収縮を抑える。"
+          en: "Inhibits L-type calcium channels and reduces cardiac and vascular smooth-muscle contraction."
+        source_id: source_1
+        evidence_status: source_candidate
+        evidence_level: source_candidate
+        evidence_summary:
+          ja: "DailyMedラベル候補を登録。薬力学節の逐語引用は未確認。"
+          en: "A DailyMed label candidate is registered; the pharmacodynamics excerpt is unconfirmed."

@@ -2,8 +2,10 @@ id: osp::mexiletine
 name: Mexiletine
 route_inferred: po
 sources:
-- url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab73778b-6794-441c-b127-610a6d0733ea
-- url: https://pubmed.ncbi.nlm.nih.gov/10589372/
+- id: source_1
+  url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab73778b-6794-441c-b127-610a6d0733ea
+- id: source_2
+  url: https://pubmed.ncbi.nlm.nih.gov/10589372/
 pk_raw:
   half_life: 10-12 hours
   clearance: null
@@ -29,6 +31,10 @@ pk_parsed:
   weight_ref_kg_for_abs: 70.0
   clearance_basis: apparent
   volume_basis: apparent
+  clearance_basis_source: confirmed
+  clearance_basis_note: Source_1 reports oral absorption about 90% and an apparent
+    distribution-volume range; the repository retains apparent CL/F and V/F for the
+    oral fixture.
 derived:
   ke_1_per_h: 0.06301338005090412
   CL_abs_L_per_h_at_70kg: 30.87655622494302
@@ -43,3 +49,73 @@ derived:
     as apparent and set F1=1.'
   - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
     typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: source_1
+    source_field: one_compartment_apparent_clearance_derived_from_apparent_V_and_half_life
+    value_basis: derived_from_reported
+    raw_value: 7.0
+    raw_unit: L/kg
+    normalized_value: 30.87655622494302
+    normalized_unit: L/h
+    conversion:
+      method: derived_formula
+      formula: (7 L/kg * 70 kg) * ln(2) / 11 h
+      assumptions:
+        parameter_basis: apparent_CL_over_F_and_V_over_F
+        half_life_range_h:
+        - 10.0
+        - 12.0
+        representative_half_life_h: 11.0
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: Source_1 supplies the apparent volume range and oral half-life
+      range; CL/F is derived for the one-compartment fixture and is not a directly
+      reported clearance.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+  V_abs_L_at_70kg:
+    source_id: source_1
+    source_field: oral_apparent_volume_of_distribution_range
+    value_basis: derived_from_reported
+    raw_value: 7.0
+    raw_unit: L/kg
+    normalized_value: 490.0
+    normalized_unit: L
+    conversion:
+      method: body_weight_scaled
+      formula: 7 L/kg * 70 kg
+      assumptions:
+        source_reported_range_L_per_kg:
+        - 5.0
+        - 7.0
+        representative_value_L_per_kg: 7.0
+        parameter_basis: apparent_V_over_F
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: DailyMed source_1 reports a 5-7 L/kg distribution-volume range.
+      The canonical 7 L/kg selects the upper bound as the deterministic fixture representative
+      and is scaled to 70 kg.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PubMed source_1, Abstract
+    exact_quote: "Its volume of distribution is large and varies from 5 to 9 L/kg in healthy individuals"
+  t_half_h:
+    source_id: source_1
+    source_field: oral_half_life_range
+    value_basis: derived_from_reported
+    raw_value: 10-12
+    raw_unit: h
+    normalized_value: 11.0
+    normalized_unit: h
+    conversion:
+      method: derived_formula
+      formula: (10 h + 12 h) / 2
+      assumptions:
+        range_summary: midpoint
+    role: check_only
+    reviewer_status: checked
+    reviewer_note: DailyMed source_1 reports a 10-12 h range. The canonical 11 h is
+      a midpoint fixture and is not a directly observed mean.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged

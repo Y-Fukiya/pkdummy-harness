@@ -2,7 +2,8 @@ id: osp::alprazolam
 name: Alprazolam
 route_inferred: po
 sources:
-- url: https://pubmed.ncbi.nlm.nih.gov/8513649/
+- id: source_1
+  url: https://pubmed.ncbi.nlm.nih.gov/8513649/
 pk_raw:
   half_life: 9-16 hours
   clearance: 0.7-1.5 mL/min/kg
@@ -22,26 +23,91 @@ pk_parsed:
     unit: L/kg
   bioavailability_frac: 0.9
   weight_ref_kg_for_abs: 70.0
-  clearance_basis: systemic
-  volume_basis: systemic
-  clearance_basis_source: unit_inferred
-  clearance_basis_note: 'clearance_basis set to systemic: source clearance is reported
-    in a mL/min-family unit (systemic plasma/renal clearance), not apparent CL/F.
-    Inferred from the source unit, not verified against full label text. NOTE: the
-    spec simulates a self-consistent fixture profile and is not calibrated to systemic-CL
-    + F (clinical exposure would use CL_apparent or F1=bioavailability); these remain
-    fixture values, not clinical PK.'
+  clearance_basis: apparent
+  volume_basis: apparent
+  clearance_basis_source: confirmed
+  clearance_basis_note: The cited oral PK summary reports clearance and volume after
+    oral dosing; this fixture treats them as apparent CL/F and V/F. Systemic CL cannot
+    be identified from oral data alone without an IV or explicitly F-linked estimate.
 derived:
   ke_1_per_h: 0.06923076923076923
   CL_abs_L_per_h_at_70kg: 6.3
   V_abs_L_at_70kg: 91.0
-  CL_apparent_L_per_h_at_70kg: 7.0
-  V_apparent_L_at_70kg: 101.11111111111111
-  CL_systemic_L_per_h_at_70kg: 6.3
-  V_systemic_L_at_70kg: 91.0
+  CL_apparent_L_per_h_at_70kg: 6.3
+  V_apparent_L_at_70kg: 91.0
+  CL_systemic_L_per_h_at_70kg: 5.67
+  V_systemic_L_at_70kg: 81.9
   notes:
-  - Apparent CL/V were derived as (systemic CL/V) / F.
-  - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability
-    with systemic CL/V.'
+  - Systemic CL/V were derived as (apparent CL/V) * F (assumes values are CL/F, V/F).
+  - 'Basis detected/selected: apparent (CL/F, V/F). Model default can use CL_abs/V_abs
+    as apparent and set F1=1.'
   - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
     typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: source_1
+    source_field: oral_clearance_after_single_1_mg_dose
+    value_basis: derived_from_reported
+    raw_value: 1.5
+    raw_unit: mL/min/kg
+    normalized_value: 6.3
+    normalized_unit: L/h
+    conversion:
+      method: unit_conversion_and_body_weight_scaling
+      formula: 1.5 mL/min/kg * 60 min/h / 1000 mL/L * 70 kg
+      assumptions:
+        range_summary: upper_bound
+        weight_ref_kg_for_abs: 70.0
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: PubMed source_1 reports oral alprazolam clearance of 0.7 to 1.5
+      mL/min/kg after a single 1 mg dose. The fixture deliberately uses the upper
+      bound and retains it as apparent CL/F; systemic CL is not identified from this
+      oral summary alone.
+    source_review_status: checked
+    fixture_limitation_status: not_applicable
+    source_locator: PubMed abstract
+    exact_quote: "clearance of 0.7 to 1.5 ml/min/kg"
+  V_abs_L_at_70kg:
+    source_id: source_1
+    source_field: oral_volume_of_distribution_after_single_1_mg_dose
+    value_basis: derived_from_reported
+    raw_value: 1.3
+    raw_unit: L/kg
+    normalized_value: 91.0
+    normalized_unit: L
+    conversion:
+      method: body_weight_scaled
+      formula: 1.3 L/kg * 70 kg
+      assumptions:
+        range_summary: upper_bound
+        weight_ref_kg_for_abs: 70.0
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: PubMed source_1 reports an oral alprazolam volume of distribution
+      of 0.8 to 1.3 L/kg after a single 1 mg dose. The fixture uses the upper bound
+      as apparent V/F and does not imply a systemic Vd.
+    source_review_status: checked
+    fixture_limitation_status: not_applicable
+    source_locator: PubMed abstract
+    exact_quote: "volume of distribution of 0.8 to 1.3 L/kg"
+  t_half_h:
+    source_id: source_1
+    source_field: oral_elimination_half_life_after_single_1_mg_dose
+    value_basis: derived_from_reported
+    raw_value: 9-16
+    raw_unit: h
+    normalized_value: 12.5
+    normalized_unit: h
+    conversion:
+      method: derived_formula
+      formula: midpoint of reported 9-16 h range
+      assumptions:
+        range_summary: midpoint
+    role: check_only
+    reviewer_status: checked
+    reviewer_note: PubMed source_1 reports an oral alprazolam elimination half-life
+      of 9 to 16 h. The fixture midpoint remains a check target and is not used to
+      force CL/F or V/F agreement.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged

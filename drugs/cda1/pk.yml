@@ -2,18 +2,20 @@ id: osp::cda1
 name: CDA1
 route_inferred: iv
 sources:
-- url: https://pubmed.ncbi.nlm.nih.gov/18502001/
-- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC2628753/
+- id: source_1
+  url: https://pubmed.ncbi.nlm.nih.gov/18502001/
+- id: source_2
+  url: https://pmc.ncbi.nlm.nih.gov/articles/PMC2628753/
 pk_raw:
-  half_life: 22.9-31.8 days
+  half_life: 25.3-31.8 days
   clearance: 0.0014 mL/min/kg
   volume_of_distribution: 0.07 L/kg
   bioavailability: N/A (IV only)
   elimination_route: ''
 pk_parsed:
-  half_life_h: 656.4000000000001
+  half_life_h: 685.2
   half_life_h_range:
-  - 549.5999999999999
+  - 607.2
   - 763.2
   clearance:
     value: 8.4e-05
@@ -39,3 +41,74 @@ derived:
     with systemic CL/V.'
   - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
     typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: source_2
+    source_field: table_2_median_clearance
+    value_basis: literature_reported
+    raw_value: 0.0014
+    raw_unit: mL/min/kg
+    normalized_value: 0.00588
+    normalized_unit: L/h
+    conversion:
+      method: unit_conversion_and_body_weight_scaling
+      formula: 0.0014 mL/min/kg * 60 min/h / 1000 mL/L * 70 kg
+      assumptions:
+        weight_ref_kg_for_abs: 70.0
+        dose_context: 1 mg/kg cohort median selected from Table 2
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: The primary CDA1 study in source_2 reports median clearance 0.0014
+      mL/min/kg and Table 2 identifies the dose-specific context. The fixture retains
+      the reported value scaled to 70 kg; it is not a general monoclonal-antibody
+      clearance.
+    source_review_status: checked
+    fixture_limitation_status: not_applicable
+    source_locator: PMC source_2, Table 2, CL column, 1.0 mg/kg cohort
+    exact_quote: "0.0014 (0.0010, 0.0019)"
+  V_abs_L_at_70kg:
+    source_id: source_2
+    source_field: table_2_median_volume_of_distribution
+    value_basis: literature_reported
+    raw_value: 0.07
+    raw_unit: L/kg
+    normalized_value: 4.9
+    normalized_unit: L
+    conversion:
+      method: body_weight_scaled
+      formula: 0.070 L/kg * 70 kg
+      assumptions:
+        weight_ref_kg_for_abs: 70.0
+        dose_context: 0.3 mg/kg cohort median selected from Table 2
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: Source_2 Table 2 reports Vd 0.070 L/kg in the 0.3 mg/kg cohort
+      and notes that distribution approximated serum. The fixture selects that dose-specific
+      value and must not be generalized across CDA1 doses.
+    source_review_status: checked
+    fixture_limitation_status: not_applicable
+    source_locator: PMC source_2, Table 2, Vd column, 0.3 mg/kg cohort
+    exact_quote: "0.070 (0.064, 0.081)"
+  t_half_h:
+    source_id: source_1
+    source_field: geometric_mean_half_life_range
+    value_basis: derived_from_reported
+    raw_value: 25.3-31.8
+    raw_unit: days
+    normalized_value: 685.2
+    normalized_unit: h
+    conversion:
+      method: unit_conversion
+      formula: fixture midpoint 28.55 days * 24 h/day
+      assumptions:
+        range_summary: midpoint
+    role: check_only
+    reviewer_status: checked
+    reviewer_note: PubMed source_1 reports geometric mean CDA1 half-lives of 25.3
+      to 31.8 days. The fixture uses that single reported geometric-mean range as a
+      check-only context summary and does not mix it with dose-specific median values
+      from the full text or use it to force CL/V agreement.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PubMed abstract
+    exact_quote: "geometric mean values of the half-life of CDA1 ranged between 25.3 and 31.8 days"

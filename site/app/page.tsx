@@ -13,14 +13,15 @@ const auditLabels: Record<string, [string, string]> = {
   UNVERIFIED: ["未確認", "Unverified"],
   DERIVED: ["導出", "Derived"],
 };
+const correctionReportUrl = "/pkdummy-harness/parameter-corrections/";
 const auditReportUrl = "https://github.com/Y-Fukiya/pkdummy-harness/blob/main/docs/research/2026-10-02-all-drug-audit/REPORT.md";
 function AuditPanel({ slug, lang }: { slug?: string; lang: Language }) {
   const item = parameterAudit.drugs.find((drug) => drug.slug === slug);
-  return <section className="panel audit-panel" aria-label={lang === "ja" ? "最新パラメータ監査" : "Latest parameter audit"}>
+  return <section className="panel audit-panel" aria-label={lang === "ja" ? "修正前のパラメータ監査" : "Historical parameter audit"}>
     <span className="eyebrow">PARAMETER AUDIT · {parameterAudit.audit_date}</span>
-    <h2>{lang === "ja" ? "最新パラメータ監査" : "Latest parameter audit"}</h2>
+    <h2>{lang === "ja" ? "2026-10-02監査の記録" : "Audit record from 2026-10-02"}</h2>
     <p>{lang === "ja" ? "37薬剤・148項目を監査。数値照合はモデル採用の承認ではありません。全37薬剤の臨床モデル採用は保留です。" : "37 drugs and 148 parameters reviewed. Matching a value does not qualify a model. Clinical model use remains on hold for all 37 drugs."}</p>
-    <p className="audit-scope">{lang === "ja" ? "監査対象は記録されたローカル作業版の入力snapshotです。掲載先mainの全薬剤YAMLを監査済みという意味ではありません。従来のPKチェック・確認状態と今回の監査判定は別に表示します。" : "The audit covers the recorded local working-tree snapshot, not every canonical YAML in main. Earlier PK checks and the new audit verdicts are separate assessments."}</p>
+    <p className="audit-scope">{lang === "ja" ? "この判定は2026-10-28の原典修正前の記録です。下の現行採用値とは区別してください。修正によって臨床採用保留が解除されたわけではありません。" : "These verdicts describe the snapshot before the 2026-10-28 source corrections. Current values below are separate. Corrections do not remove the clinical hold."}</p>
     {item ? <>
       <p>{item.summary}</p>
       <div className="audit-items">{item.parameters.map((entry) => <details key={entry.parameter}>
@@ -103,6 +104,7 @@ type Drug = {
   provenance: JsonObject;
   targets: JsonObject;
   spec: JsonObject;
+  simulation_validity?: { status: "clinical_hold"; reasons: string[] };
   review: {
     provenance_field_count: number;
     needs_review_count: number;
@@ -421,11 +423,12 @@ function hasCitationGap(drug: Drug): boolean {
 }
 
 function statusForDrug(drug: Drug, lang: Language): string {
+  if (drug.simulation_validity?.status === "clinical_hold") return lang === "ja" ? "原典修正済み・臨床採用保留" : "Source corrected, clinical hold";
   const audit = parameterAudit.drugs.find((entry) => entry.slug === drug.slug);
   if (audit) {
     const order = ["CONTRADICTION", "UNVERIFIED", "QUALIFIED", "FIXTURE_ASSUMPTION", "DERIVED", "VERIFIED_VALUE_ONLY"];
     const verdict = order.find((key) => audit.parameters.some((entry) => entry.verdict === key))!;
-    return `${lang === "ja" ? "監査" : "Audit"}: ${auditLabels[verdict][lang === "ja" ? 0 : 1]}`;
+    return `${lang === "ja" ? "修正前監査" : "Prior audit"}: ${auditLabels[verdict][lang === "ja" ? 0 : 1]}`;
   }
   if (drug.review.provenance_field_count === 0) return copy[lang].notRecorded;
   if (hasOpenReview(drug)) return copy[lang].needsReview;
@@ -693,8 +696,6 @@ function DetailView({ drug, lang, onBack }: { drug: Drug; lang: Language; onBack
         </div>
       </div>
 
-      <AuditPanel slug={drug.slug} lang={lang} />
-
       <div className="metrics detail-metrics">
         <div className="metric-card accent-blue">
           <span>CL</span>
@@ -718,13 +719,22 @@ function DetailView({ drug, lang, onBack }: { drug: Drug; lang: Language; onBack
         </div>
       </div>
 
+      {drug.simulation_validity?.status === "clinical_hold" && <section className="panel correction-panel" aria-label={lang === "ja" ? "現行パラメータの修正" : "Current parameter corrections"}>
+        <span className="eyebrow">SOURCE CORRECTIONS · 2026-10-28</span>
+        <h2>{lang === "ja" ? "現行パラメータの修正と制約" : "Current corrections and limitations"}</h2>
+        <p>{lang === "ja" ? "原典に基づく修正を実行spec・INDEX・表示データへ反映しています。原典値の照合と臨床モデルの妥当性確認は別です。" : "Source corrections are reflected in the execution spec, INDEX, and displayed data. Matching source values is separate from clinical model validation."}</p>
+        <ul>{drug.simulation_validity.reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul>
+        <a href={correctionReportUrl}>{lang === "ja" ? "修正値・換算式・原典を確認" : "Values, equations and source references"} ↗</a>
+      </section>}
+      <AuditPanel slug={drug.slug} lang={lang} />
+
       <section className="panel decision-panel" id="about">
         <div className="section-heading">
           <div>
             <span className="eyebrow">INTERPRETATION SUMMARY</span>
             <h2>{lang === "ja" ? "この値をどう読むか" : "How to read this evidence"}</h2>
           </div>
-          <span className="decision-mark">{hasOpenReview(drug) ? "REVIEW" : "TRACEABLE"}</span>
+          <span className="decision-mark">CLINICAL HOLD</span>
         </div>
         <p>
           {lang === "ja"
@@ -961,8 +971,8 @@ function Catalog({
           <p>{t.intro}</p>
           <div className="hero-note"><span className="dot" /> {t.notClinical}</div>
           <div className="hero-note readiness-note"><span className="dot" /> {lang === "ja"
-            ? `最新監査: ${parameterAudit.drug_count}薬剤・${parameterAudit.core_parameter_count}項目。臨床モデル採用は全薬剤で保留です。`
-            : `Latest audit: ${parameterAudit.drug_count} drugs, ${parameterAudit.core_parameter_count} parameters. Clinical model use remains on hold.`}</div>
+            ? `原典修正 2026-10-28。${parameterAudit.drug_count}薬剤の臨床モデル採用保留は継続しています。`
+            : `Source corrections updated 2026-10-28. Clinical model use remains on hold for all ${parameterAudit.drug_count} drugs.`}</div>
           <a className="mobile-catalog-jump" href="#catalog-section">{t.mobileCatalogJump} →</a>
         </div>
         <div className="hero-stamp">
@@ -972,6 +982,12 @@ function Catalog({
         </div>
       </section>
 
+      <section className="panel correction-panel" aria-label={lang === "ja" ? "現行データ" : "Current data"}>
+        <span className="eyebrow">CURRENT SNAPSHOT · 2026-10-28</span>
+        <h2>{lang === "ja" ? "実行specと表示値を統一しました" : "Displayed values match execution specs"}</h2>
+        <p>{lang === "ja" ? "CL・V・F1・投与経路・INDEXと表示データの一致を公開前に検査しています。数値の整合性は臨床的な妥当性の証明ではありません。" : "CL, V, F1, route, INDEX and displayed data are checked together before publication. Numerical consistency does not establish clinical validity."}</p>
+        <a href={correctionReportUrl}>{lang === "ja" ? "2026-10-28の原典修正と残る制約" : "2026-10-28 source corrections and remaining limitations"} ↗</a>
+      </section>
       <AuditPanel lang={lang} />
 
       <div className="metrics">

@@ -6,35 +6,43 @@ sources:
   url: https://go.drugbank.com/drugs/DB00638
 - id: source_2
   url: https://www.sciencedirect.com/topics/immunology-and-microbiology/elimination-half-life
+- id: source_3
+  url: https://pmc.ncbi.nlm.nih.gov/articles/PMC1873801/
 pk_raw:
-  half_life: 2-4 hours
-  clearance: 7.2 L/hr
-  volume_of_distribution: 16 L
+  half_life: Source_3 uses a tri-exponential IV disposition model and does not report
+    a unique single half-life
+  legacy_secondary_half_life_summary: 2-4 hours (not used for the canonical fixture)
+  clearance: source_3 healthy-subject systemic clearance 93.5 mL/min (normalized to
+    70 kg)
+  volume_of_distribution: source_3 healthy-subject Vss approximately 13 L/70 kg
   bioavailability: N/A (IV only)
   elimination_route: 腎排泄
 pk_parsed:
-  half_life_h: 3.0
-  half_life_h_range:
-  - 2.0
-  - 4.0
+  half_life_h: 1.6062234130622617
+  half_life_h_range: null
   clearance:
-    value: 7.2
+    value: 5.61
     unit: L/h
   volume:
-    value: 16.0
+    value: 13.0
     unit: L
   bioavailability_frac: 1.0
   weight_ref_kg_for_abs: 70.0
   clearance_basis: systemic
   volume_basis: systemic
+  clearance_basis_source: primary_source_reviewed
+  clearance_basis_note: Source_3 reports healthy-subject systemic inulin clearance
+    93.5 mL/min and Vss approximately 13 L/70 kg after IV bolus; the source explicitly
+    finds tri-exponential disposition. The repository uses these values only for a
+    transparent one-compartment fixture and derives its single ke/t1/2 from CL/V.
 derived:
-  ke_1_per_h: 0.45
-  CL_abs_L_per_h_at_70kg: 7.2
-  V_abs_L_at_70kg: 16.0
-  CL_apparent_L_per_h_at_70kg: 7.2
-  V_apparent_L_at_70kg: 16.0
-  CL_systemic_L_per_h_at_70kg: 7.2
-  V_systemic_L_at_70kg: 16.0
+  ke_1_per_h: 0.43153846153846154
+  CL_abs_L_per_h_at_70kg: 5.61
+  V_abs_L_at_70kg: 13.0
+  CL_apparent_L_per_h_at_70kg: 5.61
+  V_apparent_L_at_70kg: 13.0
+  CL_systemic_L_per_h_at_70kg: 5.61
+  V_systemic_L_at_70kg: 13.0
   notes:
   - Apparent CL/V were derived as (systemic CL/V) / F.
   - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability
@@ -43,86 +51,71 @@ derived:
     typically report systemic parameters.'
 value_provenance:
   CL_abs_L_per_h_at_70kg:
-    source_id: null
-    source_field: pk_parsed.clearance
-    value_basis: derived_from_reported
-    raw_value: 7.2
-    raw_unit: L/h
-    normalized_value: 7.2
+    source_id: source_3
+    source_field: healthy_subject_systemic_clearance
+    value_basis: literature_reported
+    raw_value: 93.5
+    raw_unit: mL/min
+    normalized_value: 5.61
     normalized_unit: L/h
     conversion:
-      method: direct
-      formula: pk_parsed.clearance.value
-      assumptions: {}
+      method: unit_conversion
+      formula: 93.5 mL/min * 60 min/h / 1000 mL/L
+      assumptions:
+        route_context: IV_bolus_healthy_subjects
+        weight_normalization: 70 kg
     role: simulation_parameter
-    reviewer_status: needs_source_review
-    reviewer_note: Clearance is used as a deterministic fixture model parameter and
-      is not recalibrated to force agreement with terminal half-life. Existing source
-      URLs do not identify the exact value-level source for this parameter. This provenance
-      records the canonical parsed/derived fixture value and intentionally marks source
-      mapping for future review.
-    source_review_status: needs_source_review
-    fixture_limitation_status: not_applicable
+    reviewer_status: checked
+    reviewer_note: PMC source_3 reports healthy-subject systemic inulin clearance
+      93.5 mL/min, normalized to 70 kg. It is a renal/systemic IV marker clearance,
+      not a conventional oral-drug CL.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PMC article, Results / clearance estimates
+    exact_quote: "93.5 (9.2) and 102.6 (19.6) ml min−1"
   V_abs_L_at_70kg:
-    source_id: null
-    source_field: pk_parsed.volume
-    value_basis: derived_from_reported
-    raw_value: 16.0
-    raw_unit: L
-    normalized_value: 16.0
+    source_id: source_3
+    source_field: healthy_subject_Vss
+    value_basis: literature_reported
+    raw_value: 13.0
+    raw_unit: L/70 kg
+    normalized_value: 13.0
     normalized_unit: L
     conversion:
       method: direct
-      formula: pk_parsed.volume.value
-      assumptions: {}
+      formula: source_3 reports Vss approximately 13 L/70 kg
+      assumptions:
+        route_context: IV_bolus_healthy_subjects
     role: simulation_parameter
-    reviewer_status: needs_source_review
-    reviewer_note: Volume is retained as the one-compartment fixture volume and is
-      not recalibrated to force agreement with terminal half-life. Existing source
-      URLs do not identify the exact value-level source for this parameter. This provenance
-      records the canonical parsed/derived fixture value and intentionally marks source
-      mapping for future review.
-    source_review_status: needs_source_review
-    fixture_limitation_status: not_applicable
+    reviewer_status: checked
+    reviewer_note: PMC source_3 reports healthy-subject Vss approximately 13 L/70
+      kg and describes tri-exponential inulin disposition. The value is retained as
+      a one-compartment fixture volume, not as evidence that inulin is one-compartmental.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PMC article, Discussion
+    exact_quote: "averaging 13l 70 kg−1"
   t_half_h:
-    source_id: null
-    source_field: pk_parsed.half_life_h
+    source_id: source_3
+    source_field: one_compartment_half_life_derived_from_source_CL_and_Vss
     value_basis: derived_from_reported
-    raw_value: 3.0
+    raw_value: 1.6062234130622617
     raw_unit: h
-    normalized_value: 3.0
+    normalized_value: 1.6062234130622617
     normalized_unit: h
     conversion:
-      method: direct
-      formula: pk_parsed.half_life_h
-      assumptions: {}
+      method: derived_formula
+      formula: ln(2) * 13 L / 5.61 L/h
+      assumptions:
+        source_tri_exponential: true
+        no_unique_source_single_half_life: true
     role: check_only
-    reviewer_status: acknowledged_fixture_limitation
-    reviewer_note: Half-life is retained as a check target only. CL and V are not
-      jointly calibrated to match terminal half-life in this deterministic one-compartment
-      fixture. Existing source URLs do not identify the exact value-level source for
-      this parameter. This provenance records the canonical parsed/derived fixture
-      value and intentionally marks source mapping for future review.
-    source_verification:
-      status: no_exact_public_source_match
-      reviewed_source_ids:
-      - source_1
-      - source_2
-      reviewed_external_queries:
-      - PubMed search: inulin pharmacokinetics human clearance half-life
-      - PubMed exact search: inulin half-life 2-4 hours clearance 7.2 L/hr
-      blocker: exact_value_not_found_in_public_primary_source
-      next_action: add_primary_source_or_replace_fixture_value
-      fixture_value_decision: retain_current_fixture_value_pending_primary_source
-      decision_reason: >
-        Retain the current 2-4 h fixture half-life for deterministic regression
-        continuity while keeping source_id null. This value must not be treated
-        as source-verified until a primary source exact match is added, or until
-        the fixture value is deliberately replaced with a source-verified value.
-      reviewer_note: Public unauthenticated DrugBank access did not expose exact
-        source text for source_1. The fetched ScienceDirect topic page for source_2
-        did not expose an exact inulin value. PubMed abstract searches did not identify
-        a public primary source matching the local 2-4 h inulin half-life range, so
-        source_id remains null instead of being inferred.
-    source_review_status: needs_source_review
+    reviewer_status: checked
+    reviewer_note: Source_3 explicitly states that inulin disposition is best described
+      by a tri-exponential model and does not provide a unique single half-life. The
+      committed 1.606 h is therefore derived only to make the one-compartment fixture
+      self-consistent; it must not be presented as an observed inulin half-life.
+    source_review_status: checked
     fixture_limitation_status: acknowledged
+    source_locator: PMC article, Abstract / Results
+    exact_quote: "Inulin disposition kinetics were best described by a tri-exponential model."

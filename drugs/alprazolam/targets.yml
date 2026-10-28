@@ -36,8 +36,7 @@ targets:
       acknowledged: false
       reason: null
 notes:
-- AUC is computed as Dose/CL (assuming CL is apparent CL/F for oral, and systemic
-  CL for IV).
+- AUC is computed as Dose/CL_apparent for this apparent-basis oral fixture; it is not an independent literature AUC.
 - Variability fields are placeholders unless you replace them with drug-specific PopPK
   values.
 - 'AUC target provenance: computed as Dose/CL from the extracted CL used by this fixture.

@@ -185,6 +185,8 @@ def normalize_route(route: Any) -> str:
     r = str(route or "").strip().lower()
     if r in {"po", "oral", "p.o.", "per os"} or r.startswith("oral"):
         return "po"
+    if r in {"sl", "s.l.", "sublingual"} or r.startswith("subling"):
+        return "sl"
     if r in {"iv", "i.v.", "intravenous"} or r.startswith("iv") or r.startswith("intraven"):
         return "iv"
     return r
@@ -261,7 +263,7 @@ def check_drug_files(root: Path, issues: list[str]) -> None:
             continue
         pk = read_yaml(pk_path)
         route = normalize_route(pk.get("route_inferred"))
-        expected_spec = "spec_pk1_oral.yml" if route == "po" else "spec_pk1_iv.yml" if route == "iv" else ""
+        expected_spec = "spec_pk1_oral.yml" if route in {"po", "sl"} else "spec_pk1_iv.yml" if route == "iv" else ""
         if not expected_spec:
             issues.append(f"{drug_dir.name}: unsupported route_inferred={pk.get('route_inferred')!r}")
             continue

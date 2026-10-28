@@ -12,6 +12,8 @@ sources:
   url: https://www.sciencedirect.com/topics/biochemistry-genetics-and-molecular-biology/abciximab
 - id: source_5
   url: https://pubmed.ncbi.nlm.nih.gov/14618072/
+- id: source_6
+  url: https://ascpt.onlinelibrary.wiley.com/doi/abs/10.1016/j.clpt.2003.11.342
 pk_raw:
   half_life: 20-30 minutes
   clearance: 183 +/- 72 mL/min
@@ -19,12 +21,12 @@ pk_raw:
   bioavailability: N/A (IV only)
   elimination_route: 細網内皮系による代謝
 pk_parsed:
-  half_life_h: 0.3333333333333333
+  half_life_h: 0.4166666666666667
   half_life_h_range:
   - 0.3333333333333333
   - 0.5
   clearance:
-    value: 4.32
+    value: 10.98
     unit: L/h
   volume:
     value: 1.44
@@ -34,12 +36,12 @@ pk_parsed:
   clearance_basis: systemic
   volume_basis: systemic
 derived:
-  ke_1_per_h: 0.042857142857142864
-  CL_abs_L_per_h_at_70kg: 4.32
+  ke_1_per_h: 0.10892857142857143
+  CL_abs_L_per_h_at_70kg: 10.98
   V_abs_L_at_70kg: 100.8
-  CL_apparent_L_per_h_at_70kg: 4.32
+  CL_apparent_L_per_h_at_70kg: 10.98
   V_apparent_L_at_70kg: 100.8
-  CL_systemic_L_per_h_at_70kg: 4.32
+  CL_systemic_L_per_h_at_70kg: 10.98
   V_systemic_L_at_70kg: 100.8
   notes:
   - Apparent CL/V were derived as (systemic CL/V) / F.
@@ -49,29 +51,31 @@ derived:
     typically report systemic parameters.'
 value_provenance:
   CL_abs_L_per_h_at_70kg:
-    source_id: null
-    source_field: pk_parsed.clearance
+    source_id: source_2
+    source_field: IV_steady_state_clearance_in_healthy_subjects
     value_basis: derived_from_reported
-    raw_value: 4.32
-    raw_unit: L/h
-    normalized_value: 4.32
+    raw_value: 183
+    raw_unit: mL/min
+    normalized_value: 10.98
     normalized_unit: L/h
     conversion:
-      method: direct
-      formula: pk_parsed.clearance.value
-      assumptions: {}
+      method: unit_conversion
+      formula: 183 mL/min * 60 min/h / 1000 mL/L
+      assumptions:
+        route_context: IV_steady_state_healthy_subjects
+        reported_variability: 72 mL/min SD
     role: simulation_parameter
-    reviewer_status: needs_source_review
-    reviewer_note: Clearance is used as a deterministic fixture model parameter and
-      is not recalibrated to force agreement with terminal half-life. Existing source
-      URLs do not identify the exact value-level source for this parameter. This provenance
-      records the canonical parsed/derived fixture value and intentionally marks source
-      mapping for future review.
-    source_review_status: needs_source_review
-    fixture_limitation_status: not_applicable
+    reviewer_status: checked
+    reviewer_note: PubMed source_2 reports steady-state clearance 183 +/- 72 mL/min
+      in healthy subjects. The canonical value uses the reported mean, converted to
+      L/h; intersubject variability is not represented by this deterministic fixture.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PubMed source_2, Abstract, Results
+    exact_quote: "Abciximab steady-state clearance in healthy participants was 183 +/- 72 ml/min"
   V_abs_L_at_70kg:
-    source_id: null
-    source_field: pk_parsed.volume
+    source_id: source_6
+    source_field: IV_volume_of_distribution_conference_abstract
     value_basis: derived_from_reported
     raw_value: 1.44
     raw_unit: L/kg
@@ -83,32 +87,35 @@ value_provenance:
       assumptions:
         weight_ref_kg_for_abs: 70.0
     role: simulation_parameter
-    reviewer_status: needs_source_review
-    reviewer_note: Volume is retained as the one-compartment fixture volume and is
-      not recalibrated to force agreement with terminal half-life. Existing source
-      URLs do not identify the exact value-level source for this parameter. This provenance
-      records the canonical parsed/derived fixture value and intentionally marks source
-      mapping for future review.
-    source_review_status: needs_source_review
-    fixture_limitation_status: not_applicable
+    reviewer_status: checked
+    reviewer_note: The Wiley conference abstract indexed as source_6 reports IV Vss
+      1.44 L/kg. The value is mapped for traceability but remains a conference-abstract
+      fixture input; it is not a substitute for a full peer-reviewed population PK
+      report.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: Wiley conference abstract source_6, Results
+    exact_quote: "Steady state volume of distribution of Abx was 1.44 L/kg"
   t_half_h:
     source_id: source_5
-    source_field: plasma_half_life_range
+    source_field: short_plasma_half_life_range
     value_basis: derived_from_reported
     raw_value: 20-30
     raw_unit: min
-    normalized_value: 0.3333333333333333
+    normalized_value: 0.4166666666666667
     normalized_unit: h
     conversion:
       method: unit_conversion
-      formula: lower bound of reported 20-30 min range / 60 min/h
+      formula: ((20 min + 30 min) / 2) / 60 min/h
       assumptions:
-        range_summary: lower_bound
+        range_summary: midpoint
     role: check_only
     reviewer_status: checked
     reviewer_note: PubMed source_5 reports abciximab short plasma half-life of 20-30
-      min. Canonical t_half_h keeps the lower-bound fixture value converted to hours
-      and remains a check target only. CL and V are not jointly calibrated to match
-      terminal half-life in this deterministic one-compartment fixture.
+      min. Canonical t_half_h uses the midpoint converted to hours and remains a check
+      target only. CL and V are not jointly calibrated to match terminal half-life
+      in this deterministic one-compartment fixture.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    source_locator: PubMed source_5, Abstract
+    exact_quote: "a short plasma half-life (20-30 min)"

@@ -7,20 +7,22 @@ scenario:
     unit: mg
   population:
     species: human
-    group: adult_healthy
+    group: elderly_healthy
+    parameter_source: source_1, elderly IV and oral comparison
 targets:
   auc:
     type: AUC0-inf
-    value: 54112.55411255411
+    value: 33008.658008658014
     unit: ng*h/mL
-    summary: geometric_mean
+    summary: fixture_consistency_check
     variability:
       type: gcv_percent
       value: 35
-    basis: dose_over_cl
-    target_basis: dose_over_cl_not_literature_auc
+    basis: f_dose_over_cl
+    target_basis: f_dose_over_cl_systemic_not_literature_auc
     independent_literature_target: false
-    source_value: CL_abs_L_per_h_at_70kg
+    source_value: CL_systemic_L_per_h_at_70kg
+    bioavailability_frac: 0.61
     role: consistency_check
   t_half:
     phase: terminal
@@ -36,25 +38,27 @@ targets:
       acknowledged: true
       reason: one_compartment_fixture_approximation
 notes:
-- AUC is computed as Dose/CL (assuming CL is apparent CL/F for oral, and systemic
-  CL for IV).
-- Variability fields are placeholders unless you replace them with drug-specific PopPK
-  values.
-- 'AUC target provenance: computed as Dose/CL from the extracted CL used by this fixture.
-  It is an integration consistency check, not an independent literature AUC or clinical
-  validity claim. To validate against a literature AUC, replace targets.auc.value/unit/summary
-  and add the source, raw text, unit conversion, and derivation note.'
-- 'Parameter-pair policy: spec theta uses CL and V from pk.yml derived absolute values
-  as the independent simulation parameters. The literature t_half is retained as a
-  target/check and is not used to recalibrate CL or V automatically.'
-- 'Known 1-compartment attainability issue: CL/V-implied t_half differs from pk_parsed.half_life_h
-  beyond the library warning threshold. t_half WARN/FAILED in demo validation may
-  be expected and this drug can be used as a stress-test fixture.'
+- Variability fields are placeholders unless you replace them with drug-specific PopPK values.
+- 'Parameter-pair policy: spec theta uses CL and V from pk.yml derived absolute values as the independent
+  simulation parameters. The literature t_half is retained as a target/check and is not used to recalibrate
+  CL or V automatically.'
+- 'Known 1-compartment attainability issue: CL/V-implied t_half differs from pk_parsed.half_life_h beyond
+  the library warning threshold. t_half WARN/FAILED in demo validation may be expected and this drug can
+  be used as a stress-test fixture.'
+- AUC is computed as F*Dose/CL_systemic and is a fixture consistency check, not an independent literature
+  AUC.
+- Parameter-source population is healthy elderly volunteers, N=12, from source_1. CL30.8 mL/min, Vss9.7
+  L and terminal half-life6.7 h followed7 mg IV over5 min. These are not the general healthy-young-adult
+  label values.
+- F1=0.61 is the elderly mean after10 mg oral; the prior0.615 mixed elderly61% with a previously measured
+  young-subject62%. Do not replace elderly CL/t_half with a different population label value.
+- The retained100 mg oral arm is a computational stress test, not the cited10 mg oral or7 mg IV scenario.
+  The generated body-weight distribution does not reconstruct the elderly cohort. KA, lag, IIV and residual
+  errors remain generic fixture assumptions.
 provenance_review:
   status: acknowledged_fixture_limitation
-  reviewer_note: t_half is retained as a check target only. CL/V are used for one-compartment
-    fixture generation and are not jointly calibrated to match literature terminal
-    half-life.
+  reviewer_note: The reported half-life remains check-only. CL and Vss are not recalibrated to force the
+    terminal half-life into a one-compartment model.
   reviewed_fields:
   - CL
   - V

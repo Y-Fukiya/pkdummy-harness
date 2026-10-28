@@ -11,7 +11,7 @@ scenario:
 targets:
   auc:
     type: AUC0-inf
-    value: 13888.888888888889
+    value: 17825.311942959
     unit: ng*h/mL
     summary: geometric_mean
     variability:
@@ -24,7 +24,7 @@ targets:
     role: consistency_check
   t_half:
     phase: terminal
-    value: 3.0
+    value: 1.6062234130622617
     unit: h
     summary: arithmetic_mean
     variability:

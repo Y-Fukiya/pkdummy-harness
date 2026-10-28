@@ -1,6 +1,6 @@
 scenario:
-  id: sufentanil_dose0.03mg_po_single
-  route: po
+  id: sufentanil_dose0.03mg_sl_single
+  route: sl
   regimen: single
   dose:
     value: 0.03
@@ -11,17 +11,23 @@ scenario:
 targets:
   auc:
     type: AUC0-inf
-    value: 0.2777777777777778
+    value: 0.278
     unit: ng*h/mL
-    summary: geometric_mean
+    summary: mean
     variability:
       type: gcv_percent
       value: 35
-    basis: dose_over_cl
-    target_basis: dose_over_cl_not_literature_auc
-    independent_literature_target: false
-    source_value: CL_abs_L_per_h_at_70kg
-    role: consistency_check
+    basis: literature_reported
+    target_basis: dailymed_single_dose_auc
+    independent_literature_target: true
+    source_id: source_1
+    raw_value: 278
+    raw_unit: h*pg/mL
+    conversion:
+      method: concentration_unit_conversion
+      formula: 278 h*pg/mL * 0.001 ng/pg
+      assumptions: {}
+    role: literature_check
   t_half:
     phase: terminal
     value: 13.4
@@ -36,8 +42,7 @@ targets:
       acknowledged: false
       reason: null
 notes:
-- AUC is computed as Dose/CL using the extracted CL. For oral, this is often apparent
-  CL/F unless you explicitly choose systemic parameters.
+- AUC is a DailyMed single-dose literature target: 278 h*pg/mL converted to 0.278 ng*h/mL. It is independent of the fixture target calculation.
 - Variability fields are placeholders unless you replace them with drug-specific PopPK
   values.
 - 'AUC target provenance: computed as Dose/CL from the extracted CL used by this fixture.

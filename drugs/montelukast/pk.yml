@@ -21,31 +21,28 @@ pk_parsed:
   volume:
     value: 9.7
     unit: L
-  bioavailability_frac: 0.615
+  bioavailability_frac: 0.61
   weight_ref_kg_for_abs: 70.0
   clearance_basis: systemic
   volume_basis: systemic
-  clearance_basis_source: unit_inferred
-  clearance_basis_note: 'clearance_basis set to systemic: source clearance is reported
-    in a mL/min-family unit (systemic plasma/renal clearance), not apparent CL/F.
-    Inferred from the source unit, not verified against full label text. NOTE: the
-    spec simulates a self-consistent fixture profile and is not calibrated to systemic-CL
-    + F (clinical exposure would use CL_apparent or F1=bioavailability); these remain
-    fixture values, not clinical PK.'
+  clearance_basis_source: primary_source_reviewed
+  clearance_basis_note: 'Systemic basis reviewed against PubMed source_1: plasma clearance is reported
+    after intravenous dosing, with oral bioavailability reported separately. The fixture uses systemic
+    CL with F1=bioavailability and remains a one-compartment workflow fixture, not a clinical PK model.'
 derived:
   ke_1_per_h: 0.19051546391752577
   CL_abs_L_per_h_at_70kg: 1.8479999999999999
   V_abs_L_at_70kg: 9.7
-  CL_apparent_L_per_h_at_70kg: 3.004878048780488
-  V_apparent_L_at_70kg: 15.772357723577235
+  CL_apparent_L_per_h_at_70kg: 3.029508196721311
+  V_apparent_L_at_70kg: 15.901639344262295
   CL_systemic_L_per_h_at_70kg: 1.8479999999999999
   V_systemic_L_at_70kg: 9.7
   notes:
   - Apparent CL/V were derived as (systemic CL/V) / F.
-  - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability
-    with systemic CL/V.'
-  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
-    typically report systemic parameters.'
+  - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability with systemic
+    CL/V.'
+  - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels typically report systemic
+    parameters.'
 value_provenance:
   CL_abs_L_per_h_at_70kg:
     source_id: source_1
@@ -61,11 +58,13 @@ value_provenance:
       assumptions: {}
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: PubMed source_1 reports mean plasma clearance of 30.8 mL/min after
-      intravenous dosing. Clearance is used as a deterministic fixture model parameter
+    reviewer_note: PubMed source_1 reports mean plasma clearance of 30.8 mL/min after intravenous dosing;
+      this supports a systemic CL interpretation. Clearance is used as a deterministic fixture model parameter
       and is not recalibrated to force agreement with terminal half-life.
     source_review_status: checked
     fixture_limitation_status: not_applicable
+    source_locator: PubMed abstract, elderly IV paragraph
+    exact_quote: 30.8 mL min-1
   V_abs_L_at_70kg:
     source_id: source_1
     source_field: volume_of_distribution
@@ -80,11 +79,13 @@ value_provenance:
       assumptions: {}
     role: simulation_parameter
     reviewer_status: checked
-    reviewer_note: PubMed source_1 reports mean volume of distribution of 9.7 L after
-      intravenous dosing. Volume is retained as the one-compartment fixture volume
-      and is not recalibrated to force agreement with terminal half-life.
+    reviewer_note: PubMed source_1 reports mean volume of distribution of 9.7 L after intravenous dosing.
+      Volume is retained as the one-compartment fixture volume and is not recalibrated to force agreement
+      with terminal half-life.
     source_review_status: checked
     fixture_limitation_status: not_applicable
+    source_locator: PubMed abstract, elderly IV paragraph
+    exact_quote: 9.7 L
   t_half_h:
     source_id: source_1
     source_field: terminal_half_life
@@ -99,9 +100,45 @@ value_provenance:
       assumptions: {}
     role: check_only
     reviewer_status: checked
-    reviewer_note: PubMed source_1 reports mean terminal half-life of 6.7 h after
-      intravenous dosing. Canonical t_half_h remains a check target only. CL and V
-      are not jointly calibrated to match terminal half-life in this deterministic
-      one-compartment fixture.
+    reviewer_note: PubMed source_1 reports mean terminal half-life of 6.7 h after intravenous dosing.
+      Canonical t_half_h remains a check target only. CL and V are not jointly calibrated to match terminal
+      half-life in this deterministic one-compartment fixture.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    source_locator: PubMed abstract, elderly IV paragraph
+    exact_quote: 6.7 h
+  bioavailability_frac:
+    source_id: source_1
+    source_field: elderly_absolute_oral_bioavailability_10mg
+    value_basis: literature_reported
+    raw_value: 61
+    raw_unit: percent
+    normalized_value: 0.61
+    normalized_unit: fraction
+    conversion:
+      method: unit_conversion
+      formula: 61 / 100
+      assumptions:
+        population_context: healthy_elderly_volunteers
+        dose_context: 10 mg oral, single-dose bioavailability comparison
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: Source_1 reports mean oral F61% in healthy elderly subjects after10 mg. This matches
+      the elderly population of the IV CL, Vss and half-life values. The separately reported young-subject62%
+      is not averaged into this value.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PubMed abstract, oral bioavailability paragraph
+    exact_quote: the bioavailability of montelukast in healthy elderly averaged 61%
+simulation_validity:
+  status: clinical_hold
+  review_date: '2026-10-28'
+  reasons:
+  - Parameter-source population is healthy elderly volunteers, N=12, from source_1. CL30.8 mL/min, Vss9.7
+    L and terminal half-life6.7 h followed7 mg IV over5 min. These are not the general healthy-young-adult
+    label values.
+  - F1=0.61 is the elderly mean after10 mg oral; the prior0.615 mixed elderly61% with a previously measured
+    young-subject62%. Do not replace elderly CL/t_half with a different population label value.
+  - The retained100 mg oral arm is a computational stress test, not the cited10 mg oral or7 mg IV scenario.
+    The generated body-weight distribution does not reconstruct the elderly cohort. KA, lag, IIV and residual
+    errors remain generic fixture assumptions.

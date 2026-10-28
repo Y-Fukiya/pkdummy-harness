@@ -2,7 +2,8 @@ id: OSP_albuterol
 name: Albuterol
 route_inferred: iv
 sources:
-- url: https://pubmed.ncbi.nlm.nih.gov/2878124/
+- id: source_1
+  url: https://pubmed.ncbi.nlm.nih.gov/3790406/
 pk_raw:
   text: 'IV study: clearance 480 mL/min, t1/2 3.86 h. One-comp V derived from CL and
     t1/2.'
@@ -32,3 +33,67 @@ derived:
     with systemic CL/V.'
   - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
     typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: source_1
+    source_field: intravenous_total_plasma_clearance
+    value_basis: derived_from_reported
+    raw_value: 480
+    raw_unit: mL/min
+    normalized_value: 28.8
+    normalized_unit: L/h
+    conversion:
+      method: unit_conversion
+      formula: 480 mL/min * 60 min/h / 1000 mL/L
+      assumptions: {}
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: PubMed source_1 reports total plasma clearance of 480 +/- 123 mL/min
+      after intravenous administration. The fixture retains the reported mean as systemic
+      CL and does not use the half-life to recalibrate it.
+    source_review_status: checked
+    fixture_limitation_status: not_applicable
+    source_locator: PubMed abstract
+    exact_quote: "With intravenous administration, total plasma clearance was 480 +/- 123 ml min-1"
+  V_abs_L_at_70kg:
+    source_id: source_1
+    source_field: one_compartment_volume_derived_from_clearance_and_half_life
+    value_basis: fixture_derived
+    raw_value: 480
+    raw_unit: mL/min with t1/2 3.86 h
+    normalized_value: 160.38152230554428
+    normalized_unit: L
+    conversion:
+      method: derived_formula
+      formula: CL_abs_L_per_h_at_70kg * t_half_h / ln(2)
+      assumptions:
+        model: one_compartment_fixture
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: The cited study reports the IV clearance and half-life; the committed
+      V is explicitly a one-compartment fixture derivation, not a directly reported
+      Vd.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PubMed abstract
+    exact_quote: "apparent volume of distribution was 156 +/- 381"
+  t_half_h:
+    source_id: source_1
+    source_field: intravenous_elimination_half_life
+    value_basis: literature_reported
+    raw_value: 3.86
+    raw_unit: h
+    normalized_value: 3.86
+    normalized_unit: h
+    conversion:
+      method: direct
+      formula: pk_parsed.half_life_h
+      assumptions: {}
+    role: check_only
+    reviewer_status: checked
+    reviewer_note: PubMed source_1 reports an IV elimination half-life of 3.86 +/-
+      0.83 h. It remains a check target because the fixture V is derived independently.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PubMed abstract
+    exact_quote: "elimination half-life was 3.86 +/- 0.83 h"

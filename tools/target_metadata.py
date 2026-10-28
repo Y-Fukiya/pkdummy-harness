@@ -38,6 +38,8 @@ def infer_auc_metadata(targets: dict[str, Any], notes_text: str) -> dict[str, An
     explicit_basis = auc.get("basis")
     if explicit_basis:
         basis = str(explicit_basis)
+    elif has_auc and ("f*dose/cl" in notes_text or "f* dose/cl" in notes_text or "f_dose_over_cl" in notes_text):
+        basis = "f_dose_over_cl"
     elif has_auc and ("dose/cl" in notes_text or "computed as dose/cl" in notes_text):
         basis = "dose_over_cl"
     elif has_auc:
@@ -45,7 +47,7 @@ def infer_auc_metadata(targets: dict[str, Any], notes_text: str) -> dict[str, An
     else:
         basis = "not_provided"
 
-    if basis == "dose_over_cl":
+    if basis in {"dose_over_cl", "f_dose_over_cl"}:
         target_basis = str(auc.get("target_basis") or "dose_over_cl_not_literature_auc")
         independent = bool(auc.get("independent_literature_target", False))
     elif has_auc:
@@ -60,6 +62,7 @@ def infer_auc_metadata(targets: dict[str, Any], notes_text: str) -> dict[str, An
         "target_basis": target_basis,
         "independent_literature_target": independent,
         "source_value": auc.get("source_value"),
+        "bioavailability_frac": auc.get("bioavailability_frac"),
         "role": auc.get("role"),
         "value": auc.get("value"),
         "unit": auc.get("unit"),

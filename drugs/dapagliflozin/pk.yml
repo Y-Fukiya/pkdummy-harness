@@ -2,33 +2,125 @@ id: OSP_dapagliflozin
 name: Dapagliflozin
 route_inferred: po
 sources:
-- url: https://www.accessdata.fda.gov/drugsatfda_docs/nda/2014/202293Orig1s000ClinPharmR.pdf
+- id: source_1
+  url: https://www.accessdata.fda.gov/drugsatfda_docs/nda/2014/202293Orig1s000ClinPharmR.pdf
 pk_raw:
-  text: 'FDA ClinPharm review: plasma clearance 207 mL/min; t1/2 12.9 h; oral bioavailability
-    78%. Treat CL/V as apparent for 1-comp template.'
+  text: 'FDA ClinPharm review: IV microdose systemic clearance 207 mL/min and Vss
+    118 L; oral bioavailability 77.8%; oral terminal t1/2 12.9 h. Treat CL/V as systemic
+    values and retain F separately for the oral fixture.'
 pk_parsed:
   half_life_h: 12.9
   clearance:
     value: 12.42
     unit: L/h
   volume:
-    value: 231.14571406114794
+    value: 118.0
     unit: L
   bioavailability_frac: 0.78
-  clearance_basis: apparent
-  volume_basis: apparent
+  clearance_basis: systemic
+  volume_basis: systemic
+  clearance_basis_source: primary_source_reviewed
+  clearance_basis_note: FDA source_1 Table 24 reports CL 207 mL/min and Vss 118 L
+    from an IV microdose; oral F 77.8% and oral terminal half-life 12.9 h are retained
+    separately. The current one-compartment V is Vss, not an oral V/F estimate.
   weight_ref_kg_for_abs: 70.0
 derived:
-  ke_1_per_h: 0.053732339578290336
+  ke_1_per_h: 0.1052542372881356
   CL_abs_L_per_h_at_70kg: 12.42
-  V_abs_L_at_70kg: 231.14571406114794
-  CL_apparent_L_per_h_at_70kg: 12.42
-  V_apparent_L_at_70kg: 231.14571406114794
-  CL_systemic_L_per_h_at_70kg: 9.6876
-  V_systemic_L_at_70kg: 180.2936569676954
+  V_abs_L_at_70kg: 118.0
+  CL_apparent_L_per_h_at_70kg: 15.923076923076922
+  V_apparent_L_at_70kg: 151.28205128205127
+  CL_systemic_L_per_h_at_70kg: 12.42
+  V_systemic_L_at_70kg: 118.0
   notes:
-  - Systemic CL/V were derived as (apparent CL/V) * F (assumes values are CL/F, V/F).
-  - 'Basis detected/selected: apparent (CL/F, V/F). Model default can use CL_abs/V_abs
-    as apparent and set F1=1.'
+  - Apparent CL/V were derived as (systemic CL/V) / F.
+  - 'Basis detected/selected: systemic (CL, V). Oral models typically use F1=bioavailability
+    with systemic CL/V.'
   - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
     typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: source_1
+    source_field: IV_microdose_clearance
+    value_basis: literature_reported
+    raw_value: 207
+    raw_unit: mL/min
+    normalized_value: 12.42
+    normalized_unit: L/h
+    conversion:
+      method: unit_conversion
+      formula: 207 mL/min * 60 min/h / 1000 mL/L
+      assumptions:
+        route_context: IV_microdose
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: FDA ClinPharm source_1 Table 24 reports 207 mL/min for the IV microdose.
+      It is treated as systemic CL; oral F is not folded into this value.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: Clinical Pharmacology Review PDF, Table 24 (p. 74)
+    exact_quote: "CL (mL/min) ... Geom. Mean (CV %) NA 207 (23)"
+  V_abs_L_at_70kg:
+    source_id: source_1
+    source_field: IV_microdose_Vss
+    value_basis: literature_reported
+    raw_value: 118
+    raw_unit: L
+    normalized_value: 118.0
+    normalized_unit: L
+    conversion:
+      method: direct
+      formula: FDA source_1 Table 24 reported Vss
+      assumptions:
+        route_context: IV_microdose
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: FDA ClinPharm source_1 Table 24 reports Vss 118 L in the IV microdose
+      context. It is not interpreted as oral V/F.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: Clinical Pharmacology Review PDF, p. 44
+    exact_quote: "After IV administration the volume of distribution of dapagliflozin is 118 L."
+  bioavailability_frac:
+    source_id: source_1
+    source_field: absolute_oral_bioavailability
+    value_basis: literature_reported
+    raw_value: 77.8
+    raw_unit: percent
+    normalized_value: 0.78
+    normalized_unit: fraction
+    conversion:
+      method: unit_conversion
+      formula: 77.8 percent / 100
+      assumptions:
+        population_context: healthy_fasted_subjects
+        study_design: 10 mg oral followed by 80 microgram IV microdose
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: FDA ClinPharm source_1 reports absolute bioavailability of 77.8% in the IV-microdose study. The normalized fixture value is 0.78; CL and V remain the systemic IV values.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: Clinical Pharmacology Review PDF, section 2.8.5, Table 24 (p. 74)
+    exact_quote: "The absolute bioavailability was 78%"
+  t_half_h:
+    source_id: source_1
+    source_field: oral_terminal_half_life
+    value_basis: label_reported
+    raw_value: 12.9
+    raw_unit: h
+    normalized_value: 12.9
+    normalized_unit: h
+    conversion:
+      method: direct
+      formula: FDA source_1 reported oral terminal t1/2
+      assumptions:
+        route_context: oral
+    role: check_only
+    reviewer_status: checked
+    reviewer_note: FDA ClinPharm source_1 reports oral terminal half-life 12.9 h.
+      It is retained as a check target; CL/V are not recalibrated to force the one-compartment
+      fixture to reproduce it.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: Clinical Pharmacology Review PDF, Table 1 (p. 18)
+    exact_quote: "T1/2, hour ... 12.9 (5.54)"

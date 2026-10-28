@@ -24,7 +24,7 @@ def md(value):
 
 def main():
     internal = json.loads((OUT / "internal-audit.json").read_text())
-    tests = json.loads((OUT / "test-summary.json").read_text())
+    json.loads((OUT / "test-summary.json").read_text())
     groups = [json.loads((OUT / f"group-{letter}.json").read_text()) for letter in "abc"]
     drugs = sorted([drug for group in groups for drug in group["drugs"]], key=lambda drug: drug["slug"])
     assert len(drugs) == len({drug["slug"] for drug in drugs}) == 37

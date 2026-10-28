@@ -27,13 +27,12 @@ pk_parsed:
   weight_ref_kg_for_abs: 70.0
   clearance_basis: systemic
   volume_basis: systemic
-  clearance_basis_source: unit_inferred
-  clearance_basis_note: 'clearance_basis set to systemic: source clearance is reported
-    in a mL/min-family unit (systemic plasma/renal clearance), not apparent CL/F.
-    Inferred from the source unit, not verified against full label text. NOTE: the
-    spec simulates a self-consistent fixture profile and is not calibrated to systemic-CL
-    + F (clinical exposure would use CL_apparent or F1=bioavailability); these remain
-    fixture values, not clinical PK.'
+  clearance_basis_source: primary_source_reviewed
+  clearance_basis_note: 'Systemic basis reviewed against PubMed source_2: mean total
+    clearance from blood is reported after intravenous dosing, while oral systemic
+    availability is reported separately. The fixture uses the selected upper bound
+    of the reported clearance range as a systemic reference and remains a one-compartment
+    workflow fixture, not a clinical PK model.'
 derived:
   ke_1_per_h: 0.12857142857142856
   CL_abs_L_per_h_at_70kg: 90.0
@@ -65,10 +64,13 @@ value_provenance:
     role: simulation_parameter
     reviewer_status: checked
     reviewer_note: PubMed source_2 reports mean total clearance from blood of 1 to
-      1.5 L/min. Clearance is used as a deterministic fixture model parameter and
-      is not recalibrated to force agreement with terminal half-life.
+      1.5 L/min after intravenous dosing; this supports a systemic CL interpretation.
+      Clearance is used as a deterministic fixture model parameter and is not recalibrated
+      to force agreement with terminal half-life.
     source_review_status: checked
     fixture_limitation_status: not_applicable
+    source_locator: PubMed abstract
+    exact_quote: "Mean total clearance from the blood is 1 to 1.5 L/min"
   V_abs_L_at_70kg:
     source_id: source_2
     source_field: volume_of_distribution
@@ -89,6 +91,29 @@ value_provenance:
       recalibrated to force agreement with terminal half-life.
     source_review_status: checked
     fixture_limitation_status: not_applicable
+    source_locator: PubMed abstract
+    exact_quote: "The volume of distribution of felodipine is about 10 L/kg"
+  bioavailability_frac:
+    source_id: source_2
+    source_field: oral_systemic_bioavailability
+    value_basis: literature_reported
+    raw_value: 15
+    raw_unit: percent
+    normalized_value: 0.15
+    normalized_unit: fraction
+    conversion:
+      method: unit_conversion
+      formula: 15 percent / 100
+      assumptions:
+        population_context: clinical_pharmacokinetic_summary
+        route_context: oral
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: PubMed source_2 reports that first-pass degradation reduces the amount reaching systemic circulation to about 15%. The fixture uses this oral systemic availability with IV-derived systemic CL/V.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PubMed abstract
+    exact_quote: "the amount reaching the systemic circulation is reduced to about 15%"
   t_half_h:
     source_id: source_2
     source_field: mean_elimination_half_life
@@ -112,3 +137,5 @@ value_provenance:
       to match terminal half-life in this deterministic one-compartment fixture.
     source_review_status: checked
     fixture_limitation_status: acknowledged
+    source_locator: PubMed abstract
+    exact_quote: "The mean elimination half-life of felodipine is approximately 25h."

@@ -126,7 +126,7 @@ def _arms(
     regimen = spec.get("regimen") or {}
     route = str(regimen.get("route") or "").strip().lower()
     template = str(((spec.get("model") or {}).get("template")) or "").strip().lower()
-    if route in {"oral", "po"} and template and "oral" not in template:
+    if route in {"oral", "po", "sublingual", "sl"} and template and "oral" not in template:
         raise ValueError("regimen.route is oral/po but model.template does not describe an oral model.")
     if route in {"iv", "iv_bolus", "iv_infusion", "intravenous"} and "oral" in template:
         raise ValueError("intravenous regimen.route conflicts with an oral model.template.")
@@ -162,7 +162,7 @@ def _arms(
 
 def _is_oral(spec: dict[str, Any]) -> bool:
     route = str(((spec.get("regimen") or {}).get("route")) or "").strip().lower()
-    return route in {"oral", "po"}
+    return route in {"oral", "po", "sublingual", "sl"}
 
 
 def _has_first_order_absorption(spec: dict[str, Any], route: str) -> bool:
@@ -174,7 +174,7 @@ def _is_iv_infusion(route: str, *, infusion_h: float) -> bool:
 
 
 def _is_supported_demo_route(route: str) -> bool:
-    return route in {"oral", "po", "sc", "im", "subcutaneous", "intramuscular", "iv", "iv_bolus", "iv_infusion", "intravenous"}
+    return route in {"oral", "po", "sublingual", "sl", "sc", "im", "subcutaneous", "intramuscular", "iv", "iv_bolus", "iv_infusion", "intravenous"}
 
 
 def _concentration_ng_ml(

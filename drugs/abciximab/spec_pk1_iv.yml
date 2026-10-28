@@ -29,7 +29,7 @@ model:
     conc: ng/mL
     mult: 1000
   theta:
-    CL: 4.32
+    CL: 10.98
     V: 100.8
   notes:
   - 'Demo theta policy: CL and V are the independent simulation parameters for this

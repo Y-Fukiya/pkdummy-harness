@@ -2,7 +2,8 @@ id: OSP_carbamazepine
 name: Carbamazepine
 route_inferred: po
 sources:
-- url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=52f0f753-a70c-4572-a85c-97ea7a2601a9
+- id: source_1
+  url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=52f0f753-a70c-4572-a85c-97ea7a2601a9
 pk_raw:
   text: 'Label: oral clearance ~80 mL/min at steady state; half-life 12-17 h. Use
     t1/2 14.5 h; one-comp V derived.'
@@ -17,6 +18,9 @@ pk_parsed:
   bioavailability_frac: 1.0
   clearance_basis: apparent
   volume_basis: apparent
+  clearance_basis_source: confirmed
+  clearance_basis_note: Source_1 reports oral apparent clearance at steady state (approximately
+    80 mL/min); it is retained as CL/F rather than converted to systemic CL.
   weight_ref_kg_for_abs: 70.0
 derived:
   ke_1_per_h: 0.04780325383172036
@@ -32,3 +36,69 @@ derived:
     as apparent and set F1=1.'
   - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
     typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: source_1
+    source_field: oral_apparent_clearance_at_steady_state
+    value_basis: label_reported
+    raw_value: 80
+    raw_unit: mL/min
+    normalized_value: 4.8
+    normalized_unit: L/h
+    conversion:
+      method: unit_conversion
+      formula: 80 mL/min * 60 min/h / 1000 mL/L
+      assumptions:
+        route_context: oral_steady_state
+        parameter_basis: apparent_CL_over_F
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: DailyMed source_1 reports approximately 80 mL/min oral apparent
+      clearance at steady state. The canonical value is a unit conversion and remains
+      CL/F, not systemic CL.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: DailyMed label, Pharmacokinetics, repeated dosing
+    exact_quote: "The apparent oral clearance following a single dose was 25 ± 5 mL/min and following multiple dosing was 80 ± 30 mL/min"
+  V_abs_L_at_70kg:
+    source_id: source_1
+    source_field: one_compartment_volume_derived_from_oral_CL_and_half_life
+    value_basis: derived_from_reported
+    raw_value: 80
+    raw_unit: mL/min
+    normalized_value: 100.41157484587185
+    normalized_unit: L
+    conversion:
+      method: derived_formula
+      formula: CL_apparent_L_per_h_at_70kg * half_life_h / ln(2)
+      assumptions:
+        source_reported_half_life_range_h:
+        - 12.0
+        - 17.0
+        representative_half_life_h: 14.5
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: The one-compartment V is derived from the label's oral apparent
+      clearance and the midpoint of the reported 12-17 h half-life range; no directly
+      reported V is claimed.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+  t_half_h:
+    source_id: source_1
+    source_field: oral_half_life_range_at_steady_state
+    value_basis: derived_from_reported
+    raw_value: 12-17
+    raw_unit: h
+    normalized_value: 14.5
+    normalized_unit: h
+    conversion:
+      method: derived_formula
+      formula: (12 h + 17 h) / 2
+      assumptions:
+        range_summary: midpoint
+    role: check_only
+    reviewer_status: checked
+    reviewer_note: DailyMed source_1 reports a 12-17 h range. The canonical 14.5 h
+      is a midpoint fixture and is not a directly observed mean.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged

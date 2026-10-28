@@ -11,16 +11,17 @@ scenario:
 targets:
   auc:
     type: AUC0-inf
-    value: 2083.3333333333335
+    value: 1041.6666666666667
     unit: ng*h/mL
     summary: geometric_mean
     variability:
       type: gcv_percent
       value: 35
-    basis: dose_over_cl
-    target_basis: dose_over_cl_not_literature_auc
+    basis: f_dose_over_cl
+    target_basis: f_dose_over_cl_systemic_not_literature_auc
+    bioavailability_frac: 0.5
     independent_literature_target: false
-    source_value: CL_abs_L_per_h_at_70kg
+    source_value: CL_systemic_L_per_h_at_70kg
     role: consistency_check
   t_half:
     phase: terminal
@@ -36,17 +37,17 @@ targets:
       acknowledged: false
       reason: null
 notes:
-- AUC is computed as Dose/CL (assuming CL is apparent CL/F for oral, and systemic
-  CL for IV).
+- AUC is computed as F*Dose/CL_systemic because source_2's 48 L/h is an IV/systemic
+  clearance and source_1 reports oral F approximately 50%.
 - Variability fields are placeholders unless you replace them with drug-specific PopPK
   values.
 - 'AUC target provenance: computed as Dose/CL from the extracted CL used by this fixture.
   It is an integration consistency check, not an independent literature AUC or clinical
   validity claim. To validate against a literature AUC, replace targets.auc.value/unit/summary
   and add the source, raw text, unit conversion, and derivation note.'
-- 'Parameter-pair policy: spec theta uses CL and V from pk.yml derived absolute values
-  as the independent simulation parameters. The literature t_half is retained as a
-  target/check and is not used to recalibrate CL or V automatically.'
+- 'Parameter-pair policy: spec theta uses systemic CL and V from pk.yml as the independent
+  simulation parameters. The representative t_half is retained as a check and is not
+  used to claim a jointly validated one-compartment model.'
 - '1-compartment attainability label: no CL/V/t_half warning is currently flagged
   by validate_library at the repository threshold. This is still a workflow-fixture
   label, not evidence of clinical model validity.'

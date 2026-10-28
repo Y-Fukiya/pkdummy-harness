@@ -32,12 +32,10 @@ model:
     CL: 90.0
     V: 700.0
     KA: 1.2
-    F1: 1.0
+    F1: 0.15
     ALAG1: 0.5
   notes:
-  - Default assumes CL and V from sources are apparent (CL/F, V/F). Set theta.F1 to
-    your chosen bioavailability AND adjust CL/V accordingly if your sources report
-    systemic CL/V.
+  - Systemic CL/V parameterization: theta.F1 is the extracted bioavailability; exposure is F*Dose/CL_systemic.
   - 'Demo theta policy: CL and V are the independent simulation parameters for this
     1-compartment fixture. t_half is checked downstream and is not used to recalibrate
     theta.'

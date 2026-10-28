@@ -2,32 +2,110 @@ id: OSP_raltegravir
 name: Raltegravir
 route_inferred: po
 sources:
-- url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3486539/
+- id: source_1
+  url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3370715/
+- id: source_2
+  url: https://pubmed.ncbi.nlm.nih.gov/21746959/
 pk_raw:
-  text: 'PopPK: CL/F 60.2 L/h; terminal t1/2 10.9 h. One-comp V derived.'
+  text: 'PopPK: CL/F 60.2 L/h from source_1; healthy-volunteer plasma terminal t1/2
+    7.8 h (95% CI 5.5-11.3) from source_2. One-comp V derived.'
 pk_parsed:
-  half_life_h: 10.9
+  half_life_h: 7.8
+  half_life_h_range:
+  - 5.5
+  - 11.3
   clearance:
     value: 60.2
     unit: L/h
   volume:
-    value: 946.6676319305201
+    value: 677.4318833998217
     unit: L
   bioavailability_frac: 1.0
   clearance_basis: apparent
   volume_basis: apparent
   weight_ref_kg_for_abs: 70.0
+  clearance_basis_source: confirmed
+  clearance_basis_note: Source_1 is the population PK analysis that explicitly reports
+    oral CL/F. The current one-compartment V is a fixture derivation; the source reports
+    multicompartment V1/F and V2/F rather than this exact value.
 derived:
-  ke_1_per_h: 0.06359148445504086
+  ke_1_per_h: 0.08886502314871093
   CL_abs_L_per_h_at_70kg: 60.2
-  V_abs_L_at_70kg: 946.6676319305201
+  V_abs_L_at_70kg: 677.4318833998217
   CL_apparent_L_per_h_at_70kg: 60.2
-  V_apparent_L_at_70kg: 946.6676319305201
+  V_apparent_L_at_70kg: 677.4318833998217
   CL_systemic_L_per_h_at_70kg: 60.2
-  V_systemic_L_at_70kg: 946.6676319305201
+  V_systemic_L_at_70kg: 677.4318833998217
   notes:
   - Systemic CL/V were derived as (apparent CL/V) * F (assumes values are CL/F, V/F).
   - 'Basis detected/selected: apparent (CL/F, V/F). Model default can use CL_abs/V_abs
     as apparent and set F1=1.'
   - 'Reminder: Oral labels often report apparent parameters (CL/F, V/F). IV labels
     typically report systemic parameters.'
+value_provenance:
+  CL_abs_L_per_h_at_70kg:
+    source_id: source_1
+    source_field: oral_population_CL_over_F
+    value_basis: literature_reported
+    raw_value: 60.2
+    raw_unit: L/h
+    normalized_value: 60.2
+    normalized_unit: L/h
+    conversion:
+      method: direct
+      formula: source_1 reported oral CL/F
+      assumptions: {}
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: Source_1 reports population oral CL/F of 60.2 L/h. This is an apparent
+      parameter and is used with F1=1 in the apparent-parameter fixture.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PubMed abstract
+    exact_quote: "The apparent plasma raltegravir half-life was 7.8 (5.5 to 11.3) h"
+  V_abs_L_at_70kg:
+    source_id: source_1
+    source_field: one_compartment_volume_from_CL_and_half_life
+    value_basis: derived_from_reported
+    raw_value: 677.4318833998217
+    raw_unit: L
+    normalized_value: 677.4318833998217
+    normalized_unit: L
+    conversion:
+      method: derived_formula
+      formula: CL_abs_L_per_h_at_70kg * half_life_h / ln(2)
+      assumptions:
+        source_reports_multicompartment_V1_over_F_and_V2_over_F: true
+    role: simulation_parameter
+    reviewer_status: checked
+    reviewer_note: Source_1 supports the apparent CL/F context but does not report
+      the committed one-compartment V/F. This value is retained only as a deterministic
+      fixture derivation and must not be presented as a directly observed distribution
+      volume.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+  t_half_h:
+    source_id: source_2
+    source_field: apparent_plasma_terminal_half_life_healthy_volunteers
+    value_basis: literature_reported
+    raw_value: 7.8
+    raw_unit: h
+    normalized_value: 7.8
+    normalized_unit: h
+    conversion:
+      method: direct
+      formula: source_2 reported geometric-mean apparent plasma half-life
+      assumptions:
+        confidence_interval_h:
+        - 5.5
+        - 11.3
+        route_context: oral_single_dose
+    role: check_only
+    reviewer_status: checked
+    reviewer_note: PubMed source_2 reports apparent plasma raltegravir half-life 7.8
+      h (95% CI 5.5-11.3) in healthy volunteers after a single oral dose. The previous
+      10.9 h value was not retained because its exact context was not established.
+    source_review_status: checked
+    fixture_limitation_status: acknowledged
+    source_locator: PubMed source_2, Abstract
+    exact_quote: "The apparent plasma raltegravir half-life was 7.8 (5.5 to 11.3) h"
