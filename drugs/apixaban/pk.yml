@@ -147,6 +147,5 @@ simulation_validity:
   - The retained systemic CL and V imply a half-life that differs from the reported
     oral apparent half-life of 12 h. The oral half-life remains a check-only reference
     and does not establish an absorption-limited mechanism.
-  - KA, lag, IIV and residual errors are generic fixture assumptions. The 100 mg
-    computational regimen has not been qualified against independent concentration-time
-    data.
+  - KA, lag, IIV and residual errors are generic fixture assumptions. The fixture
+    has not been qualified against independent concentration-time data.
