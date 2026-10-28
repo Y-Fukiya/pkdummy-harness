@@ -398,6 +398,46 @@ make_input_data <- function(subjects, times, dose_count, interval_h, kind, infus
   input
 }
 
+fixture_context <- function(spec_path, spec) {
+  pk_path <- file.path(dirname(spec_path), "pk.yml")
+  targets_path <- file.path(dirname(spec_path), "targets.yml")
+  pk <- if (file.exists(pk_path)) yaml::read_yaml(pk_path) else list()
+  targets <- if (file.exists(targets_path)) yaml::read_yaml(targets_path) else list()
+  validity <- pk$simulation_validity %||% list(status = "not_assessed", reasons = list())
+  if (!(validity$status %in% c("not_assessed", "clinical_hold"))) stop("Unsupported fixture clinical assessment.", call. = FALSE)
+  reasons <- validity$reasons %||% list()
+  if (length(reasons) && any(!vapply(reasons, function(x) is.character(x) && length(x) == 1L && nzchar(trimws(x)), logical(1)))) stop("Invalid fixture hold reasons.", call. = FALSE)
+  if (identical(validity$status, "clinical_hold") && !length(reasons)) stop("Fixture clinical_hold requires reasons.", call. = FALSE)
+  validity$reasons <- as.list(reasons)
+  purpose <- (targets$scenario %||% list())$purpose %||% "computational_stress_test"
+  verified <- (targets$scenario %||% list())$clinical_dose_verified %||% FALSE
+  if (!identical(purpose, "computational_stress_test") || !identical(verified, FALSE)) stop("Fixture cannot claim verified clinical dosing.", call. = FALSE)
+  positive <- function(value) {
+    if (is.logical(value) || length(value) != 1L || !is.numeric(value) || !is.finite(value) || value <= 0) return(NULL)
+    as.numeric(value)
+  }
+  reported <- positive((pk$pk_parsed %||% list())$half_life_h)
+  cl <- positive((pk$derived %||% list())$CL_abs_L_per_h_at_70kg)
+  volume <- positive((pk$derived %||% list())$V_abs_L_at_70kg)
+  implied <- if (!is.null(cl) && !is.null(volume)) positive(log(2) * volume / cl) else NULL
+  ratio <- if (!is.null(implied) && !is.null(reported)) positive(implied / reported) else NULL
+  candidate <- if (is.null(ratio)) NULL else abs(log(ratio)) > log(1.5) && abs(abs(log(ratio)) - log(1.5)) > 1e-12
+  fields <- c("CL_abs_L_per_h_at_70kg", "V_abs_L_at_70kg", "t_half_h")
+  provenance <- pk$value_provenance %||% list()
+  circular <- any(vapply(fields, function(field) {
+    dependencies <- ((provenance[[field]] %||% list())$selection %||% list())$depends_on %||% list()
+    any(unlist(dependencies) %in% fields)
+  }, logical(1)))
+  list(
+    schema_version = "1", clinical_use = "not_approved", simulation_validity = validity,
+    dose_purpose = purpose, clinical_dose_verified = FALSE,
+    half_life_check = list(evaluated = !is.null(ratio), reported_h = reported, implied_h = implied,
+      ratio = ratio, threshold_fold = 1.5, hold_candidate = candidate, circular = circular),
+    context_source = list(spec_path = spec_path, pk_path = if (file.exists(pk_path)) pk_path else NULL,
+      targets_path = if (file.exists(targets_path)) targets_path else NULL)
+  )
+}
+
 write_manifest <- function(path, spec_path, output_path, model_code_path, spec, kind, subjects, times, dose_count, interval_h, seed, no_residual) {
   model <- spec$model %||% list()
   residual <- spec$residual %||% list()
@@ -405,6 +445,7 @@ write_manifest <- function(path, spec_path, output_path, model_code_path, spec, 
   if (is.na(conc_unit) || trimws(conc_unit) == "") stop("model.units.conc must be non-empty.", call. = FALSE)
   obj <- list(
     purpose = "mrgsolve_popPK_fixture",
+    fixture_context = fixture_context(spec_path, spec),
     status = "OK",
     created_at = format(Sys.time(), "%Y-%m-%dT%H:%M:%S%z"),
     engine = "mrgsolve",

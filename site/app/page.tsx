@@ -15,13 +15,17 @@ const auditLabels: Record<string, [string, string]> = {
 };
 const correctionReportUrl = "/pkdummy-harness/parameter-corrections/";
 const auditReportUrl = "https://github.com/Y-Fukiya/pkdummy-harness/blob/main/docs/research/2026-10-02-all-drug-audit/REPORT.md";
-function AuditPanel({ slug, lang }: { slug?: string; lang: Language }) {
+function AuditPanel({ slug, lang, currentNotes = [] }: { slug?: string; lang: Language; currentNotes?: string[] }) {
   const item = parameterAudit.drugs.find((drug) => drug.slug === slug);
   return <section className="panel audit-panel" aria-label={lang === "ja" ? "修正前のパラメータ監査" : "Historical parameter audit"}>
     <span className="eyebrow">PARAMETER AUDIT · {parameterAudit.audit_date}</span>
     <h2>{lang === "ja" ? "2026-10-02監査の記録" : "Audit record from 2026-10-02"}</h2>
-    <p>{lang === "ja" ? "37薬剤・148項目を監査。数値照合はモデル採用の承認ではありません。全37薬剤の臨床モデル採用は保留です。" : "37 drugs and 148 parameters reviewed. Matching a value does not qualify a model. Clinical model use remains on hold for all 37 drugs."}</p>
-    <p className="audit-scope">{lang === "ja" ? "この判定は2026-10-28の原典修正前の記録です。下の現行採用値とは区別してください。修正によって臨床採用保留が解除されたわけではありません。" : "These verdicts describe the snapshot before the 2026-10-28 source corrections. Current values below are separate. Corrections do not remove the clinical hold."}</p>
+    <p>{lang === "ja" ? "37薬剤・148項目を監査。数値照合はモデル採用の承認ではありません。全37薬剤とも臨床モデルとしては未承認です。" : "37 drugs and 148 parameters reviewed. Matching a value does not qualify a model. None of the 37 drugs is approved as a clinical model."}</p>
+    <p className="audit-scope">{lang === "ja" ? "この判定は2026-10-28の原典修正前の記録です。下の現行採用値とは区別してください。修正によって臨床モデルとして承認されたわけではありません。" : "These verdicts describe the snapshot before the 2026-10-28 source corrections. Current values below are separate. Corrections do not establish clinical model approval."}</p>
+    {currentNotes.length > 0 && <aside className="audit-scope" aria-label={lang === "ja" ? "監査後の出典確認" : "Source checks after the historical audit"}>
+      <strong>{lang === "ja" ? "監査後の出典確認" : "Source checks after this audit"}</strong>
+      {currentNotes.map(note => <p key={note}>{note}</p>)}
+    </aside>}
     {item ? <>
       <p>{item.summary}</p>
       <div className="audit-items">{item.parameters.map((entry) => <details key={entry.parameter}>
@@ -186,10 +190,10 @@ const copy = {
     aboutModelTitle: "モデル採用値",
     aboutModelText: "最後に、fixtureのspecが採用するthetaと、文献のcheck-only値を分けて読みます。",
     reviewed: "PKデータ確認済み",
-    pharmacologyMetric: "薬理レビュー",
+    pharmacologyMetric: "作用機序の引用確認",
     pharmacologyMetricNote: "候補とレビュー済み件数を分けて表示",
-    pharmacologyCardReviewed: "薬理: 確認済み",
-    pharmacologyCardCandidate: "薬理: 原典候補",
+    pharmacologyCardReviewed: "作用機序: 引用確認済み",
+    pharmacologyCardCandidate: "作用機序: 原典候補",
     notRecorded: "provenance未登録",
     route: "投与経路",
     basis: "CL/V basis",
@@ -287,10 +291,10 @@ const copy = {
     aboutModelTitle: "Model value",
     aboutModelText: "Finally separate the theta used by the spec from literature values kept as check-only targets.",
     reviewed: "PK data checked",
-    pharmacologyMetric: "Pharmacology review",
+    pharmacologyMetric: "Mechanism citation review",
     pharmacologyMetricNote: "Candidates and reviewed claims are counted separately",
-    pharmacologyCardReviewed: "Pharm: reviewed",
-    pharmacologyCardCandidate: "Pharm: candidate",
+    pharmacologyCardReviewed: "Mechanism: citation checked",
+    pharmacologyCardCandidate: "Mechanism: source candidate",
     notRecorded: "Provenance not recorded",
     route: "Route",
     basis: "CL/V basis",
@@ -581,8 +585,8 @@ function parameterRows(drug: Drug, lang: Language) {
             : "Fixture policy"
           : sourceStatus === "checked"
           ? lang === "ja"
-            ? "確認済み"
-            : "Checked"
+            ? "出典記録一致"
+            : "Source record matched"
           : sourceStatus || (lang === "ja" ? "未確認" : "Unconfirmed"),
     };
   });
@@ -591,7 +595,8 @@ function parameterRows(drug: Drug, lang: Language) {
 function metricNumber(value: unknown): string {
   const number = numberValue(value);
   if (number === null) return "—";
-  if (Math.abs(number) < 0.001) return number.toExponential(2);
+  if (number === 0) return "0";
+  if (Math.abs(number) < 1) return number.toPrecision(3);
   return number.toFixed(number >= 100 ? 0 : 2);
 }
 
@@ -770,7 +775,11 @@ function DetailView({ drug, lang, onBack }: { drug: Drug; lang: Language; onBack
         <a href={correctionReportUrl}>{lang === "ja" ? "修正値・換算式・原典を確認" : "Values, equations and source references"} ↗</a>
       </section>}
       <FixtureContext drug={drug} lang={lang} />
-      <AuditPanel slug={drug.slug} lang={lang} />
+      <AuditPanel slug={drug.slug} lang={lang} currentNotes={Object.values(drug.provenance).flatMap(value => {
+        const update = record(record(value).review_update);
+        const note = lang === "en" ? update.note_en ?? update.note : update.note;
+        return typeof note === "string" ? [note] : [];
+      })} />
 
       <section className="panel decision-panel" id="about">
         <div className="section-heading">
@@ -833,6 +842,7 @@ function DetailView({ drug, lang, onBack }: { drug: Drug; lang: Language; onBack
           <div>
             <span className="eyebrow">PARAMETER LEDGER</span>
             <h2>{t.parameterTable}</h2>
+            <p>{lang === "ja" ? "出典記録一致は保存された出典・換算記録との対応を意味します。臨床モデルの妥当性や採用承認とは別です。" : "Source record matched refers to the stored source and conversion record. It does not establish clinical validity or approval."}</p>
           </div>
         </div>
         <p className="table-scroll-hint">{t.tableScrollHint}</p>
@@ -848,7 +858,7 @@ function DetailView({ drug, lang, onBack }: { drug: Drug; lang: Language; onBack
                   <td className="value-cell">{row.value}</td>
                   <td><code>{row.source}</code></td>
                   <td>{row.note}</td>
-                  <td><span className={row.status === "確認済み" || row.status === "Checked" ? "mini-status good" : "mini-status warning"}>{row.status}</span></td>
+                  <td><span className={row.status === "出典記録一致" || row.status === "Source record matched" ? "mini-status good" : "mini-status warning"}>{row.status}</span></td>
                 </tr>
               ))}
             </tbody>
@@ -870,10 +880,13 @@ function DetailView({ drug, lang, onBack }: { drug: Drug; lang: Language; onBack
           <div className="target-list">
             {Object.entries(targets.targets ? record(targets.targets) : {}).map(([key, target]) => {
               const item = record(target);
+              const value = numberValue(item.value);
+              const displayValue = key === "auc" && item.role === "consistency_check" && value !== null
+                ? value.toPrecision(3) : formatValue(item.value, lang);
               return (
                 <div className="target-item" key={key}>
                   <div><strong>{key}</strong><span>{formatValue(item.role, lang) || t.unknown}</span></div>
-                  <b>{formatValue(item.value, lang)} {formatValue(item.unit, lang)}</b>
+                  <b>{displayValue} {formatValue(item.unit, lang)}</b>
                   <p>{shortText(item.summary || item.basis || item.target_basis, lang, 170)}</p>
                 </div>
               );
@@ -1016,8 +1029,8 @@ function Catalog({
           <p>{t.intro}</p>
           <div className="hero-note"><span className="dot" /> {t.notClinical}</div>
           <div className="hero-note readiness-note"><span className="dot" /> {lang === "ja"
-            ? `原典修正 2026-10-28。${parameterAudit.drug_count}薬剤の臨床モデル採用保留は継続しています。`
-            : `Source corrections updated 2026-10-28. Clinical model use remains on hold for all ${parameterAudit.drug_count} drugs.`}</div>
+            ? `原典修正 2026-10-28。全${parameterAudit.drug_count}薬剤とも臨床モデルとしては未承認です。`
+            : `Source corrections updated 2026-10-28. None of the ${parameterAudit.drug_count} drugs is approved as a clinical model.`}</div>
           <a className="mobile-catalog-jump" href="#catalog-section">{t.mobileCatalogJump} →</a>
         </div>
         <div className="hero-stamp">
@@ -1039,6 +1052,7 @@ function Catalog({
         <p>{lang === "ja" ? "全剤の投与量は計算用ストレス試験の設定で、常用量として未確認です。adult_healthy等の集団名は投与量の妥当性を保証しません。各カード・詳細画面に実際の実行用量を表示しています。" : "All regimens are computational stress-test settings, with usual clinical doses unverified. Population labels such as adult_healthy do not validate the dose. Actual execution doses appear on each card and detail page."}</p>
         <a href="/pkdummy-harness/fixture-governance/">{lang === "ja" ? "評価・用量・範囲選択の方針と原典" : "Assessment, dose and selection policy with sources"} ↗</a>
       </section>
+      <p><a href="/pkdummy-harness/atlas-output-semantics/">{lang === "ja" ? "表示と生成データへの評価情報の引き継ぎ" : "Display semantics and assessment context in generated data"} ↗</a></p>
       <AuditPanel lang={lang} />
 
       <div className="metrics">
@@ -1047,7 +1061,7 @@ function Catalog({
         <div className="metric-card accent-gold"><span>{t.sublingual}</span><strong>{sublingualCount}</strong><small>route: sl</small></div>
         <div className="metric-card accent-blue"><span>{t.iv}</span><strong>{ivCount}</strong><small>route: iv</small></div>
         <div className="metric-card accent-purple"><span>{t.sourceCount}</span><strong>{sourceCount}</strong><small>{reviewCount} {t.needsReview.toLowerCase()}{citationNoteCount ? ` · ${citationNoteCount} ${t.citationGap.toLowerCase()}` : ""}</small></div>
-        <div className="metric-card accent-gold"><span>{t.pharmacologyMetric}</span><strong>{pharmacologyReviewedCount}/{pharmacologyClaimCount}</strong><small>{lang === "ja" ? `確認済み${pharmacologyReviewedCount}件 · 原典候補${pharmacologyCandidateCount}件` : `${pharmacologyReviewedCount} reviewed · ${pharmacologyCandidateCount} source candidates`}</small></div>
+        <div className="metric-card accent-gold"><span>{t.pharmacologyMetric}</span><strong>{pharmacologyReviewedCount}/{pharmacologyClaimCount}</strong><small>{lang === "ja" ? `引用確認${pharmacologyReviewedCount}件 · 原典候補${pharmacologyCandidateCount}件` : `${pharmacologyReviewedCount} reviewed · ${pharmacologyCandidateCount} source candidates`}</small></div>
       </div>
 
       <section className="about-strip" id="about">
@@ -1084,7 +1098,7 @@ function Catalog({
                   <div className="drug-card-top"><span className="route-badge">{routeLabel(drug.route, lang)}</span><span className={statusClass(drug)}>{statusForDrug(drug, lang)}</span></div>
                   <h3>{drug.name}</h3><p className="slug">{drug.slug}</p><p className="card-dose">{lang === "ja" ? "計算用・常用量未確認" : "Computational; usual dose not verified"} · {doseLabel(drug)}</p>
                   <div className={`pharmacology-card-status ${pharmacologyStatusClass(drug)}`}><span aria-hidden="true" />{pharmacologyStatusForDrug(drug, lang)}</div>
-                  <div className="drug-card-values"><div><span>CL</span><strong>{metricNumber(derived.CL_abs_L_per_h_at_70kg)}</strong><small>L/h</small></div><div><span>V</span><strong>{metricNumber(derived.V_abs_L_at_70kg)}</strong><small>L</small></div><div><span>t½</span><strong>{metricNumber(parsed.half_life_h)}</strong><small>h</small></div></div>
+                  <div className="drug-card-values"><div><span>CL</span><strong>{metricNumber(derived.CL_abs_L_per_h_at_70kg)}</strong><small>L/h</small></div><div><span>V</span><strong>{metricNumber(derived.V_abs_L_at_70kg)}</strong><small>L</small></div><div><span>{lang === "ja" ? "t½ 参照・検証用" : "t½ source; check only"}</span><strong>{metricNumber(parsed.half_life_h)}</strong><small>h</small></div><div><span>{lang === "ja" ? "t½ モデル暗黙値" : "t½ model-implied"}</span><strong>{metricNumber(drug.fixture_assessment.half_life_check.implied_h)}</strong><small>h</small></div></div>
                   <div className="drug-card-footer"><span>{drug.sources.length} {t.sourceCount} · {drug.evidence.summary.unresolved_count} {t.unresolvedEvidence}</span><span className="view-link">{lang === "ja" ? "根拠を見る" : "View evidence"} →</span></div>
                 </button>
               );

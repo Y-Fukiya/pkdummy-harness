@@ -24,6 +24,11 @@ from typing import Any
 
 import yaml
 
+try:
+    from export_fixture_context import CONTEXT_FIELDS, attach_context, resolve_fixture_context, validate_context
+except ModuleNotFoundError:
+    from tools.export_fixture_context import CONTEXT_FIELDS, attach_context, resolve_fixture_context, validate_context
+
 
 @dataclass(frozen=True)
 class SdtmLikeResult:
@@ -685,12 +690,15 @@ def make_sdtm_like_domains(
     pc_conc_unit: str | None = None,
     strict_subject_match: bool = False,
     overwrite_existing_pc_conc: bool = False,
+    fixture_context: dict[str, Any] | None = None,
 ) -> SdtmLikeResult:
     clinical_path = Path(clinical_samples_csv)
     spec_path = Path(spec_yml)
     out_path = Path(out_dir)
     _, clinical_rows = _read_csv(clinical_path)
     spec = _load_yaml(spec_path)
+    fixture_context = validate_context(fixture_context) if fixture_context is not None else resolve_fixture_context(spec_path)
+    attach_context(clinical_rows, fixture_context)
     study_id = _study_id(spec, clinical_rows)
     start = datetime.fromisoformat(study_start)
     subjects, warnings = _load_subjects(
@@ -835,6 +843,13 @@ def make_sdtm_like_domains(
             if any(field in row for row in clinical_rows)
         )
 
+    for covariate_rows in (dm_rows, vs_rows, lb_rows):
+        if any(field in row for row in covariate_rows for field in CONTEXT_FIELDS):
+            attach_context(covariate_rows, fixture_context)
+    attach_context(ex_rows, fixture_context)
+    attach_context(pc_rows, fixture_context)
+    pc_fields = list(dict.fromkeys([*pc_fields, *CONTEXT_FIELDS]))
+    ex_fields = list(dict.fromkeys([*ex_fields, *CONTEXT_FIELDS]))
     counts = {
         "DM": len(dm_rows),
         "VS": len(vs_rows),
@@ -872,6 +887,7 @@ def make_sdtm_like_domains(
         {
             "purpose": "workflow_fixture_not_submission_ready_sdtm",
             "limited_sdtm_like": True,
+            "fixture_context": fixture_context,
             "domains": ["DM", "VS", "LB", "EX", "PC"],
             "inputs": {
                 "clinical_samples_csv": str(clinical_path),

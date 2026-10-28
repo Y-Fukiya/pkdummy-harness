@@ -1,6 +1,26 @@
 purpose: analysis_input_smoke_test_fixture
+fixture_context:
+  schema_version: '1'
+  clinical_use: not_approved
+  simulation_validity:
+    status: not_assessed
+    reasons: []
+  dose_purpose: computational_stress_test
+  clinical_dose_verified: false
+  half_life_check:
+    evaluated: false
+    reported_h: null
+    implied_h: null
+    ratio: null
+    threshold_fold: 1.5
+    hold_candidate: null
+    circular: false
+  context_source:
+    spec_path: null
+    pk_path: null
+    targets_path: null
 status: OK
-created_at: '2026-06-10T10:00:50'
+created_at: '2026-10-28T18:24:25'
 inputs:
   DM: examples/minimal_aciclovir/sdtm_like/DM.csv
   VS: examples/minimal_aciclovir/sdtm_like/VS.csv
@@ -22,6 +42,7 @@ counts:
 settings:
   dose_cmt: '1'
   observation_cmt: '2'
+  repeated_dosing: false
 warnings: []
 notes:
 - ADPC.csv is ADPC-like and intended for workflow smoke tests, not submission-ready

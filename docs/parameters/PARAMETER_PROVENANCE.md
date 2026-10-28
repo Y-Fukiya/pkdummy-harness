@@ -26,7 +26,7 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 
 | Drug | Route | Spec | Source URLs | Parameter rows | Checked source-mapping rows | Status |
 | --- | --- | --- | ---: | ---: | ---: | --- |
-| `abciximab` | iv | `spec_pk1_iv.yml` | 6 | 17 | 7 | source_urls_present |
+| `abciximab` | iv | `spec_pk1_iv.yml` | 7 | 17 | 7 | source_urls_present |
 | `aciclovir` | po | `spec_pk1_oral.yml` | 5 | 21 | 7 | source_urls_present |
 | `albuterol` | iv | `spec_pk1_iv.yml` | 1 | 17 | 7 | source_urls_present |
 | `alfentanil` | iv | `spec_pk1_iv.yml` | 1 | 17 | 7 | source_urls_present |
@@ -626,6 +626,7 @@ CSVの全行は `PARAMETER_PROVENANCE.csv`、URLの全件は `SOURCES.csv` に�
 | `abciximab` | `source_4` | https://www.sciencedirect.com/topics/biochemistry-genetics-and-molecular-biology/abciximab |
 | `abciximab` | `source_5` | https://pubmed.ncbi.nlm.nih.gov/14618072/ |
 | `abciximab` | `source_6` | https://ascpt.onlinelibrary.wiley.com/doi/abs/10.1016/j.clpt.2003.11.342 |
+| `abciximab` | `source_7` | https://www.accessdata.fda.gov/drugsatfda_docs/label/2013/103575s5126lbl.pdf |
 | `aciclovir` | `source_1` | https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=e8a0f9f8-294f-4dd6-bd55-10a6253f1aa8 |
 | `aciclovir` | `source_2` | https://pubmed.ncbi.nlm.nih.gov/6355048/ |
 | `aciclovir` | `source_3` | https://www.sciencedirect.com/science/article/pii/S2590170220300339 |

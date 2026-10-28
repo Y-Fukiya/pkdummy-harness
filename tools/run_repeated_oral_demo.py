@@ -23,6 +23,11 @@ from typing import Any
 
 import yaml
 
+try:
+    from export_fixture_context import resolve_fixture_context
+except ModuleNotFoundError:
+    from tools.export_fixture_context import resolve_fixture_context
+
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -664,6 +669,7 @@ def _write_repeated_workflow_artifacts(
     simulation_engine: str,
     counts: dict[str, int],
     warnings: list[str],
+    fixture_context: dict[str, Any],
 ) -> dict[str, Path]:
     """Write the run-level artifacts promised by the repeated-dose spec.
 
@@ -679,6 +685,7 @@ def _write_repeated_workflow_artifacts(
         manifest,
         {
             "purpose": "pk_fixture_repeated_oral_workflow",
+            "fixture_context": fixture_context,
             "status": status,
             "validation_status": validation_status,
             "inputs": {
@@ -757,6 +764,7 @@ def run_repeated_oral_demo(
     drugs_path = Path(drugs_dir)
     _, _, spec_path = _resolve_drug_files(drugs_path, slug)
     spec = _load_yaml(spec_path)
+    fixture_context = resolve_fixture_context(spec_path)
     if _spec_route(spec) not in {"ORAL", "PO"}:
         raise ValueError("repeated_oral_demo requires an oral route in the canonical spec.")
     if len((spec.get("regimen") or {}).get("arms") or {}) != 1:
@@ -852,6 +860,7 @@ def run_repeated_oral_demo(
     )
     sdtm_dir = workflow_dir / "sdtm_like"
     sdtm_result = make_sdtm_like_domains(
+        fixture_context=fixture_context,
         clinical_samples_csv=clinical_csv,
         spec_yml=spec_path,
         out_dir=sdtm_dir,
@@ -872,6 +881,7 @@ def run_repeated_oral_demo(
         for pair in (nca_config.get("partial_intervals_h") or [(0.0, 4.0), (4.0, 12.0)])
     ]
     nca_result = make_repeated_nca(
+        fixture_context=fixture_context,
         clinical_samples_csv=clinical_csv,
         out_dir=analysis_dir,
         analysis_dose_time_h=analysis_time_h,
@@ -911,6 +921,7 @@ def run_repeated_oral_demo(
     }
     validation_status = "WARN" if model_qc_warnings else "OK"
     workflow_artifacts = _write_repeated_workflow_artifacts(
+        fixture_context=fixture_context,
         workflow_dir=workflow_dir,
         status=status,
         validation_status=validation_status,
@@ -952,6 +963,7 @@ def run_repeated_oral_demo(
         demo_manifest,
         {
             "purpose": "repeated_oral_trough_steady_state_demo_set",
+            "fixture_context": fixture_context,
             "status": status,
             "validation_status": validation_status,
             "created_at": datetime.now().isoformat(timespec="seconds"),

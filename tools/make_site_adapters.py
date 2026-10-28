@@ -12,6 +12,11 @@ from typing import Any
 
 import yaml
 
+try:
+    from export_fixture_context import CONTEXT_FIELDS, attach_context, inherit_fixture_context
+except ModuleNotFoundError:
+    from tools.export_fixture_context import CONTEXT_FIELDS, attach_context, inherit_fixture_context
+
 
 SOURCE_FILES = {
     "ADPC": "ADPC.csv",
@@ -139,11 +144,17 @@ def make_site_adapters(
     files: dict[str, Path] = {}
     counts: dict[str, int] = {}
     warnings: list[str] = []
+    contexts: list[dict[str, Any]] = []
     for adapter_name, adapter in adapters.items():
         if not isinstance(adapter, dict):
             raise ValueError(f"{adapter_name}: adapter spec must be a mapping")
         source_name = str(adapter.get("source") or "").strip()
         source_fields, source_rows = _read_csv(_source_path(analysis_path, source_name))
+        context = inherit_fixture_context(analysis_path, source_rows)
+        if contexts and context != contexts[0]:
+            raise ValueError("Fixture context differs between site adapter inputs")
+        contexts.append(context)
+        source_fields = list(dict.fromkeys([*source_fields, *CONTEXT_FIELDS]))
         columns = adapter.get("columns") or []
         if not isinstance(columns, list) or not columns:
             raise ValueError(f"{adapter_name}: columns must be a non-empty list")
@@ -157,7 +168,8 @@ def make_site_adapters(
         )
         output = str(adapter.get("output") or f"{adapter_name}.csv")
         out_file = _safe_output_path(str(adapter_name), out_path, output)
-        _write_csv(out_file, out_rows, fieldnames)
+        attach_context(out_rows, context)
+        _write_csv(out_file, out_rows, list(dict.fromkeys([*fieldnames, *CONTEXT_FIELDS])))
         files[str(adapter_name)] = out_file
         counts[f"{adapter_name}_rows"] = len(out_rows)
         warnings.extend(adapter_warnings)
@@ -169,6 +181,7 @@ def make_site_adapters(
         manifest,
         {
             "purpose": "site_specific_adapter_fixture",
+            "fixture_context": contexts[0],
             "status": status,
             "created_at": datetime.now().isoformat(timespec="seconds"),
             "inputs": {

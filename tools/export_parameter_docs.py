@@ -65,7 +65,7 @@ def main(argv: list[str] | None = None) -> int:
         "permalink: /parameter-values/", "---", "",
         "# 薬剤別シミュレーションパラメータ", "",
         "このコミットの正本YAMLから生成した採用値です。CLはL/h、VはL、KAは1/h、F1は無次元、ALAG1はhです。",
-        "数値の整合性は臨床モデルの妥当性を意味しません。全薬剤の臨床採用保留を継続しています。", "",
+        "数値の整合性は臨床モデルの妥当性を意味しません。全37剤とも臨床モデルとしては未承認です。", "",
         "[検索・詳細画面](https://y-fukiya.github.io/pkdummy-harness/parameters/) / [原典修正と残る制約](https://y-fukiya.github.io/pkdummy-harness/parameter-corrections/)", "",
         "全剤の投与設定は計算用ストレス試験で、臨床常用量として未確認です。集団名は投与量の妥当性を保証しません。", "",
         "| 薬剤 | 経路 | CL | V | KA | F1 | ALAG1 | CL basis / V basis | 臨床評価 | 半減期比・候補 | 実行用量・計算用 |",

@@ -7,7 +7,7 @@ permalink: /parameter-values/
 # 薬剤別シミュレーションパラメータ
 
 このコミットの正本YAMLから生成した採用値です。CLはL/h、VはL、KAは1/h、F1は無次元、ALAG1はhです。
-数値の整合性は臨床モデルの妥当性を意味しません。全薬剤の臨床採用保留を継続しています。
+数値の整合性は臨床モデルの妥当性を意味しません。全37剤とも臨床モデルとしては未承認です。
 
 [検索・詳細画面](https://y-fukiya.github.io/pkdummy-harness/parameters/) / [原典修正と残る制約](https://y-fukiya.github.io/pkdummy-harness/parameter-corrections/)
 
@@ -15,7 +15,7 @@ permalink: /parameter-values/
 
 | 薬剤 | 経路 | CL | V | KA | F1 | ALAG1 | CL basis / V basis | 臨床評価 | 半減期比・候補 | 実行用量・計算用 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| abciximab | iv_bolus | 10.98 | 100.8 | — | — | — | systemic / systemic | not_assessed | 15.272 保留候補 | A: 100 mg・常用量未確認 |
+| abciximab | iv_bolus | 10.98 | 100.8 | — | — | — | systemic / systemic | clinical_hold | 15.272 保留候補 | A: 100 mg・常用量未確認 |
 | aciclovir | oral | 19.62 | 46.666666666666664 | 1.2 | 0.1 | 0.5 | systemic / systemic | not_assessed | 0.659 保留候補 | A: 100 mg・常用量未確認 |
 | albuterol | iv | 28.8 | 160.38152230554428 | — | — | — | systemic / systemic | not_assessed | 1.000 臨床妥当性未判定 | A: 1.0 mg・常用量未確認 |
 | alfentanil | iv_bolus | 21.0 | 70.0 | — | — | — | systemic / systemic | not_assessed | 1.379 臨床妥当性未判定 | A: 100 mg・常用量未確認 |

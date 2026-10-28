@@ -14,6 +14,8 @@ sources:
   url: https://pubmed.ncbi.nlm.nih.gov/14618072/
 - id: source_6
   url: https://ascpt.onlinelibrary.wiley.com/doi/abs/10.1016/j.clpt.2003.11.342
+- id: source_7
+  url: https://www.accessdata.fda.gov/drugsatfda_docs/label/2013/103575s5126lbl.pdf
 pk_raw:
   half_life: 20-30 minutes
   clearance: 183 +/- 72 mL/min
@@ -103,6 +105,18 @@ value_provenance:
     selection:
       rule: recorded_point_value
       rationale: pk_parsed.volume.value * pk_parsed.weight_ref_kg_for_abs
+    review_update:
+      checked_date: '2026-10-28'
+      access_method: publisher_search_indexed_conference_abstract; direct publisher
+        request returned HTTP 403
+      source_id: source_6
+      note: Vss 1.44 L/kgは2026-10-28に出版社URLの検索索引にある学会抄録で再確認しました。出版社URLの直接取得は403で、本文を直接取得したという確認ではありません。2026-10-02監査の「V未確認」は当時の記録として保持しています。
+      source_locator: Clinical Pharmacology & Therapeutics 75(2), P89, conference
+        abstract, Results
+      note_en: Vss 1.44 L/kg was rechecked on 2026-10-28 in the publisher search-indexed
+        conference abstract. Direct publisher retrieval returned HTTP 403; this is
+        not a full-text retrieval check. The 2026-10-02 unverified-V audit remains
+        a historical record.
   t_half_h:
     source_id: source_5
     source_field: short_plasma_half_life_range
@@ -131,5 +145,21 @@ value_provenance:
       rationale: ((20 min + 30 min) / 2) / 60 min/h Retained as an explicit legacy
         fixture choice, not a jointly fitted or clinically qualified parameter set.
 simulation_validity:
-  status: not_assessed
-  reasons: []
+  status: clinical_hold
+  reasons:
+  - Free plasma drug has multiphasic disposition, while platelet-bound drug persists
+    much longer. This fixed linear one-compartment fixture does not distinguish the
+    free and platelet-bound pools.
+  - The adopted clearance, volume and short plasma half-life come from different studies,
+    populations and summaries; they are not a jointly estimated parameter set.
+fixture_limitations:
+- code: free_vs_platelet_bound_disposition
+  statement: The historical FDA label reports rapid loss of free plasma abciximab,
+    with an initial half-life below 10 min and a second phase of about 30 min, while
+    platelet-bound drug remains for 15 days or longer. The label relates rapid plasma
+    decline to platelet GPIIb/IIIa binding. The linear one-compartment fixture does
+    not distinguish these pools or establish a validated target-mediated disposition
+    model.
+  source_id: source_7
+  source_locator: FDA ReoPro label, 2013, printed page 2, Clinical Pharmacology, Pharmacokinetics
+  checked_date: '2026-10-28'

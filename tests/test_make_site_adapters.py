@@ -63,13 +63,16 @@ def test_make_site_adapters_maps_analysis_inputs_to_site_specific_columns(tmp_pa
 
     assert result.status == "OK"
     assert result.counts == {"site_nca_rows": 2, "site_poppk_rows": 2}
-    assert read_csv(out_dir / "site_nca.csv")[1] == {
+    mapped_row = read_csv(out_dir / "site_nca.csv")[1]
+    assert {key: mapped_row[key] for key in ("SUBJECT", "TIME", "CONC", "STUDY")} == {
         "SUBJECT": "OSP_demo-001",
         "TIME": "1",
         "CONC": "50",
         "STUDY": "SYNTH_PK",
     }
     manifest = yaml.safe_load((out_dir / "SITE_ADAPTER_MANIFEST.yml").read_text(encoding="utf-8"))
+    assert mapped_row["CLINICAL_USE"] == "not_approved"
+    assert manifest["fixture_context"]["simulation_validity"]["status"] == "not_assessed"
     assert manifest["purpose"] == "site_specific_adapter_fixture"
     assert manifest["adapters"] == ["site_nca", "site_poppk"]
 

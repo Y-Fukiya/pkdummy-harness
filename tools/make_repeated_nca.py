@@ -18,6 +18,11 @@ from typing import Any, Iterable
 
 import yaml
 
+try:
+    from export_fixture_context import CONTEXT_FIELDS, attach_context, inherit_fixture_context, validate_context
+except ModuleNotFoundError:
+    from tools.export_fixture_context import CONTEXT_FIELDS, attach_context, inherit_fixture_context, validate_context
+
 
 @dataclass(frozen=True)
 class RepeatedNcaResult:
@@ -154,6 +159,7 @@ def make_repeated_nca(
     partial_intervals_h: list[tuple[float, float]] | None = None,
     concentration_col: str = "DV",
     stable_rel_threshold: float = 0.05,
+    fixture_context: dict[str, Any] | None = None,
 ) -> RepeatedNcaResult:
     if interval_h <= 0:
         raise ValueError("interval_h must be positive.")
@@ -179,6 +185,8 @@ def make_repeated_nca(
     _, rows = _read_csv(Path(clinical_samples_csv))
     if not rows:
         raise ValueError("clinical_samples.csv has no rows.")
+    context = validate_context(fixture_context) if fixture_context is not None else inherit_fixture_context(Path(clinical_samples_csv).parent, rows)
+    attach_context(rows, context)
     grouped = _groups(rows)
     if not grouped:
         raise ValueError("clinical_samples.csv has no USUBJID values.")
@@ -344,6 +352,12 @@ def make_repeated_nca(
         "AUC_UNIT",
     ]
     trough_summary_fields = ["STUDYID", "USUBJID", *trough_label_fields, "PRED_TROUGH_REL_CHANGE_120_144", "PRED_TROUGH_STABLE_QC"]
+    for output_rows in (trough_input, trough_summary, ss_input, nca_summary):
+        attach_context(output_rows, context)
+    trough_fields += CONTEXT_FIELDS
+    trough_summary_fields += CONTEXT_FIELDS
+    ss_fields += CONTEXT_FIELDS
+    nca_fields += CONTEXT_FIELDS
     _write_csv(files["TROUGH_INPUT"], trough_input, trough_fields)
     _write_csv(files["TROUGH_SUMMARY"], trough_summary, trough_summary_fields)
     _write_csv(files["NCA_SS_INPUT"], ss_input, ss_fields)
@@ -360,6 +374,7 @@ def make_repeated_nca(
         files["MANIFEST"],
         {
             "purpose": "repeated_oral_trough_steady_state_nca_fixture",
+            "fixture_context": context,
             "status": status,
             "created_at": datetime.now().isoformat(timespec="seconds"),
             "inputs": {"clinical_samples_csv": str(clinical_samples_csv)},

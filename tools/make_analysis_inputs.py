@@ -18,6 +18,11 @@ from typing import Any
 
 import yaml
 
+try:
+    from export_fixture_context import CONTEXT_FIELDS, attach_context, inherit_fixture_context
+except ModuleNotFoundError:
+    from tools.export_fixture_context import CONTEXT_FIELDS, attach_context, inherit_fixture_context
+
 
 @dataclass(frozen=True)
 class AnalysisInputResult:
@@ -551,6 +556,8 @@ def make_analysis_inputs(
     _, lb_rows = _read_csv(required["LB"])
     _, ex_rows = _read_csv(required["EX"])
     _, pc_rows = _read_csv(required["PC"])
+    fixture_context = inherit_fixture_context(sdtm_path, ex_rows)
+    attach_context(pc_rows, fixture_context)
     if not pc_rows:
         raise ValueError("PC.csv has no concentration rows.")
     if all(_conc(row) == "" for row in pc_rows):
@@ -607,16 +614,19 @@ def make_analysis_inputs(
     }
     if repeated_dosing:
         counts["ex_rows"] = len(ex_rows)
-    poppk_fields = POPPK_FIELDS + (["ROW_ORDER"] if repeated_dosing else [])
+    poppk_fields = POPPK_FIELDS + (["ROW_ORDER"] if repeated_dosing else []) + CONTEXT_FIELDS
+    for output_rows in (adpc_rows, nca_rows, poppk_rows):
+        attach_context(output_rows, fixture_context)
     status = "WARN" if warnings else "OK"
 
-    _write_csv(files["ADPC"], adpc_rows, ADPC_FIELDS)
-    _write_csv(files["NCA_INPUT"], nca_rows, NCA_FIELDS)
+    _write_csv(files["ADPC"], adpc_rows, ADPC_FIELDS + CONTEXT_FIELDS)
+    _write_csv(files["NCA_INPUT"], nca_rows, NCA_FIELDS + CONTEXT_FIELDS)
     _write_csv(files["POPPK_INPUT"], poppk_rows, poppk_fields)
     _write_yaml(
         files["MANIFEST"],
         {
             "purpose": "analysis_input_smoke_test_fixture",
+            "fixture_context": fixture_context,
             "status": status,
             "created_at": datetime.now().isoformat(timespec="seconds"),
             "inputs": {name: str(path) for name, path in required.items()},

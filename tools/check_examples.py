@@ -20,7 +20,7 @@ from tools.make_analysis_inputs import make_analysis_inputs
 
 
 CSV_OUTPUTS = ["ADPC.csv", "NCA_INPUT.csv", "POPPK_INPUT.csv"]
-MANIFEST_KEYS = ["purpose", "status", "counts", "warnings"]
+MANIFEST_KEYS = ["purpose", "status", "counts", "warnings", "fixture_context"]
 
 
 @dataclass(frozen=True)
