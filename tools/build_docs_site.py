@@ -16,9 +16,11 @@ import yaml
 try:
     from simulation_assessment import assess_fixture
     from pharmacology_review import review_library
+    from fixture_context_i18n import FixtureContextI18n, load_fixture_context_i18n
 except ModuleNotFoundError:  # pragma: no cover - supports package imports in tests
     from tools.simulation_assessment import assess_fixture
     from tools.pharmacology_review import review_library
+    from tools.fixture_context_i18n import FixtureContextI18n, load_fixture_context_i18n
 
 
 KNOWN_LIMITATION_CODES = {
@@ -435,9 +437,12 @@ def build_drug(
     strict_review: dict[str, Any] | None = None,
     pharmacology_data: dict[str, Any] | None = None,
     pharmacology_defaults: dict[str, Any] | None = None,
+    fixture_context_i18n: FixtureContextI18n | None = None,
 ) -> dict[str, Any]:
     drug_dir = pk_path.parent
     pk = load_yaml(pk_path)
+    if fixture_context_i18n is None:
+        fixture_context_i18n = load_fixture_context_i18n(pk_path.parents[2])[drug_dir.name]
     targets_path = drug_dir / "targets.yml"
     targets = load_yaml(targets_path) if targets_path.exists() else {}
     spec_path, spec = first_spec(drug_dir)
@@ -554,6 +559,7 @@ def build_drug(
             "simulation_validity": pk.get("simulation_validity") or {"status": "not_assessed", "reasons": []},
             "fixture_assessment": assess_fixture(pk, spec, targets),
             "fixture_limitations": pk.get("fixture_limitations") or [],
+            "fixture_context_i18n": fixture_context_i18n,
             "id": pk.get("id"),
             "name": pk.get("name") or drug_dir.name,
             "route": route,
@@ -610,18 +616,20 @@ def build_bundle(root: Path) -> dict[str, Any]:
     pharmacology_payload = load_pharmacology_data(root)
     pharmacology_data = pharmacology_payload.get("drugs", {})
     pharmacology_defaults = pharmacology_payload.get("defaults", {})
+    fixture_context_i18n = load_fixture_context_i18n(root)
     drugs = [
         build_drug(
             path,
             strict_by_slug.get(path.parent.name),
             pharmacology_data.get(path.parent.name),
             pharmacology_defaults,
+            fixture_context_i18n[path.parent.name],
         )
         for path in sorted((root / "drugs").glob("*/pk.yml"))
     ]
     return {
         "schema_version": "1.0",
-        "source": "drugs/*/pk.yml + targets.yml + spec_pk1_*.yml + docs/pharmacology.yml",
+        "source": "drugs/*/pk.yml + targets.yml + spec_pk1_*.yml + docs/pharmacology.yml + docs/fixture-context-i18n.yml",
         "drug_count": len(drugs),
         "drugs": drugs,
     }

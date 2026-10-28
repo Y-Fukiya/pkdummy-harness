@@ -96,6 +96,8 @@ type PharmacologyClaim = {
   missing: string[];
 };
 
+type FixtureLocalizedText = { ja: string; en: string };
+
 type Drug = {
   slug: string;
   id: string | null;
@@ -114,6 +116,11 @@ type Drug = {
     dose_context: { purpose: string; clinical_dose_verified: boolean; arms: Record<string, { dose_mg: number; n: number; infusion_h?: number }> };
   };
   fixture_limitations: { code: string; statement: string; source_id: string; source_locator: string }[];
+  fixture_context_i18n: {
+    reasons: FixtureLocalizedText[];
+    correction_notes: FixtureLocalizedText[];
+    fixture_limitations: Record<string, FixtureLocalizedText>;
+  };
   review: {
     provenance_field_count: number;
     needs_review_count: number;
@@ -458,15 +465,16 @@ function FixtureContext({ drug, lang }: { drug: Drug; lang: Language }) {
     <p>{lang === "ja" ? "この投与設定は計算用ストレス試験です。常用量・推奨用量として照合していません。100 mgを含む実行量をそのまま表示しており、添付文書の用量案内ではありません。" : "This is a computational stress-test regimen. These actual execution doses, including 100 mg settings, have not been verified as usual or recommended clinical doses."}</p>
     <p>{lang === "ja" ? "記録された集団コンテキスト" : "Recorded population context"}: {formatValue(population.group, lang)}. {lang === "ja" ? "このラベルは投与量の妥当性や同集団の臨床試験再現を保証しません。" : "This label does not validate the dose or establish reproduction of a clinical study in that population."}</p>
     <h3>{statusForDrug(drug, lang)}</h3>
-    <ul>{drug.simulation_validity.reasons.map(reason => <li key={reason}>{reason}</li>)}</ul>
+    <ul>{drug.fixture_context_i18n.reasons.map(reason => <li key={reason.en}>{reason[lang]}</li>)}</ul>
     <p>{lang === "ja" ? "半減期スクリーニング" : "Half-life screen"}: {check.evaluated
       ? `${lang === "ja" ? "CL/Vからの半減期 / 記録半減期" : "Implied / recorded half-life"} = ${check.ratio?.toFixed(3)} (${check.implied_h?.toFixed(3)} h / ${check.reported_h} h). ${check.hold_candidate ? (lang === "ja" ? "1.5倍閾値を超過・保留候補" : "Beyond the 1.5-fold threshold; hold candidate") : (lang === "ja" ? "閾値内・臨床妥当性は未判定" : "Within threshold; clinical validity not established")}`
       : (lang === "ja" ? "評価不能・妥当とは判定しません" : "Not evaluable; no validity conclusion")}</p>
     {check.circular && <p>{lang === "ja" ? "CL・V・半減期のいずれかを他の値から導出しています。比が1でも独立した整合性確認にはなりません。" : "At least one of CL, V and half-life is derived from the others. A ratio of 1 is not an independent validation."}</p>}
     {drug.fixture_limitations.length > 0 && <><h3>{lang === "ja" ? "原典に基づく制約" : "Source-based limitations"}</h3><ul>{drug.fixture_limitations.map(limitation => {
       const source = drug.sources.find(item => item.id === limitation.source_id);
-      return <li key={limitation.code}>{limitation.statement} {source?.url && <a href={source.url} target="_blank" rel="noreferrer">{limitation.source_id} ↗</a>} <small>{limitation.source_locator}</small></li>;
+      return <li key={limitation.code}>{drug.fixture_context_i18n.fixture_limitations[limitation.code][lang]} {source?.url && <a href={source.url} target="_blank" rel="noreferrer">{limitation.source_id} ↗</a>} <small>{limitation.source_locator}</small></li>;
     })}</ul></>}
+    {drug.slug === "felodipine" && <p><a href="/pkdummy-harness/felodipine-label-review/">{lang === "ja" ? "フェロジピンの公式ラベル照合と保留継続の根拠" : "Felodipine official-label review and rationale for continued hold"} ↗</a></p>}
     <a href="/pkdummy-harness/fixture-governance/">{lang === "ja" ? "評価・投与設定・値の選択方針" : "Assessment, regimen and selection policy"} ↗</a>
   </section>;
 }
@@ -771,7 +779,7 @@ function DetailView({ drug, lang, onBack }: { drug: Drug; lang: Language; onBack
         <span className="eyebrow">SOURCE CORRECTIONS · 2026-10-28</span>
         <h2>{lang === "ja" ? "現行パラメータの修正と制約" : "Current corrections and limitations"}</h2>
         <p>{lang === "ja" ? "原典に基づく修正を実行spec・INDEX・表示データへ反映しています。原典値の照合と臨床モデルの妥当性確認は別です。" : "Source corrections are reflected in the execution spec, INDEX, and displayed data. Matching source values is separate from clinical model validation."}</p>
-        <ul>{drug.simulation_validity.correction_notes?.map((note) => <li key={note}>{note}</li>)}</ul>
+        <ul>{drug.fixture_context_i18n.correction_notes.map(note => <li key={note.en}>{note[lang]}</li>)}</ul>
         <a href={correctionReportUrl}>{lang === "ja" ? "修正値・換算式・原典を確認" : "Values, equations and source references"} ↗</a>
       </section>}
       <FixtureContext drug={drug} lang={lang} />
