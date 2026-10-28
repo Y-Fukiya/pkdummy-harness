@@ -61,15 +61,15 @@ def source_metadata(url: str | None) -> dict[str, Any]:
     if not url:
         return {"kind": "unclassified", "identifier": None}
     parsed = urlparse(url)
-    host = parsed.netloc.lower()
-    if "pubmed.ncbi.nlm.nih.gov" in host:
+    host = (parsed.hostname or "").lower()
+    if host == "pubmed.ncbi.nlm.nih.gov":
         match = re.search(r"/([0-9]+)/?(?:$|[?#])", parsed.path)
         return {"kind": "PubMed", "identifier": match.group(1) if match else None}
-    if "dailymed.nlm.nih.gov" in host:
+    if host == "dailymed.nlm.nih.gov":
         values = parse_qs(parsed.query).get("setid", [])
         match = re.search(r"setid=([^&]+)", url, flags=re.IGNORECASE)
         return {"kind": "DailyMed", "identifier": values[0] if values else (match.group(1) if match else None)}
-    if "sciencedirect.com" in host:
+    if host in {"sciencedirect.com", "www.sciencedirect.com"}:
         return {"kind": "ScienceDirect", "identifier": None}
     return {"kind": host or "unclassified", "identifier": None}
 

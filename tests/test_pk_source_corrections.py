@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def load(slug, name):
-    return yaml.safe_load((ROOT / "drugs" / slug / name).read_text())
+    return yaml.safe_load((ROOT / "drugs" / slug / name).read_text(encoding="utf-8"))
 
 
 @pytest.mark.parametrize(

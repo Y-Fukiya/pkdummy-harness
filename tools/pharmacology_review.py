@@ -14,6 +14,7 @@ import math
 import re
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 import yaml
 
@@ -61,12 +62,13 @@ def _float(value: Any) -> float | None:
 
 
 def source_kind(url: str) -> str:
-    lowered = url.lower()
-    if any(host in lowered for host in PRIMARY_HOSTS):
+    host = (urlparse(url).hostname or "").lower()
+    if host in PRIMARY_HOSTS:
         return "primary_or_regulatory"
-    if "fda.gov" in lowered or "ema.europa.eu" in lowered:
+    if host in {"fda.gov", "www.fda.gov", "accessdata.fda.gov", "www.accessdata.fda.gov", "ema.europa.eu", "www.ema.europa.eu"}:
         return "regulatory"
-    if any(host in lowered for host in ("wikipedia.org", "drugbank", "pubchem", "researchgate")):
+    secondary_hosts = {"wikipedia.org", "drugbank.com", "pubchem.ncbi.nlm.nih.gov", "researchgate.net"}
+    if any(host == domain or host.endswith("." + domain) for domain in secondary_hosts):
         return "secondary_or_aggregator"
     return "unclassified"
 
